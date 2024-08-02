@@ -1,0 +1,126 @@
+.home{
+  text-align: center;
+  padding: 4rem;
+  // margin-top: 5rem;
+  // margin: 8rem 0;
+
+  h3{
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  
+  .center{
+    p{
+      font-size: 1.7rem;
+      // padding-bottom: 0.4rem;
+      // border-bottom: 2px solid black;
+      text-decoration: underline;
+      
+    }
+  }
+
+  
+  .home-row{
+    display: flex;
+    justify-content: space-around;
+    row-gap: 2rem;
+    margin: 8rem 0;
+    
+  .left{
+
+
+    .closet-management {
+      display: flex;
+      align-items: center;
+      margin: 2rem 0;
+      width: 400px; 
+      height: 100px;
+    
+      .image {
+        background-color: #4A4A4A;
+        border-top-left-radius: 4rem;
+        border-bottom-left-radius: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 100px; 
+        height: 100%;
+        width: 100%;
+    
+        img {
+          
+          min-width: 50%;
+
+        }
+      }
+    
+      .text {
+        border: 2px solid black;
+        border-left: none;
+        border-top-right-radius: 4rem;
+        border-bottom-right-radius: 4rem;
+        padding: 0 2rem; 
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        font-size: 1.2rem;
+        color: black;
+        flex: 1; 
+        height: 100%; 
+        text-align: center; 
+      }
+    }
+     
+
+
+  }
+
+  .right{
+
+
+.closet-management {
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+  width: 400px; 
+  height: 100px; 
+
+  .image {
+    background-color: #4A4A4A;
+    border-top-left-radius: 4rem;
+    border-bottom-left-radius: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 100px; 
+    height: 100%; 
+    width: 100%;
+
+    img {
+      min-width: 50%;
+    }
+  }
+
+  .text {
+    border: 2px solid black;
+    border-left: none;
+    border-top-right-radius: 4rem;
+    border-bottom-right-radius: 4rem;
+    padding: 0 2rem; 
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    font-size: 1.2rem;
+    color: black;
+    flex: 1; 
+    height: 100%; 
+    text-align: center; 
+  }
+}
+  
+
+  }
+
+}
+}

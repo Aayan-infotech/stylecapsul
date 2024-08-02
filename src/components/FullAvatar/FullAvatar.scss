@@ -1,0 +1,56 @@
+.full-avatar {
+  margin: 7rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15rem;
+
+  .left{
+    padding: 0;
+    // margin-left: auto;
+
+    .top{
+      width: 70%;
+      position: relative;
+      // margin: 0 auto;
+
+      img{
+        width: 100%;
+      }
+
+    }
+
+    .bottom{
+      width: 50%;
+      position: absolute;
+      top: 95%;
+      left: 6%;
+      img{
+        width: 100%;
+      }
+    }
+  }
+
+  .right{
+    padding: 0;
+    // margin-right: 3rem;
+    // margin-right: auto;
+    // text-align: center;
+
+    button{
+      margin: 0;
+      background-color: black;
+      color: white;
+      width: 80%;
+      padding: 0.7rem 1rem;
+      border-radius: 3rem;
+      margin-bottom: 1rem;
+
+      img{
+        margin-right: 0.5rem;
+      }
+    }
+
+  }
+
+}
