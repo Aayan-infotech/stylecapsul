@@ -1,90 +1,59 @@
-import React from 'react'
-import './Home.scss'
-import { Link } from 'react-router-dom'
+import React from "react";
+import "./Home.scss";
+import { Link } from "react-router-dom";
+import profile from "./img/profile.png";
+import market from "./img/market.png";
+import closet from "./img/closet.png";
+import style from "./img/style.png";
+import stylist from "./img/stylist.png";
+import analysis from "./img/analysis.png";
 
-import profile from './img/profile.png'
-import market from './img/market.png'
-import closet from './img/closet.png'
-import style from './img/style.png'
-import stylist from './img/stylist.png'
-import analysis from './img/analysis.png'
+const Home = () => {
+  const itemsLeft = [
+    { link: "/profile", imgSrc: profile, text: "Profile" },
+    { link: "/closetManagement", imgSrc: closet, text: "Closet Management" },
+    { link: "#", imgSrc: stylist, text: "Stylist" },
+  ];
 
-function Home() {
+  const itemsRight = [
+    { link: "/market-place", imgSrc: market, text: "Market Place" },
+    { link: "/myStyle-capsule", imgSrc: style, text: "My Style Capsule" },
+    { link: "#", imgSrc: analysis, text: "Analysis & Insights"},
+  ];
+
   return (
-    <>
-
-      <div className='home'>
-        {/* <h3>Services</h3> */}
-        <div className='center'>
-          <p>Home</p>
-        </div>
-        <div className='home-row'>
-          <div className='left'>
-            <Link to='/profile'  style={{ textDecoration: 'none' }}>
-              <div className="closet-management" >
+    <div className="home">
+      <div className="center">
+        <p>Home</p>
+      </div>
+      <div className="home-row">
+        <div className="left">
+          {itemsLeft.map((item, index) => (
+            <Link key={index} to={item.link} style={{ textDecoration: "none" }}>
+              <div className="closet-management">
                 <div className="image">
-                  <img src={profile} alt="Closet Icon" />
+                  <img src={item.imgSrc} alt={`${item.text} Icon`} />
                 </div>
-                <div className="text">
-                  Profile
-                </div>
+                <div className="text fw-bold">{item.text}</div>
               </div>
             </Link>
-
-            <div className="closet-management">
-              <div className="image">
-                <img src={closet} alt="Closet Icon" />
+          ))}
+        </div>
+        <div className="right">
+          {itemsRight.map((item, index) => (
+            <Link key={index} to={item.link} style={{ textDecoration: "none" }}>
+              <div className="closet-management">
+                <div className="image">
+                  <img src={item.imgSrc} alt={`${item.text} Icon`} />
+                </div>
+                <div className="text fw-bold">{item.text}</div>
               </div>
-              <div className="text">
-                Closet Management
-              </div>
-            </div>
-
-            <div className="closet-management">
-              <div className="image">
-                <img src={stylist} alt="Closet Icon" />
-              </div>
-              <div className="text">
-                Stylist
-              </div>
-            </div>
-
-          </div>
-          <div className='right'>
-
-            <div className="closet-management">
-              <div className="image">
-                <img src={market} alt="Closet Icon" />
-              </div>
-              <div className="text">
-                Market Place
-              </div>
-            </div>
-
-            <div className="closet-management">
-              <div className="image">
-                <img src={style} alt="Closet Icon" />
-              </div>
-              <div className="text">
-                My Style Capsule
-              </div>
-            </div>
-
-            <div className="closet-management">
-              <div className="image">
-                <img src={analysis} alt="Closet Icon" />
-              </div>
-              <div className="text">
-                Analysis & Insights
-              </div>
-            </div>
-
-          </div>
+            </Link>
+          ))}
         </div>
       </div>
+    </div>
+  );
+};
 
-    </>
-  )
-}
-
-export default Home
+export default Home;

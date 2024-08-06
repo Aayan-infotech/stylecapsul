@@ -1,0 +1,91 @@
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-center {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.navbar-center .title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.vid video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.marquee {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee p {
+  display: inline-block;
+  padding-right: 2rem;
+  animation: marquee 15s linear infinite;
+}
+.container{
+  display: block;
+}
+
+
+// ----------------------
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 10px; /* To avoid scrollbar overlap */
+  cursor: grab; /* Change cursor to grab */
+}
+
+.scroll-container:active {
+  cursor: grabbing; /* Change cursor to grabbing when active */
+}
+
+.scroll-container::-webkit-scrollbar {
+  height: 7px; /* Adjusted height for horizontal scrollbar */
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(61, 61, 61);
+}
+
+.d-flex.flex-nowrap .col {
+  display: inline-block;
+  white-space: normal; /* Ensures the inner content wraps as needed */
+  margin-right: 15px; /* Adjust spacing between items */
+}
+
+
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@media (max-width: 768px) {
+  .navbar-left button,
+  .navbar-right i {
+    margin-bottom: 0.5rem;
+  }
+  
+  .navbar-center .title {
+    font-size: 1.25rem;
+  }
+}
