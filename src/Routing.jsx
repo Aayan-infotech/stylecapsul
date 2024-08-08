@@ -26,6 +26,9 @@ import GiftCards from "./components/giftcards/GiftCards.jsx";
 import AnalyticsInsights from "./components/analyticsInsights/AnalyticsInsights.jsx";
 import HelpAndSupport from "./components/helpandsupport/HelpSupport.jsx";
 import ClosetOverview from "./components/closetoverview/ClosetOverview.jsx";
+import MyCapsuleAddAvtart from './components/myCapsuleAddAvtart/MyCapsuleAddAvtart.jsx'
+import TryAvtar from './components/tryavtar/TryAvtar.jsx'
+import AvtarLookingCool from './components/avtartlooking/AvtarLookingCool.jsx'
 
 import LandingPage from "./components/LandingPage/LandingPage";
 import Home from "./components/Home/Home";
@@ -88,6 +91,9 @@ const Routing = () => {
           <Route path="/help-support" element={<HelpAndSupport />} />
           <Route path="/closet-overview" element={<ClosetOverview />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />} />
+          <Route path="/try-avtar" element={<TryAvtar />} />
+          <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
         </Route>
       </Routes>
     </Router>

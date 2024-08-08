@@ -5,13 +5,14 @@ import paintimag from "../../assets/mystylecapsule/paintimag.png";
 import shoose from "../../assets/mystylecapsule/shoose.png";
 import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.css";
+import { Link } from "react-router-dom";
 
 const columnsData = [
   [],
   [
-    { src: shirttop, top: "5%", right: "70%" },
-    { src: paintimag, top: "32%", right: "70%" },
-    { src: shoose, top: "60%", right: "70%" },
+    { url: "/myCapsuleAddAvtart", src: shirttop, top: "5%", right: "70%" },
+    { url: "#", src: paintimag, top: "32%", right: "70%" },
+    { url: "#", src: shoose, top: "60%", right: "70%" },
   ],
   [],
 ];
@@ -62,22 +63,24 @@ const MyStyleCapsul = () => {
                 </div>
               ) : (
                 column.map((image, imageIndex) => (
-                  <div
-                    key={imageIndex}
-                    style={{
-                      position: "absolute",
-                      top: image.top,
-                      left: image.left,
-                      right: image.right,
-                    }}
-                  >
-                    <img
-                      src={image.src}
-                      height={200}
-                      width={200}
-                      alt={`Image ${imageIndex}`}
-                    />
-                  </div>
+                  <Link key={imageIndex} to={image.url}>
+                    <div
+                      key={imageIndex}
+                      style={{
+                        position: "absolute",
+                        top: image.top,
+                        left: image.left,
+                        right: image.right,
+                      }}
+                    >
+                      <img
+                        src={image.src}
+                        height={200}
+                        width={200}
+                        alt={`Image ${imageIndex}`}
+                      />
+                    </div>
+                  </Link>
                 ))
               )}
             </div>

@@ -1,0 +1,64 @@
+.capsule-main-container {
+    padding-top: 6rem;
+
+    .col-bg-color {
+        background-color: #F5F5F5;
+
+        .outfits-image-container {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+                max-height: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            width: 100%;
+        }
+
+        .row.g-2 {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            margin-bottom: 1rem;
+        }
+
+        .outfits-image-container img {
+            max-height: 150px;
+        }
+
+        .col-bg-color {
+            padding: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 1rem;
+        }
+
+        .row.g-2 {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            margin-bottom: 1rem;
+        }
+
+        .outfits-image-container img {
+            max-height: 120px;
+        }
+
+        .col-bg-color {
+            padding: 0.5rem;
+        }
+    }
+}

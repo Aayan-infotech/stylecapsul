@@ -1,0 +1,113 @@
+.capsule-main-container {
+    padding-top: 6rem;
+
+    .custom-button {
+        color: black;
+        width: 75%;
+        max-width: 200px;
+        padding: 0.5rem 1rem;
+        text-align: center;
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+    }
+
+    .btn-active {
+        background-color: black;
+        color: white;
+    }
+
+    .image-container {
+        width: 100%;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            width: 150px !important;
+            height: 150px !important;
+            height: auto;
+            border-top-right-radius: 60px;
+            border-top-left-radius: 60px;
+        }
+    }
+
+    .capsule-title {
+        background-color: #4C4C4C;
+        color: white;
+        width: 100%;
+        max-width: 150px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom-right-radius: 60px;
+        border-bottom-left-radius: 60px;
+    }
+
+    .outfits-background {
+        background-color: rgb(243 243 243) !important;
+        width: 230px;
+        height: 250px;
+        position: relative;
+    }
+
+    .outfits-image-container {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    .heart-icon {
+        top: 10px;
+        right: 10px;
+        background-color: white;
+        color: rgb(204, 199, 199);
+        padding: 5px;
+        border-radius: 6px;
+    }
+
+
+
+    @media (max-width: 768px) {
+        .custom-button {
+            width: 100%;
+            max-width: none;
+        }
+
+        .image-container {
+            img {
+                max-width: 100px;
+            }
+        }
+
+        .capsule-title {
+            max-width: 100px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .custom-button {
+            width: 100%;
+            max-width: none;
+        }
+
+        .image-container {
+            img {
+                max-width: 80px;
+            }
+        }
+
+        .capsule-title {
+            max-width: 80px;
+        }
+    }
+}
