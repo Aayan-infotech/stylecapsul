@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     gap: 3rem;
-    
+
 
     .girl {
       position: relative;
@@ -48,29 +48,45 @@
     padding-bottom: 2rem;
     border-bottom: 1px solid rgb(206, 203, 203);
 
-    .one,
-    .two {
-      padding: 0.5rem 1rem;
-    }
-
-    .one {
-      background-color: gray;
-      padding: 0.5rem 7rem;
-      color: white;
-      font-weight: 600;
-      font-size: 1.3rem;
-      border-radius: 2rem;
-    }
-
-    .two {
-      border: 1px solid black;
-      padding: 0.5rem 4rem;
+    .custom-button {
       color: black;
-      font-weight: 600;
-      font-size: 1.3rem;
-      margin-right: -2rem;
-      border-radius: 2rem;
+      width: 300px;
     }
+
+    .custom-button:hover {
+      background-color: black;
+      color: white
+    }
+
+    .btn-active {
+      background-color: black;
+      color: white;
+    }
+
+
+    // .one,
+    // .two {
+    //   padding: 0.5rem 1rem;
+    // }
+
+    // .one {
+    //   background-color: gray;
+    //   padding: 0.5rem 7rem;
+    //   color: white;
+    //   font-weight: 600;
+    //   font-size: 1.3rem;
+    //   border-radius: 2rem;
+    // }
+
+    // .two {
+    //   border: 1px solid black;
+    //   padding: 0.5rem 4rem;
+    //   color: black;
+    //   font-weight: 600;
+    //   font-size: 1.3rem;
+    //   margin-right: -2rem;
+    //   border-radius: 2rem;
+    // }
   }
 
   .avatar3 {
@@ -126,61 +142,62 @@
         margin: 2rem 0;
       }
 
-      .buttons{
+      .buttons {
         display: flex;
         gap: 3rem;
-      .button {
 
-        // text-align: center;
-        .text {
-          margin-left: 1rem;
+        .button {
 
-          span {
-            font-weight: 700;
-            font-size: 1.5rem;
-          }
-        }
+          // text-align: center;
+          .text {
+            margin-left: 1rem;
 
-        .counter {
-          display: flex;
-          background-color: black;
-          padding: 0.4rem 0.5rem;
-          border-radius: 3rem;
-          // justify-content: center;
-          // align-items: center;
-          // align-content: center;
-          gap: 1rem;
-
-          .minus {
-            font-size: 1.6rem;
-            background-color: #e0e0e0;
-            padding: 0 0.8rem;
-            border-radius: 2rem;
-            font-weight: 600;
-
+            span {
+              font-weight: 700;
+              font-size: 1.5rem;
+            }
           }
 
-          .plus {
-            font-size: 1.5rem;
-            background-color: #e0e0e0;
-            padding: 0 0.6rem;
-            border-radius: 2rem;
-            font-weight: 600;
+          .counter {
+            display: flex;
+            background-color: black;
+            padding: 0.4rem 0.5rem;
+            border-radius: 3rem;
+            // justify-content: center;
+            // align-items: center;
+            // align-content: center;
+            gap: 1rem;
 
+            .minus {
+              font-size: 1.6rem;
+              background-color: #e0e0e0;
+              padding: 0 0.8rem;
+              border-radius: 2rem;
+              font-weight: 600;
+
+            }
+
+            .plus {
+              font-size: 1.5rem;
+              background-color: #e0e0e0;
+              padding: 0 0.6rem;
+              border-radius: 2rem;
+              font-weight: 600;
+
+            }
           }
         }
       }
-    }
 
     }
 
   }
 
-  .avatar5{
+  .avatar5 {
     margin: 6rem 10rem;
     // border-bottom: 1px solid black;
 
-    .section{
+    .section {
       width: 60%;
       margin: 6rem auto;
 
@@ -188,19 +205,19 @@
         margin: 2rem 0;
       }
 
-      .buttons{
+      .buttons {
         display: flex;
         flex-wrap: wrap;
         gap: 3rem;
 
-        .button{
+        .button {
           background-color: #E9E9E9;
           padding: 1rem 2rem;
           width: 170px;
           text-align: center;
           border-radius: 7rem;
 
-          p{
+          p {
             margin: 0;
             padding: 0;
             font-size: 1.2rem;
@@ -208,7 +225,7 @@
           }
         }
 
-        .colored{
+        .colored {
           background-color: black;
           color: white;
         }
@@ -219,28 +236,28 @@
   }
 
 
-  .avatar6{
+  .avatar6 {
     margin: 7rem 10rem;
 
-    .section{
+    .section {
       width: 60%;
       margin: 6rem auto;
 
 
-      .buttons{
+      .buttons {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
         gap: 3rem;
 
-        .button{
+        .button {
           background-color: #E9E9E9;
           padding: 1rem 2rem;
           width: 170px;
           text-align: center;
           border-radius: 7rem;
 
-          p{
+          p {
             margin: 0;
             padding: 0;
             font-size: 1.2rem;
@@ -248,7 +265,7 @@
           }
         }
 
-        .colored{
+        .colored {
           background-color: black;
           color: white;
         }
@@ -259,7 +276,7 @@
   }
 
 
-  
+
   .border-container {
     // margin: 6rem 10rem;
     width: 50%;
@@ -268,22 +285,23 @@
     margin-top: 10px;
     margin: auto;
 
-    
-  .border-fade-left, .border-fade-right {
-    width: 12.5%;
-    height: 2px;
-    background: linear-gradient(to right, transparent, #b6b4b4);
-  }
 
-  .border-fade-right {
-    background: linear-gradient(to left, transparent, #b6b4b4);
-  }
+    .border-fade-left,
+    .border-fade-right {
+      width: 12.5%;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #b6b4b4);
+    }
 
-  .border-dark {
-    width: 25%;
-    height: 2px;
-    background-color: #b6b4b4;
-  }
+    .border-fade-right {
+      background: linear-gradient(to left, transparent, #b6b4b4);
+    }
+
+    .border-dark {
+      width: 25%;
+      height: 2px;
+      background-color: #b6b4b4;
+    }
 
   }
 

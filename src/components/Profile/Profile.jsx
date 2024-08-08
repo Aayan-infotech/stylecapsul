@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Profile.scss";
 import { Link } from "react-router-dom";
+import { Logout } from "../allmodal/Logout.jsx";
 
 import {
   FaUserEdit,
@@ -13,6 +14,10 @@ import { IoIosArrowForward } from "react-icons/io";
 import profile from "./img/profile.png";
 
 function Profile() {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const handleShowModal = () => setModalVisible(true);
+  const handleCloseModal = () => setModalVisible(false);
   return (
     <>
       <div className="profile">
@@ -52,13 +57,14 @@ function Profile() {
                 <IoIosArrowForward className="arrow-icon" />
               </button>
             </Link>
-            <button className="action-button">
-              <FaSignOutAlt className="icon" /> Log Out{" "}
+            <button className="action-button" onClick={handleShowModal}>
+              <FaSignOutAlt className="icon"/> Log Out{" "}
               <IoIosArrowForward className="arrow-icon" />
             </button>
           </div>
         </div>
       </div>
+      <Logout isModalVisible={isModalVisible} onClose={handleCloseModal} />
     </>
   );
 }

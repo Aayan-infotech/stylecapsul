@@ -12,13 +12,13 @@ const Home = () => {
   const itemsLeft = [
     { link: "/profile", imgSrc: profile, text: "Profile" },
     { link: "/closetManagement", imgSrc: closet, text: "Closet Management" },
-    { link: "#", imgSrc: stylist, text: "Stylist" },
+    { link: "/stylist", imgSrc: stylist, text: "Stylist" },
   ];
 
   const itemsRight = [
     { link: "/market-place", imgSrc: market, text: "Market Place" },
     { link: "/myStyle-capsule", imgSrc: style, text: "My Style Capsule" },
-    { link: "#", imgSrc: analysis, text: "Analysis & Insights"},
+    { link: "/analytics-insights", imgSrc: analysis, text: "Analysis & Insights"},
   ];
 
   return (

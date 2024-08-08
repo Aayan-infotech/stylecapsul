@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer class="footer mt-4">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4 footer-column">
+      <footer className="footer mt-4">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4 footer-column">
               <h4 className="fw-bold">Style Capsule</h4>
               <p>
                 {" "}
@@ -17,7 +17,7 @@ const Footer = () => {
                 agencies dedicated to national development.
               </p>
             </div>
-            <div class="col-md-4 footer-column d-flex justify-content-end align-items-center">
+            <div className="col-md-4 footer-column d-flex justify-content-end align-items-center">
              <div>
              <h6>Legal</h6>
               <h6>Terms & Condition</h6>
@@ -25,7 +25,7 @@ const Footer = () => {
               <h6>Contact</h6>
              </div>
             </div>
-            <div class="col-md-4 footer-column d-flex justify-content-end align-items-center">
+            <div className="col-md-4 footer-column d-flex justify-content-end align-items-center">
               <div>
                 <h5>
                   <span className="me-2">Available On</span>{" "}

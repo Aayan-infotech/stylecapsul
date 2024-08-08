@@ -18,7 +18,7 @@ const columnsData = [
 
 const MyStyleCapsul = () => {
   return (
-    <div className="container" style={{ paddingTop: "7rem" }}>
+    <div className="container w-75" style={{ paddingTop: "7rem" }}>
       <h1 className="text-center fw-bold fs-1">My Style Capsule</h1>
       <div className="text-center mt-4">
         <h5 className="fw-bold">Sunday</h5>
@@ -52,7 +52,10 @@ const MyStyleCapsul = () => {
                     />
                     <br />
                     <br />
-                    <h6 className="fs-6 text-center mt-2">
+                    <h6
+                      style={{ marginLeft: "2rem" }}
+                      className="fs-6 text-center mt-2"
+                    >
                       What is your outfit for today is going to be?
                     </h6>
                   </div>

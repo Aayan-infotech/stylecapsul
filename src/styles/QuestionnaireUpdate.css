@@ -1,0 +1,14 @@
+.custom-button {
+    color: black;
+    width: 150px;
+}
+
+.custom-button:hover {
+    background-color: black;
+    color: white
+}
+
+/* .btn-active {
+    background-color: black;
+    color: white;
+} */

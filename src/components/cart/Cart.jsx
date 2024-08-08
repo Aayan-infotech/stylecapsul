@@ -48,7 +48,10 @@ const Cart = () => {
   const total = subTotal - discount;
 
   return (
-    <div>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{ paddingTop: "6rem" }}
+    >
       <div className="container">
         <div style={{ marginRight: "20px" }}>
           <div className="cart-heading">Cart</div>
