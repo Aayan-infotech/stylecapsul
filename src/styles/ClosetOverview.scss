@@ -1,0 +1,35 @@
+.card {
+    background-color: #C8B199;
+    color: white;
+    width: 100%;
+    height: auto; 
+    max-width: 300px;
+    margin: auto; 
+  }
+  
+  @media (max-width: 767px) {
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .col-12 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .col-lg-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  }
+  

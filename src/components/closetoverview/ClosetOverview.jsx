@@ -1,4 +1,5 @@
 import React from "react";
+import "../../styles/ClosetOverview.scss";
 
 const cardData = [
   {
@@ -27,21 +28,14 @@ const ClosetOverview = () => {
   return (
     <div
       className="d-flex justify-content-center align-items-center closet-overview"
-      style={{ paddingTop: "6rem" }}>
+      style={{ paddingTop: "6rem" }}
+    >
       <div className="container w-50">
         <h1 className="text-center fw-bold fs-1">Closet Overview</h1>
-        <div className="row gy-5 mt-2">
+        <div className="row g-4 mt-2">
           {cardData.map((item, index) => (
-            <div key={index} className="col-6">
-              <div
-                className="card"
-                style={{
-                  width: "300px",
-                  height: "150px",
-                  backgroundColor: "#C8B199",
-                  color: "white",
-                }}
-              >
+            <div key={index} className="col-12 col-md-6 col-lg-6 d-flex justify-content-center align-items-center">
+              <div className="card">
                 <div className="card-body d-flex justify-content-center align-items-center">
                   <div>
                     <h2>{item.noOfCloset}</h2>

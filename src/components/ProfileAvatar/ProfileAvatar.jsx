@@ -9,6 +9,98 @@ import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
+  const [activeGender, setActiveGender] = useState("");
+  const [activeBodySize, setActiveBodySize] = useState("");
+  const [activeEyeColor, setActiveEyeColor] = useState("");
+  const [activeHairColor, setActiveHairColor] = useState("");
+  const [activeAgeRange, setActiveAgeRange] = useState("");
+  const [activeMaterialStatus, setActiveMaterialStatus] = useState("");
+
+  const [height, setHeight] = useState(150);
+  const [weight, setWeight] = useState(70);
+  const [shoes, setShoes] = useState(5);
+  const [shoulders, setShoulders] = useState(90);
+  const [chest, setChest] = useState(90);
+  const [waist, setWaist] = useState(90);
+  const [hips, setHips] = useState(90);
+  const [high, setHigh] = useState(90);
+
+  const handleChange = (type, delta) => {
+    if (type === "height") {
+      setHeight((prev) => Math.max(0, prev + delta));
+    } else if (type === "weight") {
+      setWeight((prev) => Math.max(0, prev + delta));
+    } else if (type === "shoes") {
+      setShoes((prev) => Math.max(0, prev + delta));
+    } else if (type === "shoulders") {
+      setShoulders((prev) => Math.max(0, prev + delta));
+    } else if (type === "chest") {
+      setChest((prev) => Math.max(0, prev + delta));
+    } else if (type === "waist") {
+      setWaist((prev) => Math.max(0, prev + delta));
+    } else if (type === "hips") {
+      setHips((prev) => Math.max(0, prev + delta));
+    } else if (type === "high") {
+      setHigh((prev) => Math.max(0, prev + delta));
+    }
+  };
+
+  const bodySize = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+  const selectEyeColor = [
+    "Amber",
+    "Blue",
+    "Brown",
+    "Gray",
+    "Hazal",
+    "Green",
+    "Others",
+  ];
+  const selectHiarColor = [
+    "Black",
+    "Blond",
+    "Brown",
+    "Auburn",
+    "Red",
+    "Gray",
+    "Others",
+  ];
+  const selectAgeRange = [
+    "18-20",
+    "23-27",
+    "28-32",
+    "33-37",
+    "38-42",
+    "43-46",
+    "47-50",
+    "51-54",
+    "55+",
+  ];
+  const selectMaterialStatus = ["Single", "Married"];
+
+  const handleClickGender = (gender) => {
+    setActiveGender(gender);
+  };
+
+  const handleClickBodySize = (body_size) => {
+    setActiveBodySize(body_size);
+  };
+
+  const handleClickEyeColor = (eye_color) => {
+    setActiveEyeColor(eye_color);
+  };
+
+  const handleClickHairColor = (hair_color) => {
+    setActiveHairColor(hair_color);
+  };
+
+  const handleClickAgeRange = (age_range) => {
+    setActiveAgeRange(age_range);
+  };
+
+  const handleClickMaterialStatus = (material_status) => {
+    setActiveMaterialStatus(material_status);
+  };
+
   return (
     <>
       <div className="avatar">
@@ -30,348 +122,512 @@ function ProfileAvatar() {
           </Link>
         </div>
 
-        <div className="avatar2">
-          <button
-            type="button"
-            className={`btn btn-outline-secondary p-2 rounded-pill fw-bold fs-5 custom-button ${
-              activeTab === "basic" ? "btn-active" : ""
-            }`}
-            onClick={() => setActiveTab("basic")}
-          >
-            Basic
-          </button>
-          <button
-            type="button"
-            className={`btn btn-outline-secondary p-2 rounded-pill fw-bold fs-5 custom-button ${
-              activeTab === "questionnaire" ? "btn-active" : ""
-            }`}
-            onClick={() => setActiveTab("questionnaire")}
-          >
-            Questionnaire
-          </button>
+        <div className="container w-50 mt-5 tab-section">
+          <div className="row g-2">
+            <div className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
+                  activeTab === "basic" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("basic")}
+              >
+                Basic
+              </button>
+            </div>
+            <div className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
+                  activeTab === "questionnaire" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("questionnaire")}
+              >
+                Questionnaire
+              </button>
+            </div>
+          </div>
         </div>
+
+        <div className="container">
+          <div className="row g-2">
+            <div className="col-12 w-100">
+              <hr />
+            </div>
+          </div>
+        </div>
+
         {activeTab === "basic" && (
-          <div>
-            <div className="avatar3">
-              <div className="input-container">
-                <label htmlFor="name-input" className="name-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name-input"
-                  className="name-input"
-                  placeholder="Enter Your Name"
-                />
-              </div>
-
-              <div className="input-container">
-                <label htmlFor="name-input" className="name-label">
-                  Bio
-                </label>
-                <input
-                  type="text"
-                  id="name-input"
-                  className="name-input"
-                  placeholder="Enter Bio"
-                />
-              </div>
-
-              <div className="input-container">
-                <label htmlFor="name-input" className="name-label">
-                  Email
-                </label>
-                <input
-                  type="text"
-                  id="name-input"
-                  className="name-input"
-                  placeholder="Enter Email"
-                />
-              </div>
-
-              <div className="input-container">
-                <label htmlFor="name-input" className="name-label">
-                  Mobile Number
-                </label>
-                <input
-                  type="text"
-                  id="name-input"
-                  className="name-input"
-                  placeholder="Enter Mobile Number"
-                />
-              </div>
-            </div>
-
-            <div className="avatar4">
-              <div className="one">
-                <h2>Height, Weight & Shoes</h2>
-                <div className="buttons">
-                  <div className="button">
-                    <h5 className="text">
-                      <span>170</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-
-                  <div className="button">
-                    <h5 className="text">
-                      <span>70</span>kg
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-
-                  <div className="button">
-                    <h5 className="text">
-                      <span>40</span>
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="one">
-                <h2>Shoulders</h2>
-                <div className="buttons">
-                  <div className="button">
-                    <h5 className="text">
-                      <span>90</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="one">
-                <h2>Chest & Waist</h2>
-                <div className="buttons">
-                  <div className="button">
-                    <h5 className="text">
-                      <span>90</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-
-                  <div className="button">
-                    <h5 className="text">
-                      <span>90</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="one">
-                <h2>Hips & High Hips</h2>
-                <div className="buttons">
-                  <div className="button">
-                    <h5 className="text">
-                      <span>90</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-
-                  <div className="button">
-                    <h5 className="text">
-                      <span>90</span>cm
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
-
-                  <div className="button">
-                    <h5 className="text">
-                      <span>40</span>
-                    </h5>
-                    <button className="counter">
-                      <div className="minus">-</div>
-                      <div className="plus">+</div>
-                    </button>
-                  </div>
+          <div className="container w-50">
+            <div className="row">
+              <div className="col-12">
+                <div className="p-2">
+                  <form>
+                    <div className="mb-3">
+                      <label htmlFor="name" className="form-label fw-bold fs-5">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control rounded-pill p-3"
+                        placeholder="Enter Your Name"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="bio" className="form-label fw-bold fs-5">
+                        Bio
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control rounded-pill p-3"
+                        placeholder="Enter Bio"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="email"
+                        className="form-label fw-bold fs-5"
+                      >
+                        Bio
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control rounded-pill p-3"
+                        placeholder="Enter Email"
+                      />
+                    </div>
+                    <div className="mb-3">
+                      <label
+                        htmlFor="mobile-number"
+                        className="form-label fw-bold fs-5"
+                      >
+                        Mobile Number
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control rounded-pill p-3"
+                        placeholder="Enter Mobile Number"
+                      />
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
 
-            <div className="avatar5">
-              <div className="section">
-                <h2>Gender</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>Male</p>
+            {/* -------------------------Height, Weight & Shoes------------------------------- */}
+            <div className="container mt-4">
+              <div className="row g-2">
+                <h1 className="fw-bold fs-3">My Style Capsule</h1>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{height}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("height", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("height", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div className="button ">
-                    <p>Female</p>
+                </div>
+
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{weight}</span>kg
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        style={{ width: "40px", height: "40px" }}
+                        onClick={() => handleChange("weight", -1)}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        style={{ width: "40px", height: "40px" }}
+                        onClick={() => handleChange("weight", -1)}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div className="button ">
-                    <p>Gender-Inc.</p>
+                </div>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{shoes}</span>
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        style={{ width: "40px", height: "40px" }}
+                        onClick={() => handleChange("shoes", -1)}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        style={{ width: "40px", height: "40px" }}
+                        onClick={() => handleChange("shoes", -1)}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="section">
-                <h2>Body Size</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>XS</p>
-                  </div>
-                  <div className="button ">
-                    <p>S</p>
-                  </div>
-                  <div className="button ">
-                    <p>M</p>
-                  </div>
-                  <div className="button ">
-                    <p>L</p>
-                  </div>
-                  <div className="button ">
-                    <p>XL</p>
-                  </div>
-                  <div className="button ">
-                    <p>XXL</p>
-                  </div>
-                  <div className="button ">
-                    <p>XXXL</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="section">
-                <h2>Eye Color</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>Amber</p>
-                  </div>
-                  <div className="button ">
-                    <p>Blue</p>
-                  </div>
-                  <div className="button ">
-                    <p>Brown</p>
-                  </div>
-                  <div className="button ">
-                    <p>Gray</p>
-                  </div>
-                  <div className="button ">
-                    <p>Hazal</p>
-                  </div>
-                  <div className="button ">
-                    <p>Green</p>
-                  </div>
-                  <div className="button ">
-                    <p>Others</p>
+              {/* -------------------------Shoulders------------------------------- */}
+              <div className="row g-2 mt-4">
+                <h1 className="fw-bold fs-3">Shoulders</h1>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{shoulders}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("shoulders", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("shoulders", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="section">
-                <h2>Hair Color</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>Black</p>
+              {/* -------------------------Shoulders------------------------------- */}
+              <div className="row g-2 mt-4">
+                <h1 className="fw-bold fs-3">Chest & Waist</h1>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{chest}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("chest", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("chest", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div className="button ">
-                    <p>Blond</p>
-                  </div>
-                  <div className="button ">
-                    <p>Brown</p>
-                  </div>
-                  <div className="button ">
-                    <p>Auburn</p>
-                  </div>
-                  <div className="button ">
-                    <p>Red</p>
-                  </div>
-                  <div className="button ">
-                    <p>Gray</p>
-                  </div>
-                  <div className="button ">
-                    <p>Others</p>
+                </div>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{waist}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("waist", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("waist", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="section">
-                <h2>What age range you're in?</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>18-22</p>
+              {/* -------------------------Hips & High Hips------------------------------- */}
+              <div className="row g-2 mt-4">
+                <h1 className="fw-bold fs-3">Hips & High Hips</h1>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{hips}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("hips", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("hips", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div className="button ">
-                    <p>23-27</p>
-                  </div>
-                  <div className="button ">
-                    <p>28-32</p>
-                  </div>
-                  <div className="button ">
-                    <p>33-37</p>
-                  </div>
-                  <div className="button ">
-                    <p>38-42</p>
-                  </div>
-                  <div className="button ">
-                    <p>43-46</p>
-                  </div>
-                  <div className="button ">
-                    <p>47-50</p>
-                  </div>
-                  <div className="button ">
-                    <p>51-54</p>
-                  </div>
-                  <div className="button ">
-                    <p>55+</p>
+                </div>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <div>
+                    <h5 className="text fs-5">
+                      <span>{high}</span>cm
+                    </h5>
+                    <div
+                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                      style={{ width: "110px", height: "50px" }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("high", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-minus"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-light fw-bold rounded-pill"
+                        onClick={() => handleChange("high", -1)}
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="section">
-                <h2>Marital Status</h2>
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>Single</p>
-                  </div>
-                  <div className="button ">
-                    <p>Married</p>
-                  </div>
+              {/* -------------------------Gender------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">Gender</h1>
+                <div className="col-12 col-md-4">
+                  <button
+                    type="button"
+                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                      activeGender === "Male" ? "selected" : ""
+                    }`}
+                    onClick={() => handleClickGender("Male")}
+                  >
+                    Male
+                  </button>
+                </div>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <button
+                    type="button"
+                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                      activeGender === "Female" ? "selected" : ""
+                    }`}
+                    onClick={() => handleClickGender("Female")}
+                  >
+                    Female
+                  </button>
+                </div>
+                <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                  <button
+                    type="button"
+                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                      activeGender === "Gender-Inc." ? "selected" : ""
+                    }`}
+                    onClick={() => handleClickGender("Gender-Inc.")}
+                  >
+                    Gender-Inc.
+                  </button>
                 </div>
               </div>
-            </div>
 
-            <div className="border-container">
-              <div className="border-fade-left"></div>
-              <div className="border-dark"></div>
-              <div className="border-fade-right"></div>
-            </div>
+              {/* -------------------------Body Size------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">Body Size</h1>
+                {bodySize.map((body_size) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={body_size}
+                  >
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeBodySize === body_size ? "selected" : ""
+                      }`}
+                      onClick={() => handleClickBodySize(body_size)}
+                    >
+                      {body_size}
+                    </button>
+                  </div>
+                ))}
+              </div>
 
-            <div className="avatar6">
-              <div className="section">
-                <div className="buttons">
-                  <div className="button colored">
-                    <p>Update</p>
+              {/* -------------------------Eye Color------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">Eye Color</h1>
+                {selectEyeColor.map((eye_color) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={eye_color}
+                  >
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeEyeColor === eye_color ? "selected" : ""
+                      }`}
+                      onClick={() => handleClickEyeColor(eye_color)}
+                    >
+                      {eye_color}
+                    </button>
                   </div>
-                  <div className="button ">
-                    <p>Cancel</p>
+                ))}
+              </div>
+
+              {/* -------------------------Hair Color------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">Hair Color</h1>
+                {selectHiarColor.map((hair_color) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={hair_color}
+                  >
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeHairColor === hair_color ? "selected" : ""
+                      }`}
+                      onClick={() => handleClickHairColor(hair_color)}
+                    >
+                      {hair_color}
+                    </button>
                   </div>
+                ))}
+              </div>
+
+              {/* -------------------------What age range you're in?------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">What age range you're in?</h1>
+                {selectAgeRange.map((age_range) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={age_range}
+                  >
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeAgeRange === age_range ? "selected" : ""
+                      }`}
+                      onClick={() => handleClickAgeRange(age_range)}
+                    >
+                      {age_range}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* -------------------------Marital Status------------------------------- */}
+              <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                <h1 className="fw-bold fs-3">Marital Status</h1>
+                {selectMaterialStatus.map((material_status) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={material_status}
+                  >
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeMaterialStatus === material_status
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() => handleClickMaterialStatus(material_status)}
+                    >
+                      {material_status}
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-container mt-5">
+                <div className="border-fade-left"></div>
+                <div className="border-dark"></div>
+                <div className="border-fade-right"></div>
+              </div>
+
+              {/* -------------------------update------------------------------- */}
+              <div class="row g-2 mt-4">
+                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
+                  <button
+                    type="button"
+                    class="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold"
+                  >
+                    Update
+                  </button>
+                </div>
+                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+                  <button
+                    type="button"
+                    class="btn btn-light w-100 w-md-50 rounded-pill p-3 fw-bold"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>

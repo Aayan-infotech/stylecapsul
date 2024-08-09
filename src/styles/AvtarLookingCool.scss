@@ -1,12 +1,17 @@
 .capsule-main-container {
-    padding-top: 17rem;
+    padding-top: 6rem;
+
+    .heading {
+        margin-bottom: 2rem;
+        z-index: 2;
+        position: relative;
+    }
 
     .position-relative {
         position: relative;
         width: 100%;
-        max-width: 600px; 
+        max-width: 100%;
         height: auto;
-        margin: 0 auto;
 
         .stage-img {
             display: block;
@@ -16,13 +21,23 @@
 
         .overlay-img {
             position: absolute;
-            top: 0%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            height: 400px; 
-            width: auto; 
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 60%;
+            width: auto;
             z-index: 1;
-            pointer-events: none; 
+            pointer-events: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .heading {
+            font-size: 1.5rem;
+        }
+
+        .overlay-img {
+            height: 50%;
         }
     }
 }

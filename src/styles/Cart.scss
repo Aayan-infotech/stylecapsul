@@ -1,0 +1,76 @@
+.cart-container {
+    padding-top: 6rem;
+
+    .card {
+        background-color: #4C4C4C;
+        color: #212529;
+        width: 100%;
+        max-width: 300px;
+
+        .card-body {
+            padding: 1rem;
+
+            .add-card-product {
+                background-color: white;
+                color: black;
+                width: 80px;
+                height: 25px;
+                border-radius: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .decrement-count {
+                    border-right: 1px solid gray;
+                    cursor: pointer;
+                }
+
+                .increment-count {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .checkout-button {
+        position: absolute;
+        top: 90%;
+        right: 30%;
+        width: 150px;
+        font-size: 1rem;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    }
+
+
+    @media (max-width: 767px) {
+        .row.g-2 {
+            gap: 0.5rem;
+        }
+
+        .card {
+            max-width: 100%;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .card {
+            max-width: 300px;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .col-lg-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .card {
+            max-width: 400px;
+        }
+    }
+}
