@@ -1,0 +1,165 @@
+.emoji-style-capsule {
+  margin: 50px 20px;
+
+  .main-heading {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+  }
+
+  .sub-heading {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    .sub-button {
+      border: 1px solid black;
+      border-radius: 50px;
+      padding: 10px 40px;
+      background-color: #fff;
+      font-size: 1.1rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    .sub-button:hover {
+      color: #fff;
+      background-color: black;
+    }
+  }
+
+  .section {
+    margin-top: 50px;
+
+    .head {
+      font-weight: bold;
+      font-size: 2rem;
+    }
+
+    .moods {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 15px;
+
+      .mood-img {
+        height: 100px;
+        width: 100px;
+        margin: 10px 0;
+        cursor: pointer;
+        border: 2px solid rgba(0, 0, 0, 0.193);
+        border-radius: 10px;
+        transition: border-color 0.3s;
+
+        &:hover {
+          border: 2px solid black;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .emoji-style-capsule {
+    margin: 120px 40px 80px 40px;
+
+    .main-heading {
+      font-size: 3rem;
+    }
+
+    .sub-heading {
+      .sub-button {
+        padding: 10px 60px;
+        font-size: 1.2rem;
+      }
+    }
+
+    .section {
+      .head {
+        font-size: 2.2rem;
+      }
+
+      .moods {
+        .mood-img {
+          height: 120px;
+          width: 120px;
+          margin: 15px 0;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .emoji-style-capsule {
+    margin: 100px 80px;
+
+    .sub-heading {
+      .sub-button {
+        padding: 10px 100px;
+      }
+    }
+
+    .section {
+      .moods {
+        .mood-img {
+          height: 130px;
+          width: 130px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .emoji-style-capsule {
+    margin: 100px 100px;
+
+    .sub-heading {
+      .sub-button {
+        padding: 10px 150px;
+      }
+    }
+
+    .section {
+      margin-top: 70px;
+
+      .moods {
+        .mood-img {
+          height: 150px;
+          width: 150px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .emoji-style-capsule {
+    margin: 100px 180px 50px;
+
+    .main-heading {
+      font-size: 3.5rem;
+    }
+
+    .sub-heading {
+      .sub-button {
+        padding: 10px 200px;
+      }
+    }
+
+    .section {
+      .head {
+        font-size: 2.5rem;
+      }
+      
+      .moods {
+        .mood-img {
+          height: 150px;
+          width: 150px;
+        }
+      }
+    }
+  }
+}

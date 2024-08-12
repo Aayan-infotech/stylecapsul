@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -26,9 +27,9 @@ import GiftCards from "./components/giftcards/GiftCards.jsx";
 import AnalyticsInsights from "./components/analyticsInsights/AnalyticsInsights.jsx";
 import HelpAndSupport from "./components/helpandsupport/HelpSupport.jsx";
 import ClosetOverview from "./components/closetoverview/ClosetOverview.jsx";
-import MyCapsuleAddAvtart from './components/myCapsuleAddAvtart/MyCapsuleAddAvtart.jsx'
-import TryAvtar from './components/tryavtar/TryAvtar.jsx'
-import AvtarLookingCool from './components/avtartlooking/AvtarLookingCool.jsx'
+import MyCapsuleAddAvtart from "./components/myCapsuleAddAvtart/MyCapsuleAddAvtart.jsx";
+import TryAvtar from "./components/tryavtar/TryAvtar.jsx";
+import AvtarLookingCool from "./components/avtartlooking/AvtarLookingCool.jsx";
 
 import LandingPage from "./components/LandingPage/LandingPage";
 import Home from "./components/Home/Home";
@@ -40,11 +41,16 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 import FullAvatar from "./components/FullAvatar/FullAvatar";
 import Body from "./components/Body/Body";
 import Appointment from "./components/Appointment/Appointment";
+import ChangePassword from "./components/ChangePassword/ChangePassword";
+import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
+import OrderHistory from "./components/OrderHistory/OrderHistory";
+import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyleCapsule";
+import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
 
 // Layout Component
 const MainLayout = () => {
   const location = useLocation();
-  const showNabar = location.pathname !== '/market-place';
+  const showNabar = location.pathname !== "/market-place";
 
   return (
     <>
@@ -94,6 +100,11 @@ const Routing = () => {
           <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />} />
           <Route path="/try-avtar" element={<TryAvtar />} />
           <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/myaddedproducts" element={<MyAddedProducts />} />
+          <Route path="/orderhistory" element={<OrderHistory />} />
+          <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />}/>
+          <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
         </Route>
       </Routes>
     </Router>
