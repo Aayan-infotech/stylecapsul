@@ -141,7 +141,7 @@ const QuestionnaireUpdate = () => {
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
-      <div className="container w-50">
+      <div className="container w-75">
         {/* -------------------------Do you like minimal style------------------------ */}
         <h1 className="fw-bold fs-1 mt-2">{question}</h1>
         <div className="row g-2 mt-2">
@@ -579,7 +579,7 @@ const QuestionnaireUpdate = () => {
             >
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+                className="btn btn-outline-secondary rounded-pill w-100 custom-button p-2 fw-bold fs-5"
               >
                 {label}
               </button>
@@ -663,15 +663,11 @@ const QuestionnaireUpdate = () => {
           ))}
         </div>
 
-        {/* <div className="row gy-2 mt-4">
-          <div className="col-12 col-sm-6 col-md-6 d-flex justify-content-center align-items-center">
-            <div className="border-container mt-6">
-              <div className="border-fade-left"></div>
-              <div className="border-dark"></div>
-              <div className="border-fade-right"></div>
-            </div>
-          </div>
-        </div> */}
+        <div className="border-container mt-5">
+          <div className="border-fade-left"></div>
+          <div className="border-dark"></div>
+          <div className="border-fade-right"></div>
+        </div>
 
         {/* -------------------------Update profile------------------------ */}
         <div className="row gy-2 mt-4">

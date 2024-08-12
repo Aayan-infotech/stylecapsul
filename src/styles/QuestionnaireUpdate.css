@@ -32,6 +32,31 @@
     padding: 20px;
 }
 
+.border-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    margin: auto;
+
+
+    .border-fade-left,
+    .border-fade-right {
+        width: 12.5%;
+        height: 2px;
+        background: linear-gradient(to right, transparent, #b6b4b4);
+    }
+
+    .border-fade-right {
+        background: linear-gradient(to left, transparent, #b6b4b4);
+    }
+
+    .border-dark {
+        width: 25%;
+        height: 2px;
+        background-color: #b6b4b4;
+    }
+}
 
 @media (max-width: 767.98px) {
     .questionnaire-update h1 {
