@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom'
-import './Login.scss';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Login.scss";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,58 +10,90 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1 className="brand-name">Style Capsule</h1>
-        <h2 className="login-title">Log In</h2>
-
-        <form className="login-form">
-
-          <div className="input-group">
-            <label htmlFor="email">Email or Phone Number</label>
-            <input type="text" id="email" placeholder="Email or Phone Number" />
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-container">
-              <input 
-                type={showPassword ? "text" : "password"} 
-                id="password" 
-                placeholder="Password" 
-              />
-              <span className="password-toggle-icon" onClick={togglePasswordVisibility}>
-                {showPassword ? (
-                  <i className="fa-solid fa-eye-slash"></i>
-                ) : (
-                  <i className="fa-solid fa-eye"></i>
-                )}
-              </span>
+    <>
+      <div className="custom-container mt-5">
+        <div>
+          <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+          <div className="card custom-card mt-0 border-0">
+            <div className="card-body p-5 text-black">
+              <h2 className="card-title fs-4 text-center fw-bold">Login</h2>
+              <form className="mt-4">
+                <div className="mb-2">
+                  <label htmlFor="emailronumber" className="form-label fw-bold">
+                    Phone Number or Email
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    placeholder="Phone Number or Email"
+                  />
+                </div>
+                <div className="mb-2 position-relative">
+                  <label htmlFor="password" className="form-label fw-bold">
+                    Password
+                  </label>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="form-control rounded-pill"
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
+                    onClick={togglePasswordVisibility}
+                    style={{ background: "none", border: "none" }}
+                  >
+                    <i
+                      className={`fa-solid ${
+                        showPassword ? "fa-eye" : "fa-eye-slash"
+                      }`}
+                    ></i>
+                  </button>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="">
+                    <Link
+                      to="/forgot-password"
+                      className="text-decoration-none text-black"
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="text-black me-1"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                      Remember Me
+                    </label>
+                  </div>
+                </div>
+                <div className="text-center mt-4">
+                  <Link to="/home">
+                    <button
+                      type="submit"
+                      className="btn custom-button text-white fw-bold rounded-pill w-75 p-2"
+                    >
+                      Login
+                    </button>
+                  </Link>
+                  <div className="signup-link">
+                    <span>Doesn't have the account? </span>
+                    <Link to="/signup" className="text-black fw-bold">
+                      Sign up
+                    </Link>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-
-          <Link to='/home'><button type="submit" className="login-button">Log In</button></Link>
-
-          
-          <div className="options">
-            <Link to="/forgot-password" className='forgot'>Forgot Password?</Link>
-            <div className="remember-me">
-              <input type="checkbox" id="rememberMe" />
-              <label htmlFor="rememberMe">Remember Me</label>
-            </div>
-          </div>
-
-
-        </form>
-
-        <div className="signup-link">
-          <span>Doesn't have the account? </span>
-          <Link to="/signup">Sign up</Link>
         </div>
       </div>
-    </div>
+    </>
   );
-
 };
 
 export default Login;

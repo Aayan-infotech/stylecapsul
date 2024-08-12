@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import {Link} from 'react-router-dom'
-import './Signup.scss';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./Signup.scss";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,91 +15,123 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-container">
-      <div className="login-box">
-        <h1 className="brand-name">Style Capsule</h1>
-        <h2 className="login-title">Sign Up</h2>
-
-        <form className="login-form">
-
-          <div className='row1'>
-
-        <div className="input-group">
-            <label htmlFor="email">Name</label>
-            <input type="text" id="email" placeholder="Enter Your Name" />
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="email">Phone Number or Email</label>
-            <input type="text" id="email" placeholder="Enter Email or Phone Number" />
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="email">Username</label>
-            <input type="text" id="email" placeholder="Enter Username" />
-          </div>
-
-          </div>
-
-          <div className='row2'>
-          
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-container">
+    <div className="container d-flex justify-content-center align-items-center full-height">
+      <div className="">
+        <h1 className="text-center outside-heading fs-1 fw-bold">
+          Style Capsule
+        </h1>
+        <div className="row gy-4 mt-1">
+          <h2 className="card-title text-center fs-4 fw-bold">Sign Up</h2>
+          <div className="col-12 col-md-4 mt-4">
+            <div>
+              <label
+                for="exampleInputEmail1"
+                className="form-label text-black fw-bold"
+              >
+                Name
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                placeholder="Enter Your Password"
+                type="email"
+                className="form-control rounded-pill"
+                placeholder="Enter Your Name"
               />
-              <span
-                className="password-toggle-icon"
+            </div>
+          </div>
+          <div className="col-12 col-md-4">
+            <div>
+              <label
+                for="exampleInputEmail1"
+                className="form-label text-black fw-bold"
+              >
+                Enter Email or Phone Number
+              </label>
+              <input
+                type="email"
+                className="form-control rounded-pill"
+                placeholder="Enter Email or Phone Number"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-4">
+            <div>
+              <label
+                for="exampleInputEmail1"
+                className="form-label text-black fw-bold"
+              >
+                Username
+              </label>
+              <input
+                type="email"
+                className="form-control rounded-pill"
+                placeholder="Enter Username"
+              />
+            </div>
+          </div>
+          <div className="col-12 col-md-6 d-flex justify-content-end align-items-center">
+            <div className="mb-2 position-relative custom-password-input">
+              <label htmlFor="password" className="form-label fw-bold">
+                Password
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control rounded-pill"
+                placeholder="Password"
+              />
+              <button
+                type="button"
+                className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
                 onClick={togglePasswordVisibility}
+                style={{ background: "none", border: "none" }}
               >
-                {showPassword ? (
-                  <i className="fa-solid fa-eye-slash"></i>
-                ) : (
-                  <i className="fa-solid fa-eye"></i>
-                )}
-              </span>
+                <i
+                  className={`fa-solid ${
+                    showPassword ? "fa-eye" : "fa-eye-slash"
+                  }`}
+                ></i>
+              </button>
             </div>
           </div>
-
-          <div className="input-group">
-            <label htmlFor="confirm-password">Confirm Password</label>
-            <div className="password-container">
+          <div className="col-12 col-md-6 d-flex justify-content-start align-items-center">
+            <div className="mb-2 position-relative custom-password-input">
+              <label htmlFor="password" className="form-label fw-bold">
+                Password
+              </label>
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirm-password"
-                placeholder="Confirm Your Password"
+                type={showConfirmPassword ? "text" : "password"}
+                className="form-control rounded-pill"
+                placeholder="Password"
               />
-              <span
-                className="password-toggle-icon"
+              <button
+                type="button"
+                className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
                 onClick={toggleConfirmPasswordVisibility}
+                style={{ background: "none", border: "none" }}
               >
-                {showConfirmPassword ? (
-                  <i className="fa-solid fa-eye-slash"></i>
-                ) : (
-                  <i className="fa-solid fa-eye"></i>
-                )}
-              </span>
+                <i
+                  className={`fa-solid ${
+                    showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                  }`}
+                ></i>
+              </button>
             </div>
           </div>
-
+          <div className="text-center mt-4">
+            <Link to="/login">
+              <button type="submit" className="login-button fw-bold">
+                Sign Up
+              </button>
+            </Link>
           </div>
-
-          <Link to='/login'><button type="submit" className="login-button">Sign Up</button></Link>
-
-         
-        </form>
-
-        <div className="signup-link">
-          <span>Already have an account? </span>
-          <Link to="/login">Log In</Link>
+          <div className="text-center mt-2">
+            <span>Already have an account? </span>
+            <Link to="/login" className="text-black">
+              Log In
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
-
 };
 
 export default Signup;
