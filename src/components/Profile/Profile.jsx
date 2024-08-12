@@ -22,7 +22,7 @@ function Profile() {
   return (
     <>
       <div className="profile">
-        <div className="card w-75">
+        <div className="card">
           <div className="card-body">
             <div className="row gx-2">
               <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
@@ -37,16 +37,15 @@ function Profile() {
                   <div className="profile-info mt-3">
                     <h2>Elizabeth</h2>
                     <h5 className="fs-6">Elizabeth@gmail.com</h5>
-                    <blockquote>“Fashions fade, style is eternal.”</blockquote>
+                    <blockquote>
+                      “Fashions fade, style is eternal.”
+                    </blockquote>
                   </div>
                 </div>
               </div>
               <div className="col-12 col-md-6">
                 <div>
-                  <Link
-                    to="/edit-profile-avatar"
-                    style={{ textDecoration: "none" }}
-                  >
+                  <Link to="/edit-profile-avatar" style={{ textDecoration: "none" }}>
                     <button className="action-button">
                       <FaUserEdit className="icon" /> Edit Profile{" "}
                       <IoIosArrowForward className="arrow-icon" />
@@ -54,10 +53,7 @@ function Profile() {
                   </Link>
                 </div>
                 <div>
-                  <Link
-                    to="/scheduled-appointment"
-                    style={{ textDecoration: "none" }}
-                  >
+                  <Link to="/scheduled-appointment" style={{ textDecoration: "none" }}>
                     <button className="action-button">
                       <FaCalendarAlt className="icon" /> Scheduled Appointment{" "}
                       <IoIosArrowForward className="arrow-icon" />
@@ -71,10 +67,7 @@ function Profile() {
                   </button>
                 </div>
                 <div>
-                  <Link
-                    to="/settingAndSecurity"
-                    style={{ textDecoration: "none" }}
-                  >
+                  <Link to="/settingAndSecurity" style={{ textDecoration: "none" }}>
                     <button className="action-button">
                       <FaCog className="icon" /> Settings{" "}
                       <IoIosArrowForward className="arrow-icon" />

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import { Link } from "react-router-dom";
 import imagefocus from "../../assets/marketplace/Group1806.png";
@@ -97,7 +98,7 @@ const MarketPlace = () => {
       <div className="outer-navbar">
         <div className="navbar d-flex justify-content-between align-items-center p-2">
           <div className="navbar-left d-flex">
-            <Link to="/login">
+            <Link to="/myaddedproducts">
               <button
                 type="button"
                 className="rounded-pill btn bg-black text-white me-2"
@@ -112,7 +113,7 @@ const MarketPlace = () => {
                 My Added Products
               </button>
             </Link>
-            <Link to="/signup">
+            <Link to="/orderhistory">
               <button
                 type="button"
                 className="rounded-pill btn bg-black text-white"

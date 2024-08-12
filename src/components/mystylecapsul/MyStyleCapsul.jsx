@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import capsulimg from "../../assets/mystylecapsule/capsulimg1.png";
 import shirttop from "../../assets/mystylecapsule/shirt1.png";
@@ -24,6 +25,9 @@ const MyStyleCapsul = () => {
       <div className="text-center mt-4">
         <h5 className="fw-bold">Sunday</h5>
         <h5 className="fw-bold">30 June 2024</h5>
+        {/* <div className="head-button">
+          <button><i className='bx bx-calendar' ></i>Calendar</button>
+        </div> */}
       </div>
       <div className="mt-5">
         <div className="row gx-5">
