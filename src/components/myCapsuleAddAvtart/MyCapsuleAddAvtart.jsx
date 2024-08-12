@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import previewImage1 from "../../assets/myCapsuleAddAvtar/previewImage1.jpg";
 import previewImage2 from "../../assets/myCapsuleAddAvtar/previewImage2.jpg";
