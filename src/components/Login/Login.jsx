@@ -15,7 +15,7 @@ const Login = () => {
         <div>
           <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
           <div className="card custom-card mt-0 border-0">
-            <div className="card-body p-5 text-black">
+            <div className="card-body p-0 text-black">
               <h2 className="card-title fs-4 text-center fw-bold">Login</h2>
               <form className="mt-4">
                 <div className="mb-2">

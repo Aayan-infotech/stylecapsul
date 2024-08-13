@@ -11,17 +11,11 @@
     border-radius: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-family: 'Arial, sans-serif';
-    max-width: 700px;
+    max-width: 750px;
 
     .card-body {
-      padding: 2rem;
-
       .row {
         margin: 0;
-      }
-
-      .col-12 {
-        padding: 0;
       }
 
       .action-button {
@@ -29,15 +23,14 @@
         color: #000;
         border: none;
         padding: 8px 20px;
-        margin: 5px 0;
-        font-size: 16px;
+        margin: 15px 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
         transition: background-color 0.3s;
         width: 100%;
-        border-radius: 2.5rem;
+        border-radius: 25px;
 
         &:hover {
           background-color: #ccc;
@@ -55,17 +48,20 @@
   }
 }
 
-@media (max-width: 992px) { 
+@media (max-width: 992px) {
   .card {
     width: 75%;
+    padding: 10px;
     margin: 5rem 0;
   }
 }
 
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
   .card {
     width: 90%;
     margin: 3rem 0;
+    padding: 10px;
+
     .action-button {
       font-size: 14px;
       padding: 12px;

@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  // position: fixed;
   position: absolute;
   top: 0;
   z-index: 1000;
@@ -19,7 +18,6 @@
     margin: 1rem auto;
     padding: 10px 20px;
     box-shadow: 0 4px 6px rgba(29, 28, 28, 0.3);
-
 
     &-left,
     &-right {
@@ -51,21 +49,7 @@
       border-radius: 50px;
     }
 
-    &-right .icon-btn {
-      font-size: 20px;
-    }
-
-    &-center {
-      .title {
-        font-family: 'Arial', sans-serif;
-        font-size: 2.5rem;
-        font-weight: 700;
-      }
-    }
-
-    .navbar-left {}
-
-    .navbar-right {
+    &-right {
       background-color: black;
       padding: 0.6rem 1rem;
       border-radius: 1.5rem;
@@ -73,37 +57,43 @@
       i {
         color: white;
         margin: 0 0.7rem;
+        font-size: 20px;
       }
     }
 
+    &-center {
+      .title {
+        font-family: 'Arial', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+      }
+    }
   }
-
 }
 
 .landing1 {
   width: 100%;
 
   .vid {
-    // width: 100%;
-
     video {
       position: relative;
       width: 100%;
       height: 100vh;
       object-fit: cover;
     }
-
   }
 
   .capsule {
     position: absolute;
     top: 85%;
-    left: 38%;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: white;
     padding: 0.6rem 1.5rem;
     border-radius: 2.5rem;
     margin: auto;
-    // align-items: center;
 
     p {
       text-align: center;
@@ -113,15 +103,11 @@
       margin: 0;
     }
   }
-
-
 }
 
 .landing2 {
-
   width: 100%;
   overflow: hidden;
-  position: relative;
 
   @keyframes marquee {
     0% {
@@ -137,375 +123,436 @@
     display: flex;
     width: 200%;
     animation: marquee 18s linear infinite;
+
+    p {
+      font-size: 4rem;
+      font-weight: bold;
+      white-space: nowrap;
+      flex: 0 0 40%;
+    }
   }
-
-  p {
-    font-size: 4rem;
-    font-weight: bold;
-    white-space: nowrap;
-    flex: 0 0 40%;
-  }
-
-
-
 }
 
-.landing3{
-  padding: 2rem 5rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
 
-  .left{
-    width: 40%;
+// Responsive Styles
+@media (max-width: 1200px) {
+  .navbar {
+    padding: 10px 15px;
+    width: 95%;
 
-    p{
-      font-size: 3.5rem;
+    &-left .login-btn,
+    &-left .signup-btn {
+      font-size: 14px;
+      padding: 6px 1.6rem;
     }
 
+    &-left .signup-btn {
+      padding: 4px 1.2rem;
+    }
+
+    &-right {
+      padding: 0.5rem 0.8rem;
+
+      i {
+        font-size: 18px;
+        margin: 0 0.5rem;
+      }
+    }
+
+    &-center .title {
+      font-size: 2rem;
+    }
   }
 
-  .right{
-    // width: 40%;
+  .landing1 .capsule {
+    top: 80%;
+    padding: 0.5rem 1.2rem;
 
-    img{
+    p {
+      font-size: 1.2rem;
+    }
+  }
+
+  .landing2 .marquee p {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 5px;
+
+    &-left {
+      margin-bottom: 10px;
+    }
+
+    &-center {
+      margin: 10px 0;
+    }
+
+    &-right {
+      margin-top: 10px;
+    }
+
+    &-left .login-btn,
+    &-left .signup-btn {
+      font-size: 14px;
+      padding: 5px 1.2rem;
+    }
+
+    &-left .signup-btn {
+      padding: 3px 1rem;
+    }
+
+    &-right {
+      padding: 0.4rem 0.6rem;
+
+      i {
+        font-size: 16px;
+        margin: 0 0.5rem;
+      }
+    }
+
+    &-center .title {
+      font-size: 1.8rem;
+    }
+  }
+
+  .landing1 .capsule {
+    top: 75%;
+    padding: 0.4rem 1rem;
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .landing2 .marquee p {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+
+    &-left .login-btn,
+    &-left .signup-btn {
+      font-size: 12px;
+      padding: 4px 1rem;
+    }
+
+    &-left .signup-btn {
+      padding: 3px 0.8rem;
+    }
+
+    &-right {
+      padding: 0.3rem 0.5rem;
+
+      i {
+        font-size: 14px;
+        margin: 0 0.4rem;
+      }
+    }
+
+    &-center .title {
+      font-size: 1.5rem;
+    }
+  }
+
+  .landing1 .capsule {
+    top: 70%;
+    padding: 0.3rem 0.8rem;
+
+    p {
+      font-size: 0.9rem;
+    }
+  }
+
+  .landing2 .marquee p {
+    font-size: 2rem;
+  }
+}
+
+.custom-container {
+  width: 100%;
+  padding: 0 15px;
+
+  .text-size {
+    font-size: 45px;
+    // line-height: 5rem;
+  }
+}
+
+.landing4 {
+  text-align: center;
+  padding: 4rem;
+
+  h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .landing4-row {
+    display: flex;
+    justify-content: space-around;
+    row-gap: 2rem;
+    flex-wrap: wrap;
+
+    .left,
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      box-sizing: border-box;
+
+      .closet-management {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        width: 100%;
+        max-width: 500px;
+        height: 100px;
+
+        .image {
+          background-color: #4A4A4A;
+          border-top-left-radius: 4rem;
+          border-bottom-left-radius: 4rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 100px;
+          height: 100%;
+
+          img {
+            max-width: 80%;
+            height: auto;
+          }
+        }
+
+        .text {
+          border: 2px solid black;
+          border-left: none;
+          border-top-right-radius: 4rem;
+          border-bottom-right-radius: 4rem;
+          padding: 0 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          color: black;
+          flex: 1;
+          height: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding: 2rem;
+
+    h3 {
+      font-size: 2rem;
+    }
+
+    .landing4-row {
+
+      .left,
+      .right {
+        max-width: 100%;
+        width: 50%;
+      }
+
+      .closet-management {
+        margin: 1rem 0;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    h3 {
+      font-size: 1.8rem;
+    }
+
+    .landing4-row {
+
+      .left,
+      .right {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .landing4-row {
+      .closet-management {
+        margin: 0.5rem 0;
+      }
+    }
+  }
+}
+
+.landing5 {
+  .product-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin: 1rem auto;
+    overflow: hidden;
+    border-radius: 5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    .image-container {
+      flex: 0 0 200px;
+      height: 180px;
+      background-color: #4a4a4a;
+      border-top-left-radius: 5rem;
+      border-bottom-left-radius: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .text-container {
+      flex: 1;
+      background-color: #f0f0f0;
+      border-top-right-radius: 5rem;
+      border-bottom-right-radius: 5rem;
+      padding: 1.3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      row-gap: 1rem;
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        h3 {
+          margin: 0;
+          font-size: 1.5rem;
+        }
+
+        .description-price {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+            flex: 1;
+          }
+
+          .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: black;
+          }
+        }
+      }
+
+      .actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+
+        .add-to-cart,
+        .buy {
+          padding: 0.5rem 1rem;
+          border: none;
+          border-radius: 2rem;
+          cursor: pointer;
+        }
+
+        .add-to-cart {
+          background-color: #fff;
+          border: 1px solid #ccc;
+          color: #333;
+        }
+
+        .buy {
+          background-color: black;
+          color: white;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .product-card {
       height: auto;
+      margin: 1rem 0;
     }
   }
 
-  
-}
-
-.landing4{
-  text-align: center;
-  padding: 4rem;
-
-  h3{
-    font-size: 2.5rem;
-    font-weight: 700;
-  }
-  
-  .landing4-row{
-    display: flex;
-    justify-content: space-around;
-    row-gap: 2rem;
-    
-  .left{
-
-
-    .closet-management {
-      display: flex;
-      align-items: center;
-      margin: 2rem 0;
-      width: 400px; // Fixed width for the container
-      height: 100px; // Fixed height for the container
-    
-      .image {
-        background-color: #4A4A4A;
-        border-top-left-radius: 4rem;
-        border-bottom-left-radius: 4rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex: 0 0 100px; // Fixed width for the image container
-        height: 100%; // Match the height of the container
-    
-        img {
-          max-width: 80%;
-        }
-      }
-    
-      .text {
-        border: 2px solid black;
-        border-left: none;
-        border-top-right-radius: 4rem;
-        border-bottom-right-radius: 4rem;
-        padding: 0 2rem; // Adjusted padding for spacing
-        display: flex;
-        align-items: center;
-        justify-content: center; // Center text horizontally
-        font-size: 1.2rem;
-        color: black;
-        flex: 1; // Take the remaining space
-        height: 100%; // Match the height of the container
-        text-align: center; // Center text horizontally
-      }
+  @media (max-width: 992px) {
+    .product-card {
+      height: auto;
+      margin: 1rem 0;
     }
-     
-
-
-  }
-
-  .right{
-
-
-.closet-management {
-  display: flex;
-  align-items: center;
-  margin: 2rem 0;
-  width: 400px; // Fixed width for the container
-  height: 100px; // Fixed height for the container
-
-  .image {
-    background-color: #4A4A4A;
-    border-top-left-radius: 4rem;
-    border-bottom-left-radius: 4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 100px; // Fixed width for the image container
-    height: 100%; // Match the height of the container
-
-    img {
-      max-width: 80%;
+    .image-container {
+      flex: 0 0 150px;
+      height: 200px !important;
     }
   }
 
-  .text {
-    border: 2px solid black;
-    border-left: none;
-    border-top-right-radius: 4rem;
-    border-bottom-right-radius: 4rem;
-    padding: 0 2rem; // Adjusted padding for spacing
-    display: flex;
-    align-items: center;
-    justify-content: center; // Center text horizontally
-    font-size: 1.2rem;
-    color: black;
-    flex: 1; // Take the remaining space
-    height: 100%; // Match the height of the container
-    text-align: center; // Center text horizontally
-  }
-}
-  
-
+  @media (max-width: 768px) {
+    .product-card {
+      height: auto;
+      margin: 1rem 0;
+    }
+    .image-container {
+      flex: 0 0 150px;
+      height: 200px !important;
+    }
   }
 
-}
-}
-
-
-.landing5{
-  text-align: center;
-  padding: 4rem;
-  margin-bottom: 4rem;
-
-  h3{
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin: 3rem 0;
-  }
-  
-  .landing4-row{
-    display: flex;
-    justify-content: space-around;
-    row-gap: 2rem;
-    
-  .left{
-    
+  @media (max-width: 576px) {
+    h2 {
+      font-size: 1.75rem;
+    }
 
     .product-card {
-      display: flex;
-      align-items: center;
-      width: 600px; 
-      height: 180px; 
-      margin: 2rem auto;
-      overflow: hidden;
-    
-      .image-container {
-        flex: 0 0 200px; 
-        height: 100%; 
-        background-color: #4A4A4A;
-        border-top-left-radius: 5rem; 
-        border-bottom-left-radius: 5rem; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden; 
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-    
-      .text-container {
-        flex: 1;
-        background-color: #f0f0f0;
-        border-top-right-radius: 5rem; 
-        border-bottom-right-radius: 5rem; 
-        padding: 1.3rem 2rem; 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        row-gap: 1rem; // Added row gap
-    
-        .info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-    
-          h3 {
-            margin: 0;
-            font-size: 1.5rem;
-          }
-    
-          .description-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            align-content: center;
-    
-            p {
-              margin: 0;
-              font-size: 0.9rem;
-              color: #666;
-              flex: 1; // Ensures the description takes the available space
-            }
-    
-            .price {
-              font-size: 1.5rem;
-              font-weight: bold;
-              color: black;
-            }
-          }
-        }
-    
-        .actions {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-    
-          .add-to-cart,
-          .buy {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-          }
-    
-          .add-to-cart {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            color: #333;
-          }
-    
-          .buy {
-            background-color: black;
-            color: white;
-          }
-        }
-      }
+      height: auto;
+      margin: 1rem 0;
     }
-    
-    
 
-  }
-
-  .right{
-
-    
-    .product-card {
-      display: flex;
-      align-items: center;
-      width: 600px; 
-      height: 180px; 
-      margin: 2rem;
-      overflow: hidden;
-    
-      .image-container {
-        flex: 0 0 200px; 
-        height: 100%; 
-        background-color: #4A4A4A;
-        border-top-left-radius: 5rem; 
-        border-bottom-left-radius: 5rem; 
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden; 
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-    
-      .text-container {
-        flex: 1;
-        background-color: #f0f0f0;
-        border-top-right-radius: 5rem; 
-        border-bottom-right-radius: 5rem; 
-        padding: 1.3rem 2rem; 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        row-gap: 1rem; // Added row gap
-    
-        .info {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-    
-          h3 {
-            margin: 0;
-            font-size: 1.5rem;
-          }
-    
-          .description-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            align-content: center;
-    
-            p {
-              margin: 0;
-              font-size: 0.9rem;
-              color: #666;
-              flex: 1; // Ensures the description takes the available space
-            }
-    
-            .price {
-              font-size: 1.5rem;
-              font-weight: bold;
-              color: black;
-            }
-          }
-        }
-    
-        .actions {
-          display: flex;
-          justify-content: center;
-          gap: 1rem;
-    
-          .add-to-cart,
-          .buy {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 2rem;
-            cursor: pointer;
-          }
-    
-          .add-to-cart {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            color: #333;
-          }
-    
-          .buy {
-            background-color: black;
-            color: white;
-          }
-        }
-      }
+    .image-container {
+      flex: 0 0 150px;
+      height: 200px !important;
     }
-    
-    
-    
 
+    .text-container {
+      padding: 1rem;
+    }
+
+    .info h3 {
+      font-size: 1.25rem;
+    }
   }
-
 }
-}
-

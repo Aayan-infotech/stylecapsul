@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
 
-
   return (
     <>
       <div className="forgot-custom-container mt-5">
@@ -39,31 +38,6 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="forgot-password">
-        <div className="forgot-box">
-          <h1 className="brand-name">Style Capsule</h1>
-          <h2 className="forgot-title">Forgot Password</h2>
-
-          <form className="forgot-form">
-            <div className="input-group">
-              <label htmlFor="email">Phone Number or Email</label>
-
-              <input
-                type="text"
-                id="email"
-                placeholder="Phone Number or Email"
-              />
-            </div>
-
-            <Link to="/recovery-code">
-              <button type="submit" className="submit-button">
-                Submit
-              </button>
-            </Link>
-          </form>
-        </div>
-      </div> */}
     </>
   );
 };

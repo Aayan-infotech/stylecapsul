@@ -11,44 +11,39 @@ const Footer = () => {
             <div className="col-md-4 footer-column">
               <h4 className="fw-bold">Style Capsule</h4>
               <p>
-                {" "}
                 As the world prioritizes a technology-driven environment for the
                 benefit of all, Style Capsule stands committed to supporting
                 agencies dedicated to national development.
               </p>
             </div>
-            <div className="col-md-4 footer-column d-flex justify-content-end align-items-center">
-             <div>
-             <h6>Legal</h6>
-              <h6>Terms & Condition</h6>
-              <h6>Privacy Policy</h6>
-              <h6>Contact</h6>
-             </div>
+            <div className="col-md-4 footer-column">
+              <div>
+                <h6>Legal</h6>
+                <h6>Terms & Condition</h6>
+                <h6>Privacy Policy</h6>
+                <h6>Contact</h6>
+              </div>
             </div>
-            <div className="col-md-4 footer-column d-flex justify-content-end align-items-center">
+            <div className="col-md-4 footer-column">
               <div>
                 <h5>
-                  <span className="me-2">Available On</span>{" "}
+                  <span className="me-2">Available On</span>
                   <i className="fa-solid fa-robot me-2"></i>
                   <i className="fa-brands fa-apple"></i>
                 </h5>
                 <div>
                   <h6>
-                    {" "}
                     <i className="fa-brands fa-facebook"></i>
                     Facebook
                   </h6>
                   <h6>
-                    {" "}
                     <i className="fa-brands fa-x-twitter"></i>(Twitter)
                   </h6>
                   <h6>
-                    {" "}
                     <i className="fa-brands fa-linkedin"></i>
                     LinkedIn
                   </h6>
                   <h6>
-                    {" "}
                     <i className="fa-brands fa-instagram"></i>
                     Instagram
                   </h6>
