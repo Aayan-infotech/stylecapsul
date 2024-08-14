@@ -15,38 +15,31 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value, });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match", {
+        autoClose: 2000,
+        style: { backgroundColor: '#dc3545', color: '#fff' }
+      });
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/signup", {
+      const res = await axios.post("http://192.168.29.127:3000/api/auth/signup", {
         firstName: formData.firstName,
         email: formData.email,
         username: formData.username,
         password: formData.password,
       });
-
-      // Show success toast message
-      toast.success("Signup successful");
-
-      // Clear form data
       setFormData({
         firstName: "",
         email: "",
@@ -54,21 +47,23 @@ const Signup = () => {
         password: "",
         confirmPassword: "",
       });
-      
-      setSuccess("Signup successful");
-      setError("");
-      
-      // Navigate to login page
-      navigate("/login");
+      toast.success(res.data.message, {
+        autoClose: 1000,
+        style: { backgroundColor: '#28a745', color: '#fff' }
+      });
+      if (res.data.success && res.data.status === 200) {
+        navigate("/login");
+      }
 
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
-      setSuccess("");
-      
-      // Show error toast message
-      toast.error(err.response?.data?.message || "Signup failed");
+      console.error(err.response?.data?.message || 'Error occurred during signup', '---err');
+      toast.error(err.response?.data?.message || 'An error occurred', {
+        autoClose: 1000,
+        style: { backgroundColor: '#dc3545', color: '#fff' }
+      });
     }
   };
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -86,16 +81,12 @@ const Signup = () => {
           <h1 className="text-center outside-heading fs-1 fw-bold">
             Style Capsule
           </h1>
-          {error && <div className="error">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="row gy-4 mt-1">
               <h2 className="card-title text-center fs-4 fw-bold">Sign Up</h2>
               <div className="col-12 col-md-4 mt-4">
                 <div>
-                  <label
-                    htmlFor="firstName"
-                    className="form-label text-black fw-bold"
-                  >
+                  <label htmlFor="firstName" className="form-label text-black fw-bold">
                     Name
                   </label>
                   <input
@@ -110,10 +101,7 @@ const Signup = () => {
               </div>
               <div className="col-12 col-md-4 mt-4">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="form-label text-black fw-bold"
-                  >
+                  <label htmlFor="email" className="form-label text-black fw-bold">
                     Enter Email or Phone Number
                   </label>
                   <input
@@ -128,10 +116,7 @@ const Signup = () => {
               </div>
               <div className="col-12 col-md-4">
                 <div>
-                  <label
-                    htmlFor="username"
-                    className="form-label text-black fw-bold"
-                  >
+                  <label htmlFor="username" className="form-label text-black fw-bold">
                     Username
                   </label>
                   <input
@@ -163,10 +148,7 @@ const Signup = () => {
                     onClick={togglePasswordVisibility}
                     style={{ background: "none", border: "none" }}
                   >
-                    <i
-                      className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
-                        }`}
-                    ></i>
+                    <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
                   </button>
                 </div>
               </div>
@@ -189,10 +171,7 @@ const Signup = () => {
                     onClick={toggleConfirmPasswordVisibility}
                     style={{ background: "none", border: "none" }}
                   >
-                    <i
-                      className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"
-                        }`}
-                    ></i>
+                    <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
                   </button>
                 </div>
               </div>
@@ -204,9 +183,6 @@ const Signup = () => {
                   Sign Up
                 </button>
               </div>
-              {error && (
-                <div className="text-center mt-2 text-danger">{error}</div>
-              )}
               <div className="text-center mt-2">
                 <span>Already have an account? </span>
                 <Link to="/login" className="text-black">

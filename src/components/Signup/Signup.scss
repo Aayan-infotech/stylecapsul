@@ -1,7 +1,6 @@
 .full-height {
   // height: 100vh;
 }
-
 .container {
   display: flex;
   justify-content: center;
@@ -9,7 +8,6 @@
   width: 100%;
   padding: 0 15px;
 }
-
 .row {
   width: 100%;
   max-width: 1200px;
@@ -33,6 +31,7 @@ input:focus {
 .form-control {
   outline: none !important;
   border: 1px solid black;
+  height: 45px;
 }
 
 .custom-password-input {
@@ -44,7 +43,7 @@ input:focus {
   position: absolute;
   top: 65%;
   right: 10px;
-  color: black;
+  color: black !important;
   transform: translateY(-50%);
   cursor: pointer;
 }
