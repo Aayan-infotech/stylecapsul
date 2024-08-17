@@ -20,13 +20,13 @@ function FullAvatar() {
               </div>
             </div>
             <div className="col-12 col-md-6">
-              <div class="row g-2">
-                <div class="col-12">
-                  <div class="p-2">
+              <div className="row g-2">
+                <div className="col-12">
+                  <div className="p-2">
                     <Link to="/body">
                       <button
                         type="button"
-                        class="btn rounded-pill text-white fw-bold"
+                        className="btn rounded-pill text-white fw-bold"
                         style={{ width: "200px", backgroundColor: "black" }}
                       >
                         <img src={two} alt="" className="me-3" />
@@ -35,11 +35,11 @@ function FullAvatar() {
                     </Link>
                   </div>
                 </div>
-                <div class="col-12">
-                  <div class="p-2">
+                <div className="col-12">
+                  <div className="p-2">
                     <button
                       type="button"
-                      class="btn rounded-pill p-3 text-white fw-bold"
+                      className="btn rounded-pill p-3 text-white fw-bold"
                       style={{ width: "200px", backgroundColor: "black" }}
                     >
                       <img src={three} alt="" height={25} />

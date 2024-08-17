@@ -334,7 +334,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Chic
             </button>
@@ -355,7 +355,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Yes
             </button>
@@ -363,7 +363,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               No
             </button>
@@ -371,7 +371,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Sometimes
             </button>
@@ -384,7 +384,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Yes
             </button>
@@ -392,7 +392,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               No
             </button>
@@ -400,7 +400,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Sometimes
             </button>
@@ -415,7 +415,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Yes
             </button>
@@ -423,7 +423,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               No
             </button>
@@ -431,7 +431,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Sometimes
             </button>
@@ -444,7 +444,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Color
             </button>
@@ -452,7 +452,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Kumas
             </button>
@@ -460,7 +460,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Price
             </button>
@@ -468,7 +468,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Brand
             </button>
@@ -476,7 +476,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-4">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Style
             </button>
@@ -489,7 +489,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Luxury Brands
             </button>
@@ -497,7 +497,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Eco-Friendly
             </button>
@@ -505,7 +505,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Inditex Brands
             </button>
@@ -520,7 +520,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Classic
             </button>
@@ -528,7 +528,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Dramatic
             </button>
@@ -536,7 +536,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Elegant
             </button>
@@ -544,7 +544,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Modern
             </button>
@@ -552,7 +552,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Trendy
             </button>
@@ -560,7 +560,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Others
             </button>
@@ -674,7 +674,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Update
             </button>
@@ -682,7 +682,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              class="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Cancel
             </button>

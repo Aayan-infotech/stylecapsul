@@ -48,13 +48,13 @@ const ClosetManagement = () => {
       className="d-flex justify-content-center align-items-center"
       style={{ paddingTop: "6rem" }}
     >
-      <div className="container" style={{ width: "700px" }}>
+      <div className="container" style={{ width: "800px" }}>
         <h1 className="text-center fw-bold fs-1">Closet Management</h1>
-        <div className="row mt-4">
+        <div className="row g-2 mt-4">
           {cardData.map((item, index) => (
-            <div key={index} className="col-md-6 col-lg-6 mb-4 d-flex justify-content-center">
+            <div key={index} className="col-md-6 col-lg-6">
               <Link to={item.url} style={{ textDecoration: "none" }}>
-                <div className="card" style={{ width: "300px", backgroundColor: "#4C4C4C", color: "white", }}>
+                <div className="card" style={{ width: "350px", backgroundColor: "#4C4C4C", color: "white", }}>
                   <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">
                     {item.image && (
                       <img src={item.image} alt={item.imageAlt} className="mb-4" style={item.imageStyle} />)}

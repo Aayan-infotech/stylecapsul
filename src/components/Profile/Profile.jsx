@@ -61,10 +61,12 @@ function Profile() {
                   </Link>
                 </div>
                 <div>
-                  <button className="action-button">
-                    <FaLock className="icon" /> Change Password{" "}
-                    <IoIosArrowForward className="arrow-icon" />
-                  </button>
+                  <Link to="/change-password" style={{ textDecoration: "none" }}>
+                    <button className="action-button">
+                      <FaLock className="icon" /> Change Password{" "}
+                      <IoIosArrowForward className="arrow-icon" />
+                    </button>
+                  </Link>
                 </div>
                 <div>
                   <Link to="/settingAndSecurity" style={{ textDecoration: "none" }}>

@@ -1,0 +1,43 @@
+.card-btn {
+    background-color: #4C4C4C;
+    position: relative;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+
+    .add-btn {
+        position: absolute;
+        top: 95%;
+        right: 43%;
+        width: 200px;
+        font-size: 1rem;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+
+        @media (max-width: 768px) {
+            width: 150px;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 576px) {
+            width: 120px;
+            font-size: 0.75rem;
+        }
+    }
+}
+
+.add-clothes-card {
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+
+    .card {
+        width: 100%;              
+        max-width: 1000px !important;        
+        border-radius: 10px;
+        background-color: #4C4C4C;
+        padding: 1.8rem 4rem 3rem 4rem;
+    }
+}
+
+
+

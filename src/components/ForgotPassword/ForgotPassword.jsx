@@ -10,7 +10,7 @@ const ForgotPassword = () => {
         <div>
           <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
           <div className="card custom-card mt-0 border-0">
-            <div className="card-body p-4 text-black">
+            <div className="card-body p-5 text-black">
               <h2 className="card-title fs-4 text-center fw-bold">Forgot Password</h2>
               <form className="mt-5">
                 <div className="mb-3">
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control rounded-pill"
+                    className="form-control rounded-pill mt-4"
                     placeholder="Phone Number or Email"
                   />
                 </div>

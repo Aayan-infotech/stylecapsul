@@ -46,7 +46,7 @@ const TryAvtar = () => {
             </div>
             <h4 className="text-center fw-bold fs-5">
               Try this on your Avatar{" "}
-              <i class="fa-solid fa-angles-right fs-5"></i>
+              <i className="fa-solid fa-angles-right fs-5"></i>
             </h4>
           </div>
         </div>

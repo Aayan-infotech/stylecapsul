@@ -1,17 +1,12 @@
-// eslint-disable-next-line no-unused-vars
 import React from "react";
 import "./Routing.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Outlet,
-  useLocation,
+  Navigate
 } from "react-router-dom";
 
-// Components
-import Navbar from "./components/Navbar/Navbar";
-import Footer from "./components/Footer/Footer";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
@@ -47,19 +42,12 @@ import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
 import OrderHistory from "./components/OrderHistory/OrderHistory";
 import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyleCapsule";
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
+import MainLayout from "./MainLayout";
+import { useSelector } from "react-redux";
 
-// Layout Component
-const MainLayout = () => {
-  const location = useLocation();
-  const showNabar = location.pathname !== "/market-place";
-
-  return (
-    <>
-      {showNabar && <Navbar />}
-      <Outlet />
-      <Footer />
-    </>
-  );
+const AuthRoute = ({ element }) => {
+  const isAuthenticated = useSelector((state) => state.login.user);
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
 };
 
 // App Component
@@ -78,11 +66,11 @@ const Routing = () => {
 
         {/* Routes that require Navbar and Footer */}
         <Route element={<MainLayout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/edit-profile-avatar" element={<ProfileAvatar />} />
-          <Route path="/edit-profile-body" element={<ProfileBody />} />
-          <Route path="/pq" element={<PandQ />} />
+          <Route path="/home" element={<AuthRoute element={<Home />} />} />
+          <Route path="/profile" element={<AuthRoute element={<Profile />} />} />
+          <Route path="/edit-profile-avatar" element={<AuthRoute element={<ProfileAvatar />} />} />
+          <Route path="/edit-profile-body" element={<AuthRoute element={<ProfileBody />} />} />
+          <Route path="/pq" element={<AuthRoute element={<PandQ />} />} />
           <Route path="/full-avatar" element={<FullAvatar />} />
           <Route path="/body" element={<Body />} />
           <Route path="/scheduled-appointment" element={<Appointment />} />
@@ -104,7 +92,7 @@ const Routing = () => {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/myaddedproducts" element={<MyAddedProducts />} />
           <Route path="/orderhistory" element={<OrderHistory />} />
-          <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />}/>
+          <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />} />
           <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
         </Route>
       </Routes>

@@ -612,19 +612,19 @@ function ProfileAvatar() {
               </div>
 
               {/* -------------------------update------------------------------- */}
-              <div class="row g-2 mt-4">
-                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
+              <div className="row g-2 mt-4">
+                <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
                   <button
                     type="button"
-                    class="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold"
+                    className="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold"
                   >
                     Update
                   </button>
                 </div>
-                <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+                <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                   <button
                     type="button"
-                    class="btn btn-light w-100 w-md-50 rounded-pill p-3 fw-bold"
+                    className="btn btn-light w-100 w-md-50 rounded-pill p-3 fw-bold"
                   >
                     Cancel
                   </button>

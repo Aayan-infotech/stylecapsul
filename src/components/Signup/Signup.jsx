@@ -34,12 +34,15 @@ const Signup = () => {
     }
 
     try {
-      const res = await axios.post("http://192.168.29.127:3000/api/auth/signup", {
+      const res = await axios.post("http://localhost:3000/api/auth/signup", {
         firstName: formData.firstName,
         email: formData.email,
         username: formData.username,
         password: formData.password,
       });
+
+      console.log('API Response:', res.data); // Log response data
+
       setFormData({
         firstName: "",
         email: "",
@@ -47,10 +50,12 @@ const Signup = () => {
         password: "",
         confirmPassword: "",
       });
+
       toast.success(res.data.message, {
         autoClose: 1000,
         style: { backgroundColor: '#28a745', color: '#fff' }
       });
+
       if (res.data.success && res.data.status === 200) {
         navigate("/login");
       }
