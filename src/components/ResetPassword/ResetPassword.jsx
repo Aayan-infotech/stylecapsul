@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './ResetPassword.scss';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "./ResetPassword.scss";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,60 +16,66 @@ const ResetPassword = () => {
 
   return (
     <div className="reset-container">
-      <div className="login-box">
-        <h1 className="brand-name">Style Capsule</h1>
-        <h2 className="login-title">Reset Password</h2>
-
-        <form className="login-form">
-          <div className="input-group">
-            <label htmlFor="password">New Password</label>
-            <div className="password-container">
+      <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+      <div className="reset-card">
+        <div className="login-box">
+          <h2 className="card-title fs-4 text-center fw-bold">
+            Reset Password
+          </h2>
+          <form className="mt-4">
+            <div className="mb-3 position-relative">
+              <label htmlFor="password" className="form-label fw-bold">
+                New Password
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
+                type={showPassword ? "text" : "password"}
+                className="form-control rounded-pill"
                 placeholder="Enter Your New Password"
               />
-              <span
-                className="password-toggle-icon"
+              <button
+                type="button"
+                className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
                 onClick={togglePasswordVisibility}
+                style={{ background: "none", border: "none" }}
               >
-                {showPassword ? (
-                  <i className="fa-solid fa-eye-slash"></i>
-                ) : (
-                  <i className="fa-solid fa-eye"></i>
-                )}
-              </span>
+                <i
+                  className={`fa-solid ${
+                    showPassword ? "fa-eye" : "fa-eye-slash"
+                  }`}
+                ></i>
+              </button>
             </div>
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="confirm-password">Confirm Password</label>
-            <div className="password-container">
+            <div className="mb-3 position-relative">
+              <label htmlFor="password" className="form-label fw-bold">
+                Confirm Password
+              </label>
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirm-password"
-                placeholder="Confirm Your New Password"
+                type={showConfirmPassword ? "text" : "password"}
+                className="form-control rounded-pill"
+                placeholder="Enter Your New Password"
               />
-              <span
-                className="password-toggle-icon"
+              <button
+                type="button"
+                className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
                 onClick={toggleConfirmPasswordVisibility}
+                style={{ background: "none", border: "none" }}
               >
-                {showConfirmPassword ? (
-                  <i className="fa-solid fa-eye-slash"></i>
-                ) : (
-                  <i className="fa-solid fa-eye"></i>
-                )}
-              </span>
+                <i
+                  className={`fa-solid ${
+                    showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                  }`}
+                ></i>
+              </button>
             </div>
-          </div>
-
-          <Link to="/login">
-            <button type="submit" className="submit-button">
-              Submit
-            </button>
-          </Link>
-        </form>
-
+            <div className="mt-4 text-center">
+              <Link to="/login">
+                <button type="submit" className="submit-button">
+                  Submit
+                </button>
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

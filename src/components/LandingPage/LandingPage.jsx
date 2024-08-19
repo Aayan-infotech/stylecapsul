@@ -26,6 +26,13 @@ const LandingPage = () => {
     { id: 4, imgSrc: six, alt: "Closet Icon", text: "Stylist" },
   ];
 
+  const products = [
+    { id: 1, src: seven, title: "Blue Jeans", price: "$28" },
+    { id: 2, src: eight, title: "Blue Jeans", price: "$28" },
+    { id: 3, src: nine, title: "Blue Jeans", price: "$28" },
+    { id: 4, src: ten, title: "Blue Jeans", price: "$28" },
+  ];
+
   return (
     <>
       <div className="outer-navbar">
@@ -70,14 +77,23 @@ const LandingPage = () => {
         </div>
       </div>
 
-      <div className="landing3">
-        <div className="left">
-          <p>Most of us don't wear 82% of our closet contents.*</p>
-        </div>
-        <div className="right">
-          <img src={two} alt="" />
+      <div className="container custom-container">
+        <div className="row gx-5">
+          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <div className="p-2">
+              <h2 className="text-size">
+                Most of us don't wear 82% of our closet contents.*
+              </h2>
+            </div>
+          </div>
+          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <div className="p-2">
+              <img src={two} contain alt="" />
+            </div>
+          </div>
         </div>
       </div>
+
       {/* -----------------------------service-------------------------- */}
       <div className="landing4">
         <h3>Services</h3>
@@ -105,90 +121,40 @@ const LandingPage = () => {
         </div>
       </div>
 
-      <div className="landing5">
-        <h3>Popular Products</h3>
-        <div className="landing4-row">
-          <div className="left">
-            <div className="product-card">
-              <div className="image-container">
-                <img src={seven} alt="Blue Jeans" />
-              </div>
-              <div className="text-container">
-                <div className="info">
-                  <h3>Blue Jeans</h3>
-                  <div className="description-price">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing e</p>
-                    <div className="price">$28</div>
-                  </div>
-                </div>
-                <div className="actions">
-                  <button className="add-to-cart">Add to cart</button>
-                  <button className="buy">Buy</button>
-                </div>
-              </div>
-            </div>
+      {/* -----------------------------Popular Products-------------------------- */}
 
-            <div className="product-card">
-              <div className="image-container">
-                <img src={eight} alt="Blue Jeans" />
-              </div>
-              <div className="text-container">
-                <div className="info">
-                  <h3>Blue Jeans</h3>
-                  <div className="description-price">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing e</p>
-                    <div className="price">$28</div>
-                  </div>
+      <div className="container landing5">
+        <h2 className="text-center fw-bold">Popular Products</h2>
+        <div className="row gy-5">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="col-12 col-md-6"
+            >
+              <div className="product-card">
+                <div className="image-container">
+                  <img src={product.src} alt={product.title} />
                 </div>
-                <div className="actions">
-                  <button className="add-to-cart">Add to cart</button>
-                  <button className="buy">Buy</button>
+                <div className="text-container">
+                  <div className="info">
+                    <h3>{product.title}</h3>
+                    <div className="description-price">
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing e
+                      </p>
+                      <div className="price">{product.price}</div>
+                    </div>
+                  </div>
+                  <div className="actions">
+                    <button className="add-to-cart">Add to cart</button>
+                    <button className="buy">Buy</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="right">
-            <div className="product-card">
-              <div className="image-container">
-                <img src={nine} alt="Blue Jeans" />
-              </div>
-              <div className="text-container">
-                <div className="info">
-                  <h3>Blue Jeans</h3>
-                  <div className="description-price">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing e</p>
-                    <div className="price">$28</div>
-                  </div>
-                </div>
-                <div className="actions">
-                  <button className="add-to-cart">Add to cart</button>
-                  <button className="buy">Buy</button>
-                </div>
-              </div>
-            </div>
-
-            <div className="product-card">
-              <div className="image-container">
-                <img src={ten} alt="Blue Jeans" />
-              </div>
-              <div className="text-container">
-                <div className="info">
-                  <h3>Blue Jeans</h3>
-                  <div className="description-price">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing e</p>
-                    <div className="price">$28</div>
-                  </div>
-                </div>
-                <div className="actions">
-                  <button className="add-to-cart">Add to cart</button>
-                  <button className="buy">Buy</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-
       <Footer />
     </>
   );

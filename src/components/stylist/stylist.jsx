@@ -25,7 +25,7 @@ const Stylist = () => {
             <h1 className="fw-bold fs-1">Stylist</h1>
           </div>
           <div className="col-12 col-md-6">
-            <div className="order-history">
+            <div className="styliset-search">
               <div className="search-box">
                 <i className="fa fa-search"></i>
                 <input

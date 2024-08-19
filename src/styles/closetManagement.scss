@@ -1,0 +1,14 @@
+.closemanagement-container{
+    // width: 800px;
+    padding-top: 6rem;
+    
+    .container{
+        width: 800px;
+
+        .card-container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

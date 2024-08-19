@@ -1,31 +1,40 @@
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import './ChangePassword.scss';
+import React from "react";
+import imagepreview from "../../assets/addclothes/add-photo-style.png";
+import "../../styles/ChangePassword.scss";
 
 const ChangePassword = () => {
     return (
-        <div className='change-password'>
-            <div>
-                <h1 className='password-heading'>Change Password</h1>
-                <div className="card">
-                    <form>
-                        <div className="email-login">
-                            <label htmlFor="old-password"><b>Old Password</b></label>
-                            <input type="password" placeholder="Enter Your Password" name="oldpassword" required />
-                            <div style={{ marginTop: '20px' }}>
-                                <label htmlFor="newpassword"><b>New Password</b></label>
-                                <input type="password" placeholder="Enter Your New Password" name="newpassword" required />
-                            </div>
-                            <div style={{ marginTop: '20px' }}>
-                                <label htmlFor="confpassword"><b>Confirm Password</b></label>
-                                <input type="password" placeholder="Enter Your New Password" name="conpassword" required />
-                            </div>
+        <>
+            <div className="d-flex justify-content-center align-items-center change-password-container">
+                <div className="container">
+                    <h1 className="text-center fw-bold fs-1">Change Password</h1>
+                    <div className="card password-card-container">
+                        <div className="card-body p-0">
+                            <form>
+                                <div className="mb-3">
+                                    <label htmlFor="oldpassword" className="form-label">Old Password</label>
+                                    <input type="password" id="oldpassword" className="form-control rounded-pill" placeholder='Enter Your Password' />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="newpassword" className="form-label">New Password</label>
+                                    <input type="password" id="newpassword" className="form-control rounded-pill" placeholder='Enter New Password' />
+                                </div>
+                                <div>
+                                    <label htmlFor="confirmpassword" className="form-label">Confirm Password</label>
+                                    <input type="password" id="confirmpassword" className="form-control rounded-pill" placeholder='Enter Confirm Password' />
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                        <button
+                            type="button"
+                            className="rounded-pill fw-bold btn btn-light passwrod-submit-btn"
+                        >
+                            Submit
+                        </button>
+                    </div>
                 </div>
             </div>
-            <button className="cta-btn">Submit</button>
-        </div>
+        </>
     );
 };
 
