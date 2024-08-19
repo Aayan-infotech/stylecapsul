@@ -1,5 +1,6 @@
 .my-added-product {
     margin: 100px 180px 0;
+    // height: 100vh;
 
     .products-heading {
         display: flex;
@@ -37,7 +38,7 @@
         
     }
     
-    .search-box .fa-cog {
+    .search-box .fa-sliders {
         position: absolute;
         top: 45%;
         right: 15px;

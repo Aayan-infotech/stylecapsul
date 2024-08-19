@@ -36,7 +36,7 @@
     font-size: 1.3rem;
   }
 
-  .search-box .fa-cog {
+  .search-box .fa-sliders {
     position: absolute;
     top: 45%;
     right: 15px;
@@ -137,9 +137,6 @@
         width: 80%;
         input {
           padding: 15px 40px 15px 40px;
-        }
-        .fa-cog {
-          display: none !important;
         }
       }
     }
