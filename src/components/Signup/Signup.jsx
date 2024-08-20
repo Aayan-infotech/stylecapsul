@@ -4,6 +4,7 @@ import "./Signup.scss";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import { apiUrl } from '../../../apiUtils';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,25 +24,24 @@ const Signup = () => {
     setFormData({ ...formData, [name]: value, });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match", {
-        autoClose: 2000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
-      });
-      return;
-    }
-
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/signup", {
+      const res = await axios.post(apiUrl('api/auth/signup'), {
         firstName: formData.firstName,
         email: formData.email,
         username: formData.username,
         password: formData.password,
       });
-
-      console.log('API Response:', res.data); // Log response data
 
       setFormData({
         firstName: "",
@@ -61,22 +61,13 @@ const Signup = () => {
       }
 
     } catch (err) {
-      console.error(err.response?.data?.message || 'Error occurred during signup', '---err');
-      toast.error(err.response?.data?.message || 'An error occurred', {
+      toast.error(err.response?.data?.message, {
         autoClose: 1000,
         style: { backgroundColor: '#dc3545', color: '#fff' }
       });
     }
   };
 
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
 
   return (
     <>

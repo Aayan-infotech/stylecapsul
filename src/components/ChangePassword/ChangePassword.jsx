@@ -9,7 +9,7 @@ const ChangePassword = () => {
                 <div className="container">
                     <h1 className="text-center fw-bold fs-1">Change Password</h1>
                     <div className="card password-card-container">
-                        <div className="card-body p-0">
+                        <div className="card-body p-5">
                             <form>
                                 <div className="mb-3">
                                     <label htmlFor="oldpassword" className="form-label">Old Password</label>

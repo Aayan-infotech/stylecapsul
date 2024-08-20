@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import Navbar from '../src/components/Navbar/Navbar.jsx';
 import Footer from "../src/components/Footer/Footer.jsx";
-import { loginUser } from '../src/reduxToolkit/loginSlice'; 
+import { loginUser } from '../src/reduxToolkit/loginSlice';
 
 const MainLayout = () => {
   const location = useLocation();
@@ -16,7 +16,7 @@ const MainLayout = () => {
     if (token && !isAuthenticated) {
       dispatch(loginUser({ token }));
     }
-  }, [dispatch, isAuthenticated]);
+  }, []);
 
   if (!isAuthenticated && !localStorage.getItem('authToken')) {
     return <Navigate to="/login" replace />;

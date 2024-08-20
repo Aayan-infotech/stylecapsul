@@ -25,18 +25,13 @@ const Login = () => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
-      if (resultAction.status === 200) {
-        toast.success(resultAction.message, {
+      if (resultAction) {
+        localStorage.setItem('authToken', resultAction.token); 
+        toast.success('Login successful!', {
           autoClose: 1000,
           style: { backgroundColor: '#28a745', color: '#fff' }
         });
-        localStorage.setItem('authToken', resultAction.token);
         navigate("/home"); 
-      } else {
-        toast.error(resultAction.message, {
-          autoClose: 2000,
-          style: { backgroundColor: '#dc3545', color: '#fff' }
-        });
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
@@ -46,7 +41,6 @@ const Login = () => {
       });
     }
   };
-
   return (
     <>
       <ToastContainer />

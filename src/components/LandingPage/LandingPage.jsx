@@ -88,7 +88,7 @@ const LandingPage = () => {
           </div>
           <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
             <div className="p-2">
-              <img src={two} contain alt="" />
+              <img src={two} alt="" />
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Routing.css";
 import {
   BrowserRouter as Router,
@@ -42,16 +42,55 @@ import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
 import OrderHistory from "./components/OrderHistory/OrderHistory";
 import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyleCapsule";
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
+
+// import { useSelector } from "react-redux";
+// import { useLocation, Outlet } from "react-router-dom";
+// import Navbar from "./components/Navbar/Navbar";
+// import Footer from "./components/Footer/Footer";
 import MainLayout from "./MainLayout";
 import { useSelector } from "react-redux";
 
-const AuthRoute = ({ element }) => {
-  const isAuthenticated = useSelector((state) => state.login.user);
-  return isAuthenticated ? element : <Navigate to="/login" replace />;
-};
+// Layout Component
+// const MainLayout = () => {
+//   const location = useLocation();
+//   const showNabar = location.pathname !== '/market-place';
+//   const user = useSelector((state) => state.login.user);
+//   if (!user) {
+//     return <Navigate to="/login" />;
+//   }
+
+
+//   return (
+//     <>
+//       {showNabar && <Navbar />}
+//       <Outlet />
+//       <Footer />
+//     </>
+//   );
+// };
+
+// const ProtectedRoute = ({ children }) => {
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+//   useEffect(() => {
+//     const token = localStorage.getItem('authToken');
+//     if (token) {
+//       setIsAuthenticated(true);
+//     } else {
+//       setIsAuthenticated(false);
+//     }
+//   }, []);
+
+//   return isAuthenticated ? children : <Navigate to="/login" />;
+// };
+
+
 
 // App Component
 const Routing = () => {
+  const isAuthenticated = useSelector((state) => state.login.user);
+  // console.log(isAuthenticated, 'isAuthenticated')
+
   return (
     <Router>
       <Routes>
@@ -66,34 +105,33 @@ const Routing = () => {
 
         {/* Routes that require Navbar and Footer */}
         <Route element={<MainLayout />}>
-          <Route path="/home" element={<AuthRoute element={<Home />} />} />
-          <Route path="/profile" element={<AuthRoute element={<Profile />} />} />
-          <Route path="/edit-profile-avatar" element={<AuthRoute element={<ProfileAvatar />} />} />
-          <Route path="/edit-profile-body" element={<AuthRoute element={<ProfileBody />} />} />
-          <Route path="/pq" element={<AuthRoute element={<PandQ />} />} />
-          <Route path="/full-avatar" element={<FullAvatar />} />
-          <Route path="/body" element={<Body />} />
-          <Route path="/scheduled-appointment" element={<Appointment />} />
+          <Route path="/home" element={isAuthenticated ? <Home /> : <Navigate to="/login" replace />} />
+          <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" replace />} />
+          <Route path="/edit-profile-avatar" element={isAuthenticated ? <ProfileAvatar /> : <Navigate to="/login" replace />} />
+          <Route path="/edit-profile-body" element={isAuthenticated ? <ProfileBody /> : <Navigate to="/login" replace />} />
+          <Route path="/pq" element={isAuthenticated ? <PandQ /> : <Navigate to="/login" replace />} />
+          <Route path="/full-avatar" element={isAuthenticated ? <FullAvatar /> : <Navigate to="/login" replace />} />
+          <Route path="/body" element={isAuthenticated ? <Body /> : <Navigate to="/login" replace />} />
+          <Route path="/scheduled-appointment" element={isAuthenticated ? <Appointment /> : <Navigate to="/login" replace />} />
+          <Route path="/setting-and-security" element={isAuthenticated ? <SettingAndSecurity /> : <Navigate to="/login" replace />} />
+          <Route path="/closet-management" element={isAuthenticated ? <ClosetManagement /> : <Navigate to="/login" replace />} />
+          <Route path="/market-place" element={isAuthenticated ? <MarketPlace /> : <Navigate to="/login" replace />} />
+          <Route path="/my-style-capsule" element={isAuthenticated ? <MyStyleCapsul /> : <Navigate to="/login" replace />} />
+          <Route path="/add-clothes" element={isAuthenticated ? <AddClothes /> : <Navigate to="/login" replace />} />
+          <Route path="/stylist" element={isAuthenticated ? <Stylist /> : <Navigate to="/login" replace />} />
+          <Route path="/gift-cards" element={isAuthenticated ? <GiftCards /> : <Navigate to="/login" replace />} />
+          <Route path="/analytics-insights" element={isAuthenticated ? <AnalyticsInsights /> : <Navigate to="/login" replace />} />
+          <Route path="/help-support" element={isAuthenticated ? <HelpAndSupport /> : <Navigate to="/login" replace />} />
+          <Route path="/closet-overview" element={isAuthenticated ? <ClosetOverview /> : <Navigate to="/login" replace />} />
+          <Route path="/myCapsuleAddAvtart" element={isAuthenticated ? <MyCapsuleAddAvtart /> : <Navigate to="/login" replace />} />
+          <Route path="/try-avtar" element={isAuthenticated ? <TryAvtar /> : <Navigate to="/login" replace />} />
+          <Route path="/avtarlookingcool" element={isAuthenticated ? <AvtarLookingCool /> : <Navigate to="/login" replace />} />
+          <Route path="/change-password" element={isAuthenticated ? <ChangePassword /> : <Navigate to="/login" replace />} />
+          <Route path="/myaddedproducts" element={isAuthenticated ? <MyAddedProducts /> : <Navigate to="/login" replace />} />
+          <Route path="/orderhistory" element={isAuthenticated ? <OrderHistory /> : <Navigate to="/login" replace />} />
+          <Route path="/calendarstylecapsule" element={isAuthenticated ? <CalendarStyleCapsule /> : <Navigate to="/login" replace />} />
+          <Route path="/emojistylecapsule" element={isAuthenticated ? <EmojiStyleCapsule /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<PageNotFound />} />
-          <Route path="/SettingAndSecurity" element={<SettingAndSecurity />} />
-          <Route path="/closetManagement" element={<ClosetManagement />} />
-          <Route path="/market-place" element={<MarketPlace />} />
-          <Route path="/myStyle-capsule" element={<MyStyleCapsul />} />
-          <Route path="/add-clothes" element={<AddClothes />} />
-          <Route path="/stylist" element={<Stylist />} />
-          <Route path="/gift-cards" element={<GiftCards />} />
-          <Route path="/analytics-insights" element={<AnalyticsInsights />} />
-          <Route path="/help-support" element={<HelpAndSupport />} />
-          <Route path="/closet-overview" element={<ClosetOverview />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />} />
-          <Route path="/try-avtar" element={<TryAvtar />} />
-          <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/myaddedproducts" element={<MyAddedProducts />} />
-          <Route path="/orderhistory" element={<OrderHistory />} />
-          <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />} />
-          <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
         </Route>
       </Routes>
     </Router>
