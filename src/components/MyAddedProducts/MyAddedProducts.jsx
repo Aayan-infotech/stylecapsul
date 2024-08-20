@@ -25,7 +25,7 @@ function MyAddedProducts() {
         <div className="search-box">
           <i className="fa fa-search"></i>
           <input type="text" placeholder="Search" />
-          <i className="fa fa-cog"></i>
+          <i className="fa-solid fa-sliders"></i>
         </div>
       </div>
       <div className="products-container">
