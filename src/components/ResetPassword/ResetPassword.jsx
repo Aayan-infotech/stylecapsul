@@ -27,10 +27,10 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match.');
-      return;
-    }
+    // if (newPassword !== confirmPassword) {
+    //   toast.error('Passwords do not match.');
+    //   return;
+    // }
     try {
       const response = await axios.post(
         apiUrl('api/auth/resetPassword'),
@@ -42,15 +42,11 @@ const ResetPassword = () => {
           },
         }
       );
-
-      console.log(response, 'response');
-
       toast.success(response.data.message, {
         autoClose: 1000,
         style: { backgroundColor: '#28a745', color: '#fff' }
       });
       navigate('/login');
-
     } catch (error) {
       if (error.response?.status === 401 && error.response?.data?.message === "Token has expired. Please request a new password reset.") {
         toast.error('Token has expired. Please request a new password reset link.');
