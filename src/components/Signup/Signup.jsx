@@ -56,9 +56,9 @@ const Signup = () => {
         style: { backgroundColor: '#28a745', color: '#fff' }
       });
 
-      if (res.data.success && res.data.status === 200) {
+      // if (res.data.success && res.data.status === 200) {
         navigate("/login");
-      }
+      // }
 
     } catch (err) {
       toast.error(err.response?.data?.message, {
