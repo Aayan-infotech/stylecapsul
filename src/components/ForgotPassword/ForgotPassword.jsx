@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import { apiUrl } from '../../../apiUtils';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/send-email', {
+      const response = await axios.post(apiUrl('api/auth/send-email'), {
         email,
       });
 

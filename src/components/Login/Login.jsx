@@ -25,16 +25,18 @@ const Login = () => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
-      if (resultAction) {
-        localStorage.setItem('authToken', resultAction.token);
-        toast.success(resultAction?.message, {
-          autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
-        });
-        if (resultAction?.success === true && resultAction?.status === 200) {
-          navigate("/home");
+        if (resultAction) {
+          localStorage.setItem('authToken', resultAction.token);
+          toast.success(resultAction?.message, {
+            autoClose: 1000,
+            style: { backgroundColor: '#28a745', color: '#fff' }
+          });
+          setTimeout(() => {
+            if (resultAction?.success === true && resultAction?.status === 200) {
+              navigate("/home");
+            }
+          }, 1000);
         }
-      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(errorMessage, {

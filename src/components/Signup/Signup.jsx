@@ -50,16 +50,15 @@ const Signup = () => {
         password: "",
         confirmPassword: "",
       });
-
       toast.success(res.data.message, {
         autoClose: 1000,
         style: { backgroundColor: '#28a745', color: '#fff' }
       });
-
-      // if (res.data.success && res.data.status === 200) {
-        navigate("/login");
-      // }
-
+      setTimeout(() => {
+        if (res.data.success && res.data.status === 200) {
+          navigate("/login");
+        }
+      }, 1000);
     } catch (err) {
       toast.error(err.response?.data?.message, {
         autoClose: 1000,
