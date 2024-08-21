@@ -43,8 +43,6 @@ const Signup = () => {
         password: formData.password,
         confirmPassword: formData.confirmPassword
       });
-      
-      console.log(res, 'res')
       setFormData({
         firstName: "",
         email: "",

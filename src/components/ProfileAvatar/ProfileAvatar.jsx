@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProfileAvatar.scss";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import girl from "./img/girl.png";
+// import fullbodyimage from "./img/fullbodyimage.png";
 import fullAvatar from "./img/full-avatar.png";
 import arrow from "./img/arrow.png";
 import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
+import { useDispatch } from 'react-redux';
+import { createBasic } from '../../reduxToolkit/createBasicProfile';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
-  const [activeGender, setActiveGender] = useState("");
+  const [activeGenderType, setActiveGenderType] = useState("");
   const [activeBodySize, setActiveBodySize] = useState("");
   const [activeEyeColor, setActiveEyeColor] = useState("");
   const [activeHairColor, setActiveHairColor] = useState("");
@@ -23,7 +27,28 @@ function ProfileAvatar() {
   const [chest, setChest] = useState(90);
   const [waist, setWaist] = useState(90);
   const [hips, setHips] = useState(90);
-  const [high, setHigh] = useState(90);
+  const [highHips, setHighHips] = useState(90);
+
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const user = location.state?.user;
+
+  const [formData, setFormData] = useState({
+    name: user.firstName || "",
+    bio: user.bio || "",
+    email: user.email || "",
+    mobileNumber: user.mobileNumber || "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleChange = (type, delta) => {
     if (type === "height") {
@@ -40,45 +65,20 @@ function ProfileAvatar() {
       setWaist((prev) => Math.max(0, prev + delta));
     } else if (type === "hips") {
       setHips((prev) => Math.max(0, prev + delta));
-    } else if (type === "high") {
-      setHigh((prev) => Math.max(0, prev + delta));
+    } else if (type === "highHips") {
+      setHighHips((prev) => Math.max(0, prev + delta));
     }
   };
 
+  const selectGender = ["Male", "Female", "Gender-Inc."];
   const bodySize = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-  const selectEyeColor = [
-    "Amber",
-    "Blue",
-    "Brown",
-    "Gray",
-    "Hazal",
-    "Green",
-    "Others",
-  ];
-  const selectHiarColor = [
-    "Black",
-    "Blond",
-    "Brown",
-    "Auburn",
-    "Red",
-    "Gray",
-    "Others",
-  ];
-  const selectAgeRange = [
-    "18-20",
-    "23-27",
-    "28-32",
-    "33-37",
-    "38-42",
-    "43-46",
-    "47-50",
-    "51-54",
-    "55+",
-  ];
+  const selectEyeColor = ["Amber", "Blue", "Brown", "Gray", "Hazal", "Green", "Others",];
+  const selectHiarColor = ["Black", "Blond", "Brown", "Auburn", "Red", "Gray", "Others",];
+  const selectAgeRange = ["18-20", "23-27", "28-32", "33-37", "38-42", "43-46", "47-50", "51-54", "55+",];
   const selectMaterialStatus = ["Single", "Married"];
 
-  const handleClickGender = (gender) => {
-    setActiveGender(gender);
+  const handleClickGenderType = (gender_type) => {
+    setActiveGenderType(gender_type);
   };
 
   const handleClickBodySize = (body_size) => {
@@ -101,8 +101,35 @@ function ProfileAvatar() {
     setActiveMaterialStatus(material_status);
   };
 
+  const handleUpdate = async () => {
+    try {
+      const res = await dispatch(createBasic({
+        ...formData,
+        height, weight, shoes, shoulders, chest, waist, hips, highHips,
+        bodySize: activeBodySize,
+        eyeColor: activeEyeColor,
+        hairColor: activeHairColor,
+        age: activeAgeRange,
+        maritalStatus: activeMaterialStatus,
+        gender: activeGenderType,
+        user_id: user?._id
+      }));
+      toast.success(res.data.message, {
+        autoClose: 1000,
+        style: { backgroundColor: '#28a745', color: '#fff' }
+      });
+      navigate('/profile');
+    } catch (err) {
+      toast.error(err.response?.data?.message, {
+        autoClose: 1000,
+        style: { backgroundColor: '#dc3545', color: '#fff' }
+      });
+    }
+  };
+
   return (
     <>
+      <ToastContainer />
       <div className="avatar">
         <div className="avatar1">
           <div className="left">
@@ -111,8 +138,11 @@ function ProfileAvatar() {
                 <img src={girl} alt="" />
               </div>
               <div className="arrow">
-                <img src={arrow} alt="" />
+                <img src={arrow} height={60} alt="" />
               </div>
+              {/* <div className="arrow">
+                <img src={fullbodyimage} height={60} alt="" />
+              </div> */}
             </div>
           </div>
           <Link to="/full-avatar">
@@ -127,9 +157,8 @@ function ProfileAvatar() {
             <div className="col-12 col-md-6">
               <button
                 type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
-                  activeTab === "basic" ? "btn-active" : ""
-                }`}
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${activeTab === "basic" ? "btn-active" : ""
+                  }`}
                 onClick={() => setActiveTab("basic")}
               >
                 Basic
@@ -138,9 +167,8 @@ function ProfileAvatar() {
             <div className="col-12 col-md-6">
               <button
                 type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
-                  activeTab === "questionnaire" ? "btn-active" : ""
-                }`}
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${activeTab === "questionnaire" ? "btn-active" : ""
+                  }`}
                 onClick={() => setActiveTab("questionnaire")}
               >
                 Questionnaire
@@ -158,7 +186,7 @@ function ProfileAvatar() {
         </div>
 
         {activeTab === "basic" && (
-          <div className="container w-50">
+          <div className="container w-75">
             <div className="row">
               <div className="col-12">
                 <div className="p-2">
@@ -171,6 +199,9 @@ function ProfileAvatar() {
                         type="text"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Your Name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -181,6 +212,9 @@ function ProfileAvatar() {
                         type="text"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Bio"
+                        name="bio"
+                        value={formData.bio}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -188,12 +222,15 @@ function ProfileAvatar() {
                         htmlFor="email"
                         className="form-label fw-bold fs-5"
                       >
-                        Bio
+                        Email
                       </label>
                       <input
                         type="email"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                       />
                     </div>
                     <div className="mb-3">
@@ -207,17 +244,19 @@ function ProfileAvatar() {
                         type="number"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Mobile Number"
+                        name="mobileNumber"
+                        value={formData.mobileNumber}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </form>
                 </div>
               </div>
             </div>
-
             {/* -------------------------Height, Weight & Shoes------------------------------- */}
             <div className="container mt-4">
               <div className="row g-2">
-                <h1 className="fw-bold fs-3">My Style Capsule</h1>
+                <h1 className="fw-bold fs-3">Height, Weight & Shoes</h1>
                 <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
                   <div>
                     <h5 className="text fs-5">
@@ -238,7 +277,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("height", -1)}
+                        onClick={() => handleChange("height", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -268,7 +307,7 @@ function ProfileAvatar() {
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
                         style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("weight", -1)}
+                        onClick={() => handleChange("weight", 1)}
                       >
                         <i className="fa-solid fa-plus"></i>
                       </button>
@@ -296,7 +335,7 @@ function ProfileAvatar() {
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
                         style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("shoes", -1)}
+                        onClick={() => handleChange("shoes", 1)}
                       >
                         <i className="fa-solid fa-plus"></i>
                       </button>
@@ -304,7 +343,6 @@ function ProfileAvatar() {
                   </div>
                 </div>
               </div>
-
               {/* -------------------------Shoulders------------------------------- */}
               <div className="row g-2 mt-4">
                 <h1 className="fw-bold fs-3">Shoulders</h1>
@@ -328,7 +366,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("shoulders", -1)}
+                        onClick={() => handleChange("shoulders", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -338,7 +376,7 @@ function ProfileAvatar() {
                 </div>
               </div>
 
-              {/* -------------------------Shoulders------------------------------- */}
+              {/* -------------------------Chest & west------------------------------- */}
               <div className="row g-2 mt-4">
                 <h1 className="fw-bold fs-3">Chest & Waist</h1>
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
@@ -361,7 +399,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("chest", -1)}
+                        onClick={() => handleChange("chest", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -389,7 +427,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("waist", -1)}
+                        onClick={() => handleChange("waist", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -398,7 +436,6 @@ function ProfileAvatar() {
                   </div>
                 </div>
               </div>
-
               {/* -------------------------Hips & High Hips------------------------------- */}
               <div className="row g-2 mt-4">
                 <h1 className="fw-bold fs-3">Hips & High Hips</h1>
@@ -422,7 +459,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("hips", -1)}
+                        onClick={() => handleChange("hips", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -433,7 +470,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{high}</span>cm
+                      <span>{highHips}</span>cm
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -442,7 +479,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("high", -1)}
+                        onClick={() => handleChange("highHips", -1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-minus"></i>
@@ -450,7 +487,7 @@ function ProfileAvatar() {
                       <button
                         type="button"
                         className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("high", -1)}
+                        onClick={() => handleChange("highHips", 1)}
                         style={{ width: "40px", height: "40px" }}
                       >
                         <i className="fa-solid fa-plus"></i>
@@ -459,45 +496,25 @@ function ProfileAvatar() {
                   </div>
                 </div>
               </div>
-
               {/* -------------------------Gender------------------------------- */}
               <div className="row g-2" style={{ paddingTop: "5rem" }}>
                 <h1 className="fw-bold fs-3">Gender</h1>
-                <div className="col-12 col-md-4">
-                  <button
-                    type="button"
-                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                      activeGender === "Male" ? "selected" : ""
-                    }`}
-                    onClick={() => handleClickGender("Male")}
+                {selectGender.map((gender_type) => (
+                  <div
+                    className="col-12 col-md-4 d-flex align-items-center text-center"
+                    key={gender_type}
                   >
-                    Male
-                  </button>
-                </div>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <button
-                    type="button"
-                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                      activeGender === "Female" ? "selected" : ""
-                    }`}
-                    onClick={() => handleClickGender("Female")}
-                  >
-                    Female
-                  </button>
-                </div>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <button
-                    type="button"
-                    className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                      activeGender === "Gender-Inc." ? "selected" : ""
-                    }`}
-                    onClick={() => handleClickGender("Gender-Inc.")}
-                  >
-                    Gender-Inc.
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeGenderType === gender_type ? "selected" : ""
+                        }`}
+                      onClick={() => handleClickGenderType(gender_type)}
+                    >
+                      {gender_type}
+                    </button>
+                  </div>
+                ))}
               </div>
-
               {/* -------------------------Body Size------------------------------- */}
               <div className="row g-2" style={{ paddingTop: "5rem" }}>
                 <h1 className="fw-bold fs-3">Body Size</h1>
@@ -508,9 +525,8 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeBodySize === body_size ? "selected" : ""
-                      }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeBodySize === body_size ? "selected" : ""
+                        }`}
                       onClick={() => handleClickBodySize(body_size)}
                     >
                       {body_size}
@@ -518,7 +534,6 @@ function ProfileAvatar() {
                   </div>
                 ))}
               </div>
-
               {/* -------------------------Eye Color------------------------------- */}
               <div className="row g-2" style={{ paddingTop: "5rem" }}>
                 <h1 className="fw-bold fs-3">Eye Color</h1>
@@ -529,9 +544,8 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeEyeColor === eye_color ? "selected" : ""
-                      }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeEyeColor === eye_color ? "selected" : ""
+                        }`}
                       onClick={() => handleClickEyeColor(eye_color)}
                     >
                       {eye_color}
@@ -550,9 +564,8 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeHairColor === hair_color ? "selected" : ""
-                      }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeHairColor === hair_color ? "selected" : ""
+                        }`}
                       onClick={() => handleClickHairColor(hair_color)}
                     >
                       {hair_color}
@@ -560,7 +573,6 @@ function ProfileAvatar() {
                   </div>
                 ))}
               </div>
-
               {/* -------------------------What age range you're in?------------------------------- */}
               <div className="row g-2" style={{ paddingTop: "5rem" }}>
                 <h1 className="fw-bold fs-3">What age range you're in?</h1>
@@ -571,9 +583,8 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeAgeRange === age_range ? "selected" : ""
-                      }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeAgeRange === age_range ? "selected" : ""
+                        }`}
                       onClick={() => handleClickAgeRange(age_range)}
                     >
                       {age_range}
@@ -581,7 +592,6 @@ function ProfileAvatar() {
                   </div>
                 ))}
               </div>
-
               {/* -------------------------Marital Status------------------------------- */}
               <div className="row g-2" style={{ paddingTop: "5rem" }}>
                 <h1 className="fw-bold fs-3">Marital Status</h1>
@@ -592,11 +602,10 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeMaterialStatus === material_status
-                          ? "selected"
-                          : ""
-                      }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeMaterialStatus === material_status
+                        ? "selected"
+                        : ""
+                        }`}
                       onClick={() => handleClickMaterialStatus(material_status)}
                     >
                       {material_status}
@@ -617,6 +626,7 @@ function ProfileAvatar() {
                   <button
                     type="button"
                     className="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold"
+                    onClick={handleUpdate}
                   >
                     Update
                   </button>

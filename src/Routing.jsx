@@ -131,6 +131,7 @@ const Routing = () => {
           <Route path="/orderhistory" element={isAuthenticated ? <OrderHistory /> : <Navigate to="/login" replace />} />
           <Route path="/calendarstylecapsule" element={isAuthenticated ? <CalendarStyleCapsule /> : <Navigate to="/login" replace />} />
           <Route path="/emojistylecapsule" element={isAuthenticated ? <EmojiStyleCapsule /> : <Navigate to="/login" replace />} />
+          <Route path="/cart" element={isAuthenticated ? <Cart /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

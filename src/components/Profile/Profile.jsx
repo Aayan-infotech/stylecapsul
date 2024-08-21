@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Logout } from "../allmodal/Logout.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios';
+import { apiUrl } from '../../../apiUtils';
 
 import {
   FaUserEdit,
@@ -15,9 +18,35 @@ import profile from "./img/profile.png";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [logedInUserData, setLogedInUserData] = useState({});
+
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.login);
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (user?.data?._id) {
+          const response = await axios.get(apiUrl(`api/user/${user.data._id}`));
+          setLogedInUserData(response?.data?.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  const navigate = useNavigate();
+  const handleEditProfile = () => {
+    console.log(logedInUserData);
+    navigate('/edit-profile-avatar', { state: { user: logedInUserData } });
+  };
+
 
   return (
     <>
@@ -35,8 +64,8 @@ function Profile() {
                     width={120}
                   />
                   <div className="profile-info mt-3">
-                    <h2>Elizabeth</h2>
-                    <h5 className="fs-6">Elizabeth@gmail.com</h5>
+                    <h2>{(logedInUserData?.firstName || "Default Name").charAt(0).toUpperCase() + (logedInUserData?.firstName || "Default Name").slice(1)}</h2>
+                    <h5 className="fs-6">{logedInUserData?.email || "Elizabeth@gmail.com"}</h5>
                     <blockquote>
                       “Fashions fade, style is eternal.”
                     </blockquote>
@@ -45,12 +74,10 @@ function Profile() {
               </div>
               <div className="col-12 col-md-6">
                 <div>
-                  <Link to="/edit-profile-avatar" style={{ textDecoration: "none" }}>
-                    <button className="action-button">
-                      <FaUserEdit className="icon" /> Edit Profile{" "}
-                      <IoIosArrowForward className="arrow-icon" />
-                    </button>
-                  </Link>
+                  <button className="action-button" onClick={handleEditProfile}>
+                    <FaUserEdit className="icon" /> Edit Profile
+                    <IoIosArrowForward className="arrow-icon" />
+                  </button>
                 </div>
                 <div>
                   <Link to="/scheduled-appointment" style={{ textDecoration: "none" }}>
