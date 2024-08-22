@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./ProfileAvatar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import girl from "./img/girl.png";
-// import fullbodyimage from "./img/fullbodyimage.png";
 import fullAvatar from "./img/full-avatar.png";
-import arrow from "./img/arrow.png";
+// -----------------------
+import girl from "./img/girl.png";
+import changeAvtar from "./img/d3cd5a4cdfd2a1b9677a50a12e6c5818.png";
+import halfbtnavtar from "./img/fullbodyimage.png";
+import fullbtnavtar from "./img/arrow.png";
+
 import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
 import { useDispatch } from 'react-redux';
 import { createBasic } from '../../reduxToolkit/createBasicProfile';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -19,6 +23,7 @@ function ProfileAvatar() {
   const [activeHairColor, setActiveHairColor] = useState("");
   const [activeAgeRange, setActiveAgeRange] = useState("");
   const [activeMaterialStatus, setActiveMaterialStatus] = useState("");
+  const [currentImageAvtar, setCurrentImageAvtar] = useState(girl);
 
   const [height, setHeight] = useState(150);
   const [weight, setWeight] = useState(70);
@@ -34,13 +39,54 @@ function ProfileAvatar() {
   const navigate = useNavigate();
 
   const user = location.state?.user;
+  const basicProfileData = location.state?.basicProfile;
+
+  const handleImageChange = (image) => {
+    setCurrentImageAvtar(image)
+  }
 
   const [formData, setFormData] = useState({
-    name: user.firstName || "",
-    bio: user.bio || "",
-    email: user.email || "",
-    mobileNumber: user.mobileNumber || "",
+    name: user?.firstName || "",
+    bio: basicProfileData?.bio || "",
+    email: user?.email || "",
+    mobileNumber: basicProfileData?.mobileNumber || "",
   });
+
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   bio: "",
+  //   email: "",
+  //   mobileNumber: "",
+  // });
+
+  useEffect(() => {
+    if (basicProfileData) {
+      setActiveGenderType(basicProfileData.gender);
+      setActiveBodySize(basicProfileData.bodySize);
+      setActiveEyeColor(basicProfileData.eyeColor);
+      setActiveHairColor(basicProfileData.hairColor);
+      setActiveAgeRange(basicProfileData.age);
+      setActiveMaterialStatus(basicProfileData.maritalStatus);
+
+      setHeight(basicProfileData.height);
+      setWeight(basicProfileData.weight);
+      setShoes(basicProfileData.shoes);
+      setShoulders(basicProfileData.shoulders);
+      setChest(basicProfileData.chest);
+      setWaist(basicProfileData.waist);
+      setHips(basicProfileData.hips);
+      setHighHips(basicProfileData.highHips);
+
+      // setFormData({
+      //   name: user?.firstName || "",
+      //   bio: basicProfileData.bio || "",
+      //   email: user?.email || "",
+      //   mobileNumber: basicProfileData?.mobileNumber || "",
+      // });
+    }
+  }, [basicProfileData, user]);
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,6 +95,8 @@ function ProfileAvatar() {
       [name]: value,
     });
   };
+
+
 
   const handleChange = (type, delta) => {
     if (type === "height") {
@@ -103,7 +151,8 @@ function ProfileAvatar() {
 
   const handleUpdate = async () => {
     try {
-      const res = await dispatch(createBasic({
+      // Await the dispatch call to handle the result properly
+      const actionResult = await dispatch(createBasic({
         ...formData,
         height, weight, shoes, shoulders, chest, waist, hips, highHips,
         bodySize: activeBodySize,
@@ -114,18 +163,33 @@ function ProfileAvatar() {
         gender: activeGenderType,
         user_id: user?._id
       }));
-      toast.success(res.data.message, {
-        autoClose: 1000,
-        style: { backgroundColor: '#28a745', color: '#fff' }
-      });
-      navigate('/profile');
+
+      // Unwrap the result to get the payload or throw an error
+      const response = unwrapResult(actionResult);
+      console.log(response, 'response');
+
+      if (response.success) {
+        toast.success(response.message, {
+          autoClose: 1000,
+          style: { backgroundColor: '#28a745', color: '#fff' }
+        });
+        setTimeout(() => {
+          navigate('/profile', { state: { createdProfileId: response?.stylist?._id } });
+        }, 1000);
+      } else {
+        toast.error(response.message || "Profile update failed", {
+          autoClose: 1000,
+          style: { backgroundColor: '#dc3545', color: '#fff' }
+        });
+      }
     } catch (err) {
-      toast.error(err.response?.data?.message, {
+      toast.error(err.message || "An error occurred", {
         autoClose: 1000,
         style: { backgroundColor: '#dc3545', color: '#fff' }
       });
     }
   };
+
 
   return (
     <>
@@ -134,15 +198,21 @@ function ProfileAvatar() {
         <div className="avatar1">
           <div className="left">
             <div className="girl">
-              <div className="up">
-                <img src={girl} alt="" />
+              <div className="up d-flex justify-content-center align-items-center">
+                <img src={currentImageAvtar} height={300} alt="Avatar" />
               </div>
               <div className="arrow">
-                <img src={arrow} height={60} alt="" />
+                {currentImageAvtar === girl && (
+                  <button type="button" onClick={() => handleImageChange(changeAvtar)} className="btn rounded-circle">
+                    <img src={halfbtnavtar} height={30} alt="" />
+                  </button>
+                )}
+                {currentImageAvtar === changeAvtar && (
+                  <button type="button" onClick={() => handleImageChange(girl)} className="btn rounded-circle">
+                    <img src={fullbtnavtar} height={30} alt="" />
+                  </button>
+                )}
               </div>
-              {/* <div className="arrow">
-                <img src={fullbodyimage} height={60} alt="" />
-              </div> */}
             </div>
           </div>
           <Link to="/full-avatar">
@@ -186,7 +256,7 @@ function ProfileAvatar() {
         </div>
 
         {activeTab === "basic" && (
-          <div className="container w-75">
+          <div className="container w-50">
             <div className="row">
               <div className="col-12">
                 <div className="p-2">
@@ -234,10 +304,7 @@ function ProfileAvatar() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label
-                        htmlFor="mobile-number"
-                        className="form-label fw-bold fs-5"
-                      >
+                      <label htmlFor="mobileNumber" className="form-label fw-bold fs-5">
                         Mobile Number
                       </label>
                       <input
@@ -632,12 +699,14 @@ function ProfileAvatar() {
                   </button>
                 </div>
                 <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-                  <button
-                    type="button"
-                    className="btn btn-light w-100 w-md-50 rounded-pill p-3 fw-bold"
-                  >
-                    Cancel
-                  </button>
+                  <Link to="/profile" className="w-100 w-md-50">
+                    <button
+                      type="button"
+                      className="btn btn-light w-100 rounded-pill p-3 fw-bold"
+                    >
+                      Cancel
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

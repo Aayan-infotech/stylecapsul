@@ -6,7 +6,6 @@ export const createBasic = createAsyncThunk('profile/createBasic',
     async (profileData, { rejectWithValue }) => {
         try {
             const response = await axios.post(apiUrl('api/user/basic'), profileData);
-            console.log(response, 'response')
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);

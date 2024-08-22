@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Logout } from "../allmodal/Logout.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import axios from 'axios';
@@ -18,33 +18,60 @@ import profile from "./img/profile.png";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [logedInUserData, setLogedInUserData] = useState({});
+  const [logedInUserData, setLogedInUserData] = useState(null);
+  const [basicProfileDetails, setBasicProfileDetails] = useState(null);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation()
   const { user } = useSelector((state) => state.login);
+  const createdBaiscProfileId = location.state?.createdProfileId;
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
 
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       if (user?.data?._id) {
+  //         const response = await axios.get(apiUrl(`api/user/${user.data._id}`));
+  //         setLogedInUserData(response?.data?.data);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchUserData();
+  // }, [user]);
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
         if (user?.data?._id) {
-          const response = await axios.get(apiUrl(`api/user/${user.data._id}`));
-          setLogedInUserData(response?.data?.data);
+          const userResponse = await axios.get(apiUrl(`api/user/${user.data._id}`));
+          setLogedInUserData(userResponse?.data?.data);
+        }
+        if (createdBaiscProfileId) {
+          const basicResponse = await axios.get(apiUrl(`api/user/get-basic-details/${createdBaiscProfileId}`));
+          setBasicProfileDetails(basicResponse?.data?.data);
+          // console.log(basicResponse.data?.data?.bio, 'basicResponse')
         }
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching data:', error);
       }
     };
 
-    fetchUserData();
-  }, [user]);
+    fetchData();
+  }, [user, createdBaiscProfileId]);
 
-  const navigate = useNavigate();
   const handleEditProfile = () => {
-    console.log(logedInUserData);
-    navigate('/edit-profile-avatar', { state: { user: logedInUserData } });
+    // console.log(basicProfileDetails?.bio, 'basicProfileDetails')
+    navigate('/edit-profile-avatar', {
+      state: {
+        user: logedInUserData,
+        basicProfile: basicProfileDetails
+      }
+    });
   };
 
 
@@ -67,7 +94,7 @@ function Profile() {
                     <h2>{(logedInUserData?.firstName || "Default Name").charAt(0).toUpperCase() + (logedInUserData?.firstName || "Default Name").slice(1)}</h2>
                     <h5 className="fs-6">{logedInUserData?.email || "Elizabeth@gmail.com"}</h5>
                     <blockquote>
-                      “Fashions fade, style is eternal.”
+                      “{basicProfileDetails?.bio || "“Fashions fade, style is eternal.”"}”
                     </blockquote>
                   </div>
                 </div>

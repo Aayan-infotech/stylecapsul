@@ -2,8 +2,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  // position: fixed;
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 1000;
 
@@ -17,30 +16,16 @@
     border-radius: 50px;
     margin: 1rem auto;
     padding: 10px 20px;
-    // box-shadow: 0 4px 6px rgba(29, 28, 28, 0.3);
-
-    .left,
-    .center,
-    .right {
-      p {
-        margin: 0;
-      }
-    }
 
     .left {
       p {
         font-size: 1.7rem;
-        font-weight: 700
+        font-weight: 700;
       }
-    }
 
-    .center {
-      p {
-        font-size: 1.7rem;
-        // padding-bottom: 0.4rem;
-        border-bottom: 2px solid black;
-        // text-decoration: underline;
-
+      img {
+        width: 300px;
+        height: 60px;
       }
     }
 
@@ -48,8 +33,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-
 
       .icons {
         background-color: black;
@@ -64,6 +47,14 @@
       }
 
       .hamburger {
+        display: block;
+
+        .dropdown-item:hover,
+        .dropdown-item:active {
+          background-color: #333;
+          color: white;
+        }
+
         i {
           margin: 0 1.5rem;
           font-size: 2rem;
@@ -71,35 +62,60 @@
         }
       }
     }
-
   }
-
-}
-.custom-bg-button{
-  color: black;
-}
-.custom-bg-button:hover {
-  background-color: black;
-  color: white;
 }
 
-.modal-footer {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+// Media query for tablets and below
+@media (max-width: 768px) {
+  .top {
+    .top1 {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .left {
+        margin-bottom: 1rem;
+      }
+
+      .right {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .icons {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+  }
 }
 
-.modal-body {
-  border-bottom: none;
-  padding: 2rem;
-}
+// Media query for mobile devices
+@media (max-width: 576px) {
+  .top {
+    .top1 {
+      padding: 5px 10px;
 
-.modal-content {
-  border: none;
-}
+      .left {
+        img {
+          width: 200px;
+          height: 40px;
+        }
+      }
 
-.dropdown-item:hover,
-.dropdown-item:active {
-  background-color: #333; 
-  color: white;
+      .right {
+        .icons {
+          padding: 0.4rem 1rem;
+
+          i {
+            font-size: 1rem;
+          }
+        }
+
+        .hamburger i {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
 }

@@ -4,7 +4,7 @@ import giftcard2 from "../../assets/giftcards/giftcard2.png";
 import giftcard3 from "../../assets/giftcards/giftcard3.png";
 import giftcard4 from "../../assets/giftcards/giftcard4.png";
 import giftcard5 from "../../assets/giftcards/giftcard5.png";
-import "../../styles/Giftcards.css";
+import "../../styles/Giftcards.scss";
 
 const giftCardData = [
   {
@@ -77,14 +77,14 @@ const giftCardData = [
 
 const GiftCards = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center add-clothes-card">
-      <div className="container p-4">
+    <div className="add-gift-cards">
+      <div className="container mt-5">
         <div className="row gx-5 ">
           <div className="col-12 col-md-6">
             <h1 className="fw-bold fs-1">Gift Cards</h1>
           </div>
           <div className="col-12 col-md-6">
-            <div className="order-history">
+            <div className="search-history">
               <div className="search-box">
                 <i className="fa fa-search"></i>
                 <input
@@ -97,7 +97,7 @@ const GiftCards = () => {
             </div>
           </div>
         </div>
-        <div className="row gy-5 mt-1">
+        <div className="row gy-4 mt-1">
           {giftCardData.map((card) => (
             <div key={card.id} className="col-12 col-md-4 position-relative">
               <img
@@ -108,7 +108,7 @@ const GiftCards = () => {
               <div className="giftcard-content">
                 <h5 className="card-title">{card.title}</h5>
                 <p className="card-text mt-3 w-75">{card.description}</p>
-                <button type="button" className="btn btn-dark mt-4">
+                <button type="button" className="btn btn-dark">
                   {card.buttonText} <i className={card.iconClass}></i>
                 </button>
               </div>

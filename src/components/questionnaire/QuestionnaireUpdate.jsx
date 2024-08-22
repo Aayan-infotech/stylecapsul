@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
+import { FaCheck } from 'react-icons/fa';
 
 const QuestionnaireUpdate = () => {
+  const [selectedBrand, setSelectedBrand] = useState(null)
+
+  const handleClick = (id) => {
+    setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
+  };
+
   const question = "Do you like minimal style?";
   const allProfileImages = [
     [
@@ -87,18 +94,10 @@ const QuestionnaireUpdate = () => {
     ],
   ];
 
-  const singleBrand = {
-    id: 1,
-    company_log:
-      "https://assets.mayoclinic.org/content/dam/mayoclinic/logos/mayo-clinic-logo.svg",
-  };
-  const generateBrandsArray = (item, count) => {
-    return Array.from({ length: count }, (el, index) => ({
-      ...item,
-      id: index + 1,
-    }));
-  };
-  const favouriteBrands = generateBrandsArray(singleBrand, 20);
+  const favouriteBrands = [
+    { id: 1, company_log: "https://assets.mayoclinic.org/content/dam/mayoclinic/logos/mayo-clinic-logo.svg", },
+    { id: 2, company_log: "https://assets.mayoclinic.org/content/dam/mayoclinic/logos/mayo-clinic-logo.svg", }
+  ];
 
   const buttonOptions = ["Yes", "No", "Sometimes"];
 
@@ -314,13 +313,22 @@ const QuestionnaireUpdate = () => {
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">What’s your favourite brand?</h1>
           {favouriteBrands.map((item) => (
-            <div className="col-12 col-sm-6 col-md-3" key={item.id}>
-              <div className="p-3 border d-flex justify-content-center align-items-center custom-column">
+            <div
+              className={`col-12 col-sm-6 col-md-3 ${selectedBrand === item.id ? 'selected' : ''}`}
+              key={item.id}
+              onClick={() => handleClick(item.id)}
+            >
+              <div
+                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${selectedBrand === item.id ? 'selected-bg' : ''}`}
+              >
                 <img
                   src={item.company_log}
                   alt="Brand Logo"
                   className="img-fluid custom-img"
                 />
+                {selectedBrand === item.id && (
+                  <FaCheck className="check-icon text-white" />
+                )}
               </div>
             </div>
           ))}

@@ -12,13 +12,13 @@ import analysis from "./img/analysis.png";
 const Home = () => {
   const itemsLeft = [
     { link: "/profile", imgSrc: profile, text: "Profile" },
-    { link: "/closetManagement", imgSrc: closet, text: "Closet Management" },
+    { link: "/closet-management", imgSrc: closet, text: "Closet Management" },
     { link: "/stylist", imgSrc: stylist, text: "Stylist" },
   ];
 
   const itemsRight = [
     { link: "/market-place", imgSrc: market, text: "Market Place" },
-    { link: "/myStyle-capsule", imgSrc: style, text: "My Style Capsule" },
+    { link: "/my-style-capsule", imgSrc: style, text: "My Style Capsule" },
     { link: "/analytics-insights", imgSrc: analysis, text: "Analysis & Insights"},
   ];
 
@@ -30,7 +30,7 @@ const Home = () => {
       <div className="home-row">
         <div className="left">
           {itemsLeft.map((item, index) => (
-            <Link key={index} to={item.link} style={{ textDecoration: "none" }}>
+            <Link key={index} to={item.link} className="text-decoration-none">
               <div className="closet-management">
                 <div className="image">
                   <img src={item.imgSrc} alt={`${item.text} Icon`} />
@@ -42,7 +42,7 @@ const Home = () => {
         </div>
         <div className="right">
           {itemsRight.map((item, index) => (
-            <Link key={index} to={item.link} style={{ textDecoration: "none" }}>
+            <Link key={index} to={item.link} className="text-decoration-none">
               <div className="closet-management">
                 <div className="image">
                   <img src={item.imgSrc} alt={`${item.text} Icon`} />
