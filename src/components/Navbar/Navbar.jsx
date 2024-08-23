@@ -3,6 +3,7 @@ import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/LOGOSC.png";
 import { Logout } from "../allmodal/Logout";
+import {checkToken} from '../../utils/auth.util.js'
 
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -18,7 +19,7 @@ function Navbar() {
       <div className="top">
         <div className="top1">
           <div className="left">
-            <Link to="/">
+            <Link to={checkToken() ? "/home" : "/"}>
               <img
                 src={logo}
                 alt="logo"

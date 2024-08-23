@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import image1 from "../../assets/stylist/img1.png";
-import image2 from "../../assets/stylist/img2.png";
-import image3 from "../../assets/stylist/img3.png";
-import image4 from "../../assets/stylist/img4.png";
-import image5 from "../../assets/stylist/img5.png";
-import image6 from "../../assets/stylist/img6.png";
 import "../../styles/Stylist.scss";
-
-const stylists = [
-  { name: "John", experience: "5+ Years of experience", image: image1 },
-  { name: "Doe", experience: "3+ Years of experience", image: image2 },
-  { name: "Abinash", experience: "5+ Years of experience", image: image3 },
-  { name: "Atul", experience: "3+ Years of experience", image: image4 },
-  { name: "Ujjwal", experience: "5+ Years of experience", image: image5 },
-  { name: "Abhishek", experience: "3+ Years of experience", image: image6 },
-];
+import { apiUrl } from "../../../apiUtils";
+import axios from "axios";
 
 const Stylist = () => {
+  const [showstylists, setShowstylists] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async (query = "") => {
+      try {
+        const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
+        const response = await axios.get(url);
+
+        if (response?.data?.success) {
+          setShowstylists(response?.data?.stylists);
+          setMessage("");
+        } else {
+          setShowstylists([]);
+          setMessage(response?.data?.message || "No stylists found");
+        }
+      } catch (error) {
+        console.log(error);
+        setShowstylists([]);
+        setMessage("An error occurred while fetching data.");
+      }
+    };
+
+    fetchUserData(searchQuery);
+  }, [searchQuery]);
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center add-clothes-card">
       <div className="container w-75 p-4">
@@ -30,8 +49,10 @@ const Stylist = () => {
                 <i className="fa fa-search"></i>
                 <input
                   type="text"
-                  className="rounded-pill"
+                  className="rounded-pill text-white"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={handleSearchInputChange}
                 />
                 <i className="fa-solid fa-sliders"></i>
               </div>
@@ -39,29 +60,32 @@ const Stylist = () => {
           </div>
         </div>
         <div className="row mt-3">
-          {stylists.map((stylist, index) => (
-            <div className="col-12 mt-3" key={index}>
-              <div
-                className="d-flex rounded-pill"
-                style={{ backgroundColor: "#4C4C4C" }}
-              >
-                <div className="me-2">
-                  <img
-                    className="image-rounded"
-                    src={stylist.image}
-                    height={120}
-                    width={150}
-                    alt="Stylist"
-                  />
-                </div>
-                <div className="p-2 text-white">
-                  <h6>{stylist.name}</h6>
-                  <h6>Outfit Planning</h6>
-                  <h6 className="mt-4">{stylist.experience}</h6>
+          {message ? (
+            <p className="text-white">{message}sdfsfsdfsdf</p>
+          ) : (
+            showstylists.map((stylist) => (
+              <div className="col-12 mt-3" key={stylist._id}>
+                <div
+                  className="d-flex rounded-pill"
+                  style={{ backgroundColor: "#4C4C4C" }}>
+                  <div className="me-2">
+                    <img
+                      className="image-rounded"
+                      src={stylist.profilePicture || image1}
+                      height={120}
+                      width={150}
+                      alt={stylist.name}
+                    />
+                  </div>
+                  <div className="p-2 text-white">
+                    <h6>{stylist.name}</h6>
+                    <h6>{stylist.specialization.join(", ")}</h6>
+                    <h6 className="mt-4">{stylist.experience}+ Years of Experience</h6>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>

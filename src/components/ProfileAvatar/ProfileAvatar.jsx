@@ -86,8 +86,6 @@ function ProfileAvatar() {
     }
   }, [basicProfileData, user]);
 
-
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -95,9 +93,6 @@ function ProfileAvatar() {
       [name]: value,
     });
   };
-
-
-
   const handleChange = (type, delta) => {
     if (type === "height") {
       setHeight((prev) => Math.max(0, prev + delta));
@@ -164,7 +159,6 @@ function ProfileAvatar() {
         user_id: user?._id
       }));
 
-      // Unwrap the result to get the payload or throw an error
       const response = unwrapResult(actionResult);
       console.log(response, 'response');
 
@@ -174,7 +168,7 @@ function ProfileAvatar() {
           style: { backgroundColor: '#28a745', color: '#fff' }
         });
         setTimeout(() => {
-          navigate('/profile', { state: { createdProfileId: response?.stylist?._id } });
+          navigate('/profile', { state: { sendUserId: user?._id } });
         }, 1000);
       } else {
         toast.error(response.message || "Profile update failed", {

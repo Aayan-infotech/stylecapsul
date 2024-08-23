@@ -3,15 +3,10 @@
     width: 150px;
 }
 
-.custom-button:hover {
-    background-color: black;
-    color: white
-}
-
-/* .btn-active {
+.custom-button.selected {
     background-color: black;
     color: white;
-} */
+}
 
 .custom-img {
     max-width: 100%;
@@ -31,32 +26,33 @@
 .questionnaire-update {
     padding: 20px;
 }
+
 .custom-column {
     position: relative;
     cursor: pointer;
     transition: background-color 0.3s;
-    overflow: hidden; 
-  }
-  
-  .selected-bg {
-    background-color: gray; 
-  }
-  
-  .check-icon {
+    overflow: hidden;
+}
+
+.selected-bg {
+    background-color: gray;
+}
+
+.check-icon {
     position: absolute;
     top: 50%;
     left: 50%;
     font-size: 3rem !important;
     transform: translate(-50%, -50%);
     color: green;
-    font-size: 2rem; 
-  }
-  
-  .img-fluid {
+    font-size: 2rem;
+}
+
+.img-fluid {
     max-width: 100%;
     height: auto;
-  }
-  
+}
+
 
 .border-container {
     width: 100%;

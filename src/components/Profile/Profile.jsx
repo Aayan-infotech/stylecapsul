@@ -25,7 +25,9 @@ function Profile() {
   const navigate = useNavigate();
   const location = useLocation()
   const { user } = useSelector((state) => state.login);
-  const createdBaiscProfileId = location.state?.createdProfileId;
+  // console.log(user)
+  const createdBaiscProfileId = location.state?.sendUserId;
+  console.log(createdBaiscProfileId, 'createdBaiscProfileId')
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
@@ -49,6 +51,7 @@ function Profile() {
       try {
         if (user?.data?._id) {
           const userResponse = await axios.get(apiUrl(`api/user/${user.data._id}`));
+          console.log(userResponse, 'userResponse')
           setLogedInUserData(userResponse?.data?.data);
         }
         if (createdBaiscProfileId) {
@@ -91,7 +94,7 @@ function Profile() {
                     width={120}
                   />
                   <div className="profile-info mt-3">
-                    <h2>{(logedInUserData?.firstName || "Default Name").charAt(0).toUpperCase() + (logedInUserData?.firstName || "Default Name").slice(1)}</h2>
+                    <h2>{(logedInUserData?.firstName || "Default Name").charAt(0).toUpperCase() + (logedInUserData?.firstName || "Elizabeth").slice(1)}</h2>
                     <h5 className="fs-6">{logedInUserData?.email || "Elizabeth@gmail.com"}</h5>
                     <blockquote>
                       “{basicProfileDetails?.bio || "“Fashions fade, style is eternal.”"}”
@@ -107,7 +110,7 @@ function Profile() {
                   </button>
                 </div>
                 <div>
-                  <Link to="/scheduled-appointment" style={{ textDecoration: "none" }}>
+                  <Link to="/scheduled-appointment" className="text-decoration-none">
                     <button className="action-button">
                       <FaCalendarAlt className="icon" /> Scheduled Appointment{" "}
                       <IoIosArrowForward className="arrow-icon" />
@@ -115,7 +118,7 @@ function Profile() {
                   </Link>
                 </div>
                 <div>
-                  <Link to="/change-password" style={{ textDecoration: "none" }}>
+                  <Link to="/change-password" className="text-decoration-none">
                     <button className="action-button">
                       <FaLock className="icon" /> Change Password{" "}
                       <IoIosArrowForward className="arrow-icon" />
@@ -123,7 +126,7 @@ function Profile() {
                   </Link>
                 </div>
                 <div>
-                  <Link to="/settingAndSecurity" style={{ textDecoration: "none" }}>
+                  <Link to="/setting-and-security" className="text-decoration-none">
                     <button className="action-button">
                       <FaCog className="icon" /> Settings{" "}
                       <IoIosArrowForward className="arrow-icon" />

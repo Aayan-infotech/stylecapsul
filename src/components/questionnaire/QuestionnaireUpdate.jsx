@@ -3,6 +3,7 @@ import "../../styles/QuestionnaireUpdate.css";
 import { FaCheck } from 'react-icons/fa';
 
 const QuestionnaireUpdate = () => {
+  const [selectedOption, setSelectedOption] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null)
 
   const handleClick = (id) => {
@@ -138,6 +139,10 @@ const QuestionnaireUpdate = () => {
     "Harmony & balancing",
   ];
 
+  const handleClickGenderType = (option) => {
+    setSelectedOption(option);
+  };
+
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
       <div className="container w-75">
@@ -165,12 +170,29 @@ const QuestionnaireUpdate = () => {
             >
               <button
                 type="button"
-                className="btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button"
+                className={`btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button ${selectedOption === option ? "selected" : ""
+                  }`}
+                onClick={() => handleClickGenderType(option)}
               >
                 {option}
               </button>
             </div>
           ))}
+          {/* {buttonOptions.map((option) => (
+            <div
+              className="col-12 col-md-4 d-flex align-items-center text-center"
+              key={option}
+            >
+              <button
+                type="button"
+                className={`btn rounded-pill w-100 fw-bold p-3 custom-button-type ${activeStatus === option ? "selected" : ""
+                  }`}
+                onClick={() => handleClickGenderType(option)}
+              >
+                {option}
+              </button>
+            </div>
+          ))} */}
         </div>
 
         {/* -------------------------Do you like feminine style------------------------ */}
