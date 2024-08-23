@@ -14,18 +14,19 @@ const Stylist = () => {
       try {
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
         const response = await axios.get(url);
+        console.log(response?.data, 'response');  // Logging the response data
 
-        if (response?.data?.success) {
-          setShowstylists(response?.data?.stylists);
+        if (response?.data?.stylists?.length > 0) {
+          setShowstylists(response.data.stylists);
           setMessage("");
         } else {
           setShowstylists([]);
-          setMessage(response?.data?.message || "No stylists found");
+          setMessage(response?.data?.message || "No stylists found.");
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.response?.data?.message);
         setShowstylists([]);
-        setMessage("An error occurred while fetching data.");
+        setMessage(error?.response?.data?.message || "An error occurred.");
       }
     };
 
@@ -61,7 +62,9 @@ const Stylist = () => {
         </div>
         <div className="row mt-3">
           {message ? (
-            <p className="text-white">{message}sdfsfsdfsdf</p>
+            <div className="text-center">
+              <h2 className="fs-3">{message}</h2>
+            </div>
           ) : (
             showstylists.map((stylist) => (
               <div className="col-12 mt-3" key={stylist._id}>
@@ -71,16 +74,16 @@ const Stylist = () => {
                   <div className="me-2">
                     <img
                       className="image-rounded"
-                      src={stylist.profilePicture || image1}
+                      src={stylist?.profilePicture || image1}
                       height={120}
                       width={150}
                       alt={stylist.name}
                     />
                   </div>
                   <div className="p-2 text-white">
-                    <h6>{stylist.name}</h6>
-                    <h6>{stylist.specialization.join(", ")}</h6>
-                    <h6 className="mt-4">{stylist.experience}+ Years of Experience</h6>
+                    <h6>{stylist?.name}</h6>
+                    <h6>{stylist?.specialization.join(", ")}</h6>
+                    <h6 className="mt-4">{stylist?.experience}+ Years of Experience</h6>
                   </div>
                 </div>
               </div>
