@@ -44,6 +44,9 @@ import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyl
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
 import { checkToken } from '../src/utils/auth.util.js'
 import MainLayout from "./MainLayout";
+import GarmentsCare from "./components/garments/GarmentsCare.jsx";
+import ServiceProvider from "./components/serviceprovider/ServiceProvider.jsx";
+import ScheduleBooking from "./components/schedulebooking/ScheduleBooking.jsx";
 
 // App Component
 const Routing = () => {
@@ -100,6 +103,9 @@ const Routing = () => {
             <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />} />
             <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/garment-care" element={<GarmentsCare />} />
+            <Route path="/service-provider" element={<ServiceProvider />} />
+            <Route path="/schedule-booking" element={<ScheduleBooking />} />
             {/* <Route path="*" element={<PageNotFound />} /> */}
           </Route>
         </Routes> :

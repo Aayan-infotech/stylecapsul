@@ -14,7 +14,7 @@ const Stylist = () => {
       try {
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
         const response = await axios.get(url);
-        console.log(response?.data, 'response');  // Logging the response data
+        console.log(response?.data, 'response');  
 
         if (response?.data?.stylists?.length > 0) {
           setShowstylists(response.data.stylists);

@@ -1,0 +1,84 @@
+.schedule-booking-sections {
+    padding-top: 6rem;
+
+    .container {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .border {
+        background-color: #4C4C4C;
+        padding: 2rem;
+        border-radius: 0.5rem;
+    }
+
+    form {
+        .form-label {
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .schedue-custom-btn {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #333;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .schedule-booking-sections {
+        padding-top: 3rem;
+
+        .container {
+            padding: 1rem;
+        }
+
+        .w-50 {
+            width: 100% !important;
+        }
+
+        .border {
+            padding: 1rem;
+        }
+
+        .form-control {
+            padding: 0.5rem;
+        }
+
+        .schedue-custom-btn {
+            width: 100%;
+        }
+    }
+    .schedule-booking-sections .border {
+        padding: 10px !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .schedule-booking-sections {
+        padding-top: 4rem;
+
+        .w-50 {
+            width: 70% !important;
+        }
+
+        .form-control {
+            padding: 0.5rem 1rem;
+        }
+
+        .schedue-custom-btn {
+            width: 70%;
+        }
+    }
+}

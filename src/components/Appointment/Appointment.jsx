@@ -1,50 +1,63 @@
-import React from 'react'
-import './Appointment.scss'
-import {Link} from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import './Appointment.scss';
+import { Link } from 'react-router-dom';
+import Schedule from './img/Schedule.png';
+import { apiUrl } from '../../../apiUtils';
+import axios from 'axios';
+import { format } from 'date-fns';
 
-import Schedule from './img/Schedule.png'
+function Container({ service }) {
+  const formattedDate = format(new Date(service.startTime), 'dd-MM-yyyy hh:mm a');
 
-function Container(){
-  return(
+  return (
     <>
-    <div className='appointment'>
-      <div className='one'>
-
-        <div>
-        <img src={Schedule} alt="" />
+      <div className='appointment'>
+        <div className='one'>
+          <div>
+            <img src={Schedule} alt="" />
+          </div>
+          <div>
+            <p>{service.service}</p>
+          </div>
         </div>
-
-        <div>
-        <p>Garment Pickup</p>
-        </div>
-        
-      </div>
-
-      <div className='two'>
-        <div>
-          <p>09-02-2024</p>
-        </div>
-        <div>
-          <p>07:01 PM</p>
+        <div className='two'>
+          <div>
+            <p>{formattedDate.split(' ')[0]}</p>
+          </div>
+          <div>
+            <p>{formattedDate.split(' ')[1]} {formattedDate.split(' ')[2]}</p>
+          </div>
         </div>
       </div>
-    </div>
     </>
-  )
+  );
 }
 
 function Appointment() {
+  const [allGarmentsServices, setAllGarmentsServices] = useState([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(apiUrl('api/garment/garment-care'));
+        setAllGarmentsServices(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
+  
+
   return (
     <>
-    <div className='sa'>
-    <Container/>
-    <Container/>
-    <Container/>
-    <Container/>
-    <Container/>
-    </div>
+      <div className='sa'>
+        {allGarmentsServices.map(service => (
+          <Container key={service._id} service={service} />
+        ))}
+      </div>
     </>
-  )
+  );
 }
 
-export default Appointment
+export default Appointment;
