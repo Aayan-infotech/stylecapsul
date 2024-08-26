@@ -47,6 +47,8 @@ import MainLayout from "./MainLayout";
 import GarmentsCare from "./components/garments/GarmentsCare.jsx";
 import ServiceProvider from "./components/serviceprovider/ServiceProvider.jsx";
 import ScheduleBooking from "./components/schedulebooking/ScheduleBooking.jsx";
+import GiftCardDetails from "./components/giftcards/GiftCardDetails.jsx";
+import StylistDetails from "./components/stylist/StylistDetails.jsx";
 
 // App Component
 const Routing = () => {
@@ -90,7 +92,9 @@ const Routing = () => {
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
             <Route path="/stylist" element={<Stylist />} />
+            <Route path="/stylist-details" element={<StylistDetails />} />
             <Route path="/gift-cards" element={<GiftCards />} />
+            <Route path="/gift-card-details/:id" element={<GiftCardDetails />} />
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
             <Route path="/help-support" element={<HelpAndSupport />} />
             <Route path="/closet-overview" element={<ClosetOverview />} />

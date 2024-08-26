@@ -5,6 +5,7 @@ import giftcard3 from "../../assets/giftcards/giftcard3.png";
 import giftcard4 from "../../assets/giftcards/giftcard4.png";
 import giftcard5 from "../../assets/giftcards/giftcard5.png";
 import "../../styles/Giftcards.scss";
+import { Link } from "react-router-dom";
 
 const giftCardData = [
   {
@@ -78,12 +79,10 @@ const giftCardData = [
 const GiftCards = () => {
   return (
     <div className="add-gift-cards">
-      <div className="container mt-5">
-        <div className="row gx-5 ">
-          <div className="col-12 col-md-6">
+      <div className="container">
+        <div className="row g-2">
+          <div className="col-12 d-flex justify-content-between align-items-center mt-4">
             <h1 className="fw-bold fs-1">Gift Cards</h1>
-          </div>
-          <div className="col-12 col-md-6">
             <div className="search-history">
               <div className="search-box">
                 <i className="fa fa-search"></i>
@@ -96,22 +95,22 @@ const GiftCards = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="row gy-4 mt-1">
           {giftCardData.map((card) => (
             <div key={card.id} className="col-12 col-md-4 position-relative">
-              <img
-                src={card.imageUrl}
-                className="giftcard-1 img-fluid"
-                alt={card.altText}
-              />
-              <div className="giftcard-content">
-                <h5 className="card-title">{card.title}</h5>
-                <p className="card-text mt-3 w-75">{card.description}</p>
-                <button type="button" className="btn btn-dark">
-                  {card.buttonText} <i className={card.iconClass}></i>
-                </button>
-              </div>
+              <Link to={`/gift-card-details/${card.id}`}>
+                <img
+                  src={card.imageUrl}
+                  className="giftcard-1 img-fluid"
+                  alt={card.altText}
+                />
+                <div className="giftcard-content">
+                  <h5 className="card-title">{card.title}</h5>
+                  <p className="card-text mt-3 w-75">{card.description}</p>
+                  <button type="button" className="btn btn-dark">
+                    {card.buttonText} <i className={card.iconClass}></i>
+                  </button>
+                </div>
+              </Link>
             </div>
           ))}
           <div className="col-12 col-md-4 d-flex justify-content-center align-items-center">
@@ -121,12 +120,12 @@ const GiftCards = () => {
                   <i className="fs-1 fa-solid fa-chevron-right"></i>
                 </button>
               </div>
-              <h4 className="mt-2">View More</h4>
+              <h4 className="fw-bold">View More</h4>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

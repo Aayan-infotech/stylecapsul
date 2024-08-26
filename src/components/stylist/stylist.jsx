@@ -3,6 +3,7 @@ import image1 from "../../assets/stylist/img1.png";
 import "../../styles/Stylist.scss";
 import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Stylist = () => {
   const [showstylists, setShowstylists] = useState([]);
@@ -14,7 +15,7 @@ const Stylist = () => {
       try {
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
         const response = await axios.get(url);
-        console.log(response?.data, 'response');  
+        console.log(response?.data, 'response');
 
         if (response?.data?.stylists?.length > 0) {
           setShowstylists(response.data.stylists);
@@ -67,26 +68,26 @@ const Stylist = () => {
             </div>
           ) : (
             showstylists.map((stylist) => (
-              <div className="col-12 mt-3" key={stylist._id}>
-                <div
-                  className="d-flex rounded-pill"
-                  style={{ backgroundColor: "#4C4C4C" }}>
-                  <div className="me-2">
-                    <img
-                      className="image-rounded"
-                      src={stylist?.profilePicture || image1}
-                      height={120}
-                      width={150}
-                      alt={stylist.name}
-                    />
-                  </div>
-                  <div className="p-2 text-white">
-                    <h6>{stylist?.name}</h6>
-                    <h6>{stylist?.specialization.join(", ")}</h6>
-                    <h6 className="mt-4">{stylist?.experience}+ Years of Experience</h6>
+              <Link to="/stylist-details" className="text-decoration-none" state={{ stylist }}>
+                <div className="col-12 mt-3" key={stylist._id}>
+                  <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
+                    <div className="me-2">
+                      <img
+                        className="image-rounded"
+                        src={stylist?.profilePicture || image1}
+                        height={120}
+                        width={150}
+                        alt={stylist.name}
+                      />
+                    </div>
+                    <div className="p-2 text-white">
+                      <h6>{stylist?.name}</h6>
+                      <h6>{stylist?.specialization.join(", ")}</h6>
+                      <h6 className="mt-4">{stylist?.experience}+ Years of Experience</h6>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>

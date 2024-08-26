@@ -8,7 +8,6 @@ export const loginUser = createAsyncThunk('login/user', async (formData, thunkAP
         const response = await axios.post(apiUrl('api/auth/login'), formData, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
-        console.log(response.data)
         return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);

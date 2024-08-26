@@ -25,9 +25,8 @@ function Profile() {
   const navigate = useNavigate();
   const location = useLocation()
   const { user } = useSelector((state) => state.login);
-  // console.log(user)
+  // console.log(user.data._id) 
   const createdBaiscProfileId = location.state?.sendUserId;
-  console.log(createdBaiscProfileId, 'createdBaiscProfileId')
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
@@ -55,9 +54,9 @@ function Profile() {
           setLogedInUserData(userResponse?.data?.data);
         }
         if (createdBaiscProfileId) {
-          const basicResponse = await axios.get(apiUrl(`api/user/get-basic-details/${createdBaiscProfileId}`));
+          const basicResponse = await axios.get(apiUrl(`api/user/get-basic-details/${user.data._id}`));
+          console.log(basicResponse.data?.data?.bio, 'basicResponse')
           setBasicProfileDetails(basicResponse?.data?.data);
-          // console.log(basicResponse.data?.data?.bio, 'basicResponse')
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -68,7 +67,6 @@ function Profile() {
   }, [user, createdBaiscProfileId]);
 
   const handleEditProfile = () => {
-    // console.log(basicProfileDetails?.bio, 'basicProfileDetails')
     navigate('/edit-profile-avatar', {
       state: {
         user: logedInUserData,

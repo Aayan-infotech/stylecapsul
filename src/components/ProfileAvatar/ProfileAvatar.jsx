@@ -52,13 +52,6 @@ function ProfileAvatar() {
     mobileNumber: basicProfileData?.mobileNumber || "",
   });
 
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   bio: "",
-  //   email: "",
-  //   mobileNumber: "",
-  // });
-
   useEffect(() => {
     if (basicProfileData) {
       setActiveGenderType(basicProfileData.gender);
@@ -146,39 +139,31 @@ function ProfileAvatar() {
 
   const handleUpdate = async () => {
     try {
-      // Await the dispatch call to handle the result properly
       const actionResult = await dispatch(createBasic({
-        ...formData,
-        height, weight, shoes, shoulders, chest, waist, hips, highHips,
-        bodySize: activeBodySize,
-        eyeColor: activeEyeColor,
-        hairColor: activeHairColor,
-        age: activeAgeRange,
-        maritalStatus: activeMaterialStatus,
-        gender: activeGenderType,
-        user_id: user?._id
-      }));
-
-      const response = unwrapResult(actionResult);
-      console.log(response, 'response');
-
-      if (response.success) {
-        toast.success(response.message, {
+        userId: user?._id,
+        profileData: {
+          ...formData, height, weight, shoes, shoulders, chest, waist, hips, highHips,
+          bodySize: activeBodySize,
+          eyeColor: activeEyeColor,
+          hairColor: activeHairColor,
+          age: activeAgeRange,
+          maritalStatus: activeMaterialStatus,
+          gender: activeGenderType,
+        },
+      })).unwrap();
+      if (actionResult.success) {
+        toast.success(actionResult?.message, {
           autoClose: 1000,
           style: { backgroundColor: '#28a745', color: '#fff' }
         });
         setTimeout(() => {
-          navigate('/profile', { state: { sendUserId: user?._id } });
+          navigate("/profile");
         }, 1000);
-      } else {
-        toast.error(response.message || "Profile update failed", {
-          autoClose: 1000,
-          style: { backgroundColor: '#dc3545', color: '#fff' }
-        });
       }
     } catch (err) {
-      toast.error(err.message || "An error occurred", {
-        autoClose: 1000,
+      const errorMessage = err.response?.data?.message || err.message;
+      toast.error(errorMessage, {
+        autoClose: 2000,
         style: { backgroundColor: '#dc3545', color: '#fff' }
       });
     }
@@ -272,10 +257,11 @@ function ProfileAvatar() {
                       <label htmlFor="bio" className="form-label fw-bold fs-5">
                         Bio
                       </label>
-                      <input
+                      <textarea
                         type="text"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Bio"
+                        rows="1"
                         name="bio"
                         value={formData.bio}
                         onChange={handleInputChange}
@@ -292,6 +278,7 @@ function ProfileAvatar() {
                         type="email"
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Email"
+                        readOnly
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}

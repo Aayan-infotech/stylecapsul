@@ -39,7 +39,11 @@ const RecoveryCode = () => {
           autoClose: 1000,
           style: { backgroundColor: '#28a745', color: '#fff' }
         });
-        navigate('/reset-password', { state: { token: response.data.token } });
+        setTimeout(() => {
+          if (response?.success === true && response?.status === 200) {
+            navigate('/reset-password', { state: { token: response.data.token } });
+          }
+        }, 1000);
       } else {
         toast.error(response?.data.message, {
           autoClose: 1000,

@@ -23,7 +23,11 @@ const ForgotPassword = () => {
           autoClose: 1000,
           style: { backgroundColor: '#28a745', color: '#fff' }
         });
-        navigate('/recovery-code');
+        setTimeout(() => {
+          if (response?.data.message) {
+            navigate("/recovery-code");
+          }
+        }, 1000);
       } else {
         toast.error(response?.data.message, {
           autoClose: 1000,
@@ -64,12 +68,12 @@ const ForgotPassword = () => {
                 </div>
                 <div className="text-center mt-4">
                   {/* <Link to="/recovery-code"> */}
-                    <button
-                      type="submit"
-                      className="btn custom-button text-white fw-bold rounded-pill w-50 p-2"
-                    >
-                      Submit
-                    </button>
+                  <button
+                    type="submit"
+                    className="btn custom-button text-white fw-bold rounded-pill w-50 p-2"
+                  >
+                    Submit
+                  </button>
                   {/* </Link> */}
                 </div>
               </form>

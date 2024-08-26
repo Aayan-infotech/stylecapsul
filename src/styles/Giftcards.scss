@@ -1,6 +1,12 @@
 .add-gift-cards {
     padding-top: 6rem;
 
+    .container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .search-history {
         .search-box {
             position: relative;

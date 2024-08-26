@@ -1,0 +1,47 @@
+.gift-card--container-sections {
+    padding-top: 6rem;
+  
+    .gift-carousel-image {
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  
+    .gift-card-carosule-content {
+      position: absolute;
+      top: 15%;
+      left: 4%;
+      color: white;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    .gift-custom-indicators {
+      position: relative;
+      bottom: -10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .carousel-indicators [data-bs-target] {
+      background-color: #000;
+    }
+  
+    .gift-service-details {
+      .border-line {
+        border: 2.5px solid black;
+        border-radius: 5px;
+        width: 8rem;
+      }
+  
+      .gift-custom-btn {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+      }
+    }
+  }
+  

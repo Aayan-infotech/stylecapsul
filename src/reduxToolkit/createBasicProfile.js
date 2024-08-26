@@ -1,17 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../../apiUtils';
+import { useSelector } from 'react-redux';
 
-export const createBasic = createAsyncThunk('profile/createBasic',
-    async (profileData, { rejectWithValue }) => {
+export const createBasic = createAsyncThunk(
+    'profile/createBasic',
+    async ({ userId, profileData }, { rejectWithValue }) => {
         try {
-            const response = await axios.post(apiUrl('api/user/basic'), profileData);
+            const response = await axios.put(apiUrl(`api/user/update-user/${userId}`), profileData);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
 );
+
 
 
 const basicProfileSlice = createSlice({

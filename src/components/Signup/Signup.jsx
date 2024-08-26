@@ -32,33 +32,32 @@ const Signup = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(apiUrl('api/auth/signup'), {
+      const signUp = await axios.post(apiUrl('api/auth/signup'), {
         firstName: formData.firstName,
         email: formData.email,
         username: formData.username,
         password: formData.password,
         confirmPassword: formData.confirmPassword
       });
-      setFormData({
-        firstName: "",
-        email: "",
-        username: "",
-        password: "",
-        confirmPassword: "",
-      });
-      toast.success(res.data.message, {
-        autoClose: 1000,
-        style: { backgroundColor: '#28a745', color: '#fff' }
-      });
-      setTimeout(() => {
-        if (res.data.success && res.data.status === 200) {
-          navigate("/login");
-        }
-      }, 1000);
+      if (signUp) {
+        setFormData({
+          firstName: "",
+          email: "",
+          username: "",
+          password: "",
+          confirmPassword: "",
+        });
+        toast.success(signUp?.data?.message, {
+          autoClose: 1000,
+          style: { backgroundColor: '#28a745', color: '#fff' }
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 1000);
+      }
     } catch (err) {
       toast.error(err.response?.data?.message, {
         autoClose: 1000,
@@ -73,9 +72,11 @@ const Signup = () => {
       <ToastContainer />
       <div className="container d-flex justify-content-center align-items-center full-height">
         <div className="">
-          <h1 className="text-center outside-heading fs-1 fw-bold">
-            Style Capsule
-          </h1>
+          <Link to="/login">
+            <h1 className="text-center outside-heading fs-1 fw-bold">
+              Style Capsule
+            </h1>
+          </Link>
           <form onSubmit={handleSubmit}>
             <div className="row gy-4 mt-1">
               <h2 className="card-title text-center fs-4 fw-bold">Sign Up</h2>
