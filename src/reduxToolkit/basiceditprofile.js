@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../../apiUtils';
-import { useSelector } from 'react-redux';
 
 export const createBasic = createAsyncThunk(
     'profile/createBasic',

@@ -19,44 +19,20 @@ import profile from "./img/profile.png";
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [logedInUserData, setLogedInUserData] = useState(null);
-  const [basicProfileDetails, setBasicProfileDetails] = useState(null);
-
-  // const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation()
   const { user } = useSelector((state) => state.login);
-  // console.log(user.data._id) 
   const createdBaiscProfileId = location.state?.sendUserId;
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       if (user?.data?._id) {
-  //         const response = await axios.get(apiUrl(`api/user/${user.data._id}`));
-  //         setLogedInUserData(response?.data?.data);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchUserData();
-  // }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (user?.data?._id) {
           const userResponse = await axios.get(apiUrl(`api/user/${user.data._id}`));
-          console.log(userResponse, 'userResponse')
           setLogedInUserData(userResponse?.data?.data);
-        }
-        if (createdBaiscProfileId) {
-          const basicResponse = await axios.get(apiUrl(`api/user/get-basic-details/${user.data._id}`));
-          console.log(basicResponse.data?.data?.bio, 'basicResponse')
-          setBasicProfileDetails(basicResponse?.data?.data);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -64,13 +40,12 @@ function Profile() {
     };
 
     fetchData();
-  }, [user, createdBaiscProfileId]);
+  }, [user]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile-avatar', {
       state: {
         user: logedInUserData,
-        basicProfile: basicProfileDetails
       }
     });
   };
@@ -95,7 +70,7 @@ function Profile() {
                     <h2>{(logedInUserData?.firstName || "Default Name").charAt(0).toUpperCase() + (logedInUserData?.firstName || "Elizabeth").slice(1)}</h2>
                     <h5 className="fs-6">{logedInUserData?.email || "Elizabeth@gmail.com"}</h5>
                     <blockquote>
-                      “{basicProfileDetails?.bio || "“Fashions fade, style is eternal.”"}”
+                      “{logedInUserData?.bio || "“Fashions fade, style is eternal.”"}”
                     </blockquote>
                   </div>
                 </div>

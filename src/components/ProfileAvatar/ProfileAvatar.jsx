@@ -9,11 +9,11 @@ import halfbtnavtar from "./img/fullbodyimage.png";
 import fullbtnavtar from "./img/arrow.png";
 
 import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
-import { useDispatch } from 'react-redux';
-import { createBasic } from '../../reduxToolkit/createBasicProfile';
+import { useDispatch, useSelector } from 'react-redux';
+import { createBasic } from '../../reduxToolkit/basiceditprofile.js'
+import { fetchProfile } from '../../reduxToolkit/profileSlice.js'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { unwrapResult } from '@reduxjs/toolkit';
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -24,60 +24,78 @@ function ProfileAvatar() {
   const [activeAgeRange, setActiveAgeRange] = useState("");
   const [activeMaterialStatus, setActiveMaterialStatus] = useState("");
   const [currentImageAvtar, setCurrentImageAvtar] = useState(girl);
+  const [selectGender, setSelectGender] = useState([]);
+  const [bodySize, setBodySize] = useState([]);
+  const [selectEyeColor, setSelectEyeColor] = useState([]);
+  const [selectHiarColor, setSelectHiarColor] = useState([]);
+  const [selectAgeRange, setSelectAgeRange] = useState([]);
+  const [selectMaterialStatus, setSelectMaterialStatus] = useState([]);
 
-  const [height, setHeight] = useState(150);
-  const [weight, setWeight] = useState(70);
-  const [shoes, setShoes] = useState(5);
-  const [shoulders, setShoulders] = useState(90);
-  const [chest, setChest] = useState(90);
-  const [waist, setWaist] = useState(90);
-  const [hips, setHips] = useState(90);
-  const [highHips, setHighHips] = useState(90);
+  const [height, setHeight] = useState(null);
+  const [weight, setWeight] = useState(null);
+  const [shoes, setShoes] = useState(null);
+  const [shoulders, setShoulders] = useState(null);
+  const [chest, setChest] = useState(null);
+  const [waist, setWaist] = useState(null);
+  const [hips, setHips] = useState(null);
+  const [highHips, setHighHips] = useState(null);
 
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = location.state?.user;
-  const basicProfileData = location.state?.basicProfile;
+  const updatedProfileData = location.state?.user;
+  const { user } = useSelector((state) => state.login);
+  const user_id = user?.data?._id
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image)
   }
 
   const [formData, setFormData] = useState({
-    name: user?.firstName || "",
-    bio: basicProfileData?.bio || "",
-    email: user?.email || "",
-    mobileNumber: basicProfileData?.mobileNumber || "",
+    name: updatedProfileData?.firstName || "",
+    bio: updatedProfileData?.bio || "",
+    email: updatedProfileData?.email || "",
+    mobileNumber: updatedProfileData?.mobileNumber || "",
   });
 
   useEffect(() => {
-    if (basicProfileData) {
-      setActiveGenderType(basicProfileData.gender);
-      setActiveBodySize(basicProfileData.bodySize);
-      setActiveEyeColor(basicProfileData.eyeColor);
-      setActiveHairColor(basicProfileData.hairColor);
-      setActiveAgeRange(basicProfileData.age);
-      setActiveMaterialStatus(basicProfileData.maritalStatus);
+    const fetchData = async () => {
+      try {
+        const actionResult = await dispatch(fetchProfile());
+        const profileData = actionResult?.payload?.style_capsule_json?.[0]?.profile;
+        setSelectGender(profileData?.measurements?.gender)
+        setBodySize(profileData?.measurements?.bodySize)
+        setSelectEyeColor(profileData?.measurements?.eyeColor)
+        setSelectHiarColor(profileData?.measurements?.hairColor)
+        setSelectAgeRange(profileData?.measurements?.ageRange)
+        setSelectMaterialStatus(profileData?.measurements?.maritalStatus)
 
-      setHeight(basicProfileData.height);
-      setWeight(basicProfileData.weight);
-      setShoes(basicProfileData.shoes);
-      setShoulders(basicProfileData.shoulders);
-      setChest(basicProfileData.chest);
-      setWaist(basicProfileData.waist);
-      setHips(basicProfileData.hips);
-      setHighHips(basicProfileData.highHips);
+        if (profileData) {
+          const { measurements } = profileData;
+          setActiveGenderType(updatedProfileData.gender || selectGender);
+          setActiveBodySize(updatedProfileData.bodySize || bodySize);
+          setActiveEyeColor(updatedProfileData.eyeColor || selectEyeColor);
+          setActiveHairColor(updatedProfileData.hairColor || selectHiarColor);
+          setActiveAgeRange(updatedProfileData.age || selectAgeRange);
+          setActiveMaterialStatus(updatedProfileData.maritalStatus || selectMaterialStatus);
 
-      // setFormData({
-      //   name: user?.firstName || "",
-      //   bio: basicProfileData.bio || "",
-      //   email: user?.email || "",
-      //   mobileNumber: basicProfileData?.mobileNumber || "",
-      // });
-    }
-  }, [basicProfileData, user]);
+          setHeight(updatedProfileData.height || measurements.height?.value);
+          setWeight(updatedProfileData.weight || measurements.weight?.value);
+          setShoes(updatedProfileData.shoes || measurements.shoes?.size);
+          setShoulders(updatedProfileData.shoulders || measurements.shoulders?.value);
+          setChest(updatedProfileData.chest || measurements.chest?.value);
+          setWaist(updatedProfileData.waist || measurements.waist?.value);
+          setHips(updatedProfileData.hips || measurements.hips?.value);
+          setHighHips(updatedProfileData.highHips || measurements.highHips?.value);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -106,13 +124,6 @@ function ProfileAvatar() {
     }
   };
 
-  const selectGender = ["Male", "Female", "Gender-Inc."];
-  const bodySize = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
-  const selectEyeColor = ["Amber", "Blue", "Brown", "Gray", "Hazal", "Green", "Others",];
-  const selectHiarColor = ["Black", "Blond", "Brown", "Auburn", "Red", "Gray", "Others",];
-  const selectAgeRange = ["18-20", "23-27", "28-32", "33-37", "38-42", "43-46", "47-50", "51-54", "55+",];
-  const selectMaterialStatus = ["Single", "Married"];
-
   const handleClickGenderType = (gender_type) => {
     setActiveGenderType(gender_type);
   };
@@ -140,7 +151,7 @@ function ProfileAvatar() {
   const handleUpdate = async () => {
     try {
       const actionResult = await dispatch(createBasic({
-        userId: user?._id,
+        userId: user_id,
         profileData: {
           ...formData, height, weight, shoes, shoulders, chest, waist, hips, highHips,
           bodySize: activeBodySize,
@@ -168,7 +179,6 @@ function ProfileAvatar() {
       });
     }
   };
-
 
   return (
     <>
@@ -308,7 +318,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{height}</span>cm
+                      <span>{height || 0}</span>cm
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
