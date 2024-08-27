@@ -6,18 +6,20 @@ const initialState = {
     status: 'idle',
     error: null,
 };
-export const addClothes = createAsyncThunk('clothes/addClothes', async (formData, { rejectWithValue }) => {
-    try {
-        const response = await axios.post('http://3.111.163.2:3000/api/stylist/add-stylist', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
-        return response.data;
-    } catch (err) {
-        return rejectWithValue(err.response.data);
+export const addClothes = createAsyncThunk(
+    'clothes/addClothes',
+    async (formData, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(apiUrl('api/cloths/add-cloths'), formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response.data);
+        }
     }
-}
 );
 // Create the slice
 const addClothesSlice = createSlice({

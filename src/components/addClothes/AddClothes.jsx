@@ -5,15 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addClothes } from '../../reduxToolkit/addClothesSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 const AddClothes = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
 
   const [formData, setFormData] = useState({
     category: '',
     color: '',
-    typeOfCloths: '',
+    typesOfCloths: '',
     season: '',
     brand: '',
     purchaseDate: '',
@@ -42,37 +45,32 @@ const AddClothes = () => {
   };
 
   const currentDate = new Date().toISOString().split('T')[0];
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const userId = user?.data?._id;
+  
     const data = new FormData();
     for (let key in formData) {
-      data.append(key, formData[key]);
+      // Replace 'image' with 'picture' for the file input
+      const value = key === 'image' ? formData[key] : formData[key];
+      data.append(key === 'image' ? 'picture' : key, value);
     }
-
+    if (userId) {
+      data.append('user_id', userId);
+    }
+  
     try {
-      const addclothesresponse = dispatch(addClothes(data));
-      if (addclothesresponse) {
-        toast.success(addclothesresponse?.message, {
-          autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
-        });
-        // setTimeout(() => {
-        //   if (addclothesresponse?.success === true && addclothesresponse?.status === 200) {
-        //     navigate("/home");
-        //   }
-        // }, 1000);
-        // setFormData({
-        //   category: '',
-        //   color: '',
-        //   typeOfCloths: '',
-        //   season: '',
-        //   brand: '',
-        //   purchaseDate: '',
-        //   description: '',
-        //   image: null,
-        // });
-        setImagePreview(imagepreview);
+      const addclothesresponse = await dispatch(addClothes(data)).unwrap();
+      console.log(addclothesresponse, 'addclothesresponse')
+      toast.success(addclothesresponse.message, {
+        autoClose: 1000,
+        style: { backgroundColor: '#28a745', color: '#fff' }
+      });
+      if (addclothesresponse.success === true && addclothesresponse.status === 200) {
+        setTimeout(() => {
+          navigate("/home");
+        }, 1000);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
@@ -125,12 +123,12 @@ const AddClothes = () => {
                         aria-label="color"
                       >
                         <option value="" disabled>Select</option>
-                        <option value="Jeans">Pink</option>
-                        <option value="Shirt">Blue</option>
-                        <option value="Paint">Red</option>
-                        <option value="Jeans">Yellow</option>
-                        <option value="Shirt">Green</option>
-                        <option value="Paint">Orange</option>
+                        <option value="pink">Pink</option>
+                        <option value="blue">Blue</option>
+                        <option value="red">Red</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="green">Green</option>
+                        <option value="orange">Orange</option>
                       </select>
                     </div>
                   </div>
@@ -143,8 +141,8 @@ const AddClothes = () => {
                         type="text"
                         className="form-control rounded-pill"
                         id="typeof-clothes"
-                        name="typeOfCloths"
-                        value={formData.typeOfCloths}
+                        name="typesOfCloths"
+                        value={formData.typesOfCloths}
                         onChange={handleChange}
                         aria-describedby="Type of Clothes"
                       />

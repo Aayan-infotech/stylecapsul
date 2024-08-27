@@ -1,0 +1,55 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(-50px);
+  
+    &.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  
+    &.fade-in {
+      opacity: 1;
+    }
+  
+    &.fade-out {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  
+    .modal-dialog {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; 
+    }
+  
+    .modal-content {
+      width: 100%;
+      max-width: 500px;
+      margin: auto; 
+    }
+  
+    .modal-body {
+      text-align: center; 
+    }
+  
+    .modal-footer {
+      border: 0;
+      display: flex;
+      justify-content: center; 
+      gap: 1rem; 
+    }
+  
+    .custom-bg-button {
+      background-color: black;
+      color: white;
+    }
+  }
+  

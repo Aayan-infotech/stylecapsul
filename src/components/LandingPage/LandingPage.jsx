@@ -17,6 +17,7 @@ import eight from "./img/eight.png";
 import nine from "./img/nine.png";
 import ten from "./img/ten.png";
 // import four from './img/four.png'
+import jeansImage from "./img/seven.png";
 
 const LandingPage = () => {
   const services = [
@@ -35,127 +36,134 @@ const LandingPage = () => {
 
   return (
     <>
-      <div className="outer-navbar">
-        <div className="navbar">
-          <div className="navbar-left">
-            <Link to="/login">
-              <button className="login-btn">Log In</button>
-            </Link>
-            <Link to="/signup">
-              <button className="signup-btn">Sign Up</button>
-            </Link>
-          </div>
-          <div className="navbar-center">
-            <h1 className="title">Style Capsule</h1>
-          </div>
-          <div className="navbar-right">
-            <i className="fa-regular fa-bell"></i>
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <i className="fa-solid fa-cart-shopping"></i>
-          </div>
-        </div>
-      </div>
-
-      <div className="landing1">
-        <div className="vid">
-          <video src={one} alt="Video" autoPlay loop muted />
-        </div>
-
-        <div className="capsule">
-          <p>
-            Create Your Capsule <i className="fa-solid fa-arrow-right-long"></i>
-          </p>
-        </div>
-      </div>
-
-      <div className="landing2">
-        <div className="marquee">
-          <p>REVOLUTIONIZE YOUR CLOSET</p>
-          <p>REVOLUTIONIZE YOUR CLOSET</p>
-          <p>REVOLUTIONIZE YOUR CLOSET</p>
-          <p>REVOLUTIONIZE YOUR CLOSET</p>
-        </div>
-      </div>
-
-      <div className="container custom-container">
-        <div className="row gx-5">
-          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <div className="p-2">
-              <h2 className="text-size">
-                Most of us don't wear 82% of our closet contents.*
-              </h2>
+      <div className="main-landing-page-home">
+        <div className="outer-navbar">
+          <div className="navbar">
+            <div className="navbar-left">
+              <Link to="/login">
+                <button className="login-btn">Log In</button>
+              </Link>
+              <Link to="/signup">
+                <button className="signup-btn">Sign Up</button>
+              </Link>
             </div>
-          </div>
-          <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <div className="p-2">
-              <img src={two} alt="" />
+            <div className="navbar-center">
+              <h1 className="title">Style Capsule</h1>
+            </div>
+            <div className="navbar-right">
+              <i className="fa-regular fa-bell"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-cart-shopping"></i>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* -----------------------------service-------------------------- */}
-      <div className="landing4">
-        <h3>Services</h3>
-        <div className="landing4-row">
-          <div className="left">
-            {services.slice(0, 2).map((service) => (
-              <div key={service.id} className="closet-management">
-                <div className="image">
-                  <img src={service.imgSrc} alt={service.alt} />
-                </div>
-                <div className="text fw-bold">{service.text}</div>
+        <div className="landing1">
+          <div className="vid">
+            <video src={one} alt="Video" autoPlay loop muted />
+          </div>
+
+          <div className="capsule">
+            <p>
+              Create Your Capsule <i className="fa-solid fa-arrow-right-long"></i>
+            </p>
+          </div>
+        </div>
+
+        <div className="landing2">
+          <div className="marquee">
+            <p>REVOLUTIONIZE YOUR CLOSET</p>
+            <p>REVOLUTIONIZE YOUR CLOSET</p>
+            <p>REVOLUTIONIZE YOUR CLOSET</p>
+            <p>REVOLUTIONIZE YOUR CLOSET</p>
+          </div>
+        </div>
+
+        <div className="container custom-container">
+          <div className="row gx-5">
+            <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+              <div className="p-2">
+                <h2 className="text-size">
+                  Most of us don't wear 82% of our closet contents.*
+                </h2>
               </div>
-            ))}
+            </div>
+            <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+              <div className="p-2">
+                <img src={two} alt="" />
+              </div>
+            </div>
           </div>
-          <div className="right">
-            {services.slice(2).map((service) => (
-              <div key={service.id} className="closet-management">
-                <div className="image">
-                  <img src={service.imgSrc} alt={service.alt} />
+
+          {/* -----------------------------service-------------------------- */}
+          <div className="row gx-md-5 mt-5">
+            <h2 className="fw-bold fs-1 text-center">Services</h2>
+            {services.map((service) => (
+              <div key={service.id} className="col-12 col-md-6 mt-4 mb-md-0 d-flex justify-content-center align-items-center">
+                <div className="closet-management">
+                  <div className="image">
+                    <img src={service.imgSrc} alt={service.alt} />
+                  </div>
+                  <div className="text fw-bold">{service.text}</div>
                 </div>
-                <div className="text fw-bold">{service.text}</div>
               </div>
             ))}
           </div>
         </div>
-      </div>
 
-      {/* -----------------------------Popular Products-------------------------- */}
-
-      <div className="container landing5">
-        <h2 className="text-center fw-bold">Popular Products</h2>
-        <div className="row gy-5">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="col-12 col-md-6"
-            >
-              <div className="product-card">
-                <div className="image-container">
-                  <img src={product.src} alt={product.title} />
+        {/* -----------------------------Popular Products-------------------------- */}
+        {/* <div class="container overflow-hidden text-center">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="p-3 border bg-secondary">
+                <div class="row">
+                  <div class="col-12 col-md-4">
+                    <img src={jeansImage} style={{ width: '100%', height: 'auto', objectFit: 'cover', borderBottomLeftRadius:'60px', borderTopLeftRadius:'60px' }} />
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <div class="p-3 border bg-warning">Custom column padding</div>
+                  </div>
                 </div>
-                <div className="text-container">
-                  <div className="info">
-                    <h3>{product.title}</h3>
-                    <div className="description-price">
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing e
-                      </p>
-                      <div className="price">{product.price}</div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+
+
+        <div className="container landing5 mt-5">
+          <div className="row">
+            <h2 className="text-center fw-bold">Popular Products</h2>
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="col-12 col-md-6 mt-4"
+              >
+                <div className="product-card">
+                  <div className="image-container">
+                    <img src={product.src} alt={product.title} />
+                  </div>
+                  <div className="text-container">
+                    <div className="info">
+                      <h3>{product.title}</h3>
+                      <div className="description-price">
+                        <p>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing e
+                        </p>
+                        <div className="price">{product.price}</div>
+                      </div>
+                    </div>
+                    <div className="actions">
+                      <button className="add-to-cart">Add to cart</button>
+                      <button className="buy">Buy</button>
                     </div>
                   </div>
-                  <div className="actions">
-                    <button className="add-to-cart">Add to cart</button>
-                    <button className="buy">Buy</button>
-                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

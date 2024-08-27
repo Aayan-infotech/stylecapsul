@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import "../../styles/Logout.css";
+import "../../styles/Logout.scss";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Logout = ({ isModalVisible, onClose }) => {
   const modalRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isModalVisible) {
@@ -12,38 +16,50 @@ export const Logout = ({ isModalVisible, onClose }) => {
     }
   }, [isModalVisible]);
 
+  const handleLogout = () => {
+    localStorage.clear('authToken');
+    toast.success('Logout Successfully..!', {
+      autoClose: 1000,
+      style: { backgroundColor: '#28a745', color: '#fff' }
+    });
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
+    onClose();
+  };
+
   return (
-    <div
-      className={`modal ${isModalVisible ? "fade-in" : "fade-out"}`}
-      style={{ display: isModalVisible ? "block" : "none" }}
-      ref={modalRef}
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-body text-center">
-            <h2 className="fw-bold">
-              Are you sure you want
-              <br /> to logout?
-            </h2>
-            <div className="modal-footer border-0">
-              <button
-                type="button"
-                className="btn btn-outline-secondary rounded-pill w-25 custom-bg-button fw-bold"
-                onClick={onClose}
-              >
-                Yes
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-secondary rounded-pill w-25 custom-bg-button fw-bold"
-                onClick={onClose}
-              >
-                No
-              </button>
+    <>
+      <ToastContainer />
+      <div className={`modal ${isModalVisible ? "fade-in" : "fade-out"}`}
+        style={{ display: isModalVisible ? "block" : "none" }}
+        ref={modalRef} >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body text-center">
+              <h2 className="fw-bold">
+                Are you sure you want <br /> to logout?
+              </h2>
+              <div className="modal-footer border-0">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary rounded-pill w-25 custom-bg-button fw-bold"
+                  onClick={handleLogout}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary rounded-pill w-25 custom-bg-button fw-bold"
+                  onClick={onClose}
+                >
+                  No
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

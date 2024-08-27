@@ -75,7 +75,7 @@ const Routing = () => {
 
         {/* Routes that require Navbar and Footer */}
       </Routes>
-      {isAuth ?
+      {isAuth && isAuth ?
         <Routes>
           <Route element={<MainLayout />}>
             <Route path="/home" element={<Home />} />
@@ -114,7 +114,7 @@ const Routing = () => {
           </Route>
         </Routes> :
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
         </Routes>}
     </Router>
   );
