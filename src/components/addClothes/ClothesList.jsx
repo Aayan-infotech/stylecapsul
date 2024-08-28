@@ -3,13 +3,13 @@ import "../../styles/ClothesList.scss";
 import { apiUrl } from '../../../apiUtils';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ClothesList() {
-
     const [allClothes, setAllClothes] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +42,11 @@ function ClothesList() {
             });
         }
     };
+
+    const updateCloth = (cloth) => {
+        // navigate('/add-clothes')
+        console.log(cloth, 'cloth')
+    }
 
     return (
         <>
@@ -81,7 +86,7 @@ function ClothesList() {
                                                 </div>
                                             </Link>
                                             <div className="second-text">
-                                                <button type="button" className="btn btn-outline-dark border border-dark">
+                                                <button type="button" onClick={() => updateCloth(product)} className="btn btn-outline-dark border border-dark">
                                                     <i className="fa-regular fa-pen-to-square"></i>
                                                 </button>
                                             </div>
@@ -97,5 +102,4 @@ function ClothesList() {
         </>
     );
 }
-
 export default ClothesList;

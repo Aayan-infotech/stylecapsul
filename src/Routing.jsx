@@ -118,7 +118,7 @@ const Routing = () => {
           </Route>
         </Routes> :
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
         </Routes>}
     </Router>
   );

@@ -12,7 +12,6 @@ const AddClothes = () => {
   const navigate = useNavigate();
   const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
-
   const [formData, setFormData] = useState({
     category: '',
     color: '',
@@ -49,7 +48,6 @@ const AddClothes = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userId = user?.data?._id;
-  
     const data = new FormData();
     for (let key in formData) {
       const value = key === 'image' ? formData[key] : formData[key];
@@ -58,7 +56,6 @@ const AddClothes = () => {
     if (userId) {
       data.append('user_id', userId);
     }
-  
     try {
       const addclothesresponse = await dispatch(addClothes(data)).unwrap();
       console.log(addclothesresponse, 'addclothesresponse')
@@ -68,7 +65,7 @@ const AddClothes = () => {
       });
       if (addclothesresponse.success === true && addclothesresponse.status === 200) {
         setTimeout(() => {
-          navigate("/home");
+          navigate("/all-clothes-list");
         }, 1000);
       }
     } catch (error) {
@@ -251,5 +248,4 @@ const AddClothes = () => {
     </>
   );
 };
-
 export default AddClothes;

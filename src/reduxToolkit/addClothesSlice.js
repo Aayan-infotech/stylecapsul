@@ -40,5 +40,4 @@ const addClothesSlice = createSlice({
             });
     },
 });
-
 export default addClothesSlice.reducer;
