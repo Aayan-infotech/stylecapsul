@@ -1,0 +1,36 @@
+.clothes-main-container-sections {
+    padding-top: 6rem;
+
+    .clothes-carousel-image {
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .clothes-custom-indicators {
+        position: relative;
+        bottom: -10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .carousel-indicators [data-bs-target] {
+        background-color: #000;
+    }
+
+    .clothes-serviece-details {
+        .border-line {
+            border: 2.5px solid black;
+            border-radius: 5px;
+            width: 8rem;
+        }
+
+        .clothes-custom-btn {
+            background-color: black;
+            color: white;
+            font-weight: bold;
+        }
+    }
+
+}

@@ -4,6 +4,7 @@ import userLoginReducer from './loginSlice';
 import basicProfileReducer from './basiceditprofile';
 import addClothesReducer from './addClothesSlice';
 import profileReducer from './profileSlice';
+import changePasswordReducer from './changePasswordSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     basicProfile: basicProfileReducer,
     clothes: addClothesReducer,
     profile: profileReducer,
+    changePassword: changePasswordReducer
   },
 });

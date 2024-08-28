@@ -8,7 +8,6 @@ const StylistDetails = () => {
     const [showStylistDetails, setShowStylistDetails] = useState(null);
     const location = useLocation();
     const stylist = location.state?.stylist;
-    console.log(stylist, 'stylist')
 
     useEffect(() => {
         if (stylist) {

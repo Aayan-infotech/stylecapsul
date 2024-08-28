@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addClothes } from '../../reduxToolkit/addClothesSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddClothes = () => {
   const dispatch = useDispatch();
@@ -52,7 +52,6 @@ const AddClothes = () => {
   
     const data = new FormData();
     for (let key in formData) {
-      // Replace 'image' with 'picture' for the file input
       const value = key === 'image' ? formData[key] : formData[key];
       data.append(key === 'image' ? 'picture' : key, value);
     }
@@ -243,6 +242,7 @@ const AddClothes = () => {
                   className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
                   Add
                 </button>
+                <Link to="/all-clothes-list">List</Link>
               </form>
             </div>
           </div>

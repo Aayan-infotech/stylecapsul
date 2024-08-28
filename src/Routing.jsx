@@ -49,6 +49,8 @@ import ServiceProvider from "./components/serviceprovider/ServiceProvider.jsx";
 import ScheduleBooking from "./components/schedulebooking/ScheduleBooking.jsx";
 import GiftCardDetails from "./components/giftcards/GiftCardDetails.jsx";
 import StylistDetails from "./components/stylist/StylistDetails.jsx";
+import ClothesList from "./components/addClothes/ClothesList.jsx";
+import ShowClothesDetails from "./components/addClothes/ShowClothesDetails.jsx";
 
 // App Component
 const Routing = () => {
@@ -91,6 +93,8 @@ const Routing = () => {
             <Route path="/market-place" element={<MarketPlace />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
+            <Route path="/all-clothes-list" element={<ClothesList />} />
+            <Route path="/clothes-details" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-details" element={<StylistDetails />} />
             <Route path="/gift-cards" element={<GiftCards />} />

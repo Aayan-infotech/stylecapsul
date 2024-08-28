@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../../styles/ServiceProvider.scss';
-import { Link } from "react-router-dom";
 
 const ServiceProvider = () => {
     const [serviceProviderData, setServiceProviderData] = useState({});

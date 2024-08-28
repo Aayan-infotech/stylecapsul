@@ -1,36 +1,145 @@
-import React from "react";
-import imagepreview from "../../assets/addclothes/add-photo-style.png";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userChangePassword } from "../../reduxToolkit/changePasswordSlice";
 import "../../styles/ChangePassword.scss";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const ChangePassword = () => {
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { user } = useSelector((state) => state.login);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const userId = user?.data._id;
+
+    const togglePasswordVisibility = (setter) => {
+        setter(prev => !prev);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const changepassresult = await dispatch(userChangePassword({
+                userId,
+                oldPassword,
+                newPassword,
+                newConfirmPassword: confirmPassword
+            }));
+            if (userChangePassword.fulfilled.match(changepassresult)) {
+                const { message } = changepassresult.payload;
+                toast.success(message, {
+                    autoClose: 1000,
+                    style: { backgroundColor: '#28a745', color: '#fff' }
+                });
+                localStorage.clear('authToken');
+                setTimeout(() => {
+                    navigate("/login");
+                }, 1000);
+            } else {
+                throw new Error(changepassresult.payload?.message || "Unknown error");
+            }
+        } catch (error) {
+            const errorMessage = error.message || "An error occurred";
+            toast.error(errorMessage, {
+                autoClose: 2000,
+                style: { backgroundColor: '#dc3545', color: '#fff' }
+            });
+        }
+    };
+
     return (
         <>
+            <ToastContainer />
             <div className="d-flex justify-content-center align-items-center change-password-container">
                 <div className="container">
                     <h1 className="text-center fw-bold fs-1">Change Password</h1>
                     <div className="card password-card-container">
                         <div className="card-body p-5">
-                            <form>
-                                <div className="mb-3">
-                                    <label htmlFor="oldpassword" className="form-label">Old Password</label>
-                                    <input type="password" id="oldpassword" className="form-control rounded-pill" placeholder='Enter Your Password' />
+                            <form onSubmit={handleSubmit}>
+                                <div className="mb-2 position-relative">
+                                    <label htmlFor="oldpassword" className="form-label fw-bold">
+                                        Old Password
+                                    </label>
+                                    <input
+                                        type={showOldPassword ? "text" : "password"}
+                                        id="oldpassword"
+                                        value={oldPassword}
+                                        onChange={(e) => setOldPassword(e.target.value)}
+                                        className="form-control rounded-pill"
+                                        placeholder='Enter Old Password'
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
+                                        onClick={() => togglePasswordVisibility(setShowOldPassword)}
+                                        style={{ background: "none", border: "none" }}
+                                    >
+                                        <i
+                                            className={`fa-solid ${showOldPassword ? "fa-eye" : "fa-eye-slash"}`}
+                                        ></i>
+                                    </button>
                                 </div>
-                                <div className="mb-3">
-                                    <label htmlFor="newpassword" className="form-label">New Password</label>
-                                    <input type="password" id="newpassword" className="form-control rounded-pill" placeholder='Enter New Password' />
+                                <div className="mb-2 position-relative">
+                                    <label htmlFor="newpassword" className="form-label fw-bold">
+                                        New Password
+                                    </label>
+                                    <input
+                                        type={showNewPassword ? "text" : "password"}
+                                        id="newpassword"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        className="form-control rounded-pill"
+                                        placeholder='Enter New Password'
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
+                                        onClick={() => togglePasswordVisibility(setShowNewPassword)}
+                                        style={{ background: "none", border: "none" }}
+                                    >
+                                        <i
+                                            className={`fa-solid ${showNewPassword ? "fa-eye" : "fa-eye-slash"}`}
+                                        ></i>
+                                    </button>
                                 </div>
-                                <div>
-                                    <label htmlFor="confirmpassword" className="form-label">Confirm Password</label>
-                                    <input type="password" id="confirmpassword" className="form-control rounded-pill" placeholder='Enter Confirm Password' />
+                                <div className="mb-2 position-relative">
+                                    <label htmlFor="confirmpassword" className="form-label fw-bold">
+                                        Confirm Password
+                                    </label>
+                                    <input
+                                        type={showConfirmPassword ? "text" : "password"}
+                                        id="confirmpassword"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className="form-control rounded-pill"
+                                        placeholder='Confirm New Password'
+                                    />
+                                    <button
+                                        type="button"
+                                        className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
+                                        onClick={() => togglePasswordVisibility(setShowConfirmPassword)}
+                                        style={{ background: "none", border: "none" }}
+                                    >
+                                        <i
+                                            className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}
+                                        ></i>
+                                    </button>
                                 </div>
+                                <button
+                                    type="submit"
+                                    className="rounded-pill fw-bold btn btn-light chagne-passwrod-submit-btn"
+                                >
+                                    Change Password
+                                </button>
                             </form>
                         </div>
-                        <button
-                            type="button"
-                            className="rounded-pill fw-bold btn btn-light passwrod-submit-btn"
-                        >
-                            Submit
-                        </button>
                     </div>
                 </div>
             </div>
