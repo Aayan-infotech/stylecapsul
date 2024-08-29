@@ -30,7 +30,7 @@ import LandingPage from "./components/LandingPage/LandingPage";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
-import ProfileBody from "./components/ProfileBody/ProfileBody";
+// import ProfileBody from "./components/ProfileBody/ProfileBody";
 import PandQ from "./components/PandQ/PandQ";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import FullAvatar from "./components/FullAvatar/FullAvatar";
@@ -63,7 +63,6 @@ const Routing = () => {
         setIsAuth(false);
       }
     };
-
     checkAuth();
   }, []);
 
@@ -83,7 +82,7 @@ const Routing = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/edit-profile-avatar" element={<ProfileAvatar />} />
-            <Route path="/edit-profile-body" element={<ProfileBody />} />
+            {/* <Route path="/edit-profile-body" element={<ProfileBody />} /> */}
             <Route path="/pq" element={<PandQ />} />
             <Route path="/full-avatar" element={<FullAvatar />} />
             <Route path="/body" element={<Body />} />

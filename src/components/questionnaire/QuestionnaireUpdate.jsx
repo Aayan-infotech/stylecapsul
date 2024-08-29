@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
 import { FaCheck } from 'react-icons/fa';
+import { useSelector } from "react-redux";
 
 const QuestionnaireUpdate = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null)
+
+  const profile = useSelector((state) => state.profile.data);
+  const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
+
+  // Find the object containing the brand key
+  const brandQuestion = questionnaire?.find((question) => question.brand);
+
+  const favouriteBrandss = brandQuestion?.brand?.images;
 
   const handleClick = (id) => {
     setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
@@ -147,52 +156,39 @@ const QuestionnaireUpdate = () => {
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
       <div className="container w-75">
         {/* -------------------------Do you like minimal style------------------------ */}
-        <h1 className="fw-bold fs-1 mt-2">{question}</h1>
-        <div className="row g-2 mt-2">
-          {allProfileImages.map((imageSet, index) => (
-            <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
-              {imageSet.map((src, imgIndex) => (
-                <img
-                  key={imgIndex}
-                  src={src}
-                  alt={`Closet ${imgIndex}`}
-                  className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="row g-2 mt-2">
-          {buttonOptions.map((option, index) => (
-            <div
-              key={index}
-              className="col-12 col-md-4 d-flex justify-content-center mb-2 mb-md-0"
-            >
-              <button
-                type="button"
-                className={`btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button ${selectedOption === option ? "selected" : ""
-                  }`}
-                onClick={() => handleClickGenderType(option)}
+        <div className="mt-2">
+          <h1 className="fw-bold fs-1 mt-2">{question}</h1>
+          <div className="row g-2 mt-2">
+            {allProfileImages1.map((imageSet, index) => (
+              <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
+                {imageSet.map((src, imgIndex) => (
+                  <img
+                    key={imgIndex}
+                    src={src}
+                    alt={`Closet ${imgIndex}`}
+                    className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className="row g-2 mt-2">
+            {buttonOptions.map((option, index) => (
+              <div
+                key={index}
+                className="col-12 col-md-4 d-flex justify-content-center mb-2 mb-md-0"
               >
-                {option}
-              </button>
-            </div>
-          ))}
-          {/* {buttonOptions.map((option) => (
-            <div
-              className="col-12 col-md-4 d-flex align-items-center text-center"
-              key={option}
-            >
-              <button
-                type="button"
-                className={`btn rounded-pill w-100 fw-bold p-3 custom-button-type ${activeStatus === option ? "selected" : ""
-                  }`}
-                onClick={() => handleClickGenderType(option)}
-              >
-                {option}
-              </button>
-            </div>
-          ))} */}
+                <button
+                  type="button"
+                  className={`btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button ${selectedOption === option ? "selected" : ""
+                    }`}
+                  onClick={() => handleClickGenderType(option)}
+                >
+                  {option}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* -------------------------Do you like feminine style------------------------ */}
@@ -333,22 +329,22 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------What’s your favourotite brand?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">What’s your favourite brand?</h1>
-          {favouriteBrands.map((item) => (
+          <h1 className="fw-bold fs-1 mt-2">{brandQuestion?.brand?.question || "What’s your favourite brand?"}</h1>
+          {favouriteBrandss?.map((image, index) => (
             <div
-              className={`col-12 col-sm-6 col-md-3 ${selectedBrand === item.id ? 'selected' : ''}`}
-              key={item.id}
-              onClick={() => handleClick(item.id)}
+              className={`col-12 col-sm-6 col-md-3 ${selectedBrand === index ? 'selected' : ''}`}
+              key={index}
+              onClick={() => handleClick(index)}
             >
               <div
-                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${selectedBrand === item.id ? 'selected-bg' : ''}`}
+                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${selectedBrand === index ? 'selected-bg' : ''}`}
               >
                 <img
-                  src={item.company_log}
-                  alt="Brand Logo"
+                  src={image}
+                  alt={`Brand Logo ${index + 1}`}
                   className="img-fluid custom-img"
                 />
-                {selectedBrand === item.id && (
+                {selectedBrand === index && (
                   <FaCheck className="check-icon text-white" />
                 )}
               </div>
