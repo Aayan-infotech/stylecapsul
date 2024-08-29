@@ -5,6 +5,8 @@ import { loginUser } from "../../reduxToolkit/loginSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.scss";
+import { setCookie } from "../../utils/cookieUtils";
+// import {setCookie}
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,18 +27,16 @@ const Login = () => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
-        if (resultAction) {
-          localStorage.setItem('authToken', resultAction.token);
-          toast.success(resultAction?.message, {
-            autoClose: 1000,
-            style: { backgroundColor: '#28a745', color: '#fff' }
-          });
-          setTimeout(() => {
-            if (resultAction?.success === true && resultAction?.status === 200) {
-              navigate("/home");
-            }
-          }, 1000);
+      if (resultAction) {
+        setCookie('authToken', resultAction.token, 1);
+        toast.success(resultAction?.message, {
+          autoClose: 1000,
+          style: { backgroundColor: '#28a745', color: '#fff' }
+        });
+        if (resultAction?.success === true && resultAction?.status === 200) {
+          navigate('/home');
         }
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(errorMessage, {

@@ -22,6 +22,11 @@ export const setCookie = (name, value, hoursToExpire) => {
     document.cookie = cookieString;
 };
 
+// export const deleteCookie = (name) => {
+//     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;`;
+// };
 export const deleteCookie = (name) => {
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/`;
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/`;
 };
+
+

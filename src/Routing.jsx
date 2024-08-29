@@ -3,8 +3,7 @@ import "./Routing.css";
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Navigate
+  Route
 } from "react-router-dom";
 
 import Login from "./components/Login/Login";
@@ -52,33 +51,34 @@ import StylistDetails from "./components/stylist/StylistDetails.jsx";
 import ClothesList from "./components/addClothes/ClothesList.jsx";
 import ShowClothesDetails from "./components/addClothes/ShowClothesDetails.jsx";
 
-// App Component
 const Routing = () => {
   const [isAuth, setIsAuth] = useState(false);
-  useEffect(() => {
 
-    if (checkToken()) {
-      setIsAuth(true)
-    } else {
-      setIsAuth(false)
-    }
+  useEffect(() => {
+    const checkAuth = async () => {
+      console.log(checkToken())
+      if (checkToken()) {
+        setIsAuth(true);
+      } else {
+        setIsAuth(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        {/* <Route path="/landing-page" element={<LandingPage />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Routes that require Navbar and Footer */}
-      </Routes>
-      {isAuth && isAuth ?
-        <Routes>
+        {/* Protected routes */}
+        {isAuth ? (
           <Route element={<MainLayout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
@@ -116,12 +116,11 @@ const Routing = () => {
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
             {/* <Route path="*" element={<PageNotFound />} /> */}
           </Route>
-        </Routes> :
-        <Routes>
-          <Route path="/" element={<Login />} />
-        </Routes>}
+        ) : (
+          <Route path="*" element={<Login />} />
+        )}
+      </Routes>
     </Router>
   );
 };
-
 export default Routing;

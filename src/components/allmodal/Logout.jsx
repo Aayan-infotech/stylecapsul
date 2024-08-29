@@ -3,6 +3,7 @@ import "../../styles/Logout.scss";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { deleteCookie, getCookie } from "../../utils/cookieUtils";
 
 export const Logout = ({ isModalVisible, onClose }) => {
   const modalRef = useRef(null);
@@ -16,8 +17,21 @@ export const Logout = ({ isModalVisible, onClose }) => {
     }
   }, [isModalVisible]);
 
+  // const handleLogout = () => {
+  //   deleteCookie('authToken')
+  //   toast.success('Logout Successfully..!', {
+  //     autoClose: 1000,
+  //     style: { backgroundColor: '#28a745', color: '#fff' }
+  //   });
+  //   setTimeout(() => {
+  //     navigate('/');
+  //   }, 1000);
+  //   onClose();
+  // };
+
   const handleLogout = () => {
-    localStorage.clear('authToken');
+    deleteCookie('authToken');
+    console.log('Cookie after deletion:', getCookie('authToken'));
     toast.success('Logout Successfully..!', {
       autoClose: 1000,
       style: { backgroundColor: '#28a745', color: '#fff' }
@@ -27,6 +41,7 @@ export const Logout = ({ isModalVisible, onClose }) => {
     }, 1000);
     onClose();
   };
+
 
   return (
     <>
