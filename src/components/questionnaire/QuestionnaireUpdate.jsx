@@ -9,10 +9,7 @@ const QuestionnaireUpdate = () => {
 
   const profile = useSelector((state) => state.profile.data);
   const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
-
-  // Find the object containing the brand key
   const brandQuestion = questionnaire?.find((question) => question.brand);
-
   const favouriteBrandss = brandQuestion?.brand?.images;
 
   const handleClick = (id) => {
