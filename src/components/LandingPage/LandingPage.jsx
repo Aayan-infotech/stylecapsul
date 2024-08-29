@@ -89,9 +89,9 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              <div className="p-2">
-                <img src={two} alt="" />
-              </div>
+              {/* <div className="p-3 border bg-secondary"> */}
+                <img src={two} height={400} alt="" />
+              {/* </div> */}
             </div>
           </div>
 

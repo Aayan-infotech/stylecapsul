@@ -526,6 +526,9 @@
   }
 
   @media (max-width: 576px) {
+    .text-container{
+      height: 290px !important;
+    }
     h2 {
       font-size: 1.75rem;
     }
