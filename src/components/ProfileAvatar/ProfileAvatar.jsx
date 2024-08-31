@@ -356,7 +356,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span className="me-2">{weight}</span>Pt
+                      <span className="me-2">{weight}</span>Ponds 
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
