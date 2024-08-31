@@ -261,6 +261,11 @@ function ProfileAvatar() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        readOnly
+                        style={{ color: "#6c757d" }}
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Not editable"
                       />
                     </div>
                     <div className="mb-3">
@@ -289,9 +294,13 @@ function ProfileAvatar() {
                         className="form-control rounded-pill p-3"
                         placeholder="Enter Email"
                         readOnly
+                        style={{ color: "#6c757d" }}
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Not editable"
                       />
                     </div>
                     <div className="mb-3">
@@ -318,7 +327,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{height || 0}</span>cm
+                      <span className="me-1">{height || 0}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -347,7 +356,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{weight}</span>kg
+                      <span className="me-2">{weight}</span>Pt
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -407,7 +416,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{shoulders}</span>cm
+                      <span className="me-2">{shoulders}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -440,7 +449,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{chest}</span>cm
+                      <span className="me-2">{chest}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -468,7 +477,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{waist}</span>cm
+                      <span className="me-2">{waist}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -500,7 +509,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{hips}</span>cm
+                      <span className="me-2">{hips}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
@@ -528,7 +537,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span>{highHips}</span>cm
+                      <span className="me-2">{highHips}</span>Inch
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
