@@ -1,36 +1,70 @@
 .stylist-main-container-sections {
     padding-top: 6rem;
 
-    .stylist-carousel-image {
-        height: 300px;
+    .stylist-profile-image {
         object-fit: cover;
-        border-radius: 10px;
+        width: 100%;
+        height: auto;
     }
 
-    .stylist-custom-indicators {
-        position: relative;
-        bottom: -10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .hire-custom-btn {
+        background-color: #4C4C4C;
+        color: white;
+        font-weight: bold;
+        width: 100%;
     }
 
-    .carousel-indicators [data-bs-target] {
-        background-color: #000;
-    }
-
-    .stylist-serviece-details {
-        .border-line {
-            border: 2.5px solid black;
-            border-radius: 5px;
-            width: 8rem;
+    @media (max-width: 767px) {
+        .container {
+            width: 90%;
         }
 
-        .hire-custom-btn {
-            background-color: black;
-            color: white;
-            font-weight: bold;
+        .stylist-profile-image {
+            width: 80%;
         }
     }
 
+    @media (min-width: 768px) and (max-width: 991px) {
+        .container {
+            width: 85%;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .container {
+            width: 75%;
+        }
+    }
 }
+
+// .stylist-carousel-image {
+//     height: 300px;
+//     object-fit: cover;
+//     border-radius: 10px;
+// }
+
+// .stylist-custom-indicators {
+//     position: relative;
+//     bottom: -10px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+
+// .carousel-indicators [data-bs-target] {
+//     background-color: #000;
+// }
+
+// .stylist-serviece-details {
+//     .border-line {
+//         border: 2.5px solid black;
+//         border-radius: 5px;
+//         width: 8rem;
+//     }
+
+//     .hire-custom-btn {
+//         background-color: black;
+//         color: white;
+//         font-weight: bold;
+//     }
+// }

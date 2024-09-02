@@ -27,8 +27,10 @@ const Login = () => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
+      console.log(resultAction?.data?._id, 'resultAction')
       if (resultAction) {
         setCookie('authToken', resultAction.token, 1);
+        setCookie('userId', resultAction?.data?._id);
         toast.success(resultAction?.message, {
           autoClose: 1000,
           style: { backgroundColor: '#28a745', color: '#fff' }

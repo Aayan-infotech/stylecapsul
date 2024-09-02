@@ -15,14 +15,14 @@ import {
 } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import profile from "./img/profile.png";
+import { getCookie } from "../../utils/cookieUtils.js";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [logedInUserData, setLogedInUserData] = useState(null);
+
   const navigate = useNavigate();
-  const location = useLocation()
-  const { user } = useSelector((state) => state.login);
-  const createdBaiscProfileId = location.state?.sendUserId;
+  const user_id = getCookie('userId')
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
@@ -30,8 +30,8 @@ function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user?.data?._id) {
-          const userResponse = await axios.get(apiUrl(`api/user/${user.data._id}`));
+        if (user_id) {
+          const userResponse = await axios.get(apiUrl(`api/user/${user_id}`));
           setLogedInUserData(userResponse?.data?.data);
         }
       } catch (error) {
@@ -40,7 +40,7 @@ function Profile() {
     };
 
     fetchData();
-  }, [user]);
+  }, [user_id]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile-avatar', {

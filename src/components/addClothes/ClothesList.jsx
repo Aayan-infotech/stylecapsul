@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function ClothesList() {
     const [allClothes, setAllClothes] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -44,9 +46,27 @@ function ClothesList() {
     };
 
     const updateCloth = (cloth) => {
-        // navigate('/add-clothes')
-        console.log(cloth, 'cloth')
+        navigate('/add-clothes', { state: { updateCloth: cloth } });
     }
+
+    const fetchData = async (keyword = '') => {
+        const url = keyword ? apiUrl(`api/cloths/search-by-keyword?keyword=${keyword}`) : apiUrl('api/cloths/all-cloths');
+        console.log('Fetching data from:', url);
+        try {
+            const response = await axios.get(url);
+            console.log('Response data:', response.data); // Check the structure of the response
+            const allclothes = response.data.cloths; // Adjust if necessary
+            setAllClothes(allclothes);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    
+    
+
+    useEffect(() => {
+        fetchData(searchKeyword);
+    }, [searchKeyword]);
 
     return (
         <>
@@ -58,11 +78,11 @@ function ClothesList() {
                             <h1 className="text-center fw-bold fs-1 mb-3 mb-md-0">Clothes</h1>
                             <div className="search-box mt-3 mt-md-0">
                                 <i className="fa fa-search"></i>
-                                <input type="text" placeholder="Search" />
+                                <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="Search" />
                                 <i className="fa-solid fa-sliders"></i>
                             </div>
                         </div>
-                        {allClothes.map(product => (
+                        {allClothes?.map(product => (
                             <div className="col-12" key={product._id}>
                                 <div className="products-container">
                                     <div className="products-added rounded-pill">
@@ -85,11 +105,9 @@ function ClothesList() {
                                                     <p>{format(new Date(product.purchaseDate), 'MM-dd-yyyy')}</p>
                                                 </div>
                                             </Link>
-                                            <div className="second-text">
-                                                <button type="button" onClick={() => updateCloth(product)} className="btn btn-outline-dark border border-dark">
-                                                    <i className="fa-regular fa-pen-to-square"></i>
-                                                </button>
-                                            </div>
+                                            <button type="button" class="btn btn-outline-dark" onClick={() => updateCloth(product)}>
+                                                <i className="fa-regular fa-pen-to-square"></i>
+                                            </button>
                                         </div>
                                         <i className="fa-solid fa-circle-xmark close-icon" onClick={() => deleteCloth(product._id)}></i>
                                     </div>

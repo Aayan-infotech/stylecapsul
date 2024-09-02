@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import imagepreview from "../../assets/addclothes/add-photo-style.png";
 import "../../styles/AddClothes.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { addClothes } from '../../reduxToolkit/addClothesSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { apiUrl } from '../../../apiUtils';
 
 const AddClothes = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
   const [formData, setFormData] = useState({
@@ -22,6 +22,27 @@ const AddClothes = () => {
     description: '',
     image: null,
   });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const updateNewCloth = location?.state?.updateCloth;
+
+  useEffect(() => {
+    if (updateNewCloth) {
+      setFormData({
+        category: updateNewCloth?.category ? updateNewCloth?.category.toLowerCase() : '',
+        color: updateNewCloth.color || '',
+        typesOfCloths: updateNewCloth.typesOfCloths || '',
+        season: updateNewCloth.season || '',
+        brand: updateNewCloth.brand || '',
+        purchaseDate: updateNewCloth?.purchaseDate ? updateNewCloth?.purchaseDate.split('T')[0] : '',
+        description: updateNewCloth.description || '',
+        image: null,
+      });
+      setImagePreview(updateNewCloth.picture || '');
+    }
+  }, [updateNewCloth]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -44,29 +65,48 @@ const AddClothes = () => {
   };
 
   const currentDate = new Date().toISOString().split('T')[0];
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userId = user?.data?._id;
     const data = new FormData();
     for (let key in formData) {
-      const value = key === 'image' ? formData[key] : formData[key];
-      data.append(key === 'image' ? 'picture' : key, value);
-    }
-    if (userId) {
-      data.append('user_id', userId);
+      const value = formData[key];
+      if (key === 'image' && value === null && updateNewCloth) {
+        data.append('picture', updateNewCloth.picture);
+      } else {
+        data.append(key === 'image' ? 'picture' : key, value);
+      }
     }
     try {
-      const addclothesresponse = await dispatch(addClothes(data)).unwrap();
-      console.log(addclothesresponse, 'addclothesresponse')
-      toast.success(addclothesresponse.message, {
-        autoClose: 1000,
-        style: { backgroundColor: '#28a745', color: '#fff' }
-      });
-      if (addclothesresponse.success === true && addclothesresponse.status === 200) {
+      if (updateNewCloth) {
+        data.append('user_id', updateNewCloth.user_id);
+        const response = await axios.put(apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`), data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+        toast.success(response.data.message, {
+          autoClose: 1000,
+          style: { backgroundColor: '#28a745', color: '#fff' },
+        });
         setTimeout(() => {
           navigate("/all-clothes-list");
         }, 1000);
+      } else {
+        const userId = user?.data?._id;
+        if (userId) {
+          data.append('user_id', userId);
+        }
+        const addclothesresponse = await dispatch(addClothes(data)).unwrap();
+        toast.success(addclothesresponse.message, {
+          autoClose: 1000,
+          style: { backgroundColor: '#28a745', color: '#fff' }
+        });
+        if (addclothesresponse.success && addclothesresponse.status === 200) {
+          setTimeout(() => {
+            navigate("/all-clothes-list");
+          }, 1000);
+        }
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
@@ -100,9 +140,8 @@ const AddClothes = () => {
                         aria-label="category"
                       >
                         <option value="" disabled>Select</option>
-                        <option value="Jeans">Jeans</option>
-                        <option value="Shirt">Shirt</option>
-                        <option value="Paint">Paint</option>
+                        <option value="cloth">Cloth</option>
+                        <option value="shoes">Shoes</option>
                       </select>
                     </div>
                   </div>
@@ -130,20 +169,27 @@ const AddClothes = () => {
                   </div>
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
-                      <label htmlFor="typeof-clothes" className="form-label text-white">
+                      <label htmlFor="category" className="form-label text-white">
                         Type of Clothes
                       </label>
-                      <input
-                        type="text"
-                        className="form-control rounded-pill"
+                      <select
+                        className="form-select rounded-pill"
                         id="typeof-clothes"
                         name="typesOfCloths"
                         value={formData.typesOfCloths}
                         onChange={handleChange}
-                        aria-describedby="Type of Clothes"
-                      />
+                        aria-label="category"
+                      >
+                        <option value="" disabled>Select</option>
+                        <option value="jeans">Jeans</option>
+                        <option value="shirt">Shirt</option>
+                        <option value="pant">Pant</option>
+                        <option value="t-shirt">T-shirt</option>
+                      </select>
                     </div>
                   </div>
+
+
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
                       <label htmlFor="season" className="form-label text-white">
@@ -237,7 +283,7 @@ const AddClothes = () => {
                 <button
                   type="submit"
                   className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
-                  Add
+                  {updateNewCloth ? "Update" : "Add"}
                 </button>
                 <Link to="/all-clothes-list">List</Link>
               </form>

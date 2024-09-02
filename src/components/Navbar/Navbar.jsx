@@ -48,7 +48,7 @@ function Navbar() {
                   aria-labelledby="dropdownMenuButton"
                 >
                   <li>
-                    <Link to="/#" className="text-decoration-none dropdown-item">
+                    <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
                       Scheduled
                     </Link>
                   </li>

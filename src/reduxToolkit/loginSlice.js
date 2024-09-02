@@ -5,14 +5,7 @@ import { apiUrl } from '../../apiUtils';
 
 export const loginUser = createAsyncThunk('login/user', async (formData, thunkAPI) => {
     try {
-        // const token = getCookie('authToken');
-        // console.log('Retrieved Token:', token);
         const response = await axios.post(apiUrl('api/auth/login'), formData)
-        // , {
-        //     headers: { 'Authorization': `Bearer ${token}` }
-        // });
-        // console.log(response?.data?.token, 'response')
-        // setCookie('authToken', response?.data?.token);
         return response.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
