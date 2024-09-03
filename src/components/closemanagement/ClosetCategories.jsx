@@ -10,45 +10,45 @@ const cardData = [
   {
     id: 1,
     image: notification,
-    title: "Add Clothes",
+    title: "Clothes",
     imageAlt: "Notification",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/add-clothes",
+    url: "/all-clothes-list",
   },
   {
     id: 2,
     icon: null,
-    title: "Closet",
+    title: "Shoes",
     image: closet,
     imageAlt: "closet",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/closet-categories",
+    url: "#",
   },
   {
     id: 3,
     icon: null,
-    title: "Garment Care",
+    title: "Accessories",
     image: coinhand,
     imageAlt: "coinhand",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/garment-care",
+    url: "/accessories",
   },
   {
     id: 4,
     image: imagefocus,
-    title: "StyleScan",
+    title: "Miscellaneous",
     imageAlt: "imagefocus",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/close-management_style_scan",
+    url: "#",
   },
 ];
 
-const ClosetManagement = () => {
+const ClosetCategories = () => {
   return (
     <div className="d-flex justify-content-center align-items-center close-management-container">
       <div className="container w-50">
         <div className="row g-4">
-          <h1 className="text-center fw-bold fs-1">Closet Management</h1>
+          <h1 className="text-center fw-bold fs-1">Closet</h1>
           {cardData.map((item, index) => (
             <div key={index} className="col-md-6 col-lg-6">
               <Link to={item.url} className="text-decoration-none">
@@ -69,4 +69,4 @@ const ClosetManagement = () => {
   );
 };
 
-export default ClosetManagement;
+export default ClosetCategories;

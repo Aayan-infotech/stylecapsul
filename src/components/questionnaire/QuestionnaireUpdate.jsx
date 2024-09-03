@@ -2,38 +2,63 @@ import React, { useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
 import { FaCheck } from 'react-icons/fa';
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { apiUrl } from "../../../apiUtils";
 
 const QuestionnaireUpdate = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedBrand, setSelectedBrand] = useState(null)
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({
+    minimal_style: null,
+    feminine_style: null,
+    boho_style: null,
+    classic_style: null,
+    sexy_style: null,
+    neighborhoods: null,
+    sports: null,
+    enjoyshopping: null,
+    shoppingApprov: null,
+    shop_color: null,
+    shop_brand: null,
+    current_style: null,
+    cloth_mistake: null,
+    cloth_describe: null,
+    wear_time: null,
+    never_wear_time: null,
+    change_stype_time: null
+  });
 
-  const profile = useSelector((state) => state.profile.data);
+  const profile = useSelector((state) => state.profile?.data);
   const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
-  const brandQuestion = questionnaire?.find((question) => question.brand);
+  const brandQuestion = questionnaire?.find((question) => question?.brand);
   const favouriteBrandss = brandQuestion?.brand?.images;
+
+  const neighborhoodsplaces = questionnaire?.find((item) => item?.nighborhoods);
+  const sportsdata = questionnaire?.find((sp) => sp?.sports);
+  const enjoyShopping = questionnaire?.find((shop) => shop?.shopping)
+  const shoppingApproval = questionnaire?.find((approv) => approv?.approval)
+  const shopColor = questionnaire?.find((spcolor) => spcolor?.['shop-for']);
+  const shoppingBrand = questionnaire?.find((spbrand) => spbrand?.['shopping-brand']);
+  const currentStyle = questionnaire?.find((sty) => sty?.style);
+  const clothMistake = questionnaire?.find((mistake) => mistake?.clothing);
+  const clothDescribe = questionnaire?.find((cd) => cd?.describe);
+  const wearTime = questionnaire?.find((wer) => wer?.wear);
+  const neverChooseWear = questionnaire?.find((nwear) => nwear?.['never-wear']);
+  const chagneStyle = questionnaire?.find((chs) => chs?.['change-style']);
+
+  const handleClickGenderType = (type, option) => {
+    setSelectedOptions((prevState) => ({
+      ...prevState,
+      [type]: option,
+    }));
+  };
+
+  const user = useSelector((state) => state.login.user);
+  console.log(user?.id, 'user')
 
   const handleClick = (id) => {
     setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
   };
 
-  const question = "Do you like minimal style?";
-  const allProfileImages = [
-    [
-      "https://images.unsplash.com/photo-1720048171527-208cb3e93192?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-    ],
-    [
-      "https://plus.unsplash.com/premium_photo-1722945721803-d7a1cdb06fdd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx",
-      "https://images.unsplash.com/photo-1722959124885-b73921a69946?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    [
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
-    ],
-  ];
-
-  const question1 = "Do you like feminine style?";
   const allProfileImages1 = [
     [
       "https://images.unsplash.com/photo-1720048171527-208cb3e93192?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -49,104 +74,16 @@ const QuestionnaireUpdate = () => {
       "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
     ],
   ];
-
-  const question3 = "Do you like boho style?";
-  const allProfileImages3 = [
-    [
-      "https://images.unsplash.com/photo-1720048171527-208cb3e93192?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-    ],
-    [
-      "https://plus.unsplash.com/premium_photo-1722945721803-d7a1cdb06fdd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx",
-      "https://images.unsplash.com/photo-1722959124885-b73921a69946?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    [
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
-    ],
-  ];
-
-  const question4 = "Do you like classic style?";
-  const allProfileImages4 = [
-    [
-      "https://images.unsplash.com/photo-1720048171527-208cb3e93192?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-    ],
-    [
-      "https://plus.unsplash.com/premium_photo-1722945721803-d7a1cdb06fdd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx",
-      "https://images.unsplash.com/photo-1722959124885-b73921a69946?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    [
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
-    ],
-  ];
-
-  const question5 = "Do you like sexy style?";
-  const allProfileImages5 = [
-    [
-      "https://images.unsplash.com/photo-1720048171527-208cb3e93192?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-    ],
-    [
-      "https://plus.unsplash.com/premium_photo-1722945721803-d7a1cdb06fdd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx",
-      "https://images.unsplash.com/photo-1722959124885-b73921a69946?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D",
-    ],
-    [
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722888879060-ed9d1e88c2c7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8",
-      "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
-    ],
-  ];
-
-  const favouriteBrands = [
-    { id: 1, company_log: "https://assets.mayoclinic.org/content/dam/mayoclinic/logos/mayo-clinic-logo.svg", },
-    { id: 2, company_log: "https://assets.mayoclinic.org/content/dam/mayoclinic/logos/mayo-clinic-logo.svg", }
-  ];
-
   const buttonOptions = ["Yes", "No", "Sometimes"];
 
-  const biggestMistakeButton = [
-    "I don’t know my body & i can’t dress accordingly.",
-    "I don’t know my style & i find it confusing.",
-    "I am having trouble choosing shoes.",
-  ];
-
-  const looginClothsButton = [
-    "Well Maintained, Clean, Simple",
-    "Confused",
-    "Self-Confident",
-    "Striking",
-  ];
-
-  const wearTimeButton = ["Jeans", "Sneakers", "T-Shirts", "Dress", "Others"];
-
-  const buttonWearColors = [
-    "Black",
-    "White",
-    "Gray",
-    "Red",
-    "Orange",
-    "Yellow",
-    "Green",
-    "Light Blue",
-    "Dark Blue",
-    "Purple",
-    "Pink",
-    "Brown",
-  ];
-
-  const changestylebutton = [
-    "Clear up confusion",
-    "Learning the rules I don’t know",
-    "To be able to shop more conveniently ",
-    "Harmony & balancing",
-  ];
-
-  const handleClickGenderType = (option) => {
-    setSelectedOption(option);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(apiUrl(`/api/questionnaire/update${user?.id}`), selectedOptions);
+      console.log(response, 'response')
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
   };
 
   return (
@@ -154,7 +91,7 @@ const QuestionnaireUpdate = () => {
       <div className="container w-75">
         {/* -------------------------Do you like minimal style------------------------ */}
         <div className="mt-2">
-          <h1 className="fw-bold fs-1 mt-2">{question}</h1>
+          <h1 className="fw-bold fs-1 mt-2">Do you like minimal style?</h1>
           <div className="row g-2 mt-2">
             {allProfileImages1.map((imageSet, index) => (
               <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
@@ -177,9 +114,9 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  className={`btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button ${selectedOption === option ? "selected" : ""
+                  onClick={() => handleClickGenderType("minimal_style", option)}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.minimal_style === option ? "selected" : ""
                     }`}
-                  onClick={() => handleClickGenderType(option)}
                 >
                   {option}
                 </button>
@@ -190,7 +127,7 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Do you like feminine style------------------------ */}
         <div className="mt-5">
-          <h1 className="fw-bold fs-1 mt-2">{question1}</h1>
+          <h1 className="fw-bold fs-1 mt-2">Do you like feminine style?</h1>
           <div className="row g-2 mt-2">
             {allProfileImages1.map((imageSet, index) => (
               <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
@@ -213,7 +150,9 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  className="btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button"
+                  onClick={() => handleClickGenderType("feminine_style", option)}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.feminine_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -224,9 +163,9 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Do you like boho style?------------------------ */}
         <div className="mt-5">
-          <h1 className="fw-bold fs-1 mt-2">{question3}</h1>
+          <h1 className="fw-bold fs-1 mt-2">Do you like boho style?</h1>
           <div className="row g-2 mt-2">
-            {allProfileImages3.map((imageSet, index) => (
+            {allProfileImages1.map((imageSet, index) => (
               <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
                 {imageSet.map((src, imgIndex) => (
                   <img
@@ -247,7 +186,9 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  className="btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button"
+                  onClick={() => handleClickGenderType("boho_style", option)}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.boho_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -258,9 +199,9 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Do you like classic style?------------------------ */}
         <div className="mt-5">
-          <h1 className="fw-bold fs-1 mt-2">{question4}</h1>
+          <h1 className="fw-bold fs-1 mt-2">Do you like classic style?</h1>
           <div className="row g-2 mt-2">
-            {allProfileImages4.map((imageSet, index) => (
+            {allProfileImages1.map((imageSet, index) => (
               <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
                 {imageSet.map((src, imgIndex) => (
                   <img
@@ -281,7 +222,9 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  className="btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button"
+                  onClick={() => handleClickGenderType("classic_style", option)}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.classic_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -292,9 +235,9 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Do you like classic style?------------------------ */}
         <div className="mt-5">
-          <h1 className="fw-bold fs-1 mt-2">{question5}</h1>
+          <h1 className="fw-bold fs-1 mt-2">Do you like sexy style?</h1>
           <div className="row g-2 mt-2">
-            {allProfileImages5.map((imageSet, index) => (
+            {allProfileImages1.map((imageSet, index) => (
               <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
                 {imageSet.map((src, imgIndex) => (
                   <img
@@ -315,7 +258,9 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  className="btn btn-outline-secondary p-2 fw-bold rounded-pill custom-button"
+                  onClick={() => handleClickGenderType("sexy_style", option)}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sexy_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -349,262 +294,153 @@ const QuestionnaireUpdate = () => {
           ))}
         </div>
 
-        {/* -------------------------What kind of nighborhoods & places do you spend time in?------------------------ */}
+        {/* -------------------------What kind of neighborhoods & places do you spend time in?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            What kind of nighborhoods & places do you spend time in?
+            {neighborhoodsplaces?.nighborhoods?.question}
           </h1>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Chic
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Shabby
-            </button>
-          </div>
+          {neighborhoodsplaces?.nighborhoods?.options.map((option, index) => (
+            <div className="col-12 col-sm-6 col-md-6" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("neighborhoods", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------Do you do sports?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">Do you do sports?</h1>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Yes
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              No
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Sometimes
-            </button>
-          </div>
+          <h1 className="fw-bold fs-1 mt-2">
+            {sportsdata?.sports?.question}
+          </h1>
+          {sportsdata?.sports?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("sports", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sports === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------Do you enjoy shopping?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">Do you enjoy shopping?</h1>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Yes
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              No
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Sometimes
-            </button>
-          </div>
+          <h1 className="fw-bold fs-1 mt-2">
+            {enjoyShopping?.shopping?.question}
+          </h1>
+          {enjoyShopping?.shopping?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("enjoyshopping", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.enjoyshopping === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------Do you feel the need to get approval from someone while shpping?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            Do you feel the need to get approval from someone while shpping?
+            {shoppingApproval?.approval?.question}
           </h1>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Yes
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              No
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Sometimes
-            </button>
-          </div>
+          {shoppingApproval?.approval?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("shoppingApprov", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shoppingApprov === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------What do you shop for?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">What do you shop for?</h1>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Color
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Kumas
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Price
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Brand
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-4">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Style
-            </button>
-          </div>
+          <h1 className="fw-bold fs-1 mt-2">
+            {shopColor?.['shop-for']?.question}
+          </h1>
+          {shopColor?.['shop-for']?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("shop_color", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_color === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
-        {/* -------------------------What brand do you shop with?------------------------ */}
+        {/* ------------------------What brand do you shop with?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">What brand do you shop with?</h1>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Luxury Brands
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Eco-Friendly
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Inditex Brands
-            </button>
-          </div>
+          <h1 className="fw-bold fs-1 mt-2">
+            {shoppingBrand?.['shopping-brand']?.question}
+          </h1>
+          {shoppingBrand?.['shopping-brand']?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("shop_brand", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_brand === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------How do you describe your current style?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            How do you describe your current style?
+            {currentStyle?.style?.question}
           </h1>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Classic
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Dramatic
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Elegant
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Modern
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Trendy
-            </button>
-          </div>
-          <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
-            >
-              Others
-            </button>
-          </div>
+          {currentStyle?.style?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
+              <button
+                type="button"
+                onClick={() => handleClickGenderType("current_style", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.current_style === option ? "selected" : ""
+                  }`}
+              >
+                {option}
+              </button>
+            </div>
+          ))}
         </div>
 
         {/* -------------------------What is biggest mistake you make about clothing?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            What is biggest mistake you make about clothing?
+            {clothMistake?.clothing?.question}
           </h1>
-          {biggestMistakeButton.map((label, index) => (
-            <div
-              key={index}
-              className="col-12 d-flex justify-content-center align-items-center"
-            >
+          {clothMistake?.clothing?.options?.map((option, index) => (
+            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-100 custom-button p-2 fw-bold fs-5"
+                onClick={() => handleClickGenderType("cloth_mistake", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_mistake === option ? "selected" : ""
+                  }`}
               >
-                {label}
+                {option}
               </button>
             </div>
           ))}
@@ -613,18 +449,17 @@ const QuestionnaireUpdate = () => {
         {/* -------------------------How would someone describe you by looking at your cloths?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            How would someone describe you by looking at your cloths?
+            {clothDescribe?.describe?.question}
           </h1>
-          {looginClothsButton.map((label, index) => (
-            <div
-              key={index}
-              className="col-12 d-flex justify-content-center align-items-center"
-            >
+          {clothDescribe?.describe?.options?.map((option, index) => (
+            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+                onClick={() => handleClickGenderType("cloth_describe", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_describe === option ? "selected" : ""
+                  }`}
               >
-                {label}
+                {option}
               </button>
             </div>
           ))}
@@ -633,18 +468,17 @@ const QuestionnaireUpdate = () => {
         {/* -------------------------Is there anything you wear all the time?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            Is there anything you wear all the time?
+            {wearTime?.wear?.question}
           </h1>
-          {wearTimeButton.map((label, index) => (
-            <div
-              key={index}
-              className="col-12 d-flex justify-content-center align-items-center"
-            >
+          {wearTime?.wear?.options?.map((option, index) => (
+            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+                onClick={() => handleClickGenderType("wear_time", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.wear_time === option ? "selected" : ""
+                  }`}
               >
-                {label}
+                {option}
               </button>
             </div>
           ))}
@@ -652,14 +486,18 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Which colors you never wear?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">Which colors you never wear?</h1>
-          {buttonWearColors.map((label, index) => (
-            <div key={index} className="col-12 col-sm-6 col-md-6">
+          <h1 className="fw-bold fs-1 mt-2">
+            {neverChooseWear?.['never-wear']?.question}
+          </h1>
+          {neverChooseWear?.['never-wear']?.options?.map((option, index) => (
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+                onClick={() => handleClickGenderType("never_wear_time", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.never_wear_time === option ? "selected" : ""
+                  }`}
               >
-                {label}
+                {option}
               </button>
             </div>
           ))}
@@ -668,19 +506,17 @@ const QuestionnaireUpdate = () => {
         {/* -------------------------What would you like to change about your style? what will happen when you change it? ------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            What would you like to change about your style? what will happen
-            when you change it?
+            {chagneStyle?.['change-style']?.question}
           </h1>
-          {changestylebutton.map((label, index) => (
-            <div
-              key={index}
-              className="col-12 d-flex justify-content-center align-items-center"
-            >
+          {chagneStyle?.['change-style']?.options?.map((option, index) => (
+            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+                onClick={() => handleClickGenderType("change_stype_time", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.change_stype_time === option ? "selected" : ""
+                  }`}
               >
-                {label}
+                {option}
               </button>
             </div>
           ))}
@@ -697,6 +533,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
+              onClick={handleSubmit}
               className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
             >
               Update
@@ -712,7 +549,7 @@ const QuestionnaireUpdate = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

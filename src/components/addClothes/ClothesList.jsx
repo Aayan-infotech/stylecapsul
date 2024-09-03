@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import image22 from '../../assets/closetmanagement/image-22.jfif';
 
 function ClothesList() {
     const [allClothes, setAllClothes] = useState([]);
@@ -54,15 +55,15 @@ function ClothesList() {
         console.log('Fetching data from:', url);
         try {
             const response = await axios.get(url);
-            console.log('Response data:', response.data); // Check the structure of the response
-            const allclothes = response.data.cloths; // Adjust if necessary
+            console.log('Response data:', response.data);
+            const allclothes = response.data.cloths;
             setAllClothes(allclothes);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
-    
-    
+
+
 
     useEffect(() => {
         fetchData(searchKeyword);
@@ -72,7 +73,7 @@ function ClothesList() {
         <>
             <ToastContainer />
             <div className="clothes-list-main-container">
-                <div className="container clothes-list-container mt-4">
+                <div className="container w-75 clothes-list-container mt-4">
                     <div className="row">
                         <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
                             <h1 className="text-center fw-bold fs-1 mb-3 mb-md-0">Clothes</h1>

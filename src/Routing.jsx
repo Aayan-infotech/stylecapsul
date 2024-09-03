@@ -50,6 +50,8 @@ import GiftCardDetails from "./components/giftcards/GiftCardDetails.jsx";
 import StylistDetails from "./components/stylist/StylistDetails.jsx";
 import ClothesList from "./components/addClothes/ClothesList.jsx";
 import ShowClothesDetails from "./components/addClothes/ShowClothesDetails.jsx";
+import ClosetCategories from "./components/closemanagement/ClosetCategories.jsx";
+import StyleScan from "./components/closemanagement/StyleScan.jsx";
 
 const Routing = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -89,6 +91,8 @@ const Routing = () => {
             <Route path="/scheduled-appointment" element={<Appointment />} />
             <Route path="/setting-and-security" element={<SettingAndSecurity />} />
             <Route path="/closet-management" element={<ClosetManagement />} />
+            <Route path="/closet-categories" element={<ClosetCategories />} />
+            <Route path="/close-management_style_scan" element={<StyleScan />} />
             <Route path="/market-place" element={<MarketPlace />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />

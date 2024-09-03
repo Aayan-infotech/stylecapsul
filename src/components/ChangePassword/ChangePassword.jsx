@@ -5,6 +5,7 @@ import "../../styles/ChangePassword.scss";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { deleteCookie } from "../../utils/cookieUtils";
 
 const ChangePassword = () => {
     const [showOldPassword, setShowOldPassword] = useState(false);
@@ -38,7 +39,7 @@ const ChangePassword = () => {
                     autoClose: 1000,
                     style: { backgroundColor: '#28a745', color: '#fff' }
                 });
-                localStorage.clear('authToken');
+                deleteCookie('authToken');
                 setTimeout(() => {
                     navigate("/login");
                 }, 1000);
