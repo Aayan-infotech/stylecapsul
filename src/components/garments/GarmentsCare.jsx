@@ -5,6 +5,7 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
+import blank_image from '../../assets/stylist/blank_img.jpg';
 
 const GarmentsCare = () => {
   const [showGarments, setShowGarments] = useState([]);
@@ -13,31 +14,55 @@ const GarmentsCare = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUserData = async (query = "") => {
-      setLoading(true);
-      try {
-        const url = query
-          ? apiUrl(`api/garment/garment-care/services/${query}`)
-          : apiUrl("api/garment/garment-care");
-        const response = await axios.get(url);
-        if (response?.data?.data?.length > 0) {
-          setShowGarments(response.data.data);
-          setMessage("");
-        } else {
-          setShowGarments([]);
-          setMessage("No services found.");
-        }
-      } catch (error) {
-        console.log(error.response?.data?.message);
+  // Function to fetch all garment care services
+  const fetchAllGarmentCareServices = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(apiUrl("api/garment/garment-care"));
+      if (response?.data?.data?.length > 0) {
+        setShowGarments(response.data.data);
+        setMessage("");
+      } else {
         setShowGarments([]);
-        setMessage(error?.response?.data?.message || "An error occurred.");
-      } finally {
-        setLoading(false);
+        setMessage("No services found.");
       }
-    };
+    } catch (error) {
+      console.log(error.response?.data?.message);
+      setShowGarments([]);
+      setMessage(error?.response?.data?.message || "An error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchUserData(searchQuery);
+  // Function to fetch garment care services based on a search query
+  const fetchGarmentCareServicesByQuery = async (query) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(apiUrl(`api/garment/garment-care/services/${query}`));
+      if (response?.data?.data?.length > 0) {
+        setShowGarments(response.data.data);
+        setMessage("");
+      } else {
+        setShowGarments([]);
+        setMessage("No services found.");
+      }
+    } catch (error) {
+      console.log(error.response?.data?.message);
+      setShowGarments([]);
+      setMessage(error?.response?.data?.message || "An error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Effect to fetch data based on search query
+  useEffect(() => {
+    if (searchQuery) {
+      fetchGarmentCareServicesByQuery(searchQuery);
+    } else {
+      fetchAllGarmentCareServices();
+    }
   }, [searchQuery]);
 
   const debouncedSearch = useCallback(
@@ -102,7 +127,7 @@ const GarmentsCare = () => {
                   <div className="me-2">
                     <img
                       className="image-rounded"
-                      src={image1}
+                      src={garment?.ServiceProvider?.profilePicture || blank_image}
                       alt={garment.ServiceProvider.name}
                     />
                   </div>

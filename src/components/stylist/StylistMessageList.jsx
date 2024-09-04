@@ -13,7 +13,7 @@ const StylistMessageList = () => {
                 <div className="row gx-5 mt-2">
                     <h1 className="fw-bold fs-1 text-center text-md-start">Message</h1>
                     <div className="col-12">
-                        <div className="border border-2 rounded-pill" style={{ borderColor: 'black' }}>
+                        <div className="border border-2 rounded-pill" style={{ borderColor: 'black', boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)" }}>
                             <div className="d-flex align-items-center">
                                 <img
                                     src={stylistList?.profilePicture || blank_image}
