@@ -58,9 +58,19 @@ const ScheduleBooking = () => {
             });
             console.log(schedueResponse?.data?.booking, 'schedueResponse')
             if (schedueResponse) {
+                // toast.success(schedueResponse?.message || 'Schedule Booking is Successfully..!', {
+                //     autoClose: 1000,
+                //     style: { backgroundColor: '#28a745', color: '#fff' }
+                // });
                 toast.success(schedueResponse?.message || 'Schedule Booking is Successfully..!', {
                     autoClose: 1000,
-                    style: { backgroundColor: '#28a745', color: '#fff' }
+                    hideProgressBar: true,
+                    style: {
+                        backgroundColor: 'black',
+                        color: '#C8B199',
+                        borderRadius: '50px',
+                        padding: '10px 20px',
+                    }
                 });
                 setTimeout(() => {
                     // if (schedueResponse?.success === true && schedueResponse?.status === 200) {

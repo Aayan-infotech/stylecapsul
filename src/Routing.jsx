@@ -52,6 +52,9 @@ import ClothesList from "./components/addClothes/ClothesList.jsx";
 import ShowClothesDetails from "./components/addClothes/ShowClothesDetails.jsx";
 import ClosetCategories from "./components/closemanagement/ClosetCategories.jsx";
 import StyleScan from "./components/closemanagement/StyleScan.jsx";
+import UploadScanImage from "./components/closemanagement/UploadScanImage.jsx";
+import ScannedImageWardrobe from "./components/closemanagement/ScannedImageWardrobe.jsx";
+import StylistMessageList from "./components/stylist/StylistMessageList.jsx";
 
 const Routing = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -93,6 +96,8 @@ const Routing = () => {
             <Route path="/closet-management" element={<ClosetManagement />} />
             <Route path="/closet-categories" element={<ClosetCategories />} />
             <Route path="/close-management_style_scan" element={<StyleScan />} />
+            <Route path="/upload-image-scan" element={<UploadScanImage />} />
+            <Route path="/scanned-image-wardrobe" element={<ScannedImageWardrobe />} />
             <Route path="/market-place" element={<MarketPlace />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
@@ -100,6 +105,7 @@ const Routing = () => {
             <Route path="/clothes-details" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-details" element={<StylistDetails />} />
+            <Route path="/stylist-message-list" element={<StylistMessageList />} />
             <Route path="/gift-cards" element={<GiftCards />} />
             <Route path="/gift-card-details/:id" element={<GiftCardDetails />} />
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />

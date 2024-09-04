@@ -1,0 +1,64 @@
+.upload-image-scanner-container {
+    padding-top: 6rem;
+
+    .container {
+        height: 100%;
+
+        .wardrobe-item {
+            .title {
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+
+            .image-wrapper {
+                position: relative;
+                border-radius: 70px;
+                overflow: hidden;
+                width: 200px;
+                max-height: 350px;
+
+                img {
+                    border-radius: 70px;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .overlay {
+                    position: absolute;
+                    bottom: 0;
+                    width: 100%;
+                    background: linear-gradient(to top, rgba(100, 100, 100, 400) 0%, rgba(102, 102, 102, 0) 100%);
+                    color: white;
+                    padding: 10px 0;
+                    text-align: center;
+
+                    .item-name {
+                        font-weight: bold;
+                        font-size: 24px;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .border {
+        background-color: #6c757d;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    @media (max-width: 767px) {
+        .border {
+            padding: 15px;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .border {
+            padding: 18px;
+        }
+    }
+}

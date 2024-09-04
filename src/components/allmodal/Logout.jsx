@@ -17,24 +17,18 @@ export const Logout = ({ isModalVisible, onClose }) => {
     }
   }, [isModalVisible]);
 
-  // const handleLogout = () => {
-  //   deleteCookie('authToken')
-  //   toast.success('Logout Successfully..!', {
-  //     autoClose: 1000,
-  //     style: { backgroundColor: '#28a745', color: '#fff' }
-  //   });
-  //   setTimeout(() => {
-  //     navigate('/');
-  //   }, 1000);
-  //   onClose();
-  // };
-
   const handleLogout = () => {
     deleteCookie('authToken');
     console.log('Cookie after deletion:', getCookie('authToken'));
     toast.success('Logout Successfully..!', {
       autoClose: 1000,
-      style: { backgroundColor: '#28a745', color: '#fff' }
+      hideProgressBar: true,
+      style: {
+        backgroundColor: 'black',
+        color: '#C8B199',
+        borderRadius: '50px',  
+        padding: '10px 20px', 
+      }
     });
     setTimeout(() => {
       navigate('/');

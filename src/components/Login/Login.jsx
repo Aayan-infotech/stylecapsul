@@ -33,8 +33,14 @@ const Login = () => {
         setCookie('userId', resultAction?.data?._id);
         toast.success(resultAction?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
-        });
+          hideProgressBar: true,
+          style: {
+            backgroundColor: 'black',
+            color: '#C8B199',
+            borderRadius: '50px',  
+            padding: '10px 20px', 
+          }
+        });        
         if (resultAction?.success === true && resultAction?.status === 200) {
           navigate('/home');
         }

@@ -85,9 +85,15 @@ const AddClothes = () => {
             'Content-Type': 'multipart/form-data',
           }
         });
-        toast.success(response.data.message, {
+        toast.success(response?.data?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' },
+          hideProgressBar: true,
+          style: {
+            backgroundColor: 'black',
+            color: '#C8B199',
+            borderRadius: '50px',  
+            padding: '10px 20px', 
+          }
         });
         setTimeout(() => {
           navigate("/all-clothes-list");
@@ -98,9 +104,15 @@ const AddClothes = () => {
           data.append('user_id', userId);
         }
         const addclothesresponse = await dispatch(addClothes(data)).unwrap();
-        toast.success(addclothesresponse.message, {
+        toast.success(addclothesresponse?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
+          hideProgressBar: true,
+          style: {
+            backgroundColor: 'black',
+            color: '#C8B199',
+            borderRadius: '50px',  
+            padding: '10px 20px', 
+          }
         });
         if (addclothesresponse.success && addclothesresponse.status === 200) {
           setTimeout(() => {

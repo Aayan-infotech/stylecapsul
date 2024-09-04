@@ -4,19 +4,20 @@ import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import image2 from "../../assets/stylist/img2.png"
 import image3 from "../../assets/stylist/img5.png"
 import shirt from "../../assets/closetmanagement/shirts.jfif";
+import { Link } from 'react-router-dom';
 
 const StyleScan = () => {
 
     const cardData = [
         {
             id: 1,
-            title: "Shirt",
+            title: "Dress",
             imageScanIcon: imagefocus,
             backimageUrl: image3,
         },
         {
             id: 2,
-            title: "Shirt",
+            title: "Shoes",
             imageScanIcon: imagefocus,
             backimageUrl: image2
         },
@@ -28,7 +29,7 @@ const StyleScan = () => {
         },
         {
             id: 4,
-            title: "Shirt",
+            title: "Pant",
             imageScanIcon: imagefocus,
             backimageUrl: image2
         },
@@ -63,15 +64,17 @@ const StyleScan = () => {
             <div className="container text-center">
                 <div className="row g-2">
                     <h1 className="text-center fw-bold fs-1">Style Scan</h1>
-                    {cardData?.map((item, index) => (
+                    {cardData.map((item, index) => (
                         <div className="col-12 col-md-3 d-flex justify-content-center align-items-center" key={index}>
-                            <div className='image_scanner_card'>
-                                <img src={item?.backimageUrl} height={120} className="position-relative show_back_image" />
-                                <div className='text-white card_title'>
-                                    <h4 className="fw-bold">{item?.title}</h4>
+                            <Link to={{ pathname: `/upload-image-scan`, }} state={{ item }} className="text-decoration-none w-100">
+                                <div className="image_scanner_card">
+                                    <img src={item.backimageUrl} height={120} className="position-relative show_back_image" alt={item.title} />
+                                    <div className="text-white card_title">
+                                        <h4 className="fw-bold">{item.title}</h4>
+                                    </div>
+                                    <img src={item.imageScanIcon} className="position-absolute scanner_icon" alt="Scan Icon" />
                                 </div>
-                                <img src={item?.imageScanIcon} className='position-absolute scanner_icon' />
-                            </div>
+                            </Link>
                         </div>
                     ))}
                 </div>

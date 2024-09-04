@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../../styles/StylistDetails.scss';
 import blank_image from '../../assets/stylist/blank_img.jpg';
 import image_1 from '../../assets/marketplace/showimg5.jpg';
@@ -57,16 +57,18 @@ const StylistDetails = () => {
                         <div className="d-flex justify-content-between align-items-center">
                             <h5>Outfit Planning</h5>
                             <div>
-                                <button type="button" className="btn btn-secondary me-2 rounded-pill" style={{ width: "60px", backgroundColor: "#4C4C4C" }}>
+                                <button type="button" className="btn btn-outline-dark me-2 rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px" }}>
                                     <i className="fa-solid fa-user-plus"></i>
                                 </button>
-                                <button type="button" className="btn btn-secondary rounded-pill" style={{ width: "60px", backgroundColor: "#4C4C4C" }}>
+                                <button type="button" className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px" }}>
                                     <i className="fa-solid fa-message"></i>
                                 </button>
                             </div>
                         </div>
                         <div align="center" className="mt-5">
-                            <button type="button" className="btn hire-custom-btn rounded-pill p-2">Hire</button>
+                            <Link to={{ pathname: `/stylist-message-list`, }} state={{ profile_details }} className="text-decoration-none w-100">
+                                <button type="button" className="btn hire-custom-btn rounded-pill p-2">Hire</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

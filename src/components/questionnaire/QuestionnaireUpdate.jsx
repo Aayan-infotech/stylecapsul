@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
 import { FaCheck } from 'react-icons/fa';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 const QuestionnaireUpdate = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -24,8 +27,19 @@ const QuestionnaireUpdate = () => {
     cloth_describe: null,
     wear_time: null,
     never_wear_time: null,
-    change_stype_time: null
   });
+
+  const [updatedQuestionnaire, setUpdatedQuestionnaire] = useState(null);
+
+  useEffect(() => {
+    if (updatedQuestionnaire) {
+      setSelectedOptions((prevState) => ({
+        ...prevState,
+        minimal_style: updatedQuestionnaire.minimal_style || prevState.minimal_style,
+        neighborhoods: updatedQuestionnaire.neighborhoods || prevState.neighborhoods,
+      }));
+    }
+  }, [updatedQuestionnaire]);
 
   const profile = useSelector((state) => state.profile?.data);
   const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
@@ -44,8 +58,7 @@ const QuestionnaireUpdate = () => {
   const wearTime = questionnaire?.find((wer) => wer?.wear);
   const neverChooseWear = questionnaire?.find((nwear) => nwear?.['never-wear']);
   const chagneStyle = questionnaire?.find((chs) => chs?.['change-style']);
-
-  const handleClickGenderType = (type, option) => {
+  const handleChooseQuestionnair = (type, option) => {
     setSelectedOptions((prevState) => ({
       ...prevState,
       [type]: option,
@@ -53,6 +66,7 @@ const QuestionnaireUpdate = () => {
   };
 
   const user = useSelector((state) => state.login.user);
+  console.log(user)
 
   const handleClick = (id) => {
     setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
@@ -74,19 +88,40 @@ const QuestionnaireUpdate = () => {
     ],
   ];
   const buttonOptions = ["Yes", "No", "Sometimes"];
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(apiUrl(`/api/questionnaire/update${user?.id}`), selectedOptions);
-      console.log(response, 'response')
-    } catch (error) {
-      console.error("Error submitting data:", error);
+      const response = await axios.put(`http://localhost:3000/api/user/questionnaire/${user?.id}`, selectedOptions);
+      console.log(response?.data, 'response')
+      if (response?.data?.success) {
+        setUpdatedQuestionnaire(response?.data?.updatedQuestionnaire);
+        toast.success(response?.data?.message, {
+          autoClose: 1000,
+          hideProgressBar: true,
+          style: {
+            backgroundColor: 'black',
+            color: '#C8B199',
+            borderRadius: '50px',  
+            padding: '10px 20px', 
+          }
+        });
+        setTimeout(() => {
+          navigate("/profile");
+        }, 1000);
+      }
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message;
+      toast.error(errorMessage, {
+        autoClose: 2000,
+        style: { backgroundColor: '#dc3545', color: '#fff' }
+      });
     }
   };
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
+      <ToastContainer />
       <div className="container w-75">
         {/* -------------------------Do you like minimal style------------------------ */}
         <div className="mt-2">
@@ -113,7 +148,7 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleClickGenderType("minimal_style", option)}
+                  onClick={() => handleChooseQuestionnair("minimal_style", option)}
                   className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.minimal_style === option ? "selected" : ""
                     }`}
                 >
@@ -149,7 +184,7 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleClickGenderType("feminine_style", option)}
+                  onClick={() => handleChooseQuestionnair("feminine_style", option)}
                   className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.feminine_style === option ? "selected" : ""
                     }`}
                 >
@@ -185,7 +220,7 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleClickGenderType("boho_style", option)}
+                  onClick={() => handleChooseQuestionnair("boho_style", option)}
                   className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.boho_style === option ? "selected" : ""
                     }`}
                 >
@@ -221,7 +256,7 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleClickGenderType("classic_style", option)}
+                  onClick={() => handleChooseQuestionnair("classic_style", option)}
                   className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.classic_style === option ? "selected" : ""
                     }`}
                 >
@@ -257,7 +292,7 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleClickGenderType("sexy_style", option)}
+                  onClick={() => handleChooseQuestionnair("sexy_style", option)}
                   className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sexy_style === option ? "selected" : ""
                     }`}
                 >
@@ -302,7 +337,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-6 col-md-6" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("neighborhoods", option)}
+                onClick={() => handleChooseQuestionnair("neighborhoods", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
                   }`}
               >
@@ -321,7 +356,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("sports", option)}
+                onClick={() => handleChooseQuestionnair("sports", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sports === option ? "selected" : ""
                   }`}
               >
@@ -340,7 +375,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("enjoyshopping", option)}
+                onClick={() => handleChooseQuestionnair("enjoyshopping", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.enjoyshopping === option ? "selected" : ""
                   }`}
               >
@@ -359,7 +394,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("shoppingApprov", option)}
+                onClick={() => handleChooseQuestionnair("shoppingApprov", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shoppingApprov === option ? "selected" : ""
                   }`}
               >
@@ -378,7 +413,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("shop_color", option)}
+                onClick={() => handleChooseQuestionnair("shop_color", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_color === option ? "selected" : ""
                   }`}
               >
@@ -397,7 +432,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("shop_brand", option)}
+                onClick={() => handleChooseQuestionnair("shop_brand", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_brand === option ? "selected" : ""
                   }`}
               >
@@ -416,7 +451,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("current_style", option)}
+                onClick={() => handleChooseQuestionnair("current_style", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.current_style === option ? "selected" : ""
                   }`}
               >
@@ -435,7 +470,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("cloth_mistake", option)}
+                onClick={() => handleChooseQuestionnair("cloth_mistake", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_mistake === option ? "selected" : ""
                   }`}
               >
@@ -454,7 +489,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("cloth_describe", option)}
+                onClick={() => handleChooseQuestionnair("cloth_describe", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_describe === option ? "selected" : ""
                   }`}
               >
@@ -473,7 +508,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("wear_time", option)}
+                onClick={() => handleChooseQuestionnair("wear_time", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.wear_time === option ? "selected" : ""
                   }`}
               >
@@ -492,7 +527,7 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("never_wear_time", option)}
+                onClick={() => handleChooseQuestionnair("never_wear_time", option)}
                 className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.never_wear_time === option ? "selected" : ""
                   }`}
               >
@@ -502,29 +537,23 @@ const QuestionnaireUpdate = () => {
           ))}
         </div>
 
-        {/* -------------------------What would you like to change about your style? what will happen when you change it? ------------------------ */}
+        {/* -------------------------What kind of neighborhoods & places do you spend time in?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            {chagneStyle?.['change-style']?.question}
+            {neighborhoodsplaces?.nighborhoods?.question}
           </h1>
-          {chagneStyle?.['change-style']?.options?.map((option, index) => (
-            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
+          {neighborhoodsplaces?.nighborhoods?.options.map((option, index) => (
+            <div className="col-12 col-sm-6 col-md-6" key={index}>
               <button
                 type="button"
-                onClick={() => handleClickGenderType("change_stype_time", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.change_stype_time === option ? "selected" : ""
+                onClick={() => handleChooseQuestionnair("neighborhoods", option)}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
                   }`}
               >
                 {option}
               </button>
             </div>
           ))}
-        </div>
-
-        <div className="border-container mt-5">
-          <div className="border-fade-left"></div>
-          <div className="border-dark"></div>
-          <div className="border-fade-right"></div>
         </div>
 
         {/* -------------------------Update profile------------------------ */}

@@ -32,9 +32,19 @@ function ClothesList() {
             const response = await axios.delete(apiUrl(`api/cloths/delete-cloth-item/${cloth_id}`));
             if (response.status === 200) {
                 setAllClothes(prevClothes => prevClothes.filter(cloth => cloth._id !== cloth_id));
+                // toast.success(response?.data?.message, {
+                //     autoClose: 1000,
+                //     style: { backgroundColor: '#28a745', color: '#fff' }
+                // });
                 toast.success(response?.data?.message, {
                     autoClose: 1000,
-                    style: { backgroundColor: '#28a745', color: '#fff' }
+                    hideProgressBar: true,
+                    style: {
+                        backgroundColor: 'black',
+                        color: '#C8B199',
+                        borderRadius: '50px',
+                        padding: '10px 20px',
+                    }
                 });
             }
         } catch (error) {

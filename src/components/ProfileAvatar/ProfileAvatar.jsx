@@ -165,7 +165,13 @@ function ProfileAvatar() {
       if (actionResult.success) {
         toast.success(actionResult?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
+          hideProgressBar: true,
+          style: {
+            backgroundColor: 'black',
+            color: '#C8B199',
+            borderRadius: '50px',
+            padding: '10px 20px',
+          }
         });
         setTimeout(() => {
           navigate("/profile");
@@ -356,7 +362,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-4 d-flex align-items-center text-center">
                   <div>
                     <h5 className="text fs-5">
-                      <span className="me-2">{weight}</span>Ponds 
+                      <span className="me-2">{weight}</span>Ponds
                     </h5>
                     <div
                       className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"

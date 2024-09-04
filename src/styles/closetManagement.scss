@@ -33,6 +33,8 @@
                 width: 100%;
                 border-top-left-radius: 70px;
                 border-top-right-radius: 70px;
+                opacity: 0.3;
+                background-color: rgba(0, 0, 0, 0.5); 
             }
 
             .scanner_icon {
@@ -130,7 +132,7 @@
         }
 
         img {
-            max-width: 50px;
+            max-width: 100%;
         }
     }
 }

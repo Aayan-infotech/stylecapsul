@@ -19,10 +19,20 @@ const ForgotPassword = () => {
       });
 
       if (response.status === 200) {
-        toast.success(response?.data.message, {
+        // toast.success(response?.data.message, {
+        //   autoClose: 1000,
+        //   style: { backgroundColor: '#28a745', color: '#fff' }
+        // });
+        toast.success(response?.data?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#28a745', color: '#fff' }
-        });
+          hideProgressBar: true,
+          style: {
+              backgroundColor: 'black',
+              color: '#C8B199',
+              borderRadius: '50px',
+              padding: '10px 20px',
+          }
+      });
         setTimeout(() => {
           if (response?.data.message) {
             navigate("/recovery-code");
