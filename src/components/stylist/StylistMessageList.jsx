@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../styles/StylistMessageList.scss';
 import img_1 from '../../assets/stylist/img2.png'
+import blank_image from '../../assets/stylist/blank_img.jpg';
 import { useLocation } from 'react-router-dom';
 
 const StylistMessageList = () => {
@@ -15,15 +16,15 @@ const StylistMessageList = () => {
                     <h1 className="fw-bold fs-1 text-center text-md-start">Message</h1>
                     <div className="col-12">
                         <div className="border border-2 rounded-pill">
-                            <div className="d-flex align-items-center p-2">
+                            <div className="d-flex align-items-center">
                                 <img
-                                    src={img_1}
+                                    src={stylistList?.profilePicture || blank_image}
                                     alt="John Doe"
                                     className="profile-image rounded-circle"
                                 />
                                 <div className="message-content ms-3">
-                                    <h5 className="name mb-1">John Doe</h5>
-                                    <p className="message mb-0">Hey john this side, i hope you’re doing well.</p>
+                                    <h4 className="name fs-4 mb-1">{stylistList?.name}</h4>
+                                    <p className="message mb-0 text-black">{stylistList?.description}</p>
                                 </div>
                             </div>
                         </div>

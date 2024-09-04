@@ -37,7 +37,7 @@ const StylistDetails = () => {
                         <h1 className="fw-bold fs-1 text-center text-md-start">Stylist</h1>
                     </div>
                     <div className="col-12 col-md-3 d-flex justify-content-center">
-                        <img src={image_1} className='stylist-profile-image rounded-pill' alt="Stylist" />
+                        <img src={profile_details?.profilePicture || blank_image} className='stylist-profile-image rounded-pill' alt="Stylist" />
                     </div>
                     <div className="col-12 col-md-8">
                         <div className="d-flex justify-content-between align-items-center mt-5">

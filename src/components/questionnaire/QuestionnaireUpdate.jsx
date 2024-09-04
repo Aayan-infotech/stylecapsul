@@ -102,8 +102,8 @@ const QuestionnaireUpdate = () => {
           style: {
             backgroundColor: 'black',
             color: '#C8B199',
-            borderRadius: '50px',  
-            padding: '10px 20px', 
+            borderRadius: '50px',
+            padding: '10px 20px',
           }
         });
         setTimeout(() => {
@@ -543,7 +543,7 @@ const QuestionnaireUpdate = () => {
             {neighborhoodsplaces?.nighborhoods?.question}
           </h1>
           {neighborhoodsplaces?.nighborhoods?.options.map((option, index) => (
-            <div className="col-12 col-sm-6 col-md-6" key={index}>
+            <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("neighborhoods", option)}
@@ -554,6 +554,12 @@ const QuestionnaireUpdate = () => {
               </button>
             </div>
           ))}
+        </div>
+
+        <div className="border-container mt-5">
+          <div className="border-fade-left"></div>
+          <div className="border-dark"></div>
+          <div className="border-fade-right"></div>
         </div>
 
         {/* -------------------------Update profile------------------------ */}

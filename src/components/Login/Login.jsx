@@ -37,7 +37,7 @@ const Login = () => {
           style: {
             backgroundColor: 'black',
             color: '#C8B199',
-            borderRadius: '50px',  
+            borderRadius: '50px', 
             padding: '10px 20px', 
           }
         });        
