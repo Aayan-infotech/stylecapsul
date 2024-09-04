@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
-import { FaCheck } from 'react-icons/fa';
+import { FaCheck } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const QuestionnaireUpdate = () => {
@@ -35,8 +35,10 @@ const QuestionnaireUpdate = () => {
     if (updatedQuestionnaire) {
       setSelectedOptions((prevState) => ({
         ...prevState,
-        minimal_style: updatedQuestionnaire.minimal_style || prevState.minimal_style,
-        neighborhoods: updatedQuestionnaire.neighborhoods || prevState.neighborhoods,
+        minimal_style:
+          updatedQuestionnaire.minimal_style || prevState.minimal_style,
+        neighborhoods:
+          updatedQuestionnaire.neighborhoods || prevState.neighborhoods,
       }));
     }
   }, [updatedQuestionnaire]);
@@ -48,16 +50,18 @@ const QuestionnaireUpdate = () => {
 
   const neighborhoodsplaces = questionnaire?.find((item) => item?.nighborhoods);
   const sportsdata = questionnaire?.find((sp) => sp?.sports);
-  const enjoyShopping = questionnaire?.find((shop) => shop?.shopping)
-  const shoppingApproval = questionnaire?.find((approv) => approv?.approval)
-  const shopColor = questionnaire?.find((spcolor) => spcolor?.['shop-for']);
-  const shoppingBrand = questionnaire?.find((spbrand) => spbrand?.['shopping-brand']);
+  const enjoyShopping = questionnaire?.find((shop) => shop?.shopping);
+  const shoppingApproval = questionnaire?.find((approv) => approv?.approval);
+  const shopColor = questionnaire?.find((spcolor) => spcolor?.["shop-for"]);
+  const shoppingBrand = questionnaire?.find(
+    (spbrand) => spbrand?.["shopping-brand"]
+  );
   const currentStyle = questionnaire?.find((sty) => sty?.style);
   const clothMistake = questionnaire?.find((mistake) => mistake?.clothing);
   const clothDescribe = questionnaire?.find((cd) => cd?.describe);
   const wearTime = questionnaire?.find((wer) => wer?.wear);
-  const neverChooseWear = questionnaire?.find((nwear) => nwear?.['never-wear']);
-  const chagneStyle = questionnaire?.find((chs) => chs?.['change-style']);
+  const neverChooseWear = questionnaire?.find((nwear) => nwear?.["never-wear"]);
+  const chagneStyle = questionnaire?.find((chs) => chs?.["change-style"]);
   const handleChooseQuestionnair = (type, option) => {
     setSelectedOptions((prevState) => ({
       ...prevState,
@@ -66,10 +70,10 @@ const QuestionnaireUpdate = () => {
   };
 
   const user = useSelector((state) => state.login.user);
-  console.log(user)
+  console.log(user);
 
   const handleClick = (id) => {
-    setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
+    setSelectedBrand((prevSelected) => (prevSelected === id ? null : id));
   };
 
   const allProfileImages1 = [
@@ -87,25 +91,29 @@ const QuestionnaireUpdate = () => {
       "https://images.unsplash.com/photo-1722962496035-d6c08f9085be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2Mnx8fGVufDB8fHx8fA%3D%3D",
     ],
   ];
+
   const buttonOptions = ["Yes", "No", "Sometimes"];
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.put(`http://localhost:3000/api/user/questionnaire/${user?.id}`, selectedOptions);
-      const response = await axios.put(apiUrl(`api/user/questionnaire/${user?.id}`), selectedOptions)
-      console.log(response?.data, 'response')
+      const response = await axios.put(
+        apiUrl(`api/user/questionnaire/${user?.id}`),
+        selectedOptions
+      );
+      console.log(response?.data, "response");
       if (response?.data?.success) {
         setUpdatedQuestionnaire(response?.data?.updatedQuestionnaire);
         toast.success(response?.data?.message, {
           autoClose: 1000,
           hideProgressBar: true,
           style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
+            backgroundColor: "black",
+            color: "#C8B199",
+            borderRadius: "50px",
+            padding: "10px 20px",
+          },
         });
         setTimeout(() => {
           navigate("/profile");
@@ -115,10 +123,17 @@ const QuestionnaireUpdate = () => {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(errorMessage, {
         autoClose: 2000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
+        style: { backgroundColor: "#dc3545", color: "#fff" },
       });
     }
   };
+
+  useEffect(async () => {
+    try {
+      const response = await axios.get(apiUrl('api/user/questionnaire'));
+      console.log(response, 'response');
+    } catch (error) {}
+  }, []);
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
@@ -149,9 +164,12 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleChooseQuestionnair("minimal_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.minimal_style === option ? "selected" : ""
-                    }`}
+                  onClick={() =>
+                    handleChooseQuestionnair("minimal_style", option)
+                  }
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                    selectedOptions.minimal_style === option ? "selected" : ""
+                  }`}
                 >
                   {option}
                 </button>
@@ -185,9 +203,12 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleChooseQuestionnair("feminine_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.feminine_style === option ? "selected" : ""
-                    }`}
+                  onClick={() =>
+                    handleChooseQuestionnair("feminine_style", option)
+                  }
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                    selectedOptions.feminine_style === option ? "selected" : ""
+                  }`}
                 >
                   {option}
                 </button>
@@ -222,8 +243,9 @@ const QuestionnaireUpdate = () => {
                 <button
                   type="button"
                   onClick={() => handleChooseQuestionnair("boho_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.boho_style === option ? "selected" : ""
-                    }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                    selectedOptions.boho_style === option ? "selected" : ""
+                  }`}
                 >
                   {option}
                 </button>
@@ -257,9 +279,12 @@ const QuestionnaireUpdate = () => {
               >
                 <button
                   type="button"
-                  onClick={() => handleChooseQuestionnair("classic_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.classic_style === option ? "selected" : ""
-                    }`}
+                  onClick={() =>
+                    handleChooseQuestionnair("classic_style", option)
+                  }
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                    selectedOptions.classic_style === option ? "selected" : ""
+                  }`}
                 >
                   {option}
                 </button>
@@ -294,8 +319,9 @@ const QuestionnaireUpdate = () => {
                 <button
                   type="button"
                   onClick={() => handleChooseQuestionnair("sexy_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sexy_style === option ? "selected" : ""
-                    }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                    selectedOptions.sexy_style === option ? "selected" : ""
+                  }`}
                 >
                   {option}
                 </button>
@@ -306,15 +332,21 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------What’s your favourotite brand?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">{brandQuestion?.brand?.question || "What’s your favourite brand?"}</h1>
+          <h1 className="fw-bold fs-1 mt-2">
+            {brandQuestion?.brand?.question || "What’s your favourite brand?"}
+          </h1>
           {favouriteBrandss?.map((image, index) => (
             <div
-              className={`col-12 col-sm-6 col-md-3 ${selectedBrand === index ? 'selected' : ''}`}
+              className={`col-12 col-sm-6 col-md-3 ${
+                selectedBrand === index ? "selected" : ""
+              }`}
               key={index}
               onClick={() => handleClick(index)}
             >
               <div
-                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${selectedBrand === index ? 'selected-bg' : ''}`}
+                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${
+                  selectedBrand === index ? "selected-bg" : ""
+                }`}
               >
                 <img
                   src={image}
@@ -338,9 +370,12 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-6 col-md-6" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("neighborhoods", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("neighborhoods", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.neighborhoods === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -350,16 +385,15 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Do you do sports?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">
-            {sportsdata?.sports?.question}
-          </h1>
+          <h1 className="fw-bold fs-1 mt-2">{sportsdata?.sports?.question}</h1>
           {sportsdata?.sports?.options?.map((option, index) => (
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("sports", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sports === option ? "selected" : ""
-                  }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.sports === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -376,9 +410,12 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("enjoyshopping", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.enjoyshopping === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("enjoyshopping", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.enjoyshopping === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -395,9 +432,12 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("shoppingApprov", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shoppingApprov === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("shoppingApprov", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.shoppingApprov === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -408,15 +448,16 @@ const QuestionnaireUpdate = () => {
         {/* -------------------------What do you shop for?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            {shopColor?.['shop-for']?.question}
+            {shopColor?.["shop-for"]?.question}
           </h1>
-          {shopColor?.['shop-for']?.options?.map((option, index) => (
+          {shopColor?.["shop-for"]?.options?.map((option, index) => (
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("shop_color", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_color === option ? "selected" : ""
-                  }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.shop_color === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -427,15 +468,16 @@ const QuestionnaireUpdate = () => {
         {/* ------------------------What brand do you shop with?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            {shoppingBrand?.['shopping-brand']?.question}
+            {shoppingBrand?.["shopping-brand"]?.question}
           </h1>
-          {shoppingBrand?.['shopping-brand']?.options?.map((option, index) => (
+          {shoppingBrand?.["shopping-brand"]?.options?.map((option, index) => (
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("shop_brand", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_brand === option ? "selected" : ""
-                  }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.shop_brand === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -445,16 +487,17 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------How do you describe your current style?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">
-            {currentStyle?.style?.question}
-          </h1>
+          <h1 className="fw-bold fs-1 mt-2">{currentStyle?.style?.question}</h1>
           {currentStyle?.style?.options?.map((option, index) => (
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("current_style", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.current_style === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("current_style", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.current_style === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -468,12 +511,18 @@ const QuestionnaireUpdate = () => {
             {clothMistake?.clothing?.question}
           </h1>
           {clothMistake?.clothing?.options?.map((option, index) => (
-            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
+            <div
+              className="col-12 d-flex justify-content-center align-items-center"
+              key={index}
+            >
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("cloth_mistake", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_mistake === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("cloth_mistake", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.cloth_mistake === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -487,12 +536,18 @@ const QuestionnaireUpdate = () => {
             {clothDescribe?.describe?.question}
           </h1>
           {clothDescribe?.describe?.options?.map((option, index) => (
-            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
+            <div
+              className="col-12 d-flex justify-content-center align-items-center"
+              key={index}
+            >
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("cloth_describe", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_describe === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("cloth_describe", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.cloth_describe === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -502,16 +557,18 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Is there anything you wear all the time?------------------------ */}
         <div className="row gy-2 mt-4">
-          <h1 className="fw-bold fs-1 mt-2">
-            {wearTime?.wear?.question}
-          </h1>
+          <h1 className="fw-bold fs-1 mt-2">{wearTime?.wear?.question}</h1>
           {wearTime?.wear?.options?.map((option, index) => (
-            <div className="col-12 d-flex justify-content-center align-items-center" key={index}>
+            <div
+              className="col-12 d-flex justify-content-center align-items-center"
+              key={index}
+            >
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("wear_time", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.wear_time === option ? "selected" : ""
-                  }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.wear_time === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -522,15 +579,18 @@ const QuestionnaireUpdate = () => {
         {/* -------------------------Which colors you never wear?------------------------ */}
         <div className="row gy-2 mt-4">
           <h1 className="fw-bold fs-1 mt-2">
-            {neverChooseWear?.['never-wear']?.question}
+            {neverChooseWear?.["never-wear"]?.question}
           </h1>
-          {neverChooseWear?.['never-wear']?.options?.map((option, index) => (
+          {neverChooseWear?.["never-wear"]?.options?.map((option, index) => (
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("never_wear_time", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.never_wear_time === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("never_wear_time", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.never_wear_time === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -547,9 +607,12 @@ const QuestionnaireUpdate = () => {
             <div className="col-12 col-sm-4 col-md-4" key={index}>
               <button
                 type="button"
-                onClick={() => handleChooseQuestionnair("neighborhoods", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
-                  }`}
+                onClick={() =>
+                  handleChooseQuestionnair("neighborhoods", option)
+                }
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
+                  selectedOptions.neighborhoods === option ? "selected" : ""
+                }`}
               >
                 {option}
               </button>
@@ -584,7 +647,7 @@ const QuestionnaireUpdate = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
