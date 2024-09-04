@@ -92,7 +92,8 @@ const QuestionnaireUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/api/user/questionnaire/${user?.id}`, selectedOptions);
+      // const response = await axios.put(`http://localhost:3000/api/user/questionnaire/${user?.id}`, selectedOptions);
+      const response = await axios.put(apiUrl(`api/user/questionnaire/${user?.id}`), selectedOptions)
       console.log(response?.data, 'response')
       if (response?.data?.success) {
         setUpdatedQuestionnaire(response?.data?.updatedQuestionnaire);
