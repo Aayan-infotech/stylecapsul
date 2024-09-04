@@ -2,23 +2,13 @@
     padding-top: 6rem;
 
     .container {
+        .border {
+            border-color: black !important;  // Ensure this color is applied
+        }
+
         .profile-image {
-            width: 100px;
-            height: 100px;
-
-            .stylist-message-container .border {
-                border-color: black !important;
-            }
-        }
-
-        .name {
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .message {
-            color: #555;
+            width: 140px;
+            height: 120px;
         }
     }
-
 }

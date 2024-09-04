@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import image1 from "../../assets/stylist/img1.png";
 import "../../styles/Stylist.scss";
 import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import blank_image from '../../assets/stylist/blank_img.jpg';
 
 const Stylist = () => {
   const [showstylists, setShowstylists] = useState([]);
@@ -16,7 +16,6 @@ const Stylist = () => {
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
         const response = await axios.get(url);
         console.log(response?.data, 'response');
-
         if (response?.data?.stylists?.length > 0) {
           setShowstylists(response.data.stylists);
           setMessage("");
@@ -74,7 +73,7 @@ const Stylist = () => {
                     <div className="me-2">
                       <img
                         className="image-rounded"
-                        src={stylist?.profilePicture || image1}
+                        src={stylist?.profilePicture || blank_image}
                         height={120}
                         width={150}
                         alt={stylist.name}
