@@ -56,10 +56,12 @@ const GarmentsCare = () => {
     }
   };
 
-  // Effect to fetch data based on search query
   useEffect(() => {
     if (searchQuery) {
-      fetchGarmentCareServicesByQuery(searchQuery);
+      const filteredGarments = showGarments.filter((garment) =>
+        garment.service.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setShowGarments(filteredGarments);
     } else {
       fetchAllGarmentCareServices();
     }

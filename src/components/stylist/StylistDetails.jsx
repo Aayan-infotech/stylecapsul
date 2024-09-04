@@ -60,15 +60,15 @@ const StylistDetails = () => {
                                 <button type="button" className="btn btn-outline-dark me-2 rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px" }}>
                                     <i className="fa-solid fa-user-plus"></i>
                                 </button>
-                                <button type="button" className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px" }}>
-                                    <i className="fa-solid fa-message"></i>
-                                </button>
+                                <Link to={{ pathname: `/stylist-message-list`, }} state={{ profile_details }} className="text-decoration-none w-100">
+                                    <button type="button" className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px" }}>
+                                        <i className="fa-solid fa-message"></i>
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                         <div align="center" className="mt-5">
-                            <Link to={{ pathname: `/stylist-message-list`, }} state={{ profile_details }} className="text-decoration-none w-100">
-                                <button type="button" className="btn hire-custom-btn rounded-pill p-2">Hire</button>
-                            </Link>
+                            <button type="button" className="btn hire-custom-btn rounded-pill p-2">Hire</button>
                         </div>
                     </div>
                 </div>
