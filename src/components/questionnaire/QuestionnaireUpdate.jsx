@@ -53,7 +53,6 @@ const QuestionnaireUpdate = () => {
   };
 
   const user = useSelector((state) => state.login.user);
-  console.log(user?.id, 'user')
 
   const handleClick = (id) => {
     setSelectedBrand(prevSelected => (prevSelected === id ? null : id));
