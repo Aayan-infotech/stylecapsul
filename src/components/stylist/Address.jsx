@@ -45,6 +45,7 @@ const Address = () => {
             id: newId,
             ...newAddress
         };
+
         setAddresses([...addresses, newAddressData]);
         setNewAddress({ name: '', location: '', phone: '' });
         setSelectedAddressId(newId);
@@ -141,9 +142,7 @@ const Address = () => {
                                     />
                                 </div>
                                 <div className='text-center'>
-                                    <button type="button" className="btn btn-dark w-50 rounded-pill" style={{ backgroundColor: "black" }}>
-                                        Update
-                                    </button>
+                                    <button type="submit" className="btn btn-dark w-50 rounded-pill" style={{ backgroundColor: "black" }}>Update</button>
                                 </div>
                             </form>
                         </div>

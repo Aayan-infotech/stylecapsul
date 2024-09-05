@@ -60,6 +60,7 @@ import StylistCategories from "./components/stylist/StylistCategories.jsx";
 import CategoryDetails from "./components/stylist/CategoryDetials.jsx";
 import Address from "./components/stylist/Address.jsx";
 import Payment from "./components/stylist/Payment.jsx";
+import ThankuPage from "./components/stylist/ThankuPage.jsx";
 
 const Routing = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -116,6 +117,7 @@ const Routing = () => {
             <Route path="/category-details" element={<CategoryDetails />} />
             <Route path="/address" element={<Address />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/thanku" element={<ThankuPage />} />
             <Route path="/gift-cards" element={<GiftCards />} />
             <Route path="/gift-card-details/:id" element={<GiftCardDetails />} />
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />

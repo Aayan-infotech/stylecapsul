@@ -2,8 +2,14 @@ import React from 'react';
 import "../../styles/Payment.scss";
 import creditcard from '../../assets/payment/credit.png';
 import paypal from '../../assets/payment/paypal.png';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Payment = () => {
+    const navigate = useNavigate();
+
+    const handlePayment = () => {
+        navigate('/thanku')
+    }
     return (
         <div className="payment-container container">
             <div class="row gx-5">
@@ -21,7 +27,9 @@ const Payment = () => {
                     <img src={paypal} height={30} alt="Credit Card" />
                 </div>
             </div>
-            <button className="pay-button">Pay</button>
+            {/* <div className='text-center'> */}
+            <button onClick={handlePayment} className="pay-button">Pay</button>
+            {/* </div> */}
         </div>
     );
 };
