@@ -1,0 +1,38 @@
+.address-details-container {
+    padding-top: 6rem;
+    max-width: 400px;
+    margin: auto;
+
+    .address-card {
+        background: rgba(248, 247, 247, 1);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        .address-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            .radio-btn {
+                input[type="radio"] {
+                    margin-right: 10px;
+                }
+
+                .form-check-input:checked {
+                    background-color: black !important;
+                    border-color: black !important;
+                }
+            }
+
+            .address-info {
+                flex: 1;
+                margin-left: 10px;
+            }
+        }
+    }
+}

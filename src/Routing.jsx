@@ -55,6 +55,11 @@ import StyleScan from "./components/closemanagement/StyleScan.jsx";
 import UploadScanImage from "./components/closemanagement/UploadScanImage.jsx";
 import ScannedImageWardrobe from "./components/closemanagement/ScannedImageWardrobe.jsx";
 import StylistMessageList from "./components/stylist/StylistMessageList.jsx";
+import Chat from "./components/stylist/Chat.jsx";
+import StylistCategories from "./components/stylist/StylistCategories.jsx";
+import CategoryDetails from "./components/stylist/CategoryDetials.jsx";
+import Address from "./components/stylist/Address.jsx";
+import Payment from "./components/stylist/Payment.jsx";
 
 const Routing = () => {
   const [isAuth, setIsAuth] = useState(false);
@@ -104,8 +109,13 @@ const Routing = () => {
             <Route path="/all-clothes-list" element={<ClothesList />} />
             <Route path="/clothes-details" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
-            <Route path="/stylist-details" element={<StylistDetails />} />
-            <Route path="/stylist-message-list" element={<StylistMessageList />} />
+            <Route path="/stylist-profile" element={<StylistDetails />} />
+            <Route path="/stylist-list" element={<StylistMessageList />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/categories-type" element={<StylistCategories />} />
+            <Route path="/category-details" element={<CategoryDetails />} />
+            <Route path="/address" element={<Address />} />
+            <Route path="/payment" element={<Payment />} />
             <Route path="/gift-cards" element={<GiftCards />} />
             <Route path="/gift-card-details/:id" element={<GiftCardDetails />} />
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
