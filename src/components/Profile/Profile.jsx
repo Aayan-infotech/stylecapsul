@@ -22,7 +22,8 @@ function Profile() {
   const [logedInUserData, setLogedInUserData] = useState(null);
 
   const navigate = useNavigate();
-  const user_id = getCookie('userId')
+  // const user_id = getCookie('userId')
+  const user = useSelector((state) => state?.login?.user);
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
@@ -30,8 +31,8 @@ function Profile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user_id) {
-          const userResponse = await axios.get(apiUrl(`api/user/${user_id}`));
+        if (user?.id) {
+          const userResponse = await axios.get(apiUrl(`api/user/${user?.id}`));
           setLogedInUserData(userResponse?.data?.data);
         }
       } catch (error) {
@@ -40,7 +41,7 @@ function Profile() {
     };
 
     fetchData();
-  }, [user_id]);
+  }, [user?.id]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile-avatar', {

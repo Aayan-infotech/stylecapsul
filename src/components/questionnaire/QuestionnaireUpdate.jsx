@@ -31,18 +31,6 @@ const QuestionnaireUpdate = () => {
 
   const [updatedQuestionnaire, setUpdatedQuestionnaire] = useState(null);
 
-  useEffect(() => {
-    if (updatedQuestionnaire) {
-      setSelectedOptions((prevState) => ({
-        ...prevState,
-        minimal_style:
-          updatedQuestionnaire.minimal_style || prevState.minimal_style,
-        neighborhoods:
-          updatedQuestionnaire.neighborhoods || prevState.neighborhoods,
-      }));
-    }
-  }, [updatedQuestionnaire]);
-
   const profile = useSelector((state) => state.profile?.data);
   const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
   const brandQuestion = questionnaire?.find((question) => question?.brand);
@@ -61,7 +49,7 @@ const QuestionnaireUpdate = () => {
   const clothDescribe = questionnaire?.find((cd) => cd?.describe);
   const wearTime = questionnaire?.find((wer) => wer?.wear);
   const neverChooseWear = questionnaire?.find((nwear) => nwear?.["never-wear"]);
-  const chagneStyle = questionnaire?.find((chs) => chs?.["change-style"]);
+
   const handleChooseQuestionnair = (type, option) => {
     setSelectedOptions((prevState) => ({
       ...prevState,
@@ -69,8 +57,8 @@ const QuestionnaireUpdate = () => {
     }));
   };
 
-  const user = useSelector((state) => state.login.user);
-  console.log(user);
+  const user = useSelector((state) => state?.login?.user);
+  console.log(user?.id);
 
   const handleClick = (id) => {
     setSelectedBrand((prevSelected) => (prevSelected === id ? null : id));
@@ -104,7 +92,6 @@ const QuestionnaireUpdate = () => {
       );
       console.log(response?.data, "response");
       if (response?.data?.success) {
-        setUpdatedQuestionnaire(response?.data?.updatedQuestionnaire);
         toast.success(response?.data?.message, {
           autoClose: 1000,
           hideProgressBar: true,
@@ -128,12 +115,43 @@ const QuestionnaireUpdate = () => {
     }
   };
 
-  useEffect(async () => {
-    try {
-      const response = await axios.get(apiUrl('api/user/questionnaire'));
-      console.log(response, 'response');
-    } catch (error) {}
-  }, []);
+  useEffect(() => {
+    const fetchDataAndMatchUser = async () => {
+      try {
+        const response = await axios.get(apiUrl('api/user/all_quest'));
+        const allQuest = response?.data?.data;
+        if (allQuest && user?.id) {
+          const findQues = allQuest.find((qs) => qs?.user_id === user?.id);
+          console.log(findQues, 'response')
+          console.log(user?.id, 'user ID');
+          if (findQues) {
+            setSelectedOptions((prevState) => ({
+              ...prevState,
+              minimal_style: findQues.minimal_style || prevState.minimal_style,
+              feminine_style: findQues.feminine_style || prevState.feminine_style,
+              boho_style: findQues.boho_style || prevState.boho_style,
+              classic_style: findQues.classic_style || prevState.classic_style,
+              sexy_style: findQues.sexy_style || prevState.sexy_style,
+              neighborhoods: findQues.neighborhoods || prevState.neighborhoods,
+              sports: findQues.sports || prevState.sports,
+              enjoyshopping: findQues.enjoyshopping || prevState.enjoyshopping,
+              shoppingApprov: findQues.shoppingApprov || prevState.shoppingApprov,
+              shop_color: findQues.shop_color || prevState.shop_color,
+              shop_brand: findQues.shop_brand || prevState.shop_brand,
+              current_style: findQues.current_style || prevState.current_style,
+              cloth_mistake: findQues.cloth_mistake || prevState.cloth_mistake,
+              cloth_describe: findQues.cloth_describe || prevState.cloth_describe,
+              wear_time: findQues.wear_time || prevState.wear_time,
+              never_wear_time: findQues.never_wear_time || prevState.never_wear_time,
+            }));
+          }
+        }
+      } catch (error) {
+        console.log(error, 'something went wrong');
+      }
+    };
+    fetchDataAndMatchUser();
+  }, [user?.id]);
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
@@ -167,9 +185,8 @@ const QuestionnaireUpdate = () => {
                   onClick={() =>
                     handleChooseQuestionnair("minimal_style", option)
                   }
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                    selectedOptions.minimal_style === option ? "selected" : ""
-                  }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.minimal_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -206,9 +223,8 @@ const QuestionnaireUpdate = () => {
                   onClick={() =>
                     handleChooseQuestionnair("feminine_style", option)
                   }
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                    selectedOptions.feminine_style === option ? "selected" : ""
-                  }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.feminine_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -243,9 +259,8 @@ const QuestionnaireUpdate = () => {
                 <button
                   type="button"
                   onClick={() => handleChooseQuestionnair("boho_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                    selectedOptions.boho_style === option ? "selected" : ""
-                  }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.boho_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -282,9 +297,8 @@ const QuestionnaireUpdate = () => {
                   onClick={() =>
                     handleChooseQuestionnair("classic_style", option)
                   }
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                    selectedOptions.classic_style === option ? "selected" : ""
-                  }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.classic_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -319,9 +333,8 @@ const QuestionnaireUpdate = () => {
                 <button
                   type="button"
                   onClick={() => handleChooseQuestionnair("sexy_style", option)}
-                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                    selectedOptions.sexy_style === option ? "selected" : ""
-                  }`}
+                  className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sexy_style === option ? "selected" : ""
+                    }`}
                 >
                   {option}
                 </button>
@@ -337,16 +350,14 @@ const QuestionnaireUpdate = () => {
           </h1>
           {favouriteBrandss?.map((image, index) => (
             <div
-              className={`col-12 col-sm-6 col-md-3 ${
-                selectedBrand === index ? "selected" : ""
-              }`}
+              className={`col-12 col-sm-6 col-md-3 ${selectedBrand === index ? "selected" : ""
+                }`}
               key={index}
               onClick={() => handleClick(index)}
             >
               <div
-                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${
-                  selectedBrand === index ? "selected-bg" : ""
-                }`}
+                className={`p-3 border d-flex justify-content-center align-items-center custom-column ${selectedBrand === index ? "selected-bg" : ""
+                  }`}
               >
                 <img
                   src={image}
@@ -373,9 +384,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("neighborhoods", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.neighborhoods === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -391,9 +401,8 @@ const QuestionnaireUpdate = () => {
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("sports", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.sports === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.sports === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -413,9 +422,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("enjoyshopping", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.enjoyshopping === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.enjoyshopping === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -435,9 +443,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("shoppingApprov", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.shoppingApprov === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shoppingApprov === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -455,9 +462,8 @@ const QuestionnaireUpdate = () => {
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("shop_color", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.shop_color === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_color === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -475,9 +481,8 @@ const QuestionnaireUpdate = () => {
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("shop_brand", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.shop_brand === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.shop_brand === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -495,9 +500,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("current_style", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.current_style === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.current_style === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -520,9 +524,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("cloth_mistake", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.cloth_mistake === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_mistake === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -545,9 +548,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("cloth_describe", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.cloth_describe === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.cloth_describe === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -566,9 +568,8 @@ const QuestionnaireUpdate = () => {
               <button
                 type="button"
                 onClick={() => handleChooseQuestionnair("wear_time", option)}
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.wear_time === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.wear_time === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -588,9 +589,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("never_wear_time", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.never_wear_time === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.never_wear_time === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>
@@ -610,9 +610,8 @@ const QuestionnaireUpdate = () => {
                 onClick={() =>
                   handleChooseQuestionnair("neighborhoods", option)
                 }
-                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${
-                  selectedOptions.neighborhoods === option ? "selected" : ""
-                }`}
+                className={`btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5 ${selectedOptions.neighborhoods === option ? "selected" : ""
+                  }`}
               >
                 {option}
               </button>

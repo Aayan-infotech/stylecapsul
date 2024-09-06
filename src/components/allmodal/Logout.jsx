@@ -19,6 +19,7 @@ export const Logout = ({ isModalVisible, onClose }) => {
 
   const handleLogout = () => {
     deleteCookie('authToken');
+    deleteCookie('userId');
     console.log('Cookie after deletion:', getCookie('authToken'));
     toast.success('Logout Successfully..!', {
       autoClose: 1000,
