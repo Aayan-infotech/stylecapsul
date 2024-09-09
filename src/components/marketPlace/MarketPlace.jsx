@@ -27,9 +27,7 @@ import shopwomenimg3 from "../../assets/marketplace/shopwomenimg3.png";
 import shopwomenimg4 from "../../assets/marketplace/shopwomenimg4.png";
 import shopwomenimg5 from "../../assets/marketplace/menswearimg5.png";
 import shopwomenimg6 from "../../assets/marketplace/shopwomenimg6.png";
-
 import leatherjacket from "../../assets/marketplace/leatherjacket.png";
-
 import "../../styles/MarketPlace.scss";
 
 const MarketPlace = () => {
@@ -151,7 +149,7 @@ const MarketPlace = () => {
           ></video>
         </div>
       </div>
-      {/* <div
+      <div
         className="landing2"
         style={{ position: "absolute", top: "80%", color: "white" }}
       >
@@ -161,36 +159,30 @@ const MarketPlace = () => {
           <p>REVOLUTIONIZE YOUR CLOSET</p>
           <p>REVOLUTIONIZE YOUR CLOSET</p>
         </div>
-      </div> */}
+      </div>
       {/* -----------------------trending search------------------------- */}
-      <div className="container mt-4 w-50">
-        <div>
-          <h2 className="fw-bold">Trending Search</h2>
-          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mt-1">
-            {items.map((item, index) => (
-              <div className="col" key={index}>
-                <div className="d-flex justify-content-center align-items-center border border-1 rounded-pill p-1">
-                  <span className="me-2">{item.name}</span>
-                  <img
-                    src={item.imgSrc}
-                    height={10}
-                    width={10}
-                    alt={item.name.toLowerCase().replace(" ", "-")}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+
+      <div className="container w-75 mt-4" style={{ display: "block" }}>
+        <div className="row gx-5">
+          <h1 className="fw-bold fs-3">Trending Search</h1>
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 text-center"
+            >
+              <button className="btn btn-outline-dark rounded-pill">
+                {item.name} <i class="fa-solid fa-arrow-right-long"></i>
+              </button>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* -----------------------shop by style------------------------- */}
-
-      <div className="container mt-4 w-50">
-        <h2 className="fw-bold">Shop By Style</h2>
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-1">
+      <div className="container w-50 mt-4" style={{ display: "block" }}>
+        {/* -----------------------shop by style------------------------- */}
+        <div className="row m-0 mt-1">
+          <h2 className="fw-bold">Shop By Style</h2>
           {shopebystyles.map((style, index) => (
-            <div className="col" key={index}>
+            <div className="col-12 col-md-4" key={index}>
               <div>
                 <div>
                   <img
@@ -220,14 +212,12 @@ const MarketPlace = () => {
             </div>
           ))}
         </div>
-      </div>
 
-      {/* -----------------------Shop Menswear------------------------- */}
-      <div className="container mt-4 w-50">
-        <h2 className="fw-bold">Shop Menswear</h2>
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-1">
-          {shopemenswear.map((style, index) => (
-            <div className="col" key={index}>
+        {/* -----------------------Shop Menswear------------------------- */}
+        <div className="row m-0 mt-1">
+          <h2 className="fw-bold">Shop Menswear</h2>
+          {shopebystyles.map((style, index) => (
+            <div className="col-12 col-md-4" key={index}>
               <div>
                 <div>
                   <img
@@ -257,14 +247,12 @@ const MarketPlace = () => {
             </div>
           ))}
         </div>
-      </div>
 
-      {/* -----------------------Shop Womenswear------------------------- */}
-      <div className="container mt-4 w-50">
-        <h2 className="fw-bold">Shop Womenswear</h2>
-        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-1">
-          {shopwomenwear.map((style, index) => (
-            <div className="col" key={index}>
+        {/* -----------------------Shop Womenswear------------------------- */}
+        <div className="row m-0 mt-1">
+          <h2 className="fw-bold">Shop Womenswear</h2>
+          {shopebystyles.map((style, index) => (
+            <div className="col-12 col-md-4" key={index}>
               <div>
                 <div>
                   <img
@@ -294,15 +282,13 @@ const MarketPlace = () => {
             </div>
           ))}
         </div>
-      </div>
 
-      {/* -------------------------------------Featured Collection---------------------- */}
-      <div className="container mt-4 w-50">
-        <div className="row align-items-center">
+        {/* -----------------------Featured Collection------------------------- */}
+        <div className="row">
           <div className="col-md-8">
             <h2 className="fw-bold">Featured Collection</h2>
           </div>
-          <div className="col-md-2 text-md-end">
+          <div className="col-md-2 d-flex justify-content-end align-items-center">
             <p className="fw-bold text-center border border-primary rounded-pill p-2">
               See All
             </p>

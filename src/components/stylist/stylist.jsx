@@ -38,29 +38,29 @@ const Stylist = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center add-clothes-card">
-      <div className="container w-75 p-4">
-        <div className="row gx-5">
-          <div className="col-12 col-md-6">
-            <h1 className="fw-bold fs-1">Stylist</h1>
-          </div>
-          <div className="col-12 col-md-6">
-            <div className="styliset-search">
-              <div className="search-box">
-                <i className="fa fa-search"></i>
-                <input
-                  type="text"
-                  className="rounded-pill text-white"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={handleSearchInputChange}
-                />
-                <i className="fa-solid fa-sliders"></i>
-              </div>
+    <div className="styliset-search-container">
+      <div className="row gx-5">
+        <div className="col-12 col-md-6">
+          <h1 className="fw-bold fs-1">Stylist</h1>
+        </div>
+        <div className="col-12 col-md-6">
+          <div className="styliset-search">
+            <div className="search-box">
+              <i className="fa fa-search"></i>
+              <input
+                type="text"
+                className="rounded-pill text-white"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+              />
+              <i className="fa-solid fa-sliders"></i>
             </div>
           </div>
         </div>
-        <div className="row mt-3">
+      </div>
+      <div className="container">
+        <div className="row mt-1">
           {message ? (
             <div className="text-center">
               <h2 className="fs-3">{message}</h2>
@@ -68,7 +68,7 @@ const Stylist = () => {
           ) : (
             showstylists.map((stylist) => (
               <Link to="/stylist-profile" className="text-decoration-none" state={{ stylist }}>
-                <div className="col-12 mt-3" key={stylist._id}>
+                <div className="col-12 w-100 mt-3" key={stylist._id}>
                   <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
                     <div className="me-2">
                       <img

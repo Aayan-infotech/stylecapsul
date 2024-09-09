@@ -1,43 +1,47 @@
 .capsule-main-container {
-    padding-top: 6rem;
+  padding-top: 6rem;
+
+  .container {
+    display: block;
 
     .heading {
-        margin-bottom: 2rem;
-        z-index: 2;
-        position: relative;
+      margin-bottom: 2rem;
+      z-index: 2;
+      position: relative;
     }
 
     .position-relative {
-        position: relative;
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+
+      .stage-img {
+        display: block;
         width: 100%;
-        max-width: 100%;
         height: auto;
+      }
 
-        .stage-img {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .overlay-img {
-            position: absolute;
-            top: 35%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            height: 60%;
-            width: auto;
-            z-index: 1;
-            pointer-events: none;
-        }
+      .overlay-img {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 60%;
+        width: auto;
+        z-index: 1;
+        pointer-events: none;
+      }
     }
 
     @media (max-width: 767px) {
-        .heading {
-            font-size: 1.5rem;
-        }
+      .heading {
+        font-size: 1.5rem;
+      }
 
-        .overlay-img {
-            height: 50%;
-        }
+      .overlay-img {
+        height: 50%;
+      }
     }
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import './PageNotFound.scss'
 
-function PageNotFound() {
+export const PageNotFound = () => {
   return (
     <>
       <div className="container pagenotfound mt-5">
@@ -14,5 +14,3 @@ function PageNotFound() {
     </>
   )
 }
-
-export default PageNotFound

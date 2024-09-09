@@ -1,64 +1,68 @@
 .tryavtar-main-container {
-    padding-top: 6rem;
+  padding-top: 6rem;
+
+  .container {
+    display: block;
 
     .col-bg-color {
-        background-color: #F5F5F5;
+      background-color: #f5f5f5;
 
-        .outfits-image-container {
-            width: 100%;
-            height: auto;
-            overflow: hidden;
+      .outfits-image-container {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
 
-            img {
-                width: 100%;
-                height: auto;
-                max-height: 100%;
-                object-fit: contain;
-            }
+        img {
+          width: 100%;
+          height: auto;
+          max-height: 100%;
+          object-fit: contain;
         }
+      }
     }
 
     @media (max-width: 768px) {
-        .container {
-            width: 100%;
-        }
+      .container {
+        width: 100%;
+      }
 
-        .row.g-2 {
-            flex-direction: column;
-        }
+      .row.g-2 {
+        flex-direction: column;
+      }
 
-        .col-6 {
-            margin-bottom: 1rem;
-        }
+      .col-6 {
+        margin-bottom: 1rem;
+      }
 
-        .outfits-image-container img {
-            max-height: 150px;
-        }
+      .outfits-image-container img {
+        max-height: 150px;
+      }
 
-        .col-bg-color {
-            padding: 1rem;
-        }
+      .col-bg-color {
+        padding: 1rem;
+      }
     }
 
     @media (max-width: 480px) {
-        .container {
-            padding: 0 1rem;
-        }
+      .container {
+        padding: 0 1rem;
+      }
 
-        .row.g-2 {
-            flex-direction: column;
-        }
+      .row.g-2 {
+        flex-direction: column;
+      }
 
-        .col-6 {
-            margin-bottom: 1rem;
-        }
+      .col-6 {
+        margin-bottom: 1rem;
+      }
 
-        .outfits-image-container img {
-            max-height: 120px;
-        }
+      .outfits-image-container img {
+        max-height: 120px;
+      }
 
-        .col-bg-color {
-            padding: 0.5rem;
-        }
+      .col-bg-color {
+        padding: 0.5rem;
+      }
     }
+  }
 }

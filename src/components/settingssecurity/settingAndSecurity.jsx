@@ -2,7 +2,8 @@ import React from "react";
 import notification from "../../assets/images/notification.png";
 import address from "../../assets/images/address.png";
 import password from "../../assets/images/password.png";
-import global from "../../assets/images/globe.png"
+import global from "../../assets/images/globe.png";
+import { Link } from "react-router-dom";
 
 const cardData = [
   {
@@ -11,6 +12,7 @@ const cardData = [
     title: "Notification",
     imageAlt: "Notification",
     imageStyle: { width: "50px", height: "45px" },
+    url: "#",
   },
   {
     id: 2,
@@ -19,6 +21,7 @@ const cardData = [
     image: address,
     imageAlt: "address",
     imageStyle: { width: "50px", height: "45px" },
+    url: "#",
   },
   {
     id: 3,
@@ -26,6 +29,7 @@ const cardData = [
     title: "Language",
     imageAlt: "global",
     imageStyle: { width: "50px", height: "45px" },
+    url: "#",
   },
   {
     id: 4,
@@ -33,45 +37,55 @@ const cardData = [
     title: "Password",
     imageAlt: "Password",
     imageStyle: { width: "50px", height: "45px" },
+    url: "/change-password",
   },
 ];
 
 const SettingAndSecurity = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{paddingTop:'6rem'}}>
-      <div className="container" style={{ width: "700px" }}>
+    <div className="align-items-center" style={{ paddingTop: "6rem" }}>
+      <div className="container w-50" style={{ display: "block" }}>
         <h1 className="text-center fw-bold fs-1">Settings & Security</h1>
-        <div className="row mt-4">
-          {cardData.map(({ id, icon, title, image, imageAlt, imageStyle }) => (
-            <div
-              key={id}
-              className="col-md-6 col-lg-6 mb-4 d-flex justify-content-center"
-            >
+        <div className="row gx-4 mt-4">
+          {cardData.map(
+            ({ id, icon, title, image, imageAlt, imageStyle, url }) => (
               <div
-                className="card"
-                style={{
-                  width: "300px",
-                  backgroundColor: "#4C4C4C",
-                  color: "white",
-                }}
+                key={id}
+                className="col-md-6 col-lg-6 mb-4 d-flex justify-content-center"
               >
-                <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                  {icon && (
-                    <i className={`fs-2 fa-solid fa-regular ${icon} mb-4`}></i>
-                  )}
-                  {image && (
-                    <img
-                      src={image}
-                      alt={imageAlt}
-                      className="mb-4"
-                      style={imageStyle}
-                    />
-                  )}
-                  <h4 className="card-title fw-bold">{title}</h4>
-                </div>
+                <Link
+                  to={url}
+                  className="text-decoration-none text-white w-100"
+                >
+                  <div
+                    className="card"
+                    style={{
+                      width: "300px",
+                      backgroundColor: "#4C4C4C",
+                      color: "white",
+                    }}
+                  >
+                    <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">
+                      {icon && (
+                        <i
+                          className={`fs-2 fa-solid fa-regular ${icon} mb-4`}
+                        ></i>
+                      )}
+                      {image && (
+                        <img
+                          src={image}
+                          alt={imageAlt}
+                          className="mb-4"
+                          style={imageStyle}
+                        />
+                      )}
+                      <h4 className="card-title fw-bold">{title}</h4>
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/Analyticsinsights.css";
+import "../../styles/Analyticsinsights.scss";
 import ReactApexChart from "react-apexcharts";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
@@ -125,7 +125,7 @@ const AnalyticsInsights = () => {
     },
   };
   return (
-    <div className="d-flex justify-content-center align-items-center analytics-insights mt-4">
+    <div className="d-flex justify-content-center align-items-center analytics-insights">
       <div className="container w-75">
         <div className="row gy-3">
           <div className="col-12 col-md-6">

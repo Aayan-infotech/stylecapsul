@@ -23,8 +23,8 @@ const Home = () => {
     <>
       <div className="home-container-title">
         <div className="container text-center" style={{maxWidth:"1025px"}}>
-          <h4 className="fw-bold text-decoration-underline">Home</h4>
           <div className="row gx-5 gy-0">
+          <h4 className="fw-bold text-decoration-underline">Home</h4>
             {itemsLeft.map((item, index) => (
               <div key={index} className="col-12 col-md-6 col-lg-4">
                 <Link to={item.link} className="text-decoration-none">

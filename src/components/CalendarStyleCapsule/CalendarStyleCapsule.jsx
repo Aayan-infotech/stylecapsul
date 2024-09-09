@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import DatePicker, { CalendarContainer } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './CalendarStyleCapsule.scss';
+import { Link } from 'react-router-dom';
 
 function CalendarStyleCapsule() {
   const [startDate, setStartDate] = useState(new Date());
@@ -43,6 +44,7 @@ function CalendarStyleCapsule() {
     <div className="calendar-style-capsule">
       <header className="calendar-header">
         <h1 className="main-heading">My Style Capsule</h1>
+        <Link to="/emojistylecapsule">Next Page</Link>
       </header>
       <DatePicker
         selected={startDate}

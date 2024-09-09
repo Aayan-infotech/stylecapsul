@@ -1,47 +1,47 @@
 .category-details-container {
-    padding-top: 6rem;
-    background-color: #fff;
-    border-radius: 15px;
-    
+  padding-top: 6rem;
+
+  .container {
+    display: block;
+
     .image-container {
       text-align: center;
       border: 2px solid #ddd;
-    //   border-radius: 50%;
       overflow: hidden;
       width: 200px;
       height: 300px;
       display: flex;
       justify-content: center;
       align-items: center;
-  
+
       .product-image {
         max-width: 100%;
         max-height: 100%;
         object-fit: cover;
       }
     }
-  
+
     h2 {
       font-weight: bold;
       font-size: 2rem;
       margin-bottom: 10px;
     }
-  
+
     .description-title {
       font-weight: bold;
       margin-bottom: 5px;
     }
-  
+
     .description {
       font-size: 1rem;
       margin-bottom: 20px;
     }
-  
+
     .quantity-selector {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
-  
+
       .quantity-btn {
         background-color: black;
         color: white;
@@ -55,23 +55,23 @@
         align-items: center;
         font-size: 1.5rem;
         cursor: pointer;
-  
+
         &:focus {
           outline: none;
         }
       }
-  
+
       .quantity-display {
         margin: 0 15px;
         font-size: 1.5rem;
         font-weight: bold;
       }
     }
-  
+
     .button-group {
       display: flex;
       gap: 15px;
-  
+
       .btn {
         padding: 10px 20px;
         border-radius: 30px;
@@ -79,42 +79,42 @@
         font-weight: bold;
         cursor: pointer;
       }
-  
+
       .add-to-cart {
         background-color: white;
         color: black;
         border: 2px solid black;
       }
-  
+
       .buy-now {
         background-color: black;
         color: white;
         border: none;
       }
     }
-  
+
     @media (max-width: 768px) {
       .row {
         flex-direction: column;
       }
-  
+
       h2 {
         text-align: center;
         font-size: 1.75rem;
       }
-  
+
       .description {
         text-align: center;
       }
-  
+
       .quantity-selector {
         justify-content: center;
       }
-  
+
       .button-group {
         justify-content: center;
         gap: 10px;
       }
     }
   }
-  
+}

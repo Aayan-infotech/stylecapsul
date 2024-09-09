@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import "../../styles/GiftCardDetails.scss";
 import giftcard1 from "../../assets/giftcards/giftcard1.png";
-import giftcard2 from "../../assets/giftcards/giftcard2.png";
 import giftcard3 from "../../assets/giftcards/giftcard3.png";
 import giftcard4 from "../../assets/giftcards/giftcard4.png";
-import giftcard5 from "../../assets/giftcards/giftcard5.png";
 
 const GiftCardDetails = () => {
-    const [showCardDetails, setShowCardDetails] = useState("");
 
     const giftCardData = [
         {
@@ -90,8 +87,8 @@ const GiftCardDetails = () => {
         <>
             <div className="d-flex justify-content-center align-items-center gift-card--container-sections">
                 <div className="container p-4">
-                    <h1 className="fw-bold fs-1">Card</h1>
                     <div className="row m-0 gx-2">
+                        <h1 className="fw-bold fs-1">Card</h1>
                         <div className="col-12 col-md-6 mb-2 mb-md-0 p-3">
                             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                                 <div className="carousel-inner">

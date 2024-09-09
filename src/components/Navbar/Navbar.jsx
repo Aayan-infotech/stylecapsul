@@ -19,7 +19,7 @@ function Navbar() {
       <div className="top">
         <div className="top1">
           <div className="left">
-            <Link to={checkToken() ? "/home" : "/"}>
+            <Link to={checkToken() ? "/" : "/"}>
               <img
                 src={logo}
                 alt="logo"

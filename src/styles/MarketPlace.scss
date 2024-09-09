@@ -32,10 +32,9 @@
   padding-right: 2rem;
   animation: marquee 15s linear infinite;
 }
-.container{
+.container {
   display: block;
 }
-
 
 // ----------------------
 .scroll-container {
@@ -73,10 +72,13 @@
   margin-right: 15px; /* Adjust spacing between items */
 }
 
-
 @keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 @media (max-width: 768px) {
@@ -84,7 +86,7 @@
   .navbar-right i {
     margin-bottom: 0.5rem;
   }
-  
+
   .navbar-center .title {
     font-size: 1.25rem;
   }

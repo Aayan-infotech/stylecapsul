@@ -15,33 +15,16 @@ import {
 } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import profile from "./img/profile.png";
-import { getCookie } from "../../utils/cookieUtils.js";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [logedInUserData, setLogedInUserData] = useState(null);
 
   const navigate = useNavigate();
-  // const user_id = getCookie('userId')
   const user = useSelector((state) => state?.login?.user);
+  const logedInUserData = user?.payload
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (user?.id) {
-          const userResponse = await axios.get(apiUrl(`api/user/${user?.id}`));
-          setLogedInUserData(userResponse?.data?.data);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [user?.id]);
 
   const handleEditProfile = () => {
     navigate('/edit-profile-avatar', {
@@ -50,7 +33,6 @@ function Profile() {
       }
     });
   };
-
 
   return (
     <>

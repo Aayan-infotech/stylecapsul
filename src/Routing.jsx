@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Routing.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
-
-import Login from "./components/Login/Login";
-import Signup from "./components/Signup/Signup";
-import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
-import RecoveryCode from "./components/RecoveryCode/RecoveryCode";
-import ResetPassword from "./components/ResetPassword/ResetPassword";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SettingAndSecurity from "./components/settingssecurity/settingAndSecurity.jsx";
 import ClosetManagement from "./components/closemanagement/ClosetManagement.jsx";
 import Cart from "./components/cart/Cart.jsx";
@@ -25,14 +15,10 @@ import ClosetOverview from "./components/closetoverview/ClosetOverview.jsx";
 import MyCapsuleAddAvtart from "./components/myCapsuleAddAvtart/MyCapsuleAddAvtart.jsx";
 import TryAvtar from "./components/tryavtar/TryAvtar.jsx";
 import AvtarLookingCool from "./components/avtartlooking/AvtarLookingCool.jsx";
-
-import LandingPage from "./components/LandingPage/LandingPage";
 import Home from "./components/Home/Home";
 import Profile from "./components/Profile/Profile";
 import ProfileAvatar from "./components/ProfileAvatar/ProfileAvatar";
-// import ProfileBody from "./components/ProfileBody/ProfileBody";
 import PandQ from "./components/PandQ/PandQ";
-import PageNotFound from "./components/PageNotFound/PageNotFound";
 import FullAvatar from "./components/FullAvatar/FullAvatar";
 import Body from "./components/Body/Body";
 import Appointment from "./components/Appointment/Appointment";
@@ -41,7 +27,6 @@ import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
 import OrderHistory from "./components/OrderHistory/OrderHistory";
 import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyleCapsule";
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
-import { checkToken } from '../src/utils/auth.util.js'
 import MainLayout from "./MainLayout";
 import GarmentsCare from "./components/garments/GarmentsCare.jsx";
 import ServiceProvider from "./components/serviceprovider/ServiceProvider.jsx";
@@ -61,39 +46,19 @@ import CategoryDetails from "./components/stylist/CategoryDetials.jsx";
 import Address from "./components/stylist/Address.jsx";
 import Payment from "./components/stylist/Payment.jsx";
 import ThankuPage from "./components/stylist/ThankuPage.jsx";
+import AuthRoute from "./AuthRoute.jsx";
+import PageNotFound from "../../src/components/PageNotFound/PageNotFound.jsx";
 
 const Routing = () => {
-  const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      console.log(checkToken())
-      if (checkToken()) {
-        setIsAuth(true);
-      } else {
-        setIsAuth(false);
-      }
-    };
-    checkAuth();
-  }, []);
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/recovery-code" element={<RecoveryCode />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* Protected routes */}
-        {isAuth ? (
+      <AuthRoute>
+        <Routes>
           <Route element={<MainLayout />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/edit-profile-avatar" element={<ProfileAvatar />} />
-            {/* <Route path="/edit-profile-body" element={<ProfileBody />} /> */}
             <Route path="/pq" element={<PandQ />} />
             <Route path="/full-avatar" element={<FullAvatar />} />
             <Route path="/body" element={<Body />} />
@@ -135,12 +100,10 @@ const Routing = () => {
             <Route path="/garment-care" element={<GarmentsCare />} />
             <Route path="/service-provider" element={<ServiceProvider />} />
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
-            {/* <Route path="*" element={<PageNotFound />} /> */}
+            <Route path="*" element={<PageNotFound />} />
           </Route>
-        ) : (
-          <Route path="*" element={<Login />} />
-        )}
-      </Routes>
+        </Routes>
+      </AuthRoute>
     </Router>
   );
 };

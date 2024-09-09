@@ -1,0 +1,66 @@
+.my-style-capsule-container{
+    padding-top: 6rem;
+
+    .container{
+        display: block;
+
+        .inner-img:hover {
+            transform: scale(1.1);
+        }
+        
+        .inner-img {
+            transition: transform 0.5s;
+            position: relative;
+        }
+        
+        .inner-img img {
+            position: absolute;
+            transition: none;
+        }
+        
+        .inner-img img:nth-of-type(1) {
+            top: 0%;
+            left: 13%;
+        }
+        
+        .inner-img img:nth-of-type(2) {
+            top: 65%;
+            left: 13%;
+        }
+        
+        .inner-img img:nth-of-type(3) {
+            top: 90%;
+            left: 13%;
+        }
+        
+        .inner-img:nth-of-type(2) img:nth-of-type(1) {
+            top: 0%;
+            right: 45%;
+        }
+        
+        .inner-img:nth-of-type(2) img:nth-of-type(2) {
+            top: 65%;
+            right: 45%;
+        }
+        
+        .inner-img:nth-of-type(2) img:nth-of-type(3) {
+            top: 90%;
+            right: 45%;
+        }
+        
+        .inner-img:nth-of-type(3) img:nth-of-type(1) {
+            top: 0%;
+            right: 15%;
+        }
+        
+        .inner-img:nth-of-type(3) img:nth-of-type(2) {
+            top: 65%;
+            right: 15%;
+        }
+        
+        .inner-img:nth-of-type(3) img:nth-of-type(3) {
+            top: 90%;
+            right: 15%;
+        }
+    }
+}

@@ -58,10 +58,6 @@ const ScheduleBooking = () => {
             });
             console.log(schedueResponse?.data?.booking, 'schedueResponse')
             if (schedueResponse) {
-                // toast.success(schedueResponse?.message || 'Schedule Booking is Successfully..!', {
-                //     autoClose: 1000,
-                //     style: { backgroundColor: '#28a745', color: '#fff' }
-                // });
                 toast.success(schedueResponse?.message || 'Schedule Booking is Successfully..!', {
                     autoClose: 1000,
                     hideProgressBar: true,
@@ -90,9 +86,10 @@ const ScheduleBooking = () => {
     return (
         <>
             <ToastContainer />
-            <div className="d-flex justify-content-center align-items-center schedule-booking-sections">
-                <div className="container d-flex justify-content-center align-items-center p-4">
+            <div className="schedule-booking-sections">
+                <div className="container ">
                     <div className="row m-0 gx-2">
+                        <Link to="/scheduled-appointment">Next Page</Link>
                         <h1 className="fw-bold text-center fs-1">Schedule Booking</h1>
                         <div className="col-12 d-flex justify-content-center align-items-center">
                             <div className='border w-50 p-3'>

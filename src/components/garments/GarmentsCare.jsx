@@ -85,7 +85,7 @@ const GarmentsCare = () => {
   return (
     <div className="d-flex justify-content-center align-items-center add-clothes-card">
       <div className="container w-75 p-4">
-        <div className="row gx-5">
+        {/* <div className="row gx-5">
           <div className="col-12 col-md-6">
             <h1 className="fw-bold fs-1">Garments Care</h1>
           </div>
@@ -103,9 +103,10 @@ const GarmentsCare = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="row mt-3">
+        <h1 className="fw-bold fs-1">Garments Care</h1>
           {loading ? (
             <div className="text-center">
               <h2 className="fs-3">Loading...</h2>

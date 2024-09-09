@@ -132,9 +132,9 @@ const AddClothes = () => {
   return (
     <>
       <ToastContainer />
-      <div className="d-flex justify-content-center align-items-center add-clothes-card">
-        <div className="container">
+      <div className="add-clothes-card">
           <h1 className="text-center fw-bold fs-1">Add Clothes</h1>
+        <div className="container">
           <div className="card card-btn">
             <div className="card-body">
               <form onSubmit={handleSubmit}>

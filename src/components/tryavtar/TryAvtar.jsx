@@ -7,12 +7,13 @@ import { Link } from "react-router-dom";
 
 const TryAvtar = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center tryavtar-main-container">
+    <div className="tryavtar-main-container">
       <div className="container w-50">
         <h1 className="text-center fw-bold fs-1">My Style Capsule</h1>
         <div className="row g-2 mt-4">
           <div className="col-6 d-flex justify-content-center align-items-center">
-            <Link to="/avtarlookingcool" className="text-decoration-none text-black">
+            <Link to="/avtarlookingcool" className="text-decoration-none">
+              {/* text-black */}
               <h1 className="text-center fw-bold fs-4">
                 Now that’s your outfit!
               </h1>

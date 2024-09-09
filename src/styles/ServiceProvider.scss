@@ -1,36 +1,39 @@
 .service-provider-sections {
-    padding-top: 6rem;
+  padding-top: 6rem;
+
+  .container {
+    display: block;
 
     .carousel-image {
-        height: 300px;
-        object-fit: cover;
-        border-radius: 10px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
     }
 
     .custom-indicators {
-        position: relative;
-        bottom: -10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      position: relative;
+      bottom: -10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .carousel-indicators [data-bs-target] {
-        background-color: #000;
+      background-color: #000;
     }
 
     .bookservice-details {
-        .border-line {
-            border: 2.5px solid black;
-            border-radius: 5px;
-            width: 8rem;
-        }
+      .border-line {
+        border: 2.5px solid black;
+        border-radius: 5px;
+        width: 8rem;
+      }
 
-        .book-custom-btn {
-            background-color: black;
-            color: white;
-            font-weight: bold;
-        }
+      .book-custom-btn {
+        background-color: black;
+        color: white;
+        font-weight: bold;
+      }
     }
-
+  }
 }

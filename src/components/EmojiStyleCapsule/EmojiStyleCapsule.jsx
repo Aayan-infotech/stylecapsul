@@ -22,9 +22,9 @@ import firstOccasion from "./img/work-6.png";
 import secondOccasion from "./img/date-7.png";
 import thirdOccasion from "./img/wedding-8.png";
 import fourthOccasion from "./img/chill-9.png";
+import { Link } from "react-router-dom";
 
 function EmojiStyleCapsule() {
-
   const [styles, setStyles] = useState([
     firstStyle,
     secondStyle,
@@ -38,7 +38,7 @@ function EmojiStyleCapsule() {
     secondOccasion,
     thirdOccasion,
     fourthOccasion,
-    secondStyle
+    secondStyle,
   ]);
 
   const handleImageUpload = (e, setStateFunc, currentImages) => {
@@ -78,6 +78,7 @@ function EmojiStyleCapsule() {
   return (
     <div className="emoji-style-capsule">
       <h1 className="main-heading">My Style Capsule</h1>
+      <Link to="/myCapsuleAddAvtart">Next Page</Link>
       <div className="sub-heading">
         <button className="sub-button">Items</button>
         <button className="sub-button">Outfits</button>

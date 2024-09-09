@@ -88,8 +88,8 @@ const StylistCategories = () => {
     };
 
     return (
-        <div className='stylist-categories-list'>
-            <div className="container w-75 mt-2 stylist-content">
+        <div className='categories-type-container'>
+            <div className="container w-75 mt-2 stylist-content" style={{display:"block"}}>
                 <div className="row gx-2">
                     <div className='d-flex justify-content-between align-items-center'>
                         <div className="fw-bold fs-1">Categories</div>
@@ -106,7 +106,7 @@ const StylistCategories = () => {
                     <div className="col-12 col-md-4 mt-3" style={{ margin: "auto", textAlign: "center" }}>
                         <button
                             type="button"
-                            className={`btn btn-primary rounded-pill w-50 p-2 ${selectedCategory === 'Buy' ? 'active' : ''}`}
+                            className={`btn btn-dark rounded-pill w-50 p-2 ${selectedCategory === 'Buy' ? 'active' : ''}`}
                             style={{ backgroundColor: "black" }}
                             onClick={() => setSelectedCategory('Buy')}
                         >
@@ -116,7 +116,7 @@ const StylistCategories = () => {
                     <div className="col-12 col-md-4" style={{ margin: "auto", textAlign: "center" }}>
                         <button
                             type="button"
-                            className={`btn btn-primary rounded-pill w-50 p-2 ${selectedCategory === 'Rent' ? 'active' : ''}`}
+                            className={`btn btn-dark rounded-pill w-50 p-2 ${selectedCategory === 'Rent' ? 'active' : ''}`}
                             style={{ backgroundColor: "black" }}
                             onClick={() => setSelectedCategory('Rent')}
                         >
@@ -126,7 +126,7 @@ const StylistCategories = () => {
                     <div className="col-12 col-md-4" style={{ margin: "auto", textAlign: "center" }}>
                         <button
                             type="button"
-                            className={`btn btn-primary rounded-pill w-50 p-2 ${selectedCategory === 'Swap' ? 'active' : ''}`}
+                            className={`btn btn-dark rounded-pill w-50 p-2 ${selectedCategory === 'Swap' ? 'active' : ''}`}
                             style={{ backgroundColor: "black" }}
                             onClick={() => setSelectedCategory('Swap')}
                         >
@@ -135,7 +135,7 @@ const StylistCategories = () => {
                     </div>
                 </div>
 
-                <div className="row gx-2 justify-content-center ms-1">
+                <div className="row gx-2 ms-1">
                     {getFilteredProducts()?.map((product, index) => (
                         <div key={index} className="col-12 col-md-4 p-3">
                             <div className="product-card rounded-pill text-center">

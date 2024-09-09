@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ProfileAvatar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import fullAvatar from "./img/full-avatar.png";
 // -----------------------
 import girl from "./img/girl.png";
 import changeAvtar from "./img/d3cd5a4cdfd2a1b9677a50a12e6c5818.png";
@@ -9,11 +8,12 @@ import halfbtnavtar from "./img/fullbodyimage.png";
 import fullbtnavtar from "./img/arrow.png";
 
 import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
-import { useDispatch, useSelector } from 'react-redux';
-import { createBasic } from '../../reduxToolkit/basiceditprofile.js'
-import { fetchProfile } from '../../reduxToolkit/profileSlice.js'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from "react-redux";
+import { createBasic } from "../../reduxToolkit/basiceditprofile.js";
+import { fetchProfile } from "../../reduxToolkit/profileSlice.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import standing from "../../assets/standing-human-body.png";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -46,11 +46,11 @@ function ProfileAvatar() {
 
   const updatedProfileData = location.state?.user;
   const { user } = useSelector((state) => state.login);
-  const user_id = user?.data?._id
+  const user_id = user?.data?._id;
 
   const handleImageChange = (image) => {
-    setCurrentImageAvtar(image)
-  }
+    setCurrentImageAvtar(image);
+  };
 
   const [formData, setFormData] = useState({
     name: updatedProfileData?.firstName || "",
@@ -63,13 +63,14 @@ function ProfileAvatar() {
     const fetchData = async () => {
       try {
         const actionResult = await dispatch(fetchProfile());
-        const profileData = actionResult?.payload?.style_capsule_json?.[0]?.profile;
-        setSelectGender(profileData?.measurements?.gender)
-        setBodySize(profileData?.measurements?.bodySize)
-        setSelectEyeColor(profileData?.measurements?.eyeColor)
-        setSelectHiarColor(profileData?.measurements?.hairColor)
-        setSelectAgeRange(profileData?.measurements?.ageRange)
-        setSelectMaterialStatus(profileData?.measurements?.maritalStatus)
+        const profileData =
+          actionResult?.payload?.style_capsule_json?.[0]?.profile;
+        setSelectGender(profileData?.measurements?.gender);
+        setBodySize(profileData?.measurements?.bodySize);
+        setSelectEyeColor(profileData?.measurements?.eyeColor);
+        setSelectHiarColor(profileData?.measurements?.hairColor);
+        setSelectAgeRange(profileData?.measurements?.ageRange);
+        setSelectMaterialStatus(profileData?.measurements?.maritalStatus);
 
         if (profileData) {
           const { measurements } = profileData;
@@ -78,19 +79,25 @@ function ProfileAvatar() {
           setActiveEyeColor(updatedProfileData.eyeColor || selectEyeColor);
           setActiveHairColor(updatedProfileData.hairColor || selectHiarColor);
           setActiveAgeRange(updatedProfileData.age || selectAgeRange);
-          setActiveMaterialStatus(updatedProfileData.maritalStatus || selectMaterialStatus);
+          setActiveMaterialStatus(
+            updatedProfileData.maritalStatus || selectMaterialStatus
+          );
 
           setHeight(updatedProfileData.height || measurements.height?.value);
           setWeight(updatedProfileData.weight || measurements.weight?.value);
           setShoes(updatedProfileData.shoes || measurements.shoes?.size);
-          setShoulders(updatedProfileData.shoulders || measurements.shoulders?.value);
+          setShoulders(
+            updatedProfileData.shoulders || measurements.shoulders?.value
+          );
           setChest(updatedProfileData.chest || measurements.chest?.value);
           setWaist(updatedProfileData.waist || measurements.waist?.value);
           setHips(updatedProfileData.hips || measurements.hips?.value);
-          setHighHips(updatedProfileData.highHips || measurements.highHips?.value);
+          setHighHips(
+            updatedProfileData.highHips || measurements.highHips?.value
+          );
         }
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        console.error("Error fetching profile:", error);
       }
     };
 
@@ -150,28 +157,38 @@ function ProfileAvatar() {
 
   const handleUpdate = async () => {
     try {
-      const actionResult = await dispatch(createBasic({
-        userId: user_id,
-        profileData: {
-          ...formData, height, weight, shoes, shoulders, chest, waist, hips, highHips,
-          bodySize: activeBodySize,
-          eyeColor: activeEyeColor,
-          hairColor: activeHairColor,
-          age: activeAgeRange,
-          maritalStatus: activeMaterialStatus,
-          gender: activeGenderType,
-        },
-      })).unwrap();
+      const actionResult = await dispatch(
+        createBasic({
+          userId: user_id,
+          profileData: {
+            ...formData,
+            height,
+            weight,
+            shoes,
+            shoulders,
+            chest,
+            waist,
+            hips,
+            highHips,
+            bodySize: activeBodySize,
+            eyeColor: activeEyeColor,
+            hairColor: activeHairColor,
+            age: activeAgeRange,
+            maritalStatus: activeMaterialStatus,
+            gender: activeGenderType,
+          },
+        })
+      ).unwrap();
       if (actionResult.success) {
         toast.success(actionResult?.message, {
           autoClose: 1000,
           hideProgressBar: true,
           style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
+            backgroundColor: "black",
+            color: "#C8B199",
+            borderRadius: "50px",
+            padding: "10px 20px",
+          },
         });
         setTimeout(() => {
           navigate("/profile");
@@ -181,7 +198,7 @@ function ProfileAvatar() {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(errorMessage, {
         autoClose: 2000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
+        style: { backgroundColor: "#dc3545", color: "#fff" },
       });
     }
   };
@@ -189,8 +206,118 @@ function ProfileAvatar() {
   return (
     <>
       <ToastContainer />
-      <div className="avatar">
-        <div className="avatar1">
+      <div className="update-profile-container">
+        <div class="container">
+          {/* -------------------------profile section----------------------- */}
+          <div class="row gx-4">
+            <div class="col-12 col-md-6">
+              <div class="p-2 d-flex justify-content-end align-items-center">
+                <div className="current-avtar">
+                  <div className="avtar-background d-flex justify-content-center align-items-center">
+                    <img src={currentImageAvtar} height={300} alt="Avatar" />
+                  </div>
+                  <div className="change-avtar-btn">
+                    {currentImageAvtar === girl && (
+                      <button
+                        type="button"
+                        onClick={() => handleImageChange(changeAvtar)}
+                        className="btn rounded-circle"
+                      >
+                        <img src={halfbtnavtar} height={30} alt="" />
+                      </button>
+                    )}
+                    {currentImageAvtar === changeAvtar && (
+                      <button
+                        type="button"
+                        onClick={() => handleImageChange(girl)}
+                        className="btn rounded-circle"
+                      >
+                        <img src={fullbtnavtar} height={30} alt="" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="p-2 h-100 d-flex justify-content-start align-items-center">
+                <Link
+                  to="/full-avatar"
+                  className="text-decoration-none text-black w-100"
+                >
+                  <button
+                    type="button"
+                    className="w-50 h-25 fw-bold fs-4 rounded-pill btn"
+                    style={{ backgroundColor: "#e9e9e9" }}
+                  >
+                    <img src={standing} height={50} alt="" />
+                    Full Avatar
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+          {/* -------------------------tab section----------------------- */}
+          <div className="row mt-4 tab-section">
+            <div className="col-12 col-md-6 d-flex justify-content-end">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                  activeTab === "basic" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("basic")}
+              >
+                Basic
+              </button>
+            </div>
+            <div className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                  activeTab === "questionnaire" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("questionnaire")}
+              >
+                Questionnaire
+              </button>
+            </div>
+          </div>
+          {/* -------------------------divider section----------------------- */}
+          <div className="row mt-4">
+            <div className="col-12 w-100">
+              <hr />
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="container w-50 mt-5 tab-section">
+          <div className="row g-2">
+            <div className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
+                  activeTab === "basic" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("basic")}
+              >
+                Basic
+              </button>
+            </div>
+            <div className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
+                  activeTab === "questionnaire" ? "btn-active" : ""
+                }`}
+                onClick={() => setActiveTab("questionnaire")}
+              >
+                Questionnaire
+              </button>
+            </div>
+          </div>
+        </div> */}
+
+        {/* <div className="avatar1">
           <div className="left">
             <div className="girl">
               <div className="up d-flex justify-content-center align-items-center">
@@ -198,12 +325,20 @@ function ProfileAvatar() {
               </div>
               <div className="arrow">
                 {currentImageAvtar === girl && (
-                  <button type="button" onClick={() => handleImageChange(changeAvtar)} className="btn rounded-circle">
+                  <button
+                    type="button"
+                    onClick={() => handleImageChange(changeAvtar)}
+                    className="btn rounded-circle"
+                  >
                     <img src={halfbtnavtar} height={30} alt="" />
                   </button>
                 )}
                 {currentImageAvtar === changeAvtar && (
-                  <button type="button" onClick={() => handleImageChange(girl)} className="btn rounded-circle">
+                  <button
+                    type="button"
+                    onClick={() => handleImageChange(girl)}
+                    className="btn rounded-circle"
+                  >
                     <img src={fullbtnavtar} height={30} alt="" />
                   </button>
                 )}
@@ -215,43 +350,18 @@ function ProfileAvatar() {
               <img src={fullAvatar} alt="" />
             </div>
           </Link>
-        </div>
+        </div> */}
 
-        <div className="container w-50 mt-5 tab-section">
-          <div className="row g-2">
-            <div className="col-12 col-md-6">
-              <button
-                type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${activeTab === "basic" ? "btn-active" : ""
-                  }`}
-                onClick={() => setActiveTab("basic")}
-              >
-                Basic
-              </button>
-            </div>
-            <div className="col-12 col-md-6">
-              <button
-                type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${activeTab === "questionnaire" ? "btn-active" : ""
-                  }`}
-                onClick={() => setActiveTab("questionnaire")}
-              >
-                Questionnaire
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="container">
+        {/* <div className="container">
           <div className="row g-2">
             <div className="col-12 w-100">
               <hr />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {activeTab === "basic" && (
-          <div className="container w-50">
+          <div className="container w-75">
             <div className="row">
               <div className="col-12">
                 <div className="p-2">
@@ -310,7 +420,10 @@ function ProfileAvatar() {
                       />
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="mobileNumber" className="form-label fw-bold fs-5">
+                      <label
+                        htmlFor="mobileNumber"
+                        className="form-label fw-bold fs-5"
+                      >
                         Mobile Number
                       </label>
                       <input
@@ -579,8 +692,9 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeGenderType === gender_type ? "selected" : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeGenderType === gender_type ? "selected" : ""
+                      }`}
                       onClick={() => handleClickGenderType(gender_type)}
                     >
                       {gender_type}
@@ -598,8 +712,9 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeBodySize === body_size ? "selected" : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeBodySize === body_size ? "selected" : ""
+                      }`}
                       onClick={() => handleClickBodySize(body_size)}
                     >
                       {body_size}
@@ -617,8 +732,9 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeEyeColor === eye_color ? "selected" : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeEyeColor === eye_color ? "selected" : ""
+                      }`}
                       onClick={() => handleClickEyeColor(eye_color)}
                     >
                       {eye_color}
@@ -637,8 +753,9 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeHairColor === hair_color ? "selected" : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeHairColor === hair_color ? "selected" : ""
+                      }`}
                       onClick={() => handleClickHairColor(hair_color)}
                     >
                       {hair_color}
@@ -656,8 +773,9 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeAgeRange === age_range ? "selected" : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeAgeRange === age_range ? "selected" : ""
+                      }`}
                       onClick={() => handleClickAgeRange(age_range)}
                     >
                       {age_range}
@@ -675,10 +793,11 @@ function ProfileAvatar() {
                   >
                     <button
                       type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeMaterialStatus === material_status
-                        ? "selected"
-                        : ""
-                        }`}
+                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                        activeMaterialStatus === material_status
+                          ? "selected"
+                          : ""
+                      }`}
                       onClick={() => handleClickMaterialStatus(material_status)}
                     >
                       {material_status}
@@ -698,7 +817,7 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
                   <button
                     type="button"
-                    className="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold"
+                    className="btn btn-dark w-50 w-md-50 rounded-pill p-3 fw-bold"
                     onClick={handleUpdate}
                   >
                     Update
@@ -708,7 +827,7 @@ function ProfileAvatar() {
                   <Link to="/profile" className="w-100 w-md-50">
                     <button
                       type="button"
-                      className="btn btn-light w-100 rounded-pill p-3 fw-bold"
+                      className="btn btn-light w-50 rounded-pill p-3 fw-bold"
                     >
                       Cancel
                     </button>

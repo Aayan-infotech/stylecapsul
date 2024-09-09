@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Login.scss";
 import { setCookie } from "../../utils/cookieUtils";
-// import {setCookie}
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,10 +26,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
-      console.log(resultAction?.data?._id, 'resultAction')
-      if (resultAction) {
-        setCookie('authToken', resultAction.token, 1);
-        setCookie('userId', resultAction?.data?._id);
+      if (resultAction?.status === 200) {
+        // setCookie('authToken', resultAction.token, 1);
+        // setCookie('userId', resultAction?.data?._id);
         toast.success(resultAction?.message, {
           autoClose: 1000,
           hideProgressBar: true,
@@ -42,7 +40,7 @@ const Login = () => {
           }
         });        
         if (resultAction?.success === true && resultAction?.status === 200) {
-          navigate('/home');
+          navigate('/');
         }
       }
     } catch (err) {

@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteCookie, getCookie } from "../../utils/cookieUtils";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../reduxToolkit/loginSlice";
 
 export const Logout = ({ isModalVisible, onClose }) => {
   const modalRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isModalVisible) {
@@ -17,26 +20,34 @@ export const Logout = ({ isModalVisible, onClose }) => {
     }
   }, [isModalVisible]);
 
-  const handleLogout = () => {
-    deleteCookie('authToken');
-    deleteCookie('userId');
-    console.log('Cookie after deletion:', getCookie('authToken'));
-    toast.success('Logout Successfully..!', {
-      autoClose: 1000,
-      hideProgressBar: true,
-      style: {
-        backgroundColor: 'black',
-        color: '#C8B199',
-        borderRadius: '50px',  
-        padding: '10px 20px', 
-      }
-    });
-    setTimeout(() => {
+  const handleLogout = async () => {
+    const resultAction = await dispatch(logoutUser());
+    if (resultAction?.payload?.status === 200) {
+      toast.success(resultAction?.payload?.message, {
+        autoClose: 1000,
+        hideProgressBar: true,
+        style: {
+          backgroundColor: 'black',
+          color: '#C8B199',
+          borderRadius: '50px',
+          padding: '10px 20px',
+        }
+      })
       navigate('/');
-    }, 1000);
-    onClose();
+      onClose();
+    } else {
+      toast.error('Some thing went wrong', {
+        autoClose: 1000,
+        hideProgressBar: true,
+        style: {
+          backgroundColor: 'red',
+          color: '#C8B199',
+          borderRadius: '50px',
+          padding: '10px 20px',
+        }
+      });
+    }
   };
-
 
   return (
     <>

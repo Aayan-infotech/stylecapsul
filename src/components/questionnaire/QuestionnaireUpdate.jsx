@@ -627,11 +627,11 @@ const QuestionnaireUpdate = () => {
 
         {/* -------------------------Update profile------------------------ */}
         <div className="row gy-2 mt-4">
-          <div className="col-12 col-sm-6 col-md-6">
+          <div className="col-12 col-sm-6 col-md-6 d-flex justify-content-center align-items-center">
             <button
               type="button"
               onClick={handleSubmit}
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-50 custom-button p-2 fw-bold fs-5"
             >
               Update
             </button>
@@ -639,7 +639,7 @@ const QuestionnaireUpdate = () => {
           <div className="col-12 col-sm-6 col-md-6">
             <button
               type="button"
-              className="btn btn-outline-secondary rounded-pill w-75 custom-button p-2 fw-bold fs-5"
+              className="btn btn-outline-secondary rounded-pill w-50 custom-button p-2 fw-bold fs-5"
             >
               Cancel
             </button>
