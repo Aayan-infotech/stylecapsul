@@ -10,7 +10,7 @@ import RecoveryCode from './components/RecoveryCode/RecoveryCode';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCookie } from './utils/cookieUtils';
-import PageNotFound from '../../src/components/PageNotFound/PageNotFound'
+import PageNotFound from './components/PageNotFound/PageNotFound.jsx'
 
 import axios from 'axios';
 import { apiUrl } from '../apiUtils';
@@ -30,7 +30,7 @@ const AuthRoute = ({ children }) => {
         try {
             const userId = getCookie('userId');
             if (userId) {
-                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`));
+                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`), );
                 dispatch(updateUserDetails(userResponse?.data?.data))
             }
         } catch (error) {
@@ -40,7 +40,6 @@ const AuthRoute = ({ children }) => {
 
     useEffect(() => {
         const checkAuth = async () => {
-            console.log(checkToken(), user, 'check data ----') 
             if (checkToken() && user) {
                 setIsAuth(true);
             } else {

@@ -40,7 +40,7 @@ export const updateUserDetails = createAsyncThunk(
 
 const loginSlice = createSlice({
   name: "login",
-  initialState: { user: null, status: "idle", error: null, token: null },
+  initialState: { user: null, status: "idle", error: null, token: null, loading: false },
   reducers: {},
   extraReducers: (builder) => {
     builder

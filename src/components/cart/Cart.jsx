@@ -87,11 +87,11 @@ const Cart = () => {
                     <div className="quantity-controls d-flex align-items-center">
                       <button
                         type="button"
-                        class="btn btn-dark rounded-pill"
+                        className="btn btn-dark rounded-pill"
                         onClick={() => handleDecrease(item.id)}
                         style={{ fontSize: "10px", backgroundColor: "black" }}
                       >
-                        <i class="fa-solid fa-minus"></i>
+                        <i className="fa-solid fa-minus"></i>
                       </button>
                       <span className="quantity mx-3">
                         {item.quantity < 10
@@ -100,11 +100,11 @@ const Cart = () => {
                       </span>
                       <button
                         type="button"
-                        class="btn btn-dark rounded-pill"
+                        className="btn btn-dark rounded-pill"
                         onClick={() => handleIncrease(item.id)}
                         style={{ fontSize: "10px", backgroundColor: "black" }}
                       >
-                        <i class="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus"></i>
                       </button>
                     </div>
                   </div>
@@ -114,34 +114,34 @@ const Cart = () => {
                   className="btn btn-dark rounded-pill remove-btn"
                   onClick={() => handleRemove(item.id)}
                 >
-                  <i class="fa-solid fa-xmark"></i>
+                  <i className="fa-solid fa-xmark"></i>
                 </button>
               </div>
             ))}
           </div>
           <div className="col-md-6">
-            <div class="order-summary-container rounded">
-              <div class="order-summary-card">
-                <h3 class="order-summary-title">Order Summary</h3>
-                <div class="order-summary-details">
-                  <div class="summary-item">
+            <div className="order-summary-container rounded">
+              <div className="order-summary-card">
+                <h3 className="order-summary-title">Order Summary</h3>
+                <div className="order-summary-details">
+                  <div className="summary-item">
                     <span>Items</span>
                     <span>{items?.length}</span>
                   </div>
-                  <div class="summary-item">
+                  <div className="summary-item">
                     <span>Subtotal</span>
                     <span>${subtotal}</span>
                   </div>
-                  <div class="summary-item">
+                  <div className="summary-item">
                     <span>Discount</span>
                     <span>${discount}</span>
                   </div>
-                  <div class="summary-item">
+                  <div className="summary-item">
                     <span>Delivery Charges</span>
                     <span>${deliveryCharges}</span>
                   </div>
                   <hr />
-                  <div class="summary-item total">
+                  <div className="summary-item total">
                     <span>Total</span>
                     <span>${total}</span>
                   </div>
@@ -151,7 +151,7 @@ const Cart = () => {
             <Link to="/address">
               <button
                 type="button"
-                class="btn btn-dark w-100 rounded-pill p-3 mt-3"
+                className="btn btn-dark w-100 rounded-pill p-3 mt-3"
                 style={{ backgroundColor: "black" }}
               >
                 Check Out

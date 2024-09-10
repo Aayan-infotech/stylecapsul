@@ -59,16 +59,16 @@ const Chat = () => {
                             </div>
                             <div className="chat-footer d-flex align-items-center p-3">
                                 <div className="search-bar rounded-pill me-3">
-                                    <i class="fa-solid fa-paperclip search-icon"></i>
+                                    <i className="fa-solid fa-paperclip search-icon"></i>
                                     <input
                                         type="text"
                                         className="search-input"
                                         placeholder="Search"
                                     />
-                                    <i class="fa-regular fa-face-smile search-icon"></i>
+                                    <i className="fa-regular fa-face-smile search-icon"></i>
                                 </div>
                                 <div className="send-button d-flex justify-content-center align-items-center">
-                                    <button type="button" class="btn btn-dark rounded-pill">
+                                    <button type="button" className="btn btn-dark rounded-pill">
                                         <i className="fa-solid fa-paper-plane send-icon"></i>
                                     </button>
                                 </div>

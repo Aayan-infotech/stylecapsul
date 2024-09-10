@@ -207,11 +207,11 @@ function ProfileAvatar() {
     <>
       <ToastContainer />
       <div className="update-profile-container">
-        <div class="container">
+        <div className="container">
           {/* -------------------------profile section----------------------- */}
-          <div class="row gx-4">
-            <div class="col-12 col-md-6">
-              <div class="p-2 d-flex justify-content-end align-items-center">
+          <div className="row gx-4">
+            <div className="col-12 col-md-6">
+              <div className="p-2 d-flex justify-content-end align-items-center">
                 <div className="current-avtar">
                   <div className="avtar-background d-flex justify-content-center align-items-center">
                     <img src={currentImageAvtar} height={300} alt="Avatar" />
@@ -239,8 +239,8 @@ function ProfileAvatar() {
                 </div>
               </div>
             </div>
-            <div class="col-12 col-md-6">
-              <div class="p-2 h-100 d-flex justify-content-start align-items-center">
+            <div className="col-12 col-md-6">
+              <div className="p-2 h-100 d-flex justify-content-start align-items-center">
                 <Link
                   to="/full-avatar"
                   className="text-decoration-none text-black w-100"
@@ -289,77 +289,6 @@ function ProfileAvatar() {
             </div>
           </div>
         </div>
-
-        {/* <div className="container w-50 mt-5 tab-section">
-          <div className="row g-2">
-            <div className="col-12 col-md-6">
-              <button
-                type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
-                  activeTab === "basic" ? "btn-active" : ""
-                }`}
-                onClick={() => setActiveTab("basic")}
-              >
-                Basic
-              </button>
-            </div>
-            <div className="col-12 col-md-6">
-              <button
-                type="button"
-                className={`btn btn-outline-secondary p-2 rounded-pill w-100 fw-bold fs-5 custom-button ${
-                  activeTab === "questionnaire" ? "btn-active" : ""
-                }`}
-                onClick={() => setActiveTab("questionnaire")}
-              >
-                Questionnaire
-              </button>
-            </div>
-          </div>
-        </div> */}
-
-        {/* <div className="avatar1">
-          <div className="left">
-            <div className="girl">
-              <div className="up d-flex justify-content-center align-items-center">
-                <img src={currentImageAvtar} height={300} alt="Avatar" />
-              </div>
-              <div className="arrow">
-                {currentImageAvtar === girl && (
-                  <button
-                    type="button"
-                    onClick={() => handleImageChange(changeAvtar)}
-                    className="btn rounded-circle"
-                  >
-                    <img src={halfbtnavtar} height={30} alt="" />
-                  </button>
-                )}
-                {currentImageAvtar === changeAvtar && (
-                  <button
-                    type="button"
-                    onClick={() => handleImageChange(girl)}
-                    className="btn rounded-circle"
-                  >
-                    <img src={fullbtnavtar} height={30} alt="" />
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-          <Link to="/full-avatar">
-            <div className="right">
-              <img src={fullAvatar} alt="" />
-            </div>
-          </Link>
-        </div> */}
-
-        {/* <div className="container">
-          <div className="row g-2">
-            <div className="col-12 w-100">
-              <hr />
-            </div>
-          </div>
-        </div> */}
-
         {activeTab === "basic" && (
           <div className="container w-75">
             <div className="row">

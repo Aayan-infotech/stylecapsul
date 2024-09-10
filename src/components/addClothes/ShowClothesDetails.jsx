@@ -20,8 +20,8 @@ const ShowClothesDetails = () => {
         <>
             <div className="d-flex justify-content-center align-items-center clothes-main-container-sections">
                 <div className="container p-4">
-                    <h1 className="fw-bold fs-4">View Clothes</h1>
                     <div className="row m-0 gx-2">
+                    <h1 className="fw-bold fs-3">View Clothes</h1>
                         <p className='fs-6'>{showClothes?.description}</p>
                         <div className="col-12 col-md-6 mb-2 mb-md-0">
                             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">

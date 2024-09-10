@@ -116,7 +116,7 @@ function ClothesList() {
                                                     <p>{format(new Date(product.purchaseDate), 'MM-dd-yyyy')}</p>
                                                 </div>
                                             </Link>
-                                            <button type="button" class="btn btn-outline-dark" onClick={() => updateCloth(product)}>
+                                            <button type="button" className="btn btn-outline-dark" onClick={() => updateCloth(product)}>
                                                 <i className="fa-regular fa-pen-to-square"></i>
                                             </button>
                                         </div>

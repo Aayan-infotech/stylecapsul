@@ -4,18 +4,29 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import blank_image from '../../assets/stylist/blank_img.jpg';
+import { useSelector } from "react-redux";
+import { getCookie } from "../../utils/cookieUtils";
 
 const Stylist = () => {
   const [showstylists, setShowstylists] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState("");
 
+  // const token = useSelector((state) => state.login.user);
+  // console.log(token, 'token')
+
   useEffect(() => {
     const fetchUserData = async (query = "") => {
       try {
+        const token = getCookie('authToken');
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
-        const response = await axios.get(url);
-        console.log(response?.data, 'response');
+        const response = await axios.get(url, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log(response, 'response')
         if (response?.data?.stylists?.length > 0) {
           setShowstylists(response.data.stylists);
           setMessage("");
@@ -24,7 +35,6 @@ const Stylist = () => {
           setMessage(response?.data?.message || "No stylists found.");
         }
       } catch (error) {
-        console.log(error.response?.data?.message);
         setShowstylists([]);
         setMessage(error?.response?.data?.message || "An error occurred.");
       }
@@ -67,8 +77,8 @@ const Stylist = () => {
             </div>
           ) : (
             showstylists.map((stylist) => (
-              <Link to="/stylist-profile" className="text-decoration-none" state={{ stylist }}>
-                <div className="col-12 w-100 mt-3" key={stylist._id}>
+              <Link to="/stylist-profile" className="text-decoration-none" state={{ stylist }} key={stylist._id}>
+                <div className="col-12 w-100 mt-3">
                   <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
                     <div className="me-2">
                       <img

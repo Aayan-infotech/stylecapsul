@@ -47,7 +47,7 @@ import Address from "./components/stylist/Address.jsx";
 import Payment from "./components/stylist/Payment.jsx";
 import ThankuPage from "./components/stylist/ThankuPage.jsx";
 import AuthRoute from "./AuthRoute.jsx";
-import PageNotFound from "../../src/components/PageNotFound/PageNotFound.jsx";
+import PageNotFound from "./components/PageNotFound/PageNotFound.jsx";
 
 const Routing = () => {
 

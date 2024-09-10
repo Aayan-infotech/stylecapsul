@@ -33,7 +33,9 @@ export const Logout = ({ isModalVisible, onClose }) => {
           padding: '10px 20px',
         }
       })
-      navigate('/');
+      setTimeout(() => {
+        navigate('/');
+      }, 1000)
       onClose();
     } else {
       toast.error('Some thing went wrong', {

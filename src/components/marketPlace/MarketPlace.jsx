@@ -171,7 +171,7 @@ const MarketPlace = () => {
               className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 text-center"
             >
               <button className="btn btn-outline-dark rounded-pill">
-                {item.name} <i class="fa-solid fa-arrow-right-long"></i>
+                {item.name} <i className="fa-solid fa-arrow-right-long"></i>
               </button>
             </div>
           ))}

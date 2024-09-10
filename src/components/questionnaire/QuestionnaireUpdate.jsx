@@ -7,6 +7,7 @@ import { apiUrl } from "../../../apiUtils";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../utils/cookieUtils";
 
 const QuestionnaireUpdate = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -28,8 +29,7 @@ const QuestionnaireUpdate = () => {
     wear_time: null,
     never_wear_time: null,
   });
-
-  const [updatedQuestionnaire, setUpdatedQuestionnaire] = useState(null);
+  const userId = getCookie('userId')
 
   const profile = useSelector((state) => state.profile?.data);
   const questionnaire = profile?.style_capsule_json?.[1]?.questions_profile;
@@ -56,9 +56,6 @@ const QuestionnaireUpdate = () => {
       [type]: option,
     }));
   };
-
-  const user = useSelector((state) => state?.login?.user);
-  console.log(user?.id);
 
   const handleClick = (id) => {
     setSelectedBrand((prevSelected) => (prevSelected === id ? null : id));
@@ -87,7 +84,7 @@ const QuestionnaireUpdate = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        apiUrl(`api/user/questionnaire/${user?.id}`),
+        apiUrl(`api/user/questionnaire/${userId}`),
         selectedOptions
       );
       console.log(response?.data, "response");
@@ -120,10 +117,8 @@ const QuestionnaireUpdate = () => {
       try {
         const response = await axios.get(apiUrl('api/user/all_quest'));
         const allQuest = response?.data?.data;
-        if (allQuest && user?.id) {
-          const findQues = allQuest.find((qs) => qs?.user_id === user?.id);
-          console.log(findQues, 'response')
-          console.log(user?.id, 'user ID');
+        if (allQuest && userId) {
+          const findQues = allQuest.find((qs) => qs?.user_id === userId);
           if (findQues) {
             setSelectedOptions((prevState) => ({
               ...prevState,
@@ -151,7 +146,7 @@ const QuestionnaireUpdate = () => {
       }
     };
     fetchDataAndMatchUser();
-  }, [user?.id]);
+  }, []);
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">

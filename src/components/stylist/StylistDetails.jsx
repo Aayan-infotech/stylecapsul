@@ -17,7 +17,6 @@ const StylistDetails = () => {
 
     const location = useLocation();
     const profile_details = location.state?.stylist;
-    console.log(profile_details, 'profile_details')
 
     useEffect(() => {
         if (profile_details) {

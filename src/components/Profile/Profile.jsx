@@ -3,8 +3,6 @@ import "./Profile.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Logout } from "../allmodal/Logout.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import axios from 'axios';
-import { apiUrl } from '../../../apiUtils';
 
 import {
   FaUserEdit,
@@ -18,10 +16,18 @@ import profile from "./img/profile.png";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [logedInUserData, setLogedInUserData] = useState(null);
 
   const navigate = useNavigate();
-  const user = useSelector((state) => state?.login?.user);
-  const logedInUserData = user?.payload
+
+  const { user, status } = useSelector((state) => state.login);
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      setLogedInUserData(user);
+    }
+  }, [status, user]);
+
 
   const handleShowModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
