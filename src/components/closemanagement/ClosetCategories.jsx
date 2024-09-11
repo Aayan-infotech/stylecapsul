@@ -14,7 +14,8 @@ const cardData = [
     title: "Clothes",
     imageAlt: "Notification",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/clothes",
+    url: "/all-clothes-list",
+    // url: "/clothes-list/clothes",
   },
   {
     id: 2,
@@ -23,7 +24,7 @@ const cardData = [
     image: closet,
     imageAlt: "closet",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/shoes",
+    url: "#",
   },
   {
     id: 3,
@@ -32,7 +33,7 @@ const cardData = [
     image: coinhand,
     imageAlt: "coinhand",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/accessories",
+    url: "/accessories",
   },
   {
     id: 4,
@@ -40,14 +41,14 @@ const cardData = [
     title: "Miscellaneous",
     imageAlt: "imagefocus",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/miscellaneous",
+    url: "#",
   },
 ];
 
 const ClosetCategories = () => {
   // const { clothes, status } = useSelector((state) => state.clothes);
   // console.log(clothes, 'clothes');
-
+  
   return (
     <div className="d-flex justify-content-center align-items-center close-management-container">
       <div className="container w-50">

@@ -3,9 +3,10 @@ import "../../styles/ClothesList.scss";
 import { apiUrl } from '../../../apiUtils';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import image22 from '../../assets/closetmanagement/image-22.jfif';
 import { getCookie } from '../../utils/cookieUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { allAddedClothList } from '../../reduxToolkit/addClothesSlice';
@@ -13,19 +14,34 @@ import { allAddedClothList } from '../../reduxToolkit/addClothesSlice';
 function ClothesList() {
     const [allClothes, setAllClothes] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [showLoading, setShowLoading] = useState(true);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { category } = useParams();
     const token = getCookie('authToken');
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await axios.get(apiUrl('api/cloths/all-cloths'), {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${token}`,
+    //                     'Content-Type': 'application/json'
+    //                 }
+    //             });
+    //             const allclothes = response.data.cloths;
+    //             console.log(allclothes, 'allclothes')
+    //             setAllClothes(allclothes);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+
     const { clothes, status } = useSelector((state) => state.clothes);
 
     useEffect(() => {
         dispatch(allAddedClothList());
-        const loadingTimer = setTimeout(() => {
-            setShowLoading(false);
-        }, 5000);
-        return () => clearTimeout(loadingTimer);  
     }, [dispatch]);
 
     const deleteCloth = async (cloth_id) => {
@@ -37,7 +53,7 @@ function ClothesList() {
                 }
             });
             if (response.status === 200) {
-                dispatch(allAddedClothList()); 
+                setAllClothes(prevClothes => prevClothes.filter(cloth => cloth._id !== cloth_id));
                 toast.success(response?.data?.message, {
                     autoClose: 1000,
                     hideProgressBar: true,
@@ -57,10 +73,10 @@ function ClothesList() {
             });
         }
     };
-    
+
     const updateCloth = (cloth) => {
         navigate('/add-clothes', { state: { updateCloth: cloth } });
-    };
+    }
 
     const fetchData = async (keyword = '') => {
         const url = keyword ? apiUrl(`api/cloths/search-by-keyword?keyword=${keyword}`) : apiUrl('api/cloths/all-cloths');
@@ -71,12 +87,15 @@ function ClothesList() {
                     'Content-Type': 'application/json'
                 }
             });
+            console.log('Response data:', response.data);
             const allclothes = response.data.cloths;
             setAllClothes(allclothes);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
+
+
 
     useEffect(() => {
         fetchData(searchKeyword);
@@ -87,25 +106,16 @@ function ClothesList() {
             <ToastContainer />
             <div className="clothes-list-main-container">
                 <div className="container w-75 clothes-list-container">
-                    <div className="row m-0">
+                    <div className="row">
                         <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
                             <h1 className="text-center fw-bold fs-1 mb-3 mb-md-0">Clothes</h1>
                             <div className="search-box mt-3 mt-md-0">
                                 <i className="fa fa-search"></i>
-                                <input 
-                                    type="text" 
-                                    value={searchKeyword} 
-                                    onChange={(e) => setSearchKeyword(e.target.value)} 
-                                    placeholder="Search" 
-                                />
+                                <input type="text" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} placeholder="Search" />
                                 <i className="fa-solid fa-sliders"></i>
                             </div>
                         </div>
-
-                        {/* Show loading text for 5 seconds if data is still loading */}
-                        {status === 'loading' && showLoading && <h4 className='fw-bold fs-4 text-center'>Loading...</h4>}
-
-                        {/* Render clothes list */}
+                        {status === 'loading' && <p>Loading...</p>}
                         {clothes?.map(product => (
                             <div className="col-12" key={product._id}>
                                 <div className="products-container">
@@ -144,5 +154,4 @@ function ClothesList() {
         </>
     );
 }
-
 export default ClothesList;
