@@ -6,7 +6,6 @@ import girl from "./img/girl.png";
 import changeAvtar from "./img/d3cd5a4cdfd2a1b9677a50a12e6c5818.png";
 import halfbtnavtar from "./img/fullbodyimage.png";
 import fullbtnavtar from "./img/arrow.png";
-
 import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { createBasic } from "../../reduxToolkit/basiceditprofile.js";
@@ -14,6 +13,7 @@ import { fetchProfile } from "../../reduxToolkit/profileSlice.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import standing from "../../assets/standing-human-body.png";
+import { getCookie } from "../../utils/cookieUtils.js";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -45,8 +45,10 @@ function ProfileAvatar() {
   const navigate = useNavigate();
 
   const updatedProfileData = location.state?.user;
-  const { user } = useSelector((state) => state.login);
-  const user_id = user?.data?._id;
+  const { user, status } = useSelector((state) => state.login);
+  const user_id = user?.payload?._id;
+  // const user_id = getCookie('userId');
+  console.log(user_id, 'user_id')
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
@@ -71,7 +73,6 @@ function ProfileAvatar() {
         setSelectHiarColor(profileData?.measurements?.hairColor);
         setSelectAgeRange(profileData?.measurements?.ageRange);
         setSelectMaterialStatus(profileData?.measurements?.maritalStatus);
-
         if (profileData) {
           const { measurements } = profileData;
           setActiveGenderType(updatedProfileData.gender || selectGender);
@@ -82,7 +83,6 @@ function ProfileAvatar() {
           setActiveMaterialStatus(
             updatedProfileData.maritalStatus || selectMaterialStatus
           );
-
           setHeight(updatedProfileData.height || measurements.height?.value);
           setWeight(updatedProfileData.weight || measurements.weight?.value);
           setShoes(updatedProfileData.shoes || measurements.shoes?.size);

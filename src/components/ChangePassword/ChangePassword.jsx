@@ -4,23 +4,19 @@ import { userChangePassword } from "../../reduxToolkit/changePasswordSlice";
 import "../../styles/ChangePassword.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import { deleteCookie } from "../../utils/cookieUtils";
+import { getCookie } from "../../utils/cookieUtils";
 
 const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const { user } = useSelector((state) => state.login.user);
-  // const token = useSelector((state) => state?.login?.token);
+  const { user } = useSelector((state) => state.login);
+  const token = getCookie('authToken');
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const userId = user?.data._id;
+  const userId = user?.payload?._id;
 
   const togglePasswordVisibility = (setter) => {
     setter((prev) => !prev);
@@ -29,15 +25,16 @@ const ChangePassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const changepassresult = dispatch(
+      const changepassresult = await dispatch(
         userChangePassword({
           userId,
           oldPassword,
           newPassword,
           newConfirmPassword: confirmPassword,
-          // token:token
+          token
         })
       );
+
       if (userChangePassword.fulfilled.match(changepassresult)) {
         const { message } = changepassresult.payload;
         toast.success(message, {
@@ -50,10 +47,9 @@ const ChangePassword = () => {
             padding: "10px 20px",
           },
         });
-        // deleteCookie('authToken');
-        // setTimeout(() => {
-        //     navigate("/login");
-        // }, 1000);
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
       } else {
         throw new Error(changepassresult.payload?.message || "Unknown error");
       }

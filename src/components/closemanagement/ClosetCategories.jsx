@@ -5,6 +5,7 @@ import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import { Link } from "react-router-dom";
 import '../../styles/closetManagement.scss'
+import { useSelector } from "react-redux";
 
 const cardData = [
   {
@@ -13,7 +14,7 @@ const cardData = [
     title: "Clothes",
     imageAlt: "Notification",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list",
+    url: "/all-clothes-list/clothes",
   },
   {
     id: 2,
@@ -22,7 +23,7 @@ const cardData = [
     image: closet,
     imageAlt: "closet",
     imageStyle: { width: "50px", height: "45px" },
-    url: "#",
+    url: "/all-clothes-list/shoes",
   },
   {
     id: 3,
@@ -31,7 +32,7 @@ const cardData = [
     image: coinhand,
     imageAlt: "coinhand",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/accessories",
+    url: "/all-clothes-list/accessories",
   },
   {
     id: 4,
@@ -39,11 +40,14 @@ const cardData = [
     title: "Miscellaneous",
     imageAlt: "imagefocus",
     imageStyle: { width: "50px", height: "45px" },
-    url: "#",
+    url: "/all-clothes-list/miscellaneous",
   },
 ];
 
 const ClosetCategories = () => {
+  // const { clothes, status } = useSelector((state) => state.clothes);
+  // console.log(clothes, 'clothes');
+
   return (
     <div className="d-flex justify-content-center align-items-center close-management-container">
       <div className="container w-50">

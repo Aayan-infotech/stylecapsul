@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from '../../../apiUtils';
+import { getCookie } from "../../utils/cookieUtils";
 
 const AddClothes = () => {
   const { user, status, error } = useSelector((state) => state.login);
@@ -26,6 +27,8 @@ const AddClothes = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const token = getCookie('authToken');
+  console.log(token)
   const updateNewCloth = location?.state?.updateCloth;
 
   useEffect(() => {
@@ -82,7 +85,8 @@ const AddClothes = () => {
         data.append('user_id', updateNewCloth.user_id);
         const response = await axios.put(apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`), data, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
           }
         });
         toast.success(response?.data?.message, {
@@ -91,15 +95,15 @@ const AddClothes = () => {
           style: {
             backgroundColor: 'black',
             color: '#C8B199',
-            borderRadius: '50px',  
-            padding: '10px 20px', 
+            borderRadius: '50px',
+            padding: '10px 20px',
           }
         });
         setTimeout(() => {
           navigate("/all-clothes-list");
         }, 1000);
       } else {
-        const userId = user?.data?._id;
+        const userId = user?.payload?._id;
         if (userId) {
           data.append('user_id', userId);
         }
@@ -110,8 +114,8 @@ const AddClothes = () => {
           style: {
             backgroundColor: 'black',
             color: '#C8B199',
-            borderRadius: '50px',  
-            padding: '10px 20px', 
+            borderRadius: '50px',
+            padding: '10px 20px',
           }
         });
         if (addclothesresponse.success && addclothesresponse.status === 200) {
@@ -133,7 +137,7 @@ const AddClothes = () => {
     <>
       <ToastContainer />
       <div className="add-clothes-card">
-          <h1 className="text-center fw-bold fs-1">Add Clothes</h1>
+        <h1 className="text-center fw-bold fs-1">Add Clothes</h1>
         <div className="container">
           <div className="card card-btn">
             <div className="card-body">
@@ -152,8 +156,10 @@ const AddClothes = () => {
                         aria-label="category"
                       >
                         <option value="" disabled>Select</option>
-                        <option value="cloth">Cloth</option>
+                        <option value="clothes">Clothe</option>
                         <option value="shoes">Shoes</option>
+                        <option value="accessories">Accessories</option>
+                        <option value="miscellaneous">Miscellaneous</option>
                       </select>
                     </div>
                   </div>

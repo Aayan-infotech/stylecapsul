@@ -1,12 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../../apiUtils';
+import { getCookie } from '../utils/cookieUtils';
+
+const token = getCookie('authToken');
 
 export const createBasic = createAsyncThunk(
     'profile/createBasic',
     async ({ userId, profileData }, { rejectWithValue }) => {
         try {
-            const response = await axios.put(apiUrl(`api/user/update-user/${userId}`), profileData);
+            const response = await axios.put(apiUrl(`api/user/update-user/${userId}`), profileData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);

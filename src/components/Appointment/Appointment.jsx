@@ -5,16 +5,22 @@ import Schedule from './img/Schedule.png';
 import { apiUrl } from '../../../apiUtils';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { getCookie } from '../../utils/cookieUtils';
 
 function Appointment() {
   const [allGarmentsServices, setAllGarmentsServices] = useState([]);
+  const token = getCookie('authToken');
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(apiUrl('api/garment/garment-care'));
+        const response = await axios.get(apiUrl('api/garment/garment-care'), {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         setAllGarmentsServices(response.data.data);
-        console.log(response.data.data, 'Data fetched');
       } catch (error) {
         console.log(error);
       }
@@ -29,7 +35,7 @@ function Appointment() {
           <h1 className="fw-bold fs-4 text-center text-md-start mt-2">All Appointments</h1>
           <div className="row m-0">
             {allGarmentsServices.map((item, index) => {
-              const formattedStartTime = format(new Date(item.startTime), 'dd-MM-yyyy hh:mm a');              
+              const formattedStartTime = format(new Date(item.startTime), 'dd-MM-yyyy - hh:mm a');
               return (
                 <div className="col-12 mt-2 text-white" key={index}>
                   <div className="p-3 rounded-pill appointment-box d-flex justify-content-between align-items-center">

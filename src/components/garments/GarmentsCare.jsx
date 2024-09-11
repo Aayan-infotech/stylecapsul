@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import image1 from "../../assets/stylist/img1.png";
 import "../../styles/GarmentCare.scss";
 import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import blank_image from '../../assets/stylist/blank_img.jpg';
+import { getCookie } from "../../utils/cookieUtils";
+import Loader from '../../components/Loader/Loader.jsx';
 
 const GarmentsCare = () => {
   const [showGarments, setShowGarments] = useState([]);
@@ -13,12 +14,17 @@ const GarmentsCare = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const token = getCookie('authToken');
 
-  // Function to fetch all garment care services
   const fetchAllGarmentCareServices = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl("api/garment/garment-care"));
+      const response = await axios.get(apiUrl("api/garment/garment-care"), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       if (response?.data?.data?.length > 0) {
         setShowGarments(response.data.data);
         setMessage("");
@@ -35,11 +41,15 @@ const GarmentsCare = () => {
     }
   };
 
-  // Function to fetch garment care services based on a search query
   const fetchGarmentCareServicesByQuery = async (query) => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl(`api/garment/garment-care/services/${query}`));
+      const response = await axios.get(apiUrl(`api/garment/garment-care/services/${query}`), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       if (response?.data?.data?.length > 0) {
         setShowGarments(response.data.data);
         setMessage("");
@@ -58,10 +68,7 @@ const GarmentsCare = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      const filteredGarments = showGarments.filter((garment) =>
-        garment.service.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setShowGarments(filteredGarments);
+      fetchGarmentCareServicesByQuery(searchQuery);
     } else {
       fetchAllGarmentCareServices();
     }
@@ -84,8 +91,8 @@ const GarmentsCare = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center add-clothes-card">
-      <div className="container w-75 p-4">
-        {/* <div className="row gx-5">
+      <div className="container w-75" style={{display:"block"}}>
+        <div className="row gx-5">
           <div className="col-12 col-md-6">
             <h1 className="fw-bold fs-1">Garments Care</h1>
           </div>
@@ -103,13 +110,12 @@ const GarmentsCare = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
-        <div className="row mt-3">
-        <h1 className="fw-bold fs-1">Garments Care</h1>
+        <div className="row m-0">
           {loading ? (
             <div className="text-center">
-              <h2 className="fs-3">Loading...</h2>
+              <Loader/>
             </div>
           ) : message ? (
             <div className="text-center">

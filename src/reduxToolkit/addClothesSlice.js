@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../../apiUtils';
+import { getCookie } from '../utils/cookieUtils';
+
+const token = getCookie('authToken');
 
 const initialState = {
     status: 'idle',
@@ -12,8 +15,9 @@ export const addClothes = createAsyncThunk(
         try {
             const response = await axios.post(apiUrl('api/cloths/add-cloths'), formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             return response.data;
         } catch (err) {
@@ -21,6 +25,25 @@ export const addClothes = createAsyncThunk(
         }
     }
 );
+
+export const allAddedClothList = createAsyncThunk(
+    'clothes/fetchAllClothes',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = getCookie('authToken');
+            const response = await axios.get(apiUrl('api/cloths/all-cloths'), {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            return response.data.cloths;
+        } catch (err) {
+            return rejectWithValue(err.response.data);
+        }
+    }
+);
+
 // Create the slice
 const addClothesSlice = createSlice({
     name: 'clothes',
@@ -35,6 +58,19 @@ const addClothesSlice = createSlice({
                 state.status = 'succeeded';
             })
             .addCase(addClothes.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+
+            // Handle fetching clothes
+            .addCase(allAddedClothList.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(allAddedClothList.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.clothes = action.payload;
+            })
+            .addCase(allAddedClothList.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });

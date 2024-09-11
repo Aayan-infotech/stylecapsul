@@ -3,7 +3,7 @@ import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/LOGOSC.png";
 import { Logout } from "../allmodal/Logout";
-import {checkToken} from '../../utils/auth.util.js'
+import { checkToken } from '../../utils/auth.util.js'
 
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -29,7 +29,9 @@ function Navbar() {
           </div>
           <div className="right">
             <div className="icons">
-              <i className="fa-regular fa-user"></i>
+              <Link to="/profile" className="text-decoration-none text-white">
+                <i className="fa-regular fa-user"></i>
+              </Link>
               <i className="fa-solid fa-magnifying-glass"></i>
               <Link to="/cart" className="text-decoration-none text-white">
                 <i className="fa-solid fa-cart-shopping"></i>
@@ -63,9 +65,9 @@ function Navbar() {
                     </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="/help-support">
+                    <Link to="/help-support" className="text-decoration-none dropdown-item">
                       Help & Support
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a className="dropdown-item" onClick={handleShowModal}>

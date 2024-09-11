@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.scss";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Logout } from "../allmodal/Logout.jsx";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import {
   FaUserEdit,
@@ -21,12 +21,13 @@ function Profile() {
   const navigate = useNavigate();
 
   const { user, status } = useSelector((state) => state.login);
+  const singleUser = user?.payload;
 
   useEffect(() => {
     if (status === "succeeded") {
-      setLogedInUserData(user);
+      setLogedInUserData(singleUser);
     }
-  }, [status, user]);
+  }, [status, singleUser]);
 
 
   const handleShowModal = () => setModalVisible(true);

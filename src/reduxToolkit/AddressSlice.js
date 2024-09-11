@@ -5,7 +5,6 @@ import { getCookie } from '../utils/cookieUtils';
 
 // Fetch token from cookies
 const token = getCookie('authToken');
-console.log(token, 'token')
 
 const initialState = {
     addresses: [],

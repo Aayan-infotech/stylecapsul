@@ -16,13 +16,9 @@ const ForgotPassword = () => {
     try {
       const response = await axios.post(apiUrl('api/auth/send-email'), {
         email,
-      });
+      },);
 
       if (response.status === 200) {
-        // toast.success(response?.data.message, {
-        //   autoClose: 1000,
-        //   style: { backgroundColor: '#28a745', color: '#fff' }
-        // });
         toast.success(response?.data?.message, {
           autoClose: 1000,
           hideProgressBar: true,

@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { apiUrl } from '../../../apiUtils';
 import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
 
 const ScheduleBooking = () => {
     const [selectedTimeRange, setSelectedTimeRange] = useState('');
@@ -17,6 +18,7 @@ const ScheduleBooking = () => {
     const { garment } = location.state || {};
 
     const navigate = useNavigate();
+    const token = getCookie('authToken');
 
     const timeRanges = [
         "6:00 AM to 7:00 AM",
@@ -53,8 +55,13 @@ const ScheduleBooking = () => {
             const schedueResponse = await axios.post(apiUrl('api/book/schedule'), {
                 date: selectedDate,
                 time: selectedTimeRange,
-                user: user?.data?._id,
+                user: user?.payload?._id,
                 serviceProvider: garment?._id
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
             });
             console.log(schedueResponse?.data?.booking, 'schedueResponse')
             if (schedueResponse) {
@@ -87,9 +94,8 @@ const ScheduleBooking = () => {
         <>
             <ToastContainer />
             <div className="schedule-booking-sections">
-                <div className="container ">
+                <div className="container">
                     <div className="row m-0 gx-2">
-                        <Link to="/scheduled-appointment">Next Page</Link>
                         <h1 className="fw-bold text-center fs-1">Schedule Booking</h1>
                         <div className="col-12 d-flex justify-content-center align-items-center">
                             <div className='border w-50 p-3'>

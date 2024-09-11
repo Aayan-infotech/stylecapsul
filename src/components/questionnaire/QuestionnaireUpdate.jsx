@@ -83,10 +83,12 @@ const QuestionnaireUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        apiUrl(`api/user/questionnaire/${userId}`),
-        selectedOptions
-      );
+      const response = await axios.put(apiUrl(`api/user/questionnaire/${userId}`), selectedOptions, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       console.log(response?.data, "response");
       if (response?.data?.success) {
         toast.success(response?.data?.message, {
@@ -114,8 +116,14 @@ const QuestionnaireUpdate = () => {
 
   useEffect(() => {
     const fetchDataAndMatchUser = async () => {
+      const token = getCookie('authToken');
       try {
-        const response = await axios.get(apiUrl('api/user/all_quest'));
+        const response = await axios.get(apiUrl('api/user/all_quest'), {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         const allQuest = response?.data?.data;
         if (allQuest && userId) {
           const findQues = allQuest.find((qs) => qs?.user_id === userId);

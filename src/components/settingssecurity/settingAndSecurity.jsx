@@ -5,7 +5,7 @@ import password from "../../assets/images/password.png";
 import global from "../../assets/images/globe.png";
 import { Link } from "react-router-dom";
 
-const cardData = [
+const securityData = [
   {
     id: 1,
     image: notification,
@@ -45,47 +45,32 @@ const SettingAndSecurity = () => {
   return (
     <div className="align-items-center" style={{ paddingTop: "6rem" }}>
       <div className="container w-50" style={{ display: "block" }}>
-        <h1 className="text-center fw-bold fs-1">Settings & Security</h1>
-        <div className="row gx-4 mt-4">
-          {cardData.map(
-            ({ id, icon, title, image, imageAlt, imageStyle, url }) => (
-              <div
-                key={id}
-                className="col-md-6 col-lg-6 mb-4 d-flex justify-content-center"
-              >
-                <Link
-                  to={url}
-                  className="text-decoration-none text-white w-100"
-                >
-                  <div
-                    className="card"
-                    style={{
-                      width: "300px",
-                      backgroundColor: "#4C4C4C",
-                      color: "white",
-                    }}
-                  >
-                    <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                      {icon && (
-                        <i
-                          className={`fs-2 fa-solid fa-regular ${icon} mb-4`}
-                        ></i>
-                      )}
-                      {image && (
-                        <img
-                          src={image}
-                          alt={imageAlt}
-                          className="mb-4"
-                          style={imageStyle}
-                        />
-                      )}
-                      <h4 className="card-title fw-bold">{title}</h4>
-                    </div>
+        <div className="row m-0 g-2">
+          <h1 className="text-center fw-bold fs-1">Settings & Security</h1>
+          {securityData?.map((item, index) => (
+            <div className="col-12 col-md-6 col-lg-6" key={index}>
+              <Link to={item?.url} className="text-decoration-none text-white w-100">
+                <div className="card" style={{ height: "150px", backgroundColor: "#4C4C4C", }}>
+                  <div className="card-body d-flex flex-column justify-content-center align-items-center">
+                    {item?.icon && (
+                      <i
+                        className={`fs-2 fa-solid fa-regular ${item?.icon} mb-2`}
+                      ></i>
+                    )}
+                    {item?.image && (
+                      <img
+                        src={item?.image}
+                        alt={item?.imageAlt}
+                        className="mb-2"
+                        style={item?.imageStyle}
+                      />
+                    )}
+                    <h4 className="card-title fw-bold text-white">{item?.title}</h4>
                   </div>
-                </Link>
-              </div>
-            )
-          )}
+                </div>
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     </div>
