@@ -11,7 +11,7 @@ function FullAvatar() {
   return (
     <>
       <div className="capsule-main-container">
-        <div className="container">
+        <div className="container w-75">
           <div className="row g-2 align-items-center">
             <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
               <div className="position-relative">

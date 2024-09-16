@@ -46,8 +46,12 @@ const cardData = [
 ];
 
 const ClosetCategories = () => {
-  // const { clothes, status } = useSelector((state) => state.clothes);
-  // console.log(clothes, 'clothes');
+  const { clothes, status } = useSelector((state) => state.clothes);
+  console.log(clothes, 'clothes')
+
+  const handleSelectCategoryType = (item) => {
+    console.log(item, 'item')
+  }
   
   return (
     <div className="d-flex justify-content-center align-items-center close-management-container">
@@ -55,7 +59,7 @@ const ClosetCategories = () => {
         <div className="row g-4">
           <h1 className="text-center fw-bold fs-1">Closet</h1>
           {cardData.map((item, index) => (
-            <div key={index} className="col-md-6 col-lg-6">
+            <div key={index} className="col-md-6 col-lg-6" onClick={() => handleSelectCategoryType(item)}>
               <Link to={item.url} className="text-decoration-none">
                 <div className="card text-white w-100" style={{ backgroundColor: "#4C4C4C" }}>
                   <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">

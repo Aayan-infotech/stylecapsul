@@ -100,7 +100,8 @@ const AddClothes = () => {
           }
         });
         setTimeout(() => {
-          navigate("/all-clothes-list");
+          // navigate("/all-clothes-list");closet-categories
+          navigate("/closet-categories");
         }, 1000);
       } else {
         const userId = user?.payload?._id;
@@ -120,7 +121,7 @@ const AddClothes = () => {
         });
         if (addclothesresponse.success && addclothesresponse.status === 200) {
           setTimeout(() => {
-            navigate("/all-clothes-list");
+            navigate("/closet-categories");
           }, 1000);
         }
       }

@@ -2,118 +2,77 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import "../../styles/GiftCardDetails.scss";
 import giftcard1 from "../../assets/giftcards/giftcard1.png";
-import giftcard3 from "../../assets/giftcards/giftcard3.png";
-import giftcard4 from "../../assets/giftcards/giftcard4.png";
+import axios from 'axios';
+import { apiUrl } from '../../../apiUtils';
 
 const GiftCardDetails = () => {
-
-    const giftCardData = [
-        {
-            id: 1,
-            title: "One Family, Big Saving",
-            description:
-                "Postpaid at just ₹260/connection with Vi Family $1299/plan 300GB data, Disney+ Mobile, Amazon Prime & more.",
-            buttonText: "Claim Now",
-            imageUrl: giftcard1,
-            altText: "Gift Card",
-            iconClass: "fa-solid fa-arrow-right-long",
-        },
-        {
-            id: 2,
-            title: (
-                <>
-                    Get upto 100 cashback*
-                    <br />
-                    in your Paypal Wallet
-                </>
-            ),
-            description: "on transaction of ₹99 and above using Paypal UPI or Wallet",
-            buttonText: "Claim Now",
-            imageUrl: giftcard1,
-            altText: "Gift Card",
-            iconClass: "fa-solid fa-angles-right",
-        },
-        {
-            id: 3,
-            title: (
-                <>
-                    Get assured cashback*
-                    <br /> up to ₹100
-                </>
-            ),
-            description: "Offer valid on unlimited daily data packs starting ₹100",
-            buttonText: "Claim Now",
-            imageUrl: giftcard4,
-            altText: "Gift Card",
-            iconClass: "fa-solid fa-angles-right",
-        },
-        {
-            id: 4,
-            title: (
-                <>
-                    Unlock a better *<br /> tomorrow
-                </>
-            ),
-            description: "Get exclusive solutions to help you get ahead in life",
-            buttonText: "Claim Now",
-            imageUrl: giftcard3,
-            altText: "Gift Card",
-            iconClass: "fa-solid fa-angles-right",
-        },
-        {
-            id: 5,
-            title: (
-                <>
-                    Get ₹200 off on your*
-                    <br /> first order
-                </>
-            ),
-            description: "on transaction of ₹99 and above using Paypal UPI or Wallet",
-            buttonText: "Claim Now",
-            imageUrl: giftcard1,
-            altText: "Gift Card",
-            iconClass: "fa-solid fa-arrow-right-long",
-        },
-    ];
+    const [giftDetails, setGiftDetails] = useState(null);
+    const [isCopied, setIsCopied] = useState(false);
     const { id } = useParams();
-    const cardDetails = giftCardData.find((item) => item.id === parseInt(id));
 
-    if (!cardDetails) {
-        return <div>Gift Card not found</div>;
-    }
+    const fetchGiftDetails = async () => {
+        try {
+            const response = await axios.get(apiUrl(`api/gifts/giftById/${id}`));
+            console.log(response?.data?.data, 'response');
+            setGiftDetails(response?.data?.data);
+        } catch (error) {
+            console.log(error, 'Something went wrong..!');
+        }
+    };
 
+    useEffect(() => {
+        fetchGiftDetails();
+    }, [id]);
+
+    const handleCopyPromoCode = () => {
+        const promoCode = giftDetails?.giftPromoCode;
+        if (promoCode) {
+            navigator.clipboard.writeText(promoCode)
+                .then(() => {
+                    setIsCopied(true);
+                    setTimeout(() => {
+                        setIsCopied(false);
+                    }, 2000);
+                })
+                .catch(err => console.error('Failed to copy: ', err));
+        }
+    };
+
+    useEffect(() => {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new window.bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }, []);
 
     return (
         <>
             <div className="d-flex justify-content-center align-items-center gift-card--container-sections">
                 <div className="container p-4">
                     <div className="row m-0 gx-2">
-                        <h1 className="fw-bold fs-1">Card</h1>
+                        <h1 className="fw-bold fs-1">Gift Details</h1>
                         <div className="col-12 col-md-6 mb-2 mb-md-0 p-3">
                             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                                 <div className="carousel-inner">
                                     <div className="carousel-item active position-relative">
                                         <img src={giftcard1} className="d-block w-100 gift-carousel-image" alt="..." />
                                         <div className="gift-card-carosule-content">
-                                            <h5 className="card-title">{cardDetails.title}</h5>
-                                            <p className="card-text mt-3 w-75">{cardDetails.description}</p>
-                                            <h4 className='mt-5'>{cardDetails.buttonText} <i className={cardDetails.iconClass}></i></h4>
+                                            <h5 className="card-title">{giftDetails?.giftTitle}</h5>
+                                            <p className="card-text mt-3 w-75">{giftDetails?.giftDescription}</p>
                                         </div>
                                     </div>
                                     <div className="carousel-item">
                                         <img src={giftcard1} className="d-block w-100 gift-carousel-image" alt="..." />
                                         <div className="gift-card-carosule-content">
-                                            <h5 className="card-title">{cardDetails.title}</h5>
-                                            <p className="card-text mt-3 w-75">{cardDetails.description}</p>
-                                            <h4 className='mt-5'>{cardDetails.buttonText} <i className={cardDetails.iconClass}></i></h4>
+                                            <h5 className="card-title">{giftDetails?.giftTitle}</h5>
+                                            <p className="card-text mt-3 w-75">{giftDetails?.giftDescription}</p>
                                         </div>
                                     </div>
                                     <div className="carousel-item">
                                         <img src={giftcard1} className="d-block w-100 gift-carousel-image" alt="..." />
                                         <div className="gift-card-carosule-content">
-                                            <h5 className="card-title">{cardDetails.title}</h5>
-                                            <p className="card-text mt-3 w-75">{cardDetails.description}</p>
-                                            <h4 className='mt-5'>{cardDetails.buttonText} <i className={cardDetails.iconClass}></i></h4>
+                                            <h5 className="card-title">{giftDetails?.giftTitle}</h5>
+                                            <p className="card-text mt-3 w-75">{giftDetails?.giftDescription}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -144,11 +103,27 @@ const GiftCardDetails = () => {
 
                         <div className="col-12 col-md-6 p-3 gift-service-details">
                             <div>
-                                <h5>Cashback Card</h5>
+                                <div className='d-flex align-items-center'>
+                                    <h5 className='me-3'>{giftDetails?.giftTitle}</h5>
+                                    <h5>
+                                        <span className="badge text-bg-dark">
+                                            {giftDetails?.giftPromoCode}
+                                        </span>
+                                        <i
+                                            className={isCopied ? "fa-solid fa-circle-check text-success" : "fa-regular fa-copy"}
+                                            onClick={handleCopyPromoCode}
+                                            style={{ cursor: 'pointer', marginLeft: '10px' }}
+                                            data-bs-toggle="tooltip"
+                                            title={isCopied ? "Copied" : "Copy Code"}
+                                        ></i>
+                                    </h5>
+                                </div>
                                 <div className='border-line'></div>
                                 <div className='mt-3'>
-                                    <p className='fw-bold'>Description</p>
-                                    <p className='fs-5'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+                                    <p>Valid Up To: {giftDetails?.offerValidity ?
+                                        new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(giftDetails.offerValidity))
+                                        : 'N/A'}</p>
+                                    <p className='fs-5'>{giftDetails?.giftDescription}</p>
                                 </div>
                             </div>
                             <div align="center" className="mt-5">
