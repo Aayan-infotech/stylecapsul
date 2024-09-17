@@ -28,13 +28,19 @@ function Navbar() {
             </Link>
           </div>
           <div className="right">
-            <div className="icons">
+            <div className="nav-items-icon d-flex align-items-center rounded-pill">
               <Link to="/profile" className="text-decoration-none text-white">
                 <i className="fa-regular fa-user"></i>
               </Link>
               <i className="fa-solid fa-magnifying-glass"></i>
-              <Link to="/cart" className="text-decoration-none text-white">
+              {/* <Link to="/cart" className="text-decoration-none text-white">
                 <i className="fa-solid fa-cart-shopping"></i>
+              </Link> */}
+              <Link to="/cart" className="text-decoration-none text-white">
+                <div class="cart-icon position-relative">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                  <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">3</span>
+                </div>
               </Link>
             </div>
             <div className="hamburger">

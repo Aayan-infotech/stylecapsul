@@ -12,7 +12,6 @@ const MyStyleCapsul = () => {
   const columnsData = [
     [],
     [
-      // myCapsuleAddAvtart
       { url: "/calendarstylecapsule", src: shirttop, top: "5%", right: "70%" },
       { url: "#", src: paintimag, top: "32%", right: "70%" },
       { url: "#", src: shoose, top: "60%", right: "70%" },
@@ -30,8 +29,13 @@ const MyStyleCapsul = () => {
       <div className="container">
         <h1 className="text-center fw-bold fs-1">My Style Capsule</h1>
         <div className="d-flex justify-content-end align-items-center">
-          <label htmlFor="datePicker">
-            <button type="button" className="btn btn-dark rounded-pill">
+        <label htmlFor="datePicker">
+            <button
+              type="button"
+              className="btn btn-dark rounded-pill"
+              data-bs-toggle="modal"
+              data-bs-target="#openCalendarDialogCurrent"
+            >
               <i className="fa-solid fa-calendar-days"></i>{" "}
               {selectedDate ? selectedDate : "Calendar"}
             </button>
