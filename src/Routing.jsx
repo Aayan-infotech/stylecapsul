@@ -72,7 +72,7 @@ const Routing = () => {
             <Route path="/market-place" element={<MarketPlace />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
-            <Route path="/all-clothes-list" element={<ClothesList />} />
+            <Route path="/all-clothes-list/:category" element={<ClothesList />} />
             <Route path="/clothes-details" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-profile" element={<StylistDetails />} />

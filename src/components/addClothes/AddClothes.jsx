@@ -11,6 +11,39 @@ import { apiUrl } from '../../../apiUtils';
 import { getCookie } from "../../utils/cookieUtils";
 
 const AddClothes = () => {
+  const clothingTypes = [
+    { value: "", label: "Select", disabled: true },
+    { value: "jeans", label: "Jeans" },
+    { value: "shirt", label: "Shirt" },
+    { value: "pant", label: "Pant" },
+    { value: "watch", label: "Watch" },
+    { value: "t-shirt", label: "T-shirt" },
+    { value: "dress", label: "Dress" },
+    { value: "skirt", label: "Skirt" },
+    { value: "shorts", label: "Shorts" },
+    { value: "jacket", label: "Jacket" },
+    { value: "sweater", label: "Sweater" },
+    { value: "hoodie", label: "Hoodie" },
+    { value: "blouse", label: "Blouse" },
+    { value: "suit", label: "Suit" },
+    { value: "coat", label: "Coat" },
+    { value: "leggings", label: "Leggings" },
+    { value: "cardigan", label: "Cardigan" },
+    { value: "vest", label: "Vest" },
+    { value: "romper", label: "Romper" },
+    { value: "jumpsuit", label: "Jumpsuit" },
+    { value: "activewear", label: "Activewear" },
+    { value: "swimwear", label: "Swimwear" },
+    { value: "pajamas", label: "Pajamas" },
+    { value: "robe", label: "Robe" },
+    { value: "scarf", label: "Scarf" },
+    { value: "hat", label: "Hat" },
+    { value: "gloves", label: "Gloves" },
+    { value: "belt", label: "Belt" },
+    { value: "jewelry", label: "Jewelry" },
+    { value: "costume", label: "Costume" }
+  ];
+
   const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
   const [formData, setFormData] = useState({
@@ -30,6 +63,7 @@ const AddClothes = () => {
   const token = getCookie('authToken');
   console.log(token)
   const updateNewCloth = location?.state?.updateCloth;
+  const currentCategory = location.state?.currentCategory;
 
   useEffect(() => {
     if (updateNewCloth) {
@@ -66,7 +100,6 @@ const AddClothes = () => {
   const handleImageClick = () => {
     document.getElementById('imageUpload').click();
   };
-
   const currentDate = new Date().toISOString().split('T')[0];
 
   const handleSubmit = async (e) => {
@@ -101,7 +134,8 @@ const AddClothes = () => {
         });
         setTimeout(() => {
           // navigate("/all-clothes-list");closet-categories
-          navigate("/closet-categories");
+          // navigate("/closet-categories");
+          navigate(`/all-clothes-list/${location.state?.currentCategory}`);
         }, 1000);
       } else {
         const userId = user?.payload?._id;
@@ -199,11 +233,11 @@ const AddClothes = () => {
                         onChange={handleChange}
                         aria-label="category"
                       >
-                        <option value="" disabled>Select</option>
-                        <option value="jeans">Jeans</option>
-                        <option value="shirt">Shirt</option>
-                        <option value="pant">Pant</option>
-                        <option value="t-shirt">T-shirt</option>
+                        {clothingTypes.map(type => (
+                          <option key={type.value} value={type.value} disabled={type.disabled}>
+                            {type.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -304,7 +338,6 @@ const AddClothes = () => {
                   className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
                   {updateNewCloth ? "Update" : "Add"}
                 </button>
-                <Link to="/all-clothes-list">List</Link>
               </form>
             </div>
           </div>
