@@ -78,7 +78,8 @@ const Routing = () => {
             <Route path="/stylist-profile" element={<StylistDetails />} />
             <Route path="/stylist-list" element={<StylistMessageList />} />
             <Route path="/chat" element={<Chat />} />
-            <Route path="/categories-type" element={<StylistCategories />} />
+            {/* <Route path="/categories-type" element={<StylistCategories />} /> */}
+            <Route path="/categories-type/:categoryId" element={<StylistCategories />} />
             <Route path="/category-details" element={<CategoryDetails />} />
             <Route path="/address" element={<Address />} />
             <Route path="/payment" element={<Payment />} />

@@ -6,73 +6,77 @@ import showimg3 from '../../assets/marketplace/showimg3.jpg'
 import cat_image from '../../assets/marketplace/showimg7.jpg'
 import cat_image1 from '../../assets/marketplace/showimg6.jpg'
 import cat_image3 from '../../assets/marketplace/showimg8.jpg'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
+const shopebystyles = [
+    {
+        id: 1,
+        name: "Shirt",
+        imgSrc: 'path/to/shopeimage1',
+        subcategories: [
+            {
+                id: 1, name: "Casual Shirts", imgSrc: 'path/to/casualShirtImage1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
+                price: 28,
+                category: 'Buy',
+                image: cat_image
+            },
+            {
+                id: 2, name: "Formal Shirts", imgSrc: 'path/to/casualShirtImage2', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
+                price: 28,
+                category: 'Buy',
+                image: cat_image
+            }
+        ]
+    },
+    {
+        id: 2,
+        name: "Dress",
+        imgSrc: 'path/to/shopeimage2',
+        subcategories: [
+            {
+                id: 1, name: "Casual Dresses", imgSrc: 'path/to/casualShirtImage1', description: 'Elegant red dress for any occasion.',
+                price: 45,
+                category: 'Rent',
+                image: cat_image1
+            },
+            {
+                id: 2, name: "Evening Dresses", imgSrc: 'path/to/casualShirtImage3',  description: 'Elegant red dress for any occasion.',
+                price: 45,
+                category: 'Rent',
+                image: cat_image1
+            }
+        ]
+    },
+    {
+        id: 3,
+        name: "Shoes",
+        imgSrc: 'path/to/shopeimage3',
+        subcategories: [
+            {
+                id: 1, name: "Sneakers", imgSrc: 'path/to/casualShirtImage1', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
+                price: 28,
+                category: 'Swap',
+                image: cat_image
+            },
+            {
+                id: 2, name: "Formal Shoes", imgSrc: 'path/to/casualShirtImage3', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
+                price: 28,
+                category: 'Swap',
+                image: cat_image
+            }
+        ]
+    }
+];
 
 const StylistCategories = () => {
     const [selectedCategory, setSelectedCategory] = useState('Buy');
     const navigate = useNavigate();
-
-    const products = [
-        {
-            id: 1,
-            name: 'Blue Jeans',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
-            price: 28,
-            category: 'Buy',
-            image: cat_image
-        },
-        {
-            id: 2,
-            name: 'Red Dress',
-            description: 'Elegant red dress for any occasion.',
-            price: 45,
-            category: 'Buy',
-            image: cat_image1
-        },
-        {
-            id: 3,
-            name: 'Black T-shirt',
-            description: 'Classic black t-shirt with a relaxed fit.',
-            price: 15,
-            category: 'Rent',
-            image: cat_image3
-        },
-        {
-            id: 4,
-            name: 'Green Jacket',
-            description: 'Warm and trendy green jacket.',
-            price: 35,
-            category: 'Rent',
-            image: showimg1
-        },
-        {
-            id: 5,
-            name: 'Leather Boots',
-            description: 'Durable and stylish leather boots.',
-            price: 50,
-            category: 'Swap',
-            image: showimg2
-        },
-        {
-            id: 6,
-            name: 'Sunglasses',
-            description: 'Protective and fashionable sunglasses.',
-            price: 20,
-            category: 'Swap',
-            image: showimg3
-        },
-        {
-            id: 7,
-            name: 'Pink Jeans',
-            description: 'Comfortable and stylish blue jeans.',
-            price: 48,
-            category: 'Buy',
-            image: cat_image
-        },
-    ];
+    const { categoryId } = useParams();
+    const category = shopebystyles.find(style => style.id === parseInt(categoryId, 10));
+    console.log(category?.subcategories, 'category')
 
     const getFilteredProducts = () => {
-        return products.filter(product => product.category === selectedCategory);
+        return category?.subcategories.filter(product => product.category === selectedCategory);
     };
 
     const handleBuyClick = (prod) => {
@@ -89,7 +93,7 @@ const StylistCategories = () => {
 
     return (
         <div className='categories-type-container'>
-            <div className="container w-75 mt-2 stylist-content" style={{display:"block"}}>
+            <div className="container w-75 mt-2 stylist-content" style={{ display: "block" }}>
                 <div className="row gx-2">
                     <div className='d-flex justify-content-between align-items-center'>
                         <div className="fw-bold fs-1">Categories</div>

@@ -7,12 +7,12 @@ import one from "../../assets/marketplace/one.mp4";
 import shopeimage1 from "../../assets/marketplace/showimg1.jpg";
 import shopeimage2 from "../../assets/marketplace/showimg2.jpg";
 import shopeimage3 from "../../assets/marketplace/showimg3.jpg";
-import shopeimage4 from "../../assets/marketplace/showimg4.jpg";
-import shopeimage5 from "../../assets/marketplace/showimg5.jpg";
-import shopeimage6 from "../../assets/marketplace/showimg6.jpg";
-import shopeimage7 from "../../assets/marketplace/showimg7.jpg";
-import shopeimage8 from "../../assets/marketplace/showimg8.jpg";
-import shopeimage9 from "../../assets/marketplace/showimg9.jpg";
+import casualShirtImage1 from "../../assets/marketplace/subcat1.jpg";
+import casualShirtImage2 from "../../assets/marketplace/subcat2.jpg";
+import casualShirtImage3 from "../../assets/marketplace/subcat3.jpg";
+// import shopeimage7 from "../../assets/marketplace/showimg7.jpg";
+// import shopeimage8 from "../../assets/marketplace/showimg8.jpg";
+// import shopeimage9 from "../../assets/marketplace/showimg9.jpg";
 
 import menswearimg1 from "../../assets/marketplace/menswearimg1.png";
 import menswearimg2 from "../../assets/marketplace/menswearimg2.jpg";
@@ -54,16 +54,45 @@ const MarketPlace = () => {
     },
   ];
 
+  // const shopebystyles = [
+  //   { name: "Shirt", imgSrc: shopeimage1 },
+  //   { name: "Dress", imgSrc: shopeimage2 },
+  //   { name: "Shose", imgSrc: shopeimage3 },
+  //   { name: "Watch", imgSrc: shopeimage4 },
+  //   { name: "T-Shirt", imgSrc: shopeimage5 },
+  //   { name: "Top", imgSrc: shopeimage6 },
+  //   { name: "Blazer", imgSrc: shopeimage7 },
+  //   { name: "Jeans", imgSrc: shopeimage8 },
+  //   { name: "Skirt", imgSrc: shopeimage9 },
+  // ];
   const shopebystyles = [
-    { name: "Shirt", imgSrc: shopeimage1 },
-    { name: "Dress", imgSrc: shopeimage2 },
-    { name: "Shose", imgSrc: shopeimage3 },
-    { name: "Watch", imgSrc: shopeimage4 },
-    { name: "T-Shirt", imgSrc: shopeimage5 },
-    { name: "Top", imgSrc: shopeimage6 },
-    { name: "Blazer", imgSrc: shopeimage7 },
-    { name: "Jeans", imgSrc: shopeimage8 },
-    { name: "Skirt", imgSrc: shopeimage9 },
+    {
+      id: 1,
+      name: "Shirt",
+      imgSrc: shopeimage1,
+      subcategories: [
+        { id: 1, name: "Casual Shirts", imgSrc: casualShirtImage1 },
+        { id: 2, name: "Formal Shirts", imgSrc: casualShirtImage2 }
+      ]
+    },
+    {
+      id: 2,
+      name: "Dress",
+      imgSrc: shopeimage2,
+      subcategories: [
+        { id: 1, name: "Casual Dresses", imgSrc: casualShirtImage1 },
+        { id: 2, name: "Evening Dresses", imgSrc: casualShirtImage3 }
+      ]
+    },
+    {
+      id: 3,
+      name: "Shoes",
+      imgSrc: shopeimage3,
+      subcategories: [
+        { id: 1, name: "Sneakers", imgSrc: casualShirtImage1 },
+        { id: 2, name: "Formal Shoes", imgSrc: casualShirtImage3 }
+      ]
+    }
   ];
 
   const shopemenswear = [
@@ -161,7 +190,6 @@ const MarketPlace = () => {
         </div>
       </div>
       {/* -----------------------trending search------------------------- */}
-
       <div className="container w-75 mt-4 trending-searches-section" style={{ display: "block" }}>
         {/* Trending Searches */}
         <div className="trending-searches">
@@ -176,23 +204,25 @@ const MarketPlace = () => {
           </div>
         </div>
         {/* -----------------------shop by style------------------------- */}
-        <div className="shop-by-style mt-5">
+        <div className="shop-by-style mt-1">
           <h3>Shop by Style</h3>
           <div className="row">
             {shopebystyles?.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center">
-                <div className="style-item">
-                  <div className="image-container rounded-top-pill">
-                    <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
+              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                <Link to={`/categories-type/${item.id}`} className="text-decoration-none w-100" >
+                  <div className="style-item">
+                    <div className="image-container rounded-top-pill">
+                      <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
+                    </div>
+                    <p className="style-text rounded-bottom-pill fw-bold fs-4">{item?.name}</p>
                   </div>
-                  <p className="style-text rounded-bottom-pill fw-bold fs-4">{item?.name}</p>
-                </div>
+                </Link>
               </div>
             ))}
           </div>
         </div>
         {/* -----------------------Shop Menswear------------------------- */}
-        <div className="shop-by-style mt-5">
+        <div className="shop-by-style mt-1">
           <h3>Shop Menswear</h3>
           <div className="row">
             {shopemenswear?.map((item, index) => (
@@ -208,7 +238,7 @@ const MarketPlace = () => {
           </div>
         </div>
         {/* -----------------------Shop Womenswear------------------------- */}
-        <div className="shop-by-style mt-5">
+        <div className="shop-by-style mt-1">
           <h3>Shop Womenswear</h3>
           <div className="row">
             {shopwomenwear?.map((item, index) => (
@@ -257,7 +287,7 @@ const MarketPlace = () => {
               </div>
             ))}
           </div>
-        </div> 
+        </div>
       </div>
     </>
   );
