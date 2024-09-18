@@ -1,3 +1,121 @@
+// Main container for the section
+.trending-searches-section {
+  .trending-searches {
+    h3 {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .trending-btn {
+      border-radius: 50px;
+      font-size: 1rem;
+      padding: 0.5rem 1.5rem;
+      transition: background-color 0.3s ease;
+      background: #fff;
+      border: 2px solid #000;
+
+      &:hover {
+        background-color: #000;
+        color: #fff;
+      }
+
+      i {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
+  .shop-by-style {
+    margin-top: 2rem;
+
+    h3 {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .style-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 180px;
+      margin-bottom: 2rem;
+  
+      .image-container {
+        width: 100%;
+        height: 200px; // Adjust this to get the oval shape
+        background-color: #ccc; // Placeholder background
+        // border-radius: 50% / 25%; // Oval shape
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+  
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: inherit;
+        }
+      }
+  
+      .style-text {
+        background-color: #4a4a4a;
+        color: #fff;
+        width: 100%;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// Custom styles for responsiveness
+@media (max-width: 768px) {
+  .trending-searches-section {
+    .trending-searches {
+      .trending-btn {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+      }
+    }
+
+    .shop-by-style {
+      .style-item {
+        img {
+          width: 100px;
+          height: 100px;
+        }
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .trending-searches-section {
+    .shop-by-style {
+      .style-item {
+        img {
+          width: 80px;
+          height: 80px;
+        }
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+
 .navbar-left,
 .navbar-right {
   display: flex;

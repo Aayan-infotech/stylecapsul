@@ -37,9 +37,9 @@ function Navbar() {
                 <i className="fa-solid fa-cart-shopping"></i>
               </Link> */}
               <Link to="/cart" className="text-decoration-none text-white">
-                <div class="cart-icon position-relative">
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">3</span>
+                <div className="cart-icon position-relative">
+                  <i className="fa-solid fa-cart-shopping"></i>
+                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">3</span>
                 </div>
               </Link>
             </div>
