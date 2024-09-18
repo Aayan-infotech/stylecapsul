@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/images/LOGOSC.png";
 import { Logout } from "../allmodal/Logout";
 import { checkToken } from '../../utils/auth.util.js'
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -14,6 +15,10 @@ function Navbar() {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
+
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <>
       <div className="top">
@@ -33,13 +38,10 @@ function Navbar() {
                 <i className="fa-regular fa-user"></i>
               </Link>
               <i className="fa-solid fa-magnifying-glass"></i>
-              {/* <Link to="/cart" className="text-decoration-none text-white">
-                <i className="fa-solid fa-cart-shopping"></i>
-              </Link> */}
               <Link to="/cart" className="text-decoration-none text-white">
                 <div className="cart-icon position-relative">
                   <i className="fa-solid fa-cart-shopping"></i>
-                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">3</span>
+                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">{totalItems}</span>
                 </div>
               </Link>
             </div>

@@ -6,6 +6,7 @@ import addClothesReducer from './addClothesSlice';
 import profileReducer from './profileSlice';
 import changePasswordReducer from './changePasswordSlice';
 import addressReducer from './AddressSlice';
+import cartReducer from "./addcartSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     profile: profileReducer,
     changePassword: changePasswordReducer,
     addresses: addressReducer,
+    cart: cartReducer,
   },
 });
