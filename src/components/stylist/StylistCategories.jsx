@@ -8,6 +8,7 @@ import cat_image3 from "../../assets/marketplace/showimg8.jpg";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../reduxToolkit/addcartSlice";
+import { getCookie } from "../../utils/cookieUtils";
 
 const StylistCategories = () => {
   const shopebystyles = [
@@ -24,7 +25,7 @@ const StylistCategories = () => {
           price: 28,
           category: "Buy",
           image: cat_image,
-          price:"200"
+          price: "200"
         },
         {
           id: 2,
@@ -34,7 +35,7 @@ const StylistCategories = () => {
           price: 28,
           category: "Rent",
           image: cat_image1,
-          price:"200"
+          price: "200"
         },
         {
           id: 3,
@@ -44,7 +45,7 @@ const StylistCategories = () => {
           price: 28,
           category: "Swap",
           image: cat_image3,
-          price:"250"
+          price: "250"
         },
         {
           id: 4,
@@ -54,7 +55,7 @@ const StylistCategories = () => {
           price: 28,
           category: "Rent",
           image: showimg3,
-          price:"800"
+          price: "800"
         },
         {
           id: 5,
@@ -64,14 +65,18 @@ const StylistCategories = () => {
           price: 28,
           category: "Swap",
           image: showimg2,
-          price:"2200"
+          price: "2200"
         },
       ],
     },
   ];
+  
   const [selectedCategory, setSelectedCategory] = useState("Buy");
+  const [quantity, setQuantity] = useState(1);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userId = getCookie("userId");
   const { categoryId } = useParams();
 
   const category = shopebystyles.find(
@@ -84,10 +89,6 @@ const StylistCategories = () => {
     );
   };
 
-  const handleBuyClick = (prod) => {
-    navigate("/category-details", { state: { product: prod } });
-  };
-
   const truncateText = (text, wordLimit) => {
     const wordsArray = text.split(" ");
     if (wordsArray.length > wordLimit) {
@@ -96,40 +97,32 @@ const StylistCategories = () => {
     return text;
   };
 
+  const handleBuyClick = (prod) => {
+    navigate("/category-details", {
+      state: {
+        product: prod,
+        quantity: quantity // Pass the quantity here
+      }
+    });
+  };
+
   const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
+    dispatch(addToCart({
+      userId,
+      productId: product?.id,
+      quantity: quantity // Use the quantity from state
+    }));
   };
 
   return (
     <div className="categories-type-container">
-      <div
-        className="container w-75 mt-2 stylist-content"
-        style={{ display: "block" }}
-      >
+      <div className="container w-75 mt-2 stylist-content" style={{ display: "block" }}>
         <div className="row gx-2">
-          {/* <div className="d-flex justify-content-between align-items-center">
-            <div className="fw-bold fs-1">Categories</div>
-            <div className="search-box">
-              <i className="fa fa-search"></i>
-              <input
-                type="text"
-                className="rounded-pill text-white"
-                placeholder="Search"
-              />
-              <i className="fa-solid fa-sliders"></i>
-            </div>
-          </div> */}
           {["Buy", "Rent", "Swap"].map((cat) => (
-            <div
-              key={cat}
-              className="col-12 col-md-4 mt-3"
-              style={{ margin: "auto", textAlign: "center" }}
-            >
+            <div key={cat} className="col-12 col-md-4 mt-3" style={{ margin: "auto", textAlign: "center" }}>
               <button
                 type="button"
-                className={`btn ${
-                  selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
-                } rounded-pill w-50 p-2`}
+                className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"} rounded-pill w-50 p-2`}
                 onClick={() => setSelectedCategory(cat)}
               >
                 {cat}
@@ -150,19 +143,13 @@ const StylistCategories = () => {
                   />
                 </div>
                 <div className="product-details p-3">
-                  <h3 className="product-name fw-bold">{product.name}</h3>
-                  <p className="product-description text-muted">
-                    {truncateText(product.description, 10)}
-                  </p>
+                  <div onClick={() => handleBuyClick(product)} style={{ cursor: "pointer" }}>
+                    <h3 className="product-name fw-bold">{product.name}</h3>
+                    <p className="product-description text-muted">
+                      {truncateText(product.description, 10)}
+                    </p>
+                  </div>
                   <div className="d-flex justify-content-center mb-3">
-                    <button
-                      type="button"
-                      className="btn btn-primary rounded-pill w-25 me-2"
-                      onClick={() => handleBuyClick(product)}
-                      style={{ backgroundColor: "black" }}
-                    >
-                      Buy
-                    </button>
                     <button
                       type="button"
                       className="btn btn-outline-dark rounded-pill me-2"
@@ -183,7 +170,6 @@ const StylistCategories = () => {
             className="btn btn-primary rounded-pill w-25 p-2"
             style={{ backgroundColor: "black" }}
           >
-            {" "}
             View All
           </button>
         </div>

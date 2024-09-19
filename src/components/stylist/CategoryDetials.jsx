@@ -1,12 +1,17 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux"; // Import useDispatch
+import { addToCart } from "../../reduxToolkit/addcartSlice"; // Import addToCart action
 import "../../styles/CategoryDetails.scss";
 import { Link, useLocation } from "react-router-dom";
 import blank_image from "../../assets/stylist/blank_img.jpg";
+import { getCookie } from "../../utils/cookieUtils";
 
 const CategoryDetails = () => {
-  const [quantity, setQuantity] = useState(2);
   const location = useLocation();
   const cat_Details = location?.state?.product;
+  const initialQuantity = location?.state?.quantity || 1; 
+  const [quantity, setQuantity] = useState(initialQuantity);
+  const dispatch = useDispatch(); // Initialize dispatch
 
   const increment = () => {
     setQuantity(quantity + 1);
@@ -16,6 +21,12 @@ const CategoryDetails = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
+  };
+
+  const handleAddToCart = () => {
+    const userId = getCookie("userId"); // Replace with actual user ID
+    const productId = cat_Details?.id; // Assuming `id` is the product identifier
+    dispatch(addToCart({ userId, productId, quantity })); // Dispatch the action
   };
 
   return (
@@ -38,18 +49,16 @@ const CategoryDetails = () => {
               {cat_Details?.description || "No description available."}
             </p>
             <div className="quantity-selector">
-              <button className="quantity-btn" onClick={decrement}>
-                -
-              </button>
+              <button className="quantity-btn" onClick={decrement}>-</button>
               <span className="quantity-display">
                 {quantity < 10 ? `0${quantity}` : quantity}
               </span>
-              <button className="quantity-btn" onClick={increment}>
-                +
-              </button>
+              <button className="quantity-btn" onClick={increment}>+</button>
             </div>
             <div className="button-group">
-              <button className="btn add-to-cart">Add to cart</button>
+              <button className="btn add-to-cart" onClick={handleAddToCart}>
+                Add to cart
+              </button>
               <Link to="/cart">
                 <button className="btn buy-now">Buy</button>
               </Link>

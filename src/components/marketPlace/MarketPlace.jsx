@@ -10,9 +10,6 @@ import shopeimage3 from "../../assets/marketplace/showimg3.jpg";
 import casualShirtImage1 from "../../assets/marketplace/subcat1.jpg";
 import casualShirtImage2 from "../../assets/marketplace/subcat2.jpg";
 import casualShirtImage3 from "../../assets/marketplace/subcat3.jpg";
-// import shopeimage7 from "../../assets/marketplace/showimg7.jpg";
-// import shopeimage8 from "../../assets/marketplace/showimg8.jpg";
-// import shopeimage9 from "../../assets/marketplace/showimg9.jpg";
 
 import menswearimg1 from "../../assets/marketplace/menswearimg1.png";
 import menswearimg2 from "../../assets/marketplace/menswearimg2.jpg";
@@ -31,40 +28,7 @@ import leatherjacket from "../../assets/marketplace/leatherjacket.png";
 import "../../styles/MarketPlace.scss";
 
 const MarketPlace = () => {
-  const items = [
-    {
-      name: "SHOP ALL",
-      imgSrc:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ZlHgDdHgqbNTsRNC0L6ALo1ACSUp94eozg&s",
-    },
-    {
-      name: "CHROMEHEARTS",
-      imgSrc:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ZlHgDdHgqbNTsRNC0L6ALo1ACSUp94eozg&s",
-    },
-    {
-      name: "BALENCIAGA",
-      imgSrc:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ZlHgDdHgqbNTsRNC0L6ALo1ACSUp94eozg&s",
-    },
-    {
-      name: "CLASSICAL CHIC",
-      imgSrc:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7ZlHgDdHgqbNTsRNC0L6ALo1ACSUp94eozg&s",
-    },
-  ];
 
-  // const shopebystyles = [
-  //   { name: "Shirt", imgSrc: shopeimage1 },
-  //   { name: "Dress", imgSrc: shopeimage2 },
-  //   { name: "Shose", imgSrc: shopeimage3 },
-  //   { name: "Watch", imgSrc: shopeimage4 },
-  //   { name: "T-Shirt", imgSrc: shopeimage5 },
-  //   { name: "Top", imgSrc: shopeimage6 },
-  //   { name: "Blazer", imgSrc: shopeimage7 },
-  //   { name: "Jeans", imgSrc: shopeimage8 },
-  //   { name: "Skirt", imgSrc: shopeimage9 },
-  // ];
   const shopebystyles = [
     {
       id: 1,
@@ -226,7 +190,7 @@ const MarketPlace = () => {
           <h3>Shop Menswear</h3>
           <div className="row">
             {shopemenswear?.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center">
+              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
                 <div className="style-item">
                   <div className="image-container rounded-top-pill">
                     <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
@@ -242,7 +206,7 @@ const MarketPlace = () => {
           <h3>Shop Womenswear</h3>
           <div className="row">
             {shopwomenwear?.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center">
+              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
                 <div className="style-item">
                   <div className="image-container rounded-top-pill">
                     <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />

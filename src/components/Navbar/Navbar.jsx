@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/LOGOSC.png";
 import { Logout } from "../allmodal/Logout";
 import { checkToken } from '../../utils/auth.util.js'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -16,8 +17,17 @@ function Navbar() {
     setModalVisible(false);
   };
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart); 
+  console.log(cart, 'cart');
+
+  useEffect(() => {
+    dispatch(getAllCarts());
+  }, [dispatch]);
+
+  const getTotalProductCount = () => {
+    return Array.isArray(cart) ? cart.reduce((total, item) => total + item.items.length, 0) : 0;
+  };
 
   return (
     <>
@@ -41,7 +51,9 @@ function Navbar() {
               <Link to="/cart" className="text-decoration-none text-white">
                 <div className="cart-icon position-relative">
                   <i className="fa-solid fa-cart-shopping"></i>
-                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">{totalItems}</span>
+                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                    {getTotalProductCount()}
+                  </span>
                 </div>
               </Link>
             </div>

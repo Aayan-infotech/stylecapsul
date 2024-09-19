@@ -1,40 +1,56 @@
-// src/components/cart/Cart.jsx
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/Cart.scss";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  addToCart,
-  removeFromCart,
-  decreaseQuantity,
-} from "../../reduxToolkit/addcartSlice"; // Import Redux actions
+import { getAllCarts, updateCartQuantity } from "../../reduxToolkit/addcartSlice";
+import { getCookie } from "../../utils/cookieUtils";
 
 const Cart = () => {
-  const cartItems = useSelector((state) => state.cart.cartItems);
-
+  const cartItems = useSelector((state) => state.cart.cart); 
   const dispatch = useDispatch();
+  const userId = getCookie('userId'); // Get user ID from cookies
+  const [quantities, setQuantities] = useState({}); // State to hold quantities
 
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item?.price * item?.quantity,
-    0
-  );
-  const discount = 4;
-  const deliveryCharges = 2;
-  const total = subtotal - discount + deliveryCharges;
+  useEffect(() => {
+    dispatch(getAllCarts()); // Fetch the cart data on component mount
+  }, [dispatch]);
 
-  const handleIncrease = (item) => {
-    dispatch(addToCart(item));
-  };
+  useEffect(() => {
+    // Initialize quantities state based on cartItems
+    const initialQuantities = {};
+    cartItems.forEach(cart => {
+      cart.items.forEach(item => {
+        initialQuantities[item.productId] = item.quantity;
+      });
+    });
+    setQuantities(initialQuantities);
+  }, [cartItems]);
 
-  const handleDecrease = (item) => {
-    if (item.quantity > 1) {
-      dispatch(decreaseQuantity(item.id));
+  const handleQuantityChange = (item, change) => {
+    const newQuantity = quantities[item.productId] + change;
+    if (newQuantity >= 0) { // Ensure quantity is not negative
+      setQuantities(prev => ({ ...prev, [item.productId]: newQuantity })); // Update local state
+      dispatch(updateCartQuantity({
+        userId: userId,
+        productId: item.productId,
+        newQuantity,
+      }));
     }
   };
 
+  // Calculate subtotal, total quantity, and total price dynamically
+  const subtotal = cartItems.reduce((total, cart) =>
+    total + cart.items.reduce((sum, item) => sum + quantities[item.productId] * item.price, 0), 0
+  );
+
+  const totalQuantity = Object.values(quantities).reduce((total, quantity) => total + quantity, 0);
+
+  const discount = 4; // Fixed discount value
+  const deliveryCharges = 2; // Fixed delivery charges
+  const total = subtotal - discount + deliveryCharges; // Final total calculation
+
   const handleRemove = (itemId) => {
-    dispatch(removeFromCart(itemId));
+    // Implement the functionality to remove item from cart if needed
   };
 
   return (
@@ -49,92 +65,84 @@ const Cart = () => {
           ) : (
             <>
               <div className="col-md-6 buy-cart-list mt-2">
-                {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="cart-item d-flex align-items-center mb-2 mt-3 rounded-pill px-4"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="item-image"
-                    />
-                    <div className="item-details ml-3">
-                      <h5>{item.name}</h5>
-                      <p className="text-black fw-bold">
-                        Order ID - {item.orderId}
-                      </p>
-                      <p>{item.date}</p>
-                      <div className="d-flex align-items-center">
-                        <p className="text-black fw-bold me-5">
-                          ${item?.price}
-                        </p>
-                        <div className="quantity-controls d-flex align-items-center">
-                          <button
-                            type="button"
-                            className="btn btn-dark rounded-pill"
-                            onClick={() => handleDecrease(item)}
-                            style={{
-                              fontSize: "10px",
-                              backgroundColor: "black",
-                            }}
-                          >
-                            <i className="fa-solid fa-minus"></i>
-                          </button>
-                          <span className="quantity mx-3">
-                            {item.quantity < 10
-                              ? `0${item.quantity}`
-                              : item.quantity}
-                          </span>
-                          <button
-                            type="button"
-                            className="btn btn-dark rounded-pill"
-                            onClick={() => handleIncrease(item)}
-                            style={{
-                              fontSize: "10px",
-                              backgroundColor: "black",
-                            }}
-                          >
-                            <i className="fa-solid fa-plus"></i>
-                          </button>
+                {cartItems.map((cart, cartIndex) =>
+                  cart.items.map((item, itemIndex) => (
+                    <div
+                      key={`${cartIndex}-${itemIndex}`}
+                      className="cart-item d-flex align-items-center mb-2 mt-3 rounded-pill px-4"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="item-image"
+                      />
+                      <div className="item-details ml-3">
+                        <h5>{item.name}</h5>
+                        <p className="text-black fw-bold">Order ID - {item.productId}</p>
+                        <p>{item.date}</p>
+                        <div className="d-flex align-items-center">
+                          <p className="text-black fw-bold me-5">${item.price}</p>
+                          <div className="quantity-controls d-flex align-items-center">
+                            <button
+                              type="button"
+                              className="btn btn-dark rounded-pill"
+                              onClick={() => handleQuantityChange(item, -1)}
+                            >
+                              <i className="fa-solid fa-minus"></i>
+                            </button>
+                            <span className="quantity mx-3">
+                              {quantities[item.productId] < 10 ? `0${quantities[item.productId]}` : quantities[item.productId]}
+                            </span>
+                            <button
+                              type="button"
+                              className="btn btn-dark rounded-pill"
+                              onClick={() => handleQuantityChange(item, 1)}
+                            >
+                              <i className="fa-solid fa-plus"></i>
+                            </button>
+                          </div>
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        className="btn btn-dark rounded-pill remove-btn"
+                        onClick={() => handleRemove(item.id)}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-dark rounded-pill remove-btn"
-                      onClick={() => handleRemove(item.id)}
-                    >
-                      <i className="fa-solid fa-xmark"></i>
-                    </button>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
               <div className="col-md-6">
                 <div className="order-summary-container rounded">
                   <div className="order-summary-card">
-                    <h3 className="order-summary-title">Order Summary</h3>
+                    <h3 className="order-summary-title fw-bold">Order Summary</h3>
                     <div className="order-summary-details">
                       <div className="summary-item">
-                        <span>Items</span>
-                        <span>{cartItems?.length}</span>
+                        <span>Total Items</span>
+                        <span>{cartItems.length}</span>
+                      </div>
+                      <div className="summary-item">
+                        <span>Total Quantity</span>
+                        <span>{totalQuantity}</span>
                       </div>
                       <div className="summary-item">
                         <span>Subtotal</span>
-                        <span>${subtotal}</span>
+                        <span>${subtotal.toFixed(2)}</span>
                       </div>
                       <div className="summary-item">
                         <span>Discount</span>
-                        <span>${discount}</span>
+                        <span>${discount.toFixed(2)}</span>
                       </div>
                       <div className="summary-item">
                         <span>Delivery Charges</span>
-                        <span>${deliveryCharges}</span>
+                        <span>${deliveryCharges.toFixed(2)}</span>
                       </div>
                       <hr />
                       <div className="summary-item total">
                         <span>Total</span>
-                        <span>${total}</span>
+                        <span>${total.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
@@ -142,10 +150,9 @@ const Cart = () => {
                 <Link to="/address">
                   <button
                     type="button"
-                    className="btn btn-dark w-100 rounded-pill p-3 mt-3"
-                    style={{ backgroundColor: "black" }}
+                    className="btn btn-dark w-100 mt-3 rounded-pill"
                   >
-                    Check Out
+                    Proceed to Checkout
                   </button>
                 </Link>
               </div>
