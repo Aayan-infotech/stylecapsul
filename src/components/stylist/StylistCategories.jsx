@@ -7,7 +7,7 @@ import cat_image1 from "../../assets/marketplace/showimg6.jpg";
 import cat_image3 from "../../assets/marketplace/showimg8.jpg";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../reduxToolkit/addcartSlice";
+import { addToCart, getAllCarts } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
 
 const StylistCategories = () => {
@@ -70,7 +70,7 @@ const StylistCategories = () => {
       ],
     },
   ];
-  
+
   const [selectedCategory, setSelectedCategory] = useState("Buy");
   const [quantity, setQuantity] = useState(1);
 
@@ -101,19 +101,22 @@ const StylistCategories = () => {
     navigate("/category-details", {
       state: {
         product: prod,
-        quantity: quantity // Pass the quantity here
+        quantity: quantity
       }
     });
   };
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart({
+  const handleAddToCart = async (product) => {
+    await dispatch(addToCart({
       userId,
       productId: product?.id,
-      quantity: quantity // Use the quantity from state
+      quantity: quantity
     }));
+  
+    // Fetch updated cart items to refresh the count
+    await dispatch(getAllCarts());
   };
-
+  
   return (
     <div className="categories-type-container">
       <div className="container w-75 mt-2 stylist-content" style={{ display: "block" }}>

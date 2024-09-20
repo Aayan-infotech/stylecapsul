@@ -18,16 +18,19 @@ function Navbar() {
   };
 
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart); 
-  console.log(cart, 'cart');
+  const cart = useSelector((state) => state.cart.cart);
 
   useEffect(() => {
-    dispatch(getAllCarts());
+    const fetchItem = async () => {
+      await dispatch(getAllCarts());
+    };
+    fetchItem();
   }, [dispatch]);
 
   const getTotalProductCount = () => {
     return Array.isArray(cart) ? cart.reduce((total, item) => total + item.items.length, 0) : 0;
   };
+
 
   return (
     <>

@@ -1,9 +1,11 @@
 import React from 'react'
 import Routing from './Routing'
+import Toast from './components/toastMessage/Toast'
 
 function App() {
   return (
     <div>
+      <Toast />
       <Routing />
     </div>
   )

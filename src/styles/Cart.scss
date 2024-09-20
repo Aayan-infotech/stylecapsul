@@ -6,7 +6,7 @@
 
   .container {
     .buy-cart-list {
-      height: 350px;
+      max-height: 440px;
       overflow-y: auto;
 
       &::-webkit-scrollbar {
