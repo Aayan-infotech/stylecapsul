@@ -3,6 +3,7 @@ import "../../styles/Payment.scss";
 import creditcard from "../../assets/payment/credit.png";
 import paypal from "../../assets/payment/paypal.png";
 import { useNavigate } from "react-router-dom";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -16,18 +17,17 @@ const Payment = () => {
       <div className="container w-75 text-center">
         <div className="row gx-5">
           <h1 className="fw-bold text-center fs-1">Payment</h1>
-
+          <PayPalScriptProvider options={{ clientId: "test" }}>
+            <PayPalButtons style={{ layout: "horizontal" }} />
+          </PayPalScriptProvider>
           <div className="col-12 d-flex justify-content-center align-items-center mt-3">
-            <div className="p-3 border method rounded-pill w-75 w-md-50 w-lg-50 me-3">
-              <h5 className="fw-bold m-0">Credit Card</h5>
-            </div>
+            <button type="button" class="btn method btn-outline-secondary rounded-pill p-3 w-75 text-start fw-bold text-black fs-5 me-3">Credit Card</button>
             <img src={creditcard} height={30} alt="Credit Card" />
           </div>
-
-          <div className="col-12 d-flex justify-content-center align-items-center mt-2">
-            <div className="p-3 border method rounded-pill w-75 w-md-50 w-lg-50 fw-bold me-4">
-              <h5 className="fw-bold m-0">Pay Pal</h5>
-            </div>
+          <div className="col-12 d-flex justify-content-center align-items-center mt-3">
+            <button type="button" class="btn method btn-outline-secondary rounded-pill p-3 w-75 text-start fw-bold text-black fs-5 me-4">
+              Pay Pal
+            </button>
             <img src={paypal} height={30} alt="PayPal" />
           </div>
         </div>
