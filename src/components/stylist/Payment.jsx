@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../../styles/Payment.scss";
 import creditcard from "../../assets/payment/credit.png";
 import paypal from "../../assets/payment/paypal.png";
-import { useNavigate } from "react-router-dom";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -11,65 +10,6 @@ import StripeCheckout from "react-stripe-checkout";
 
 const Payment = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
-  const navigate = useNavigate();
-
-  const months = Array.from({ length: 12 }, (_, index) => ({
-    value: index + 1,
-    name: (index + 1).toString(),
-  }));
-
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 20 }, (_, index) => currentYear + index);
-
-  const [paymentInfo, setPaymentInfo] = useState({
-    cardNumber: "",
-    cardHolder: "",
-    expirationMonth: "",
-    expirationYear: "",
-    cvv: "",
-    productName: "Casual Shirt",
-    productPrice: "100",
-    userId: "2032049832054",
-    productId: "549834795"
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPaymentInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value,
-    }));
-  };
-
-  const handleCardNumberChange = (e) => {
-    const value = e.target.value
-      .replace(/\s/g, "")
-      .slice(0, 16)
-      .replace(/(\d{4})(?=\d)/g, "$1 ");
-    setPaymentInfo((prevInfo) => ({
-      ...prevInfo,
-      cardNumber: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://your-backend-domain.com/api/payment/credit-card",
-        paymentInfo
-      );
-      if (response.data.success) {
-        showSuccessToast('Payment successful!');
-        navigate("/thanku");
-      } else {
-        showErrorToast(response.data.message || 'Payment failed.');
-      }
-    } catch (error) {
-      console.error("Payment failed", error);
-      showErrorToast(error.response?.data?.message || 'Payment failed.');
-    }
-  };
 
   const openCreditCardModal = () => {
     setSelectedMethod("credit");

@@ -3,6 +3,7 @@
 
   .container {
     display: block;
+    
     .payment-title {
       font-size: 32px;
       font-weight: bold;
@@ -31,20 +32,16 @@
       }
     }
 
-    .pay-button {
-      background-color: black;
-      color: white;
-      padding: 10px 0;
-      border-radius: 30px;
-      font-size: 18px;
-      width: 100%;
-      max-width: 200px;
-      text-align: center;
-      border: none;
-      cursor: pointer;
+    .modal-fade-dialog {
+      .form-control, 
+      .form-select {
+        height: 45px !important;
 
-      &:hover {
-        background-color: #333;
+        &:focus, &:focus-visible {
+          outline: none !important; 
+          box-shadow: none !important;
+          border-color: #000 !important;
+        }
       }
     }
 
