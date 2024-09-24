@@ -70,7 +70,6 @@ const Cart = () => {
       <div className="cart-container">
         <div className="container" style={{ display: "block" }}>
           <div className="row">
-            {/* <h1 className="text-center fw-bold fs-1 mb-4">Cart</h1> */}
             {cartItems.length === 0 ? (
               <div className="text-center mt-5">
                 <h3>No cart available</h3>
@@ -128,7 +127,7 @@ const Cart = () => {
                   )}
                 </div>
                 <div className="col-md-6">
-                  <h1 className="text-start fw-bold fs-1 mb-4">Cart</h1>
+                  <h1 className="text-start fw-bold fs-1 mb-1">Cart</h1>
                   <div className="order-summary-container rounded">
                     <div className="order-summary-card">
                       <h3 className="order-summary-title fw-bold">Order Summary</h3>
