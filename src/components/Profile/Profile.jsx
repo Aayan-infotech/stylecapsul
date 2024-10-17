@@ -21,7 +21,7 @@ function Profile() {
   const navigate = useNavigate();
 
   const { user, status } = useSelector((state) => state.login);
-  const singleUser = user?.payload;
+  const singleUser = user;
 
   useEffect(() => {
     if (status === "succeeded") {

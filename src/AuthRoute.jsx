@@ -15,6 +15,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound.jsx'
 import axios from 'axios';
 import { apiUrl } from '../apiUtils';
 import { updateUserDetails } from './reduxToolkit/loginSlice';
+import Explore from './components/explore/Explore.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -58,6 +59,7 @@ const AuthRoute = ({ children }) => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/explore" element={<Explore />} />
         <Route path="*" element={<PageNotFound />} />
     </Routes>;
 }

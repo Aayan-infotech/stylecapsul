@@ -119,6 +119,13 @@
         margin: 0;
       }
     }
+
+    .explore_btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
   }
 }
 
@@ -526,9 +533,10 @@
   }
 
   @media (max-width: 576px) {
-    .text-container{
+    .text-container {
       height: 290px !important;
     }
+
     h2 {
       font-size: 1.75rem;
     }

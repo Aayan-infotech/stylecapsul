@@ -50,6 +50,15 @@ const LandingPage = () => {
             <div className="navbar-center">
               <h1 className="title">Style Capsule</h1>
             </div>
+
+            <div className="navbar-center">
+              <Link to="/explore" className="text-decoration-none text-black">
+                <button type="button" class="btn btn-outline-dark explore_btn rounded-pill w-50">
+                  <i className="fa-regular fa-compass fs-5 me-2"></i>
+                  <span>Explore</span>
+                </button>
+              </Link>
+            </div>
             <div className="navbar-right">
               <i className="fa-regular fa-bell"></i>
               <i className="fa-solid fa-magnifying-glass"></i>
@@ -90,7 +99,7 @@ const LandingPage = () => {
             </div>
             <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
               {/* <div className="p-3 border bg-secondary"> */}
-                <img src={two} height={400} alt="" />
+              <img src={two} height={400} alt="" />
               {/* </div> */}
             </div>
           </div>
