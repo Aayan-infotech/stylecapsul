@@ -1,12 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/Chat.scss";
 import blank_image from "../../assets/stylist/blank_img.jpg";
 import image_1 from "../../assets/marketplace/showimg5.jpg";
 import { useLocation } from "react-router-dom";
+import { io } from "socket.io-client";
+
+const SOCKET_SERVER_URL = "http://localhost:5000";
 
 const Chat = () => {
     const location = useLocation();
     const st_chat = location?.state?.stylistList;
+
+    const [socket, setSocket] = useState(null);
+    const [message, setMessage] = useState(""); // message input
+    const [messages, setMessages] = useState([]); // list of all messages
+    const [selectedStylist, setSelectedStylist] = useState(st_chat);
+
+    useEffect(() => {
+        // Connect to the socket server
+        const newSocket = io(SOCKET_SERVER_URL);
+        setSocket(newSocket);
+
+        // Handle receiving messages from server
+        newSocket.on("receive-message", (newMessage) => {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        });
+
+        return () => {
+            newSocket.disconnect(); // Cleanup connection when the component unmounts
+        };
+    }, []);
+
+    // Handle sending a message
+    const handleSendMessage = () => {
+        if (message.trim() && socket) {
+            const newMessage = {
+                content: message,
+                sender: "user", // or stylist, depending on who is sending
+                timestamp: new Date(),
+            };
+
+            // Emit the message to the server
+            socket.emit("send-message", newMessage);
+            setMessages((prevMessages) => [...prevMessages, newMessage]); // Append message to chat
+            setMessage(""); // Clear input field
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setMessage(e.target.value);
+    };
+
 
     const handleStylistClick = (stylist) => {
         setSelectedStylist(stylist);
@@ -63,12 +107,14 @@ const Chat = () => {
                                     <input
                                         type="text"
                                         className="search-input"
-                                        placeholder="Search"
+                                        placeholder="Type a message..."
+                                        value={message}
+                                        onChange={handleInputChange}
                                     />
                                     <i className="fa-regular fa-face-smile search-icon"></i>
                                 </div>
                                 <div className="send-button d-flex justify-content-center align-items-center">
-                                    <button type="button" className="btn btn-dark rounded-pill">
+                                    <button onClick={handleSendMessage} type="button" className="btn btn-dark rounded-pill">
                                         <i className="fa-solid fa-paper-plane send-icon"></i>
                                     </button>
                                 </div>

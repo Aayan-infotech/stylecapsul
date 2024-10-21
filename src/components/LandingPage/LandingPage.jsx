@@ -53,7 +53,7 @@ const LandingPage = () => {
 
             <div className="navbar-center">
               <Link to="/explore" className="text-decoration-none text-black">
-                <button type="button" class="btn btn-outline-dark explore_btn rounded-pill w-50">
+                <button type="button" className="btn btn-outline-dark explore_btn rounded-pill w-50">
                   <i className="fa-regular fa-compass fs-5 me-2"></i>
                   <span>Explore</span>
                 </button>
@@ -121,16 +121,16 @@ const LandingPage = () => {
         </div>
 
         {/* -----------------------------Popular Products-------------------------- */}
-        {/* <div class="container overflow-hidden text-center">
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="p-3 border bg-secondary">
-                <div class="row">
-                  <div class="col-12 col-md-4">
+        {/* <div className="container overflow-hidden text-center">
+          <div className="row">
+            <div className="col-12 col-md-6">
+              <div className="p-3 border bg-secondary">
+                <div className="row">
+                  <div className="col-12 col-md-4">
                     <img src={jeansImage} style={{ width: '100%', height: 'auto', objectFit: 'cover', borderBottomLeftRadius:'60px', borderTopLeftRadius:'60px' }} />
                   </div>
-                  <div class="col-12 col-md-8">
-                    <div class="p-3 border bg-warning">Custom column padding</div>
+                  <div className="col-12 col-md-8">
+                    <div className="p-3 border bg-warning">Custom column padding</div>
                   </div>
                 </div>
               </div>
