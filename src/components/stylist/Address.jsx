@@ -5,11 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addAddress, deleteAddress, fetchAddresses, updateAddress } from '../../reduxToolkit/AddressSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../../../src/components/Loader/Loader'
 
 const Address = () => {
     const dispatch = useDispatch();
     const addresses = useSelector((state) => state.addresses.addresses);
-    console.log(addresses, 'addresses')
     const addressStatus = useSelector((state) => state.addresses.status);
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [addressForm, setAddressForm] = useState({
@@ -20,6 +20,7 @@ const Address = () => {
     });
     const [isEditing, setIsEditing] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (addressStatus === 'idle') {
@@ -125,6 +126,10 @@ const Address = () => {
             });
         }
     };
+
+    if (addressStatus === 'loading') {
+        return <Loader />;
+    }
     
 
     return (
