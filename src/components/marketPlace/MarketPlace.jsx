@@ -1,81 +1,14 @@
 // eslint-disable-next-line no-unused-vars
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import imagefocus from "../../assets/marketplace/Group1806.png";
 import ellipse from "../../assets/marketplace/Ellipse1.png";
 import one from "../../assets/marketplace/one.mp4";
-import shopeimage1 from "../../assets/marketplace/showimg1.jpg";
-import shopeimage2 from "../../assets/marketplace/showimg2.jpg";
-import shopeimage3 from "../../assets/marketplace/showimg3.jpg";
-import casualShirtImage1 from "../../assets/marketplace/subcat1.jpg";
-import casualShirtImage2 from "../../assets/marketplace/subcat2.jpg";
-import casualShirtImage3 from "../../assets/marketplace/subcat3.jpg";
-
-import menswearimg1 from "../../assets/marketplace/menswearimg1.png";
-import menswearimg2 from "../../assets/marketplace/menswearimg2.jpg";
-import menswearimg3 from "../../assets/marketplace/menswearimg3.jpg";
-import menswearimg4 from "../../assets/marketplace/menswearimg4.png";
-import menswearimg5 from "../../assets/marketplace/menswearimg5.png";
-import menswearimg6 from "../../assets/marketplace/menswearimg6.png";
-
-import shopwomenimg1 from "../../assets/marketplace/shopwomenimg1.png";
-import shopwomenimg2 from "../../assets/marketplace/shopwomenimg2.png";
-import shopwomenimg3 from "../../assets/marketplace/shopwomenimg3.png";
-import shopwomenimg4 from "../../assets/marketplace/shopwomenimg4.png";
-import shopwomenimg5 from "../../assets/marketplace/menswearimg5.png";
-import shopwomenimg6 from "../../assets/marketplace/shopwomenimg6.png";
 import leatherjacket from "../../assets/marketplace/leatherjacket.png";
 import "../../styles/MarketPlace.scss";
 
 const MarketPlace = () => {
-
-  const shopebystyles = [
-    {
-      id: 1,
-      name: "Shirt",
-      imgSrc: shopeimage1,
-      subcategories: [
-        { id: 1, name: "Casual Shirts", imgSrc: casualShirtImage1 },
-        { id: 2, name: "Formal Shirts", imgSrc: casualShirtImage2 }
-      ]
-    },
-    {
-      id: 2,
-      name: "Dress",
-      imgSrc: shopeimage2,
-      subcategories: [
-        { id: 1, name: "Casual Dresses", imgSrc: casualShirtImage1 },
-        { id: 2, name: "Evening Dresses", imgSrc: casualShirtImage3 }
-      ]
-    },
-    {
-      id: 3,
-      name: "Shoes",
-      imgSrc: shopeimage3,
-      subcategories: [
-        { id: 1, name: "Sneakers", imgSrc: casualShirtImage1 },
-        { id: 2, name: "Formal Shoes", imgSrc: casualShirtImage3 }
-      ]
-    }
-  ];
-
-  const shopemenswear = [
-    { name: "Tops", imgSrc: menswearimg1 },
-    { name: "Bottoms", imgSrc: menswearimg2 },
-    { name: "Outerwear", imgSrc: menswearimg3 },
-    { name: "Footwear", imgSrc: menswearimg4 },
-    { name: "Tailoring", imgSrc: menswearimg5 },
-    { name: "Accessories", imgSrc: menswearimg6 },
-  ];
-
-  const shopwomenwear = [
-    { name: "Tops", imgSrc: shopwomenimg1 },
-    { name: "Bottoms", imgSrc: shopwomenimg2 },
-    { name: "Outerwear", imgSrc: shopwomenimg3 },
-    { name: "Footwear", imgSrc: shopwomenimg4 },
-    { name: "Bags", imgSrc: shopwomenimg5 },
-    { name: "Accessories", imgSrc: shopwomenimg6 },
-  ];
+  const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
 
   const featuredCollection = [
     { name: "Leather Jackets", imgSrc: leatherjacket },
@@ -83,6 +16,20 @@ const MarketPlace = () => {
     { name: "Leather Jackets", imgSrc: leatherjacket },
     { name: "Leather Jackets", imgSrc: leatherjacket },
   ];
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/marketplaces');
+      const result = await response.json();
+      setMarketPlaceCategory(result.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -171,50 +118,62 @@ const MarketPlace = () => {
         <div className="shop-by-style mt-1">
           <h3>Shop by Style</h3>
           <div className="row">
-            {shopebystyles?.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
-                <Link to={`/categories-type/${item.id}`} className="text-decoration-none w-100" >
-                  <div className="style-item">
-                    <div className="image-container rounded-top-pill">
-                      <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
+            {marketPlaceCategory?.shop_by_style?.length ? (
+              marketPlaceCategory?.shop_by_style.map((item, index) => (
+                <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                  <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
+                    <div className="style-item">
+                      <div className="image-container rounded-top-pill">
+                        <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                      </div>
+                      <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
                     </div>
-                    <p className="style-text rounded-bottom-pill fw-bold fs-4">{item?.name}</p>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <p>No styles available</p>
+            )}
           </div>
         </div>
         {/* -----------------------Shop Menswear------------------------- */}
         <div className="shop-by-style mt-1">
           <h3>Shop Menswear</h3>
           <div className="row">
-            {shopemenswear?.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
-                <div className="style-item">
-                  <div className="image-container rounded-top-pill">
-                    <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
+            {marketPlaceCategory?.shop_menswear?.length ? (
+              marketPlaceCategory?.shop_menswear.map((item, index) => (
+                <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                  <div className="style-item">
+                    <div className="image-container rounded-top-pill">
+                      <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                    </div>
+                    <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
                   </div>
-                  <p className="style-text rounded-bottom-pill fw-bold fs-5">{item?.name}</p>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No menswear available</p>
+            )}
           </div>
         </div>
         {/* -----------------------Shop Womenswear------------------------- */}
         <div className="shop-by-style mt-1">
           <h3>Shop Womenswear</h3>
           <div className="row">
-            {shopwomenwear?.map((item, index) => (
+          {marketPlaceCategory?.shop_womenswear?.length ? (
+              marketPlaceCategory?.shop_womenswear.map((item, index) => (
               <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
                 <div className="style-item">
                   <div className="image-container rounded-top-pill">
-                    <img src={item?.imgSrc} alt="Shirt" className="img-fluid" />
+                  <img src={item.images[0]} alt={item.name} className="img-fluid" />
                   </div>
-                  <p className="style-text rounded-bottom-pill fw-bold fs-5">{item?.name}</p>
+                  <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
                 </div>
               </div>
-            ))}
+           ))
+          ) : (
+            <p>No womenswear available</p>
+          )}
           </div>
         </div>
 

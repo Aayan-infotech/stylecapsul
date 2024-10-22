@@ -11,6 +11,7 @@ import { addToCart, getAllCarts } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
 
 const StylistCategories = () => {
+  
   const shopebystyles = [
     {
       id: 1,
