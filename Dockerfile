@@ -1,28 +1,35 @@
-FROM node:20-alpine
+# Stage 1: Build the application
+FROM node:18 AS builder
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json files
 COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the project files to the working directory
+# Copy the rest of the application code
 COPY . .
 
-# Build the React project
+# Build the React app for production
 RUN npm run build
 
-# Use an official Nginx image to serve the static files
-FROM nginx:alpine
+# Stage 2: Serve the application
+FROM node:18-alpine
 
-# Copy the built files from the Node.js container to the Nginx container
-COPY --from=0 /app/dist /usr/share/nginx/html
+# Set working directory
+WORKDIR /app
 
-# Expose port 80 for the container
-EXPOSE 80
+# Copy the built files from the builder stage
+COPY --from=builder /app/dist ./dist
 
-# Start Nginx when the container launches
-CMD ["nginx", "-g", "daemon off;"]
+# Install a minimal HTTP server to serve the static files
+RUN npm install -g serve
+
+# Expose the port the app will run on
+EXPOSE 2024
+
+# Serve the production build
+CMD ["serve", "-s", "dist", "-l", "2024"]
