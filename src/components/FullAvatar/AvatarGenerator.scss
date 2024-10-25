@@ -1,0 +1,20 @@
+.avatar-generator-container {
+    margin-top: 20px;
+    display: flex;
+    
+    .customization-controls {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    select {
+      margin-bottom: 10px;
+      padding: 8px;
+    }
+  
+    button {
+      width: 150px;
+      align-self: center;
+    }
+  }
+  

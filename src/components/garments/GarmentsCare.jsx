@@ -86,12 +86,15 @@ const GarmentsCare = () => {
   };
 
   const handleShowServiceProvider = (garment) => {
-    navigate("/service-provider", { state: { garment } });
+    // console.log(garment, 'garment')
+    // navigate("/service-provider", { state: { garment } });
+    const id = garment._id; // Extract the ID
+    navigate(`/service-provider/${id}`);
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center add-clothes-card">
-      <div className="container w-75" style={{display:"block"}}>
+      <div className="container w-75" style={{ display: "block" }}>
         <div className="row gx-5">
           <div className="col-12 col-md-6">
             <h1 className="fw-bold fs-1">Garments Care</h1>
@@ -115,7 +118,7 @@ const GarmentsCare = () => {
         <div className="row m-0">
           {loading ? (
             <div className="text-center">
-              <Loader/>
+              <Loader />
             </div>
           ) : message ? (
             <div className="text-center">

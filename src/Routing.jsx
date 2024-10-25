@@ -99,7 +99,7 @@ const Routing = () => {
             <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/garment-care" element={<GarmentsCare />} />
-            <Route path="/service-provider" element={<ServiceProvider />} />
+            <Route path="/service-provider/:garmentId" element={<ServiceProvider />} />
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

@@ -15,7 +15,8 @@ const ScheduleBooking = () => {
 
     const { user } = useSelector((state) => state.login);
     const location = useLocation();
-    const { garment } = location.state || {};
+    const { serviceProviderData } = location.state || {};
+    
 
     const navigate = useNavigate();
     const token = getCookie('authToken');
@@ -56,7 +57,7 @@ const ScheduleBooking = () => {
                 date: selectedDate,
                 time: selectedTimeRange,
                 user: user?.payload?._id,
-                serviceProvider: garment?._id
+                serviceProvider: serviceProviderData?._id
             }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,

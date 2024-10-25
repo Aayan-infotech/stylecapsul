@@ -3,37 +3,42 @@
 
   .container {
     display: block;
-
-    .carousel-image {
-      height: 300px;
+    .service-provider-profile-image {
       object-fit: cover;
-      border-radius: 10px;
+      max-width: 150px;
+      width: 100%;
+      height: 100%;
+      max-height: 400px;
     }
 
-    .custom-indicators {
-      position: relative;
-      bottom: -10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .hire-custom-btn {
+      background-color: #4c4c4c;
+      color: white;
+      font-weight: bold;
+      width: 100%;
     }
 
-    .carousel-indicators [data-bs-target] {
-      background-color: #000;
-    }
-
-    .bookservice-details {
-      .border-line {
-        border: 2.5px solid black;
-        border-radius: 5px;
-        width: 8rem;
+    @media (max-width: 767px) {
+      .container {
+        width: 90%;
       }
 
-      .book-custom-btn {
-        background-color: black;
-        color: white;
-        font-weight: bold;
+      .service-provider-profile-image {
+        width: 80%;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+      .container {
+        width: 85%;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .container {
+        width: 75%;
       }
     }
   }
 }
+
