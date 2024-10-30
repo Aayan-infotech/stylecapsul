@@ -61,7 +61,8 @@ const ClosetCategories = () => {
     <div className="d-flex justify-content-center align-items-center close-management-container">
       <div className="container w-50">
         <div className="row g-4">
-          <h1 className="text-center fw-bold fs-1">Closet</h1>
+        {/* Closet */}
+          <h1 className="text-center fw-bold fs-1">Details</h1>
           {cardData.map((item, index) => (
             <div key={index} className="col-md-6 col-lg-6">
               <Link to={item.url} className="text-decoration-none">

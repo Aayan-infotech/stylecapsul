@@ -14,6 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import standing from "../../assets/standing-human-body.png";
 import { getCookie } from "../../utils/cookieUtils.js";
+import ClosetCategories from "../closemanagement/ClosetCategories.jsx";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -30,6 +31,8 @@ function ProfileAvatar() {
   const [selectHiarColor, setSelectHiarColor] = useState([]);
   const [selectAgeRange, setSelectAgeRange] = useState([]);
   const [selectMaterialStatus, setSelectMaterialStatus] = useState([]);
+
+  const [showDetails, setShowDetails] = useState(false);
 
   const [height, setHeight] = useState(null);
   const [weight, setWeight] = useState(null);
@@ -48,7 +51,7 @@ function ProfileAvatar() {
   const { user, status } = useSelector((state) => state.login);
   const user_id = user?.payload?._id;
   // const user_id = getCookie('userId');
-  console.log(user_id, 'user_id')
+  console.log(user_id, "user_id");
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
@@ -203,6 +206,10 @@ function ProfileAvatar() {
     }
   };
 
+  const handleToggleDetails = () => {
+    setShowDetails((prev) => !prev);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -239,24 +246,33 @@ function ProfileAvatar() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-6">
-              <div className="p-2 h-100 d-flex justify-content-start align-items-center">
+            <div className="col-12 col-md-6 d-flex justify-content-start align-items-center">
+              <div className="p-2">
                 <Link
                   to="/full-avatar"
                   className="text-decoration-none text-black w-100"
                 >
                   <button
                     type="button"
-                    className="w-50 h-25 fw-bold fs-4 rounded-pill btn"
+                    className="w-100 h-25 fw-bold fs-4 rounded-pill btn"
                     style={{ backgroundColor: "#e9e9e9" }}
                   >
                     <img src={standing} height={50} alt="" />
                     Full Avatar
                   </button>
                 </Link>
+                <br />
+                <button
+                  type="button"
+                  class="btn rounded-pill w-100 p-3 mt-4 border-black text-black fw-bold"
+                  onClick={handleToggleDetails}
+                >
+                  Details
+                </button>
               </div>
             </div>
           </div>
+
           {/* -------------------------tab section----------------------- */}
           <div className="row mt-4 tab-section">
             <div className="col-12 col-md-6 d-flex justify-content-end">
@@ -289,486 +305,503 @@ function ProfileAvatar() {
             </div>
           </div>
         </div>
-        {activeTab === "basic" && (
-          <div className="container w-75">
-            <div className="row">
-              <div className="col-12">
-                <div className="p-2">
-                  <form>
-                    <div className="mb-3">
-                      <label htmlFor="name" className="form-label fw-bold fs-5">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control rounded-pill p-3"
-                        placeholder="Enter Your Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        readOnly
-                        style={{ color: "#6c757d" }}
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Not editable"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="bio" className="form-label fw-bold fs-5">
-                        Bio
-                      </label>
-                      <textarea
-                        type="text"
-                        className="form-control rounded-pill p-3"
-                        placeholder="Enter Bio"
-                        rows="1"
-                        name="bio"
-                        value={formData.bio}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="email"
-                        className="form-label fw-bold fs-5"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control rounded-pill p-3"
-                        placeholder="Enter Email"
-                        readOnly
-                        style={{ color: "#6c757d" }}
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Not editable"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label
-                        htmlFor="mobileNumber"
-                        className="form-label fw-bold fs-5"
-                      >
-                        Mobile Number
-                      </label>
-                      <input
-                        type="number"
-                        className="form-control rounded-pill p-3"
-                        placeholder="Enter Mobile Number"
-                        name="mobileNumber"
-                        value={formData.mobileNumber}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            {/* -------------------------Height, Weight & Shoes------------------------------- */}
-            <div className="container mt-4">
-              <div className="row g-2">
-                <h1 className="fw-bold fs-3">Height, Weight & Shoes</h1>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-1">{height || 0}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("height", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("height", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{weight}</span>Ponds
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("weight", -1)}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("weight", 1)}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span>{shoes}</span>
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("shoes", -1)}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        style={{ width: "40px", height: "40px" }}
-                        onClick={() => handleChange("shoes", 1)}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* -------------------------Shoulders------------------------------- */}
-              <div className="row g-2 mt-4">
-                <h1 className="fw-bold fs-3">Shoulders</h1>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{shoulders}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("shoulders", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("shoulders", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* -------------------------Chest & west------------------------------- */}
-              <div className="row g-2 mt-4">
-                <h1 className="fw-bold fs-3">Chest & Waist</h1>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{chest}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("chest", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("chest", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{waist}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("waist", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("waist", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* -------------------------Hips & High Hips------------------------------- */}
-              <div className="row g-2 mt-4">
-                <h1 className="fw-bold fs-3">Hips & High Hips</h1>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{hips}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("hips", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("hips", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-12 col-md-4 d-flex align-items-center text-center">
-                  <div>
-                    <h5 className="text fs-5">
-                      <span className="me-2">{highHips}</span>Inch
-                    </h5>
-                    <div
-                      className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
-                      style={{ width: "110px", height: "50px" }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("highHips", -1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-minus"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-light fw-bold rounded-pill"
-                        onClick={() => handleChange("highHips", 1)}
-                        style={{ width: "40px", height: "40px" }}
-                      >
-                        <i className="fa-solid fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* -------------------------Gender------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">Gender</h1>
-                {selectGender.map((gender_type) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={gender_type}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeGenderType === gender_type ? "selected" : ""
-                      }`}
-                      onClick={() => handleClickGenderType(gender_type)}
-                    >
-                      {gender_type}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              {/* -------------------------Body Size------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">Body Size</h1>
-                {bodySize.map((body_size) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={body_size}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeBodySize === body_size ? "selected" : ""
-                      }`}
-                      onClick={() => handleClickBodySize(body_size)}
-                    >
-                      {body_size}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              {/* -------------------------Eye Color------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">Eye Color</h1>
-                {selectEyeColor.map((eye_color) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={eye_color}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeEyeColor === eye_color ? "selected" : ""
-                      }`}
-                      onClick={() => handleClickEyeColor(eye_color)}
-                    >
-                      {eye_color}
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              {/* -------------------------Hair Color------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">Hair Color</h1>
-                {selectHiarColor.map((hair_color) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={hair_color}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeHairColor === hair_color ? "selected" : ""
-                      }`}
-                      onClick={() => handleClickHairColor(hair_color)}
-                    >
-                      {hair_color}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              {/* -------------------------What age range you're in?------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">What age range you're in?</h1>
-                {selectAgeRange.map((age_range) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={age_range}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeAgeRange === age_range ? "selected" : ""
-                      }`}
-                      onClick={() => handleClickAgeRange(age_range)}
-                    >
-                      {age_range}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              {/* -------------------------Marital Status------------------------------- */}
-              <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                <h1 className="fw-bold fs-3">Marital Status</h1>
-                {selectMaterialStatus.map((material_status) => (
-                  <div
-                    className="col-12 col-md-4 d-flex align-items-center text-center"
-                    key={material_status}
-                  >
-                    <button
-                      type="button"
-                      className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                        activeMaterialStatus === material_status
-                          ? "selected"
-                          : ""
-                      }`}
-                      onClick={() => handleClickMaterialStatus(material_status)}
-                    >
-                      {material_status}
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="border-container mt-5">
-                <div className="border-fade-left"></div>
-                <div className="border-dark"></div>
-                <div className="border-fade-right"></div>
-              </div>
-
-              {/* -------------------------update------------------------------- */}
-              <div className="row g-2 mt-4">
-                <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
-                  <button
-                    type="button"
-                    className="btn btn-dark w-50 w-md-50 rounded-pill p-3 fw-bold"
-                    onClick={handleUpdate}
-                  >
-                    Update
-                  </button>
-                </div>
-                <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-                  <Link to="/profile" className="w-100 w-md-50">
-                    <button
-                      type="button"
-                      className="btn btn-light w-50 rounded-pill p-3 fw-bold"
-                    >
-                      Cancel
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {activeTab === "questionnaire" && (
+        {showDetails ? (
           <div>
-            <Questionnaire />
+            <ClosetCategories />
+          </div>
+        ) : (
+          <div>
+            {activeTab === "basic" && (
+              <div className="container w-75">
+                <div className="row">
+                  <div className="col-12">
+                    <div className="p-2">
+                      <form>
+                        <div className="mb-3">
+                          <label
+                            htmlFor="name"
+                            className="form-label fw-bold fs-5"
+                          >
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control rounded-pill p-3"
+                            placeholder="Enter Your Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            readOnly
+                            style={{ color: "#6c757d" }}
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Not editable"
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label
+                            htmlFor="bio"
+                            className="form-label fw-bold fs-5"
+                          >
+                            Bio
+                          </label>
+                          <textarea
+                            type="text"
+                            className="form-control rounded-pill p-3"
+                            placeholder="Enter Bio"
+                            rows="1"
+                            name="bio"
+                            value={formData.bio}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label
+                            htmlFor="email"
+                            className="form-label fw-bold fs-5"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control rounded-pill p-3"
+                            placeholder="Enter Email"
+                            readOnly
+                            style={{ color: "#6c757d" }}
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Not editable"
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label
+                            htmlFor="mobileNumber"
+                            className="form-label fw-bold fs-5"
+                          >
+                            Mobile Number
+                          </label>
+                          <input
+                            type="number"
+                            className="form-control rounded-pill p-3"
+                            placeholder="Enter Mobile Number"
+                            name="mobileNumber"
+                            value={formData.mobileNumber}
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                {/* -------------------------Height, Weight & Shoes------------------------------- */}
+                <div className="container mt-4">
+                  <div className="row g-2">
+                    <h1 className="fw-bold fs-3">Height, Weight & Shoes</h1>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center mt-2">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-1">{height || 0}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("height", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("height", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{weight}</span>Ponds
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            style={{ width: "40px", height: "40px" }}
+                            onClick={() => handleChange("weight", -1)}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            style={{ width: "40px", height: "40px" }}
+                            onClick={() => handleChange("weight", 1)}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span>{shoes}</span>
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            style={{ width: "40px", height: "40px" }}
+                            onClick={() => handleChange("shoes", -1)}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            style={{ width: "40px", height: "40px" }}
+                            onClick={() => handleChange("shoes", 1)}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* -------------------------Shoulders------------------------------- */}
+                  <div className="row g-2 mt-4">
+                    <h1 className="fw-bold fs-3">Shoulders</h1>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{shoulders}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("shoulders", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("shoulders", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* -------------------------Chest & west------------------------------- */}
+                  <div className="row g-2 mt-4">
+                    <h1 className="fw-bold fs-3">Chest & Waist</h1>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{chest}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("chest", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("chest", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{waist}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("waist", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("waist", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* -------------------------Hips & High Hips------------------------------- */}
+                  <div className="row g-2 mt-4">
+                    <h1 className="fw-bold fs-3">Hips & High Hips</h1>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{hips}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("hips", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("hips", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-4 d-flex align-items-center text-center">
+                      <div>
+                        <h5 className="text fs-5">
+                          <span className="me-2">{highHips}</span>Inch
+                        </h5>
+                        <div
+                          className="bg-dark d-flex justify-content-evenly align-items-center rounded-pill"
+                          style={{ width: "110px", height: "50px" }}
+                        >
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("highHips", -1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-minus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-light fw-bold rounded-pill"
+                            onClick={() => handleChange("highHips", 1)}
+                            style={{ width: "40px", height: "40px" }}
+                          >
+                            <i className="fa-solid fa-plus"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* -------------------------Gender------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">Gender</h1>
+                    {selectGender.map((gender_type) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={gender_type}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeGenderType === gender_type ? "selected" : ""
+                          }`}
+                          onClick={() => handleClickGenderType(gender_type)}
+                        >
+                          {gender_type}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {/* -------------------------Body Size------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">Body Size</h1>
+                    {bodySize.map((body_size) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={body_size}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeBodySize === body_size ? "selected" : ""
+                          }`}
+                          onClick={() => handleClickBodySize(body_size)}
+                        >
+                          {body_size}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {/* -------------------------Eye Color------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">Eye Color</h1>
+                    {selectEyeColor.map((eye_color) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={eye_color}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeEyeColor === eye_color ? "selected" : ""
+                          }`}
+                          onClick={() => handleClickEyeColor(eye_color)}
+                        >
+                          {eye_color}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* -------------------------Hair Color------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">Hair Color</h1>
+                    {selectHiarColor.map((hair_color) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={hair_color}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeHairColor === hair_color ? "selected" : ""
+                          }`}
+                          onClick={() => handleClickHairColor(hair_color)}
+                        >
+                          {hair_color}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {/* -------------------------What age range you're in?------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">What age range you're in?</h1>
+                    {selectAgeRange.map((age_range) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={age_range}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeAgeRange === age_range ? "selected" : ""
+                          }`}
+                          onClick={() => handleClickAgeRange(age_range)}
+                        >
+                          {age_range}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {/* -------------------------Marital Status------------------------------- */}
+                  <div className="row g-2" style={{ paddingTop: "5rem" }}>
+                    <h1 className="fw-bold fs-3">Marital Status</h1>
+                    {selectMaterialStatus.map((material_status) => (
+                      <div
+                        className="col-12 col-md-4 d-flex align-items-center text-center"
+                        key={material_status}
+                      >
+                        <button
+                          type="button"
+                          className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                            activeMaterialStatus === material_status
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleClickMaterialStatus(material_status)
+                          }
+                        >
+                          {material_status}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-container mt-5">
+                    <div className="border-fade-left"></div>
+                    <div className="border-dark"></div>
+                    <div className="border-fade-right"></div>
+                  </div>
+
+                  {/* -------------------------update------------------------------- */}
+                  <div className="row g-2 mt-4">
+                    <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
+                      <button
+                        type="button"
+                        className="btn btn-dark w-50 w-md-50 rounded-pill p-3 fw-bold"
+                        onClick={handleUpdate}
+                      >
+                        Update
+                      </button>
+                    </div>
+                    <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+                      <Link to="/profile" className="w-100 w-md-50">
+                        <button
+                          type="button"
+                          className="btn btn-light w-50 rounded-pill p-3 fw-bold"
+                        >
+                          Cancel
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeTab === "questionnaire" && (
+              <div>
+                <Questionnaire />
+              </div>
+            )}
           </div>
         )}
       </div>

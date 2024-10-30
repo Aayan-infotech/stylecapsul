@@ -48,6 +48,7 @@ import Payment from "./components/stylist/Payment.jsx";
 import ThankuPage from "./components/stylist/ThankuPage.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import PageNotFound from "./components/PageNotFound/PageNotFound.jsx";
+// import { SocialUserDetails } from "./components/explore/SocialUserDetails.jsx";
 
 const Routing = () => {
 
@@ -101,6 +102,7 @@ const Routing = () => {
             <Route path="/garment-care" element={<GarmentsCare />} />
             <Route path="/service-provider/:garmentId" element={<ServiceProvider />} />
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
+            {/* <Route path="/socialUserDetails" element={<SocialUserDetails />} /> */}
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

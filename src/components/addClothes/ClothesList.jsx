@@ -100,7 +100,6 @@ function ClothesList() {
     };
 
     const updateCloth = (cloth) => {
-        // navigate('/add-clothes', { state: { updateCloth: cloth } });
         navigate('/add-clothes', { state: { updateCloth: cloth, currentCategory: category } });
     }
 
