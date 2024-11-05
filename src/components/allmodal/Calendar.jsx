@@ -11,10 +11,10 @@ const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [clothesOnDates] = useState({
-        '2024-09-09': { thumbnail: day4formal },
-        '2024-09-18': { thumbnail: day1formal },
-        '2024-09-14': { thumbnail: day2formal },
-        '2024-09-15': { thumbnail: day3formal },
+        '2024-11-09': { thumbnail: day4formal },
+        '2024-11-18': { thumbnail: day1formal },
+        '2024-11-14': { thumbnail: day2formal },
+        '2024-11-120': { thumbnail: day3formal },
     });
 
     const handleModalToggle = () => {
@@ -52,15 +52,14 @@ const ClothesCalendar = ({ onSave }) => {
     const handleSave = () => {
         const formattedDate = selectedDate.toISOString().split('T')[0];
         if (clothesOnDates[formattedDate]) {
-            onSave(clothesOnDates[formattedDate].thumbnail, formattedDate); // Pass selected image and date back to parent
+            onSave(clothesOnDates[formattedDate].thumbnail, formattedDate);
         }
-        // Hide modal using Bootstrap’s modal method
         const modalElement = document.getElementById('openCalendarDialogCurrent');
         if (modalElement) {
             const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
             modalInstance && modalInstance.hide();
         }
-        setOpenCalendarDialog(false); // Ensure modal state is reset
+        setOpenCalendarDialog(false);
     };
 
     return (

@@ -17,6 +17,10 @@ import { apiUrl } from '../apiUtils';
 import { updateUserDetails } from './reduxToolkit/loginSlice';
 import Explore from './components/explore/Explore.jsx';
 import { SocialUserDetails } from './components/explore/SocialUserDetails.jsx';
+import { Cloths } from './components/explore/Cloths.jsx';
+import { ClothsDetails } from './components/explore/ClothsDetails.jsx';
+import { CapsuleRangeCalendar } from './components/explore/CapsuleRangeCalendar.jsx';
+import { CapsuleRangeCalendarDetails } from './components/explore/CapsuleRangeCalendarDetails.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -62,6 +66,10 @@ const AuthRoute = ({ children }) => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/explore" element={<Explore isAuth={isAuth} />} />
         <Route path="/socialUserDetails" element={<SocialUserDetails />} />
+        <Route path="/cloths" element={<Cloths />} />
+        <Route path="/cloths-details/:id" element={<ClothsDetails />} />
+        <Route path="/capsulerangecalendar" element={<CapsuleRangeCalendar />} />
+        <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />} />
         <Route path="*" element={<PageNotFound />} />
     </Routes>;
 }

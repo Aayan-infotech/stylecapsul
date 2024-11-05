@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import showimg4 from "../../assets/marketplace/showimg4.jpg";
 import { Edit, Delete, Share } from "@mui/icons-material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import day1formal from "../../assets/myCapsuleAddAvtar/for2-removebg-preview.png";
+import day2formal from "../../assets/myCapsuleAddAvtar/for4-removebg-preview.png";
+import day3formal from "../../assets/myCapsuleAddAvtar/for5-removebg-preview.png";
+import day4formal from "../../assets/myCapsuleAddAvtar/for6.png";
 import Explore from "./Explore";
 
 export const SocialUserDetails = () => {
@@ -30,6 +33,37 @@ export const SocialUserDetails = () => {
       image: showimg4,
     },
   ];
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [clothesOnDates] = useState({
+    "2024-11-05": { thumbnail: day4formal },
+    "2024-11-06": { thumbnail: day1formal },
+    "2024-11-11": { thumbnail: day2formal },
+    "2024-11-15": { thumbnail: day3formal },
+  });
+
+  const tileContent = ({ date, view }) => {
+    const formattedDate = date.toISOString().split("T")[0];
+    if (view === "month" && clothesOnDates[formattedDate]) {
+      return (
+        <div className="thumbnail">
+          <img
+            src={clothesOnDates[formattedDate].thumbnail}
+            alt="outfit"
+            className="outfit-thumbnail"
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const tileClassName = ({ date, view }) => {
+    const formattedDate = date.toISOString().split("T")[0];
+    if (view === "month" && clothesOnDates[formattedDate]) {
+      return "date-with-image";
+    }
+    return null;
+  };
 
   return (
     <>
@@ -67,7 +101,7 @@ export const SocialUserDetails = () => {
                 <div className="col-12 col-md-6 mt-4" key={index}>
                   <div
                     className="rounded-pill mb-3"
-                    style={{ backgroundColor: "#333" }}
+                    style={{ backgroundColor: "#4C4C4C" }}
                   >
                     <div className="d-flex align-items-center">
                       <img
@@ -98,15 +132,20 @@ export const SocialUserDetails = () => {
               ))}
             </div>
 
-            <div className="row gx-5">
+            <div className="row gx-5 mt-4">
               <div className="col-12 col-md-6">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar/>
-                </LocalizationProvider>
+                <Calendar
+                  value={selectedDate}
+                  tileContent={tileContent}
+                  tileClassName={tileClassName}
+                />
               </div>
-              <div className="col-12 col-md-6">
-                {/* <Explore /> */}
-                working mode
+              <div className="col-12 col-md-6 text-start">
+                <p>User Name: Anshuman Radha</p>
+                <p>Email: anshumanradha@gmail.com</p>
+                <p>Followers: 24</p>
+                <p>Latest Comment: 4</p>
+                <p>Status: Active</p>
               </div>
             </div>
           </div>
