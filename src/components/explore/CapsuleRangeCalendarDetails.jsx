@@ -9,7 +9,7 @@ import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
-import Avatar from "react-avatar";
+// import Avatar from "react-avatar";
 
 export const CapsuleRangeCalendarDetails = () => {
   const [selectedImage, setSelectedImage] = useState(blankimage);
