@@ -3,8 +3,12 @@ import capsulimg from "../../assets/mystylecapsule/capsulimg1.png";
 import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.scss";
 import { Link } from "react-router-dom";
-import Calendar from "../../components/allmodal/Calendar";
+// import Calendar from "../../components/allmodal/Calendar";
+import CapsuleDialog from "../../components/explore/CapsuleDialog";
 import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
+import SendIcon from "@mui/icons-material/Send";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
 import Avatar from "react-avatar";
 
 export const CapsuleRangeCalendarDetails = () => {
@@ -36,7 +40,7 @@ export const CapsuleRangeCalendarDetails = () => {
 
   return (
     <div>
-      <div className="my-style-capsule-container">
+      <div className="my-style-capsule-container mb-4">
         <div className="container">
           <div className="d-flex justify-content-between align-items-center">
             <div>
@@ -67,7 +71,7 @@ export const CapsuleRangeCalendarDetails = () => {
               >
                 <i className="fa-solid fa-calendar-days me-2"></i>Calendar
               </button>
-              <Calendar onSave={handleSave} />
+              <CapsuleDialog onSave={handleSave} />
             </div>
           </div>
           <div className="mt-5">
@@ -129,6 +133,40 @@ export const CapsuleRangeCalendarDetails = () => {
                   )}
                 </div>
               ))}
+            </div>
+            <div className="border-bottom">
+              <div className="d-flex justify-content-between pt-2 mt-4">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center text-black">
+                    <ThumbUpIcon className="fs-5 me-3" />
+                    <h6 className="mt-1">20</h6>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center text-black">
+                  <h6 className="me-3">20 Comments</h6>
+                  <h6>4 Shares</h6>
+                </div>
+              </div>
+              <div className="d-flex justify-content-evenly align-items-center text-black">
+                <h5
+                  onClick={() => handleLike(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fa-regular fa-thumbs-up me-2"></i> Like
+                </h5>
+                <h5
+                  onClick={() => toggleCommentSection(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fa-regular fa-comment me-2"></i> Comment
+                </h5>
+                <h5
+                  onClick={() => handleShare(index)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <i className="fa-solid fa-share me-2"></i> Share
+                </h5>
+              </div>
             </div>
           </div>
         </div>

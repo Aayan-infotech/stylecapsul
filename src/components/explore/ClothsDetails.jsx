@@ -15,6 +15,9 @@ export const ClothsDetails = () => {
     {
       _id: 1,
       name: "Top Jeans",
+      category: "Cloth",
+      color: "White",
+      type: "Casual",
       date: "24 Nov 2024",
       image: [showimg4, showimg5, girls],
       brand: "Killer",
@@ -24,6 +27,9 @@ export const ClothsDetails = () => {
     {
       _id: 2,
       name: "Shoes",
+      category: "Shoes",
+      color: "White",
+      type: "Casual",
       date: "14 Nov 2024",
       image: [showimg4, showimg5, girls],
       brand: "Puma",
@@ -80,7 +86,7 @@ export const ClothsDetails = () => {
                     width: "10px",
                     height: "10px",
                     borderRadius: "50%",
-                    backgroundColor: index === 0 ? "#000" : "#000",
+                    backgroundColor: "#000",
                     opacity: index === 0 ? "1" : "0.5",
                     margin: "0 5px",
                   }}
@@ -119,7 +125,7 @@ export const ClothsDetails = () => {
 
         <div className="col-12 col-md-9">
           <Typography variant="h4" component="h2" className="fw-bold">
-            {category?.name || "Jacket"}
+            {category?.name || "Item Name"}
           </Typography>
           <Typography variant="subtitle1" className="fw-bold mt-2">
             Description
@@ -132,38 +138,22 @@ export const ClothsDetails = () => {
           <div className="row">
             <div className="col-12 col-md-8 d-flex justify-content-between align-items-center">
               <Box>
-                <p variant="h6" className="text-black fw-bold">
-                  Category
-                </p>
-                <p variant="h6" className="text-black fw-bold">
-                  Color
-                </p>
-                <p variant="h6" className="text-black fw-bold">
-                  Type
-                </p>
-                <p variant="h6" className="text-black fw-bold">
-                  Brand
-                </p>
-                <p variant="h6" className="text-black fw-bold">
-                  Purchase Date
-                </p>
+                <p className="text-black fw-bold">Category</p>
+                <p className="text-black fw-bold">Color</p>
+                <p className="text-black fw-bold">Type</p>
+                <p className="text-black fw-bold">Brand</p>
+                <p className="text-black fw-bold">Purchase Date</p>
+                <p className="text-black fw-bold">Price</p>
+                <p className="text-black fw-bold">Size</p>
               </Box>
               <Box>
-                <p variant="h6" className="text-muted">
-                  Cloth
-                </p>
-                <p variant="h6" className="text-muted">
-                  White
-                </p>
-                <p variant="h6" className="text-muted">
-                  Casual
-                </p>
-                <p variant="h6" className="text-muted">
-                  ABC
-                </p>
-                <p variant="h6" className="text-muted">
-                  23 Jan 2024
-                </p>
+                <p className="text-muted">{category?.category || "N/A"}</p>
+                <p className="text-muted">{category?.color || "N/A"}</p>
+                <p className="text-muted">{category?.type || "N/A"}</p>
+                <p className="text-muted">{category?.brand || "N/A"}</p>
+                <p className="text-muted">{category?.date || "N/A"}</p>
+                <p className="text-muted">{category?.price ? `$${category.price}` : "N/A"}</p>
+                <p className="text-muted">{category?.size || "N/A"}</p>
               </Box>
             </div>
             <div className="col-12 col-md-4 d-flex justify-content-end align-items-end">

@@ -3,32 +3,35 @@ import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
 import previewImage9 from "../../assets/myCapsuleAddAvtar/previewImage9.jpg";
 import { Edit, Delete, Share } from "@mui/icons-material";
 import "react-calendar/dist/Calendar.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const Cloths = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const item = location.state?.item;
+
   const categories = [
     {
       _id: 1,
-      title: "Clothes",
+      title: "Jacket",
       date: "23 Jan 2024",
       image: showimg4,
     },
     {
       _id: 2,
-      title: "Shoes",
+      title: "Blazer",
       date: "23 Jan 2024",
       image: previewImage9,
     },
     {
       _id: 3,
-      title: "Accessories",
+      title: "Dress",
       date: "25 Mar 2024",
       image: showimg4,
     },
     {
       _id: 4,
-      title: "Other",
+      title: "T-Shirt",
       date: "23 Jan 2024",
       image: previewImage9,
     },
@@ -43,7 +46,7 @@ export const Cloths = () => {
       <div className="d-flex justify-content-center align-items-center mt-5">
         <div className="text-center w-100">
           <div className="profile-section text-center">
-            <h1 className="fw-bold">Cloths</h1>
+            <h1 className="fw-bold">{item?.title}</h1>
           </div>
 
           <div className="container d-block">

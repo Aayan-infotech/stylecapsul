@@ -9,6 +9,7 @@ import day2formal from "../../assets/myCapsuleAddAvtar/for4-removebg-preview.png
 import day3formal from "../../assets/myCapsuleAddAvtar/for5-removebg-preview.png";
 import day4formal from "../../assets/myCapsuleAddAvtar/for6.png";
 import Explore from "./Explore";
+import { useNavigate } from "react-router-dom";
 
 export const SocialUserDetails = () => {
   const categories = [
@@ -40,6 +41,7 @@ export const SocialUserDetails = () => {
     "2024-11-11": { thumbnail: day2formal },
     "2024-11-15": { thumbnail: day3formal },
   });
+  const navigate = useNavigate();
 
   const tileContent = ({ date, view }) => {
     const formattedDate = date.toISOString().split("T")[0];
@@ -63,6 +65,10 @@ export const SocialUserDetails = () => {
       return "date-with-image";
     }
     return null;
+  };
+
+  const handleClick = (item) => {
+    navigate("/cloths", { state: { item } });
   };
 
   return (
@@ -102,6 +108,7 @@ export const SocialUserDetails = () => {
                   <div
                     className="rounded-pill mb-3"
                     style={{ backgroundColor: "#4C4C4C" }}
+                    onClick={() => handleClick(item)}
                   >
                     <div className="d-flex align-items-center">
                       <img
