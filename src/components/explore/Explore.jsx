@@ -48,44 +48,6 @@ const Explore = ({ isAuth }) => {
       showComments: false,
       newComment: "",
     },
-    {
-      id: 2,
-      userName: "Aennshuman Doe",
-      postDate: "October 23",
-      email: "anshuman.s@gmail.com",
-      description: "“Fashions fade, style is eternal.”",
-      avatarUrl:
-        "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
-      postContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores quos ipsum alias optio ut excepturi facilis cumque numquam corporis doloribus!",
-      hashtags: "#hashtag",
-      cardContent: [
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://img.freepik.com/free-photo/medium-shot-romantic-couple-with-plaid-blanket_23-2150561506.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl: "https://m.media-amazon.com/images/I/61zj4JTBO4L.jpg",
-        },
-      ],
-      likes: 177,
-      liked: false,
-      comments: [],
-      shares: 42,
-      shared: false,
-      showComments: false,
-      newComment: "",
-    },
   ]);
 
   const handleCommentChange = (index, e) => {
