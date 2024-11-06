@@ -8,8 +8,7 @@ import CapsuleDialog from "../../components/explore/CapsuleDialog";
 import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
-// import Avatar from "react-avatar";
+import { Avatar, Box, IconButton, InputAdornment, TextField } from "@mui/material";
 
 export const CapsuleRangeCalendarDetails = () => {
   const [selectedImage, setSelectedImage] = useState(blankimage);
@@ -48,7 +47,7 @@ export const CapsuleRangeCalendarDetails = () => {
                 alt="Remy Sharp"
                 src={showimg4}
                 className="rounded-pill"
-                sx={{ height: "20px", width: "20px" }}
+                sx={{ height: "80px", width: "80px" }}
               />
               <h5 className="fw-bold">Anshuman</h5>
               <p className="mb-0">Elizabeth@gmail.com</p>
