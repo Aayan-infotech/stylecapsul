@@ -73,7 +73,7 @@ export const SocialUserDetails = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center mt-5">
+      <div className="d-flex justify-content-center align-items-center mt-5 mb-5">
         <div className="text-center w-100">
           <div className="profile-section mb-5 text-center">
             <Avatar
