@@ -49,7 +49,7 @@ const Explore = ({ isAuth }) => {
       newComment: "",
     },
     {
-      id: 1,
+      id: 2,
       userName: "Aennshuman Doe",
       postDate: "October 23",
       email: "anshuman.s@gmail.com",
