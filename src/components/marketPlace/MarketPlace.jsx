@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import imagefocus from "../../assets/marketplace/Group1806.png";
 import ellipse from "../../assets/marketplace/Ellipse1.png";
 import one from "../../assets/marketplace/one.mp4";
+import blank_img from '../../assets/stylist/blank_img.jpg'
 import leatherjacket from "../../assets/marketplace/leatherjacket.png";
 import "../../styles/MarketPlace.scss";
 
@@ -21,7 +22,7 @@ const MarketPlace = () => {
     try {
       const response = await fetch('http://44.196.192.232:3555/api/marketplaces');
       const result = await response.json();
-      setMarketPlaceCategory(result.data);
+      setMarketPlaceCategory(result.groupedProducts);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -124,7 +125,7 @@ const MarketPlace = () => {
                   <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
                     <div className="style-item">
                       <div className="image-container rounded-top-pill">
-                        <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                        <img src={item.images[0] || blank_img} alt={item.name} className="img-fluid" />
                       </div>
                       <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
                     </div>
