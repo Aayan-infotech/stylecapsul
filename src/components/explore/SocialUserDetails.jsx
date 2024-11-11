@@ -10,6 +10,7 @@ import day3formal from "../../assets/myCapsuleAddAvtar/for5-removebg-preview.png
 import day4formal from "../../assets/myCapsuleAddAvtar/for6.png";
 import Explore from "./Explore";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 export const SocialUserDetails = () => {
   const categories = [
@@ -35,16 +36,19 @@ export const SocialUserDetails = () => {
     },
   ];
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [clothesOnDates] = useState({
+  const [selectedDetails, setSelectedDetails] = useState(null);
+  const clothesOnDates = {
     "2024-11-05": { thumbnail: day4formal },
     "2024-11-06": { thumbnail: day1formal },
     "2024-11-11": { thumbnail: day2formal },
     "2024-11-15": { thumbnail: day3formal },
-  });
+  };
+
   const navigate = useNavigate();
 
   const tileContent = ({ date, view }) => {
-    const formattedDate = date.toISOString().split("T")[0];
+    const formattedDate = format(date, "yyyy-MM-dd");
+    console.log(formattedDate, 'formattedDate')
     if (view === "month" && clothesOnDates[formattedDate]) {
       return (
         <div className="thumbnail">
@@ -60,7 +64,7 @@ export const SocialUserDetails = () => {
   };
 
   const tileClassName = ({ date, view }) => {
-    const formattedDate = date.toISOString().split("T")[0];
+    const formattedDate = format(date, "yyyy-MM-dd");
     if (view === "month" && clothesOnDates[formattedDate]) {
       return "date-with-image";
     }
@@ -69,6 +73,18 @@ export const SocialUserDetails = () => {
 
   const handleClick = (item) => {
     navigate("/cloths", { state: { item } });
+  };
+
+  const handleSelectOutFits = (date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    const details = clothesOnDates[formattedDate];
+    if (details) {
+      const selectedData = { date: formattedDate, image: details.thumbnail };
+      setSelectedDetails(selectedData);
+      navigate("/capsulerangecalendardetails", { state: { selectedData } });
+    } else {
+      setSelectedDetails(null);
+    }
   };
 
   return (
@@ -145,6 +161,10 @@ export const SocialUserDetails = () => {
                   value={selectedDate}
                   tileContent={tileContent}
                   tileClassName={tileClassName}
+                  onClickDay={(date) => {
+                    setSelectedDate(date);
+                    handleSelectOutFits(date);
+                  }}
                 />
               </div>
               <div className="col-12 col-md-6 text-start">

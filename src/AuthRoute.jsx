@@ -68,7 +68,7 @@ const AuthRoute = ({ children }) => {
         <Route path="/socialUserDetails" element={<SocialUserDetails />} />
         <Route path="/cloths" element={<Cloths />} />
         <Route path="/cloths-details/:id" element={<ClothsDetails />} />
-        <Route path="/capsulerangecalendar" element={<CapsuleRangeCalendar />} />
+        {/* <Route path="/capsulerangecalendar" element={<CapsuleRangeCalendar />} /> */}
         <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />} />
         <Route path="*" element={<PageNotFound />} />
     </Routes>;

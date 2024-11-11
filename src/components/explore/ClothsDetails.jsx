@@ -157,7 +157,7 @@ export const ClothsDetails = () => {
               </Box>
             </div>
             <div className="col-12 col-md-4 d-flex justify-content-end align-items-end">
-              <Link to="/capsulerangecalendar" className="text-decoration-none w-100">
+              {/* <Link to="/capsulerangecalendar" className="text-decoration-none w-100"> */}
                 <button
                   className="btn btn-dark mt-4 d-flex align-items-center"
                   style={{
@@ -169,7 +169,7 @@ export const ClothsDetails = () => {
                 >
                   Share
                 </button>
-              </Link>
+              {/* </Link> */}
             </div>
           </div>
         </div>
