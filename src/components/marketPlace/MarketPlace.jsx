@@ -19,7 +19,7 @@ const MarketPlace = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/marketplaces');
+      const response = await fetch('http://44.196.192.232:3555/api/marketplaces');
       const result = await response.json();
       setMarketPlaceCategory(result.data);
     } catch (error) {
