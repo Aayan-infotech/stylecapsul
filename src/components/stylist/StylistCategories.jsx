@@ -24,9 +24,8 @@ const StylistCategories = () => {
     setLoading(true);
     setErrorMessage(""); 
     try {
-      // const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`));
-      // const url = `http://44.196.192.232:3555/api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`;
-      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`));
+      const url = `http://44.196.192.232:3555/api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`;
+      const response = await axios.get(url);
       if (response?.data?.data) {
         setMarketPlaceCategoryType(response?.data?.data);
       } else {
@@ -38,6 +37,14 @@ const StylistCategories = () => {
       setLoading(false); 
     }
   };
+
+  // const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`));
+  // if (response?.data?.data) {
+  //   setMarketPlaceCategoryType(response?.data?.data);
+  // } else {
+  //   setErrorMessage("No subcategories found for the selected category.");
+  // }
+
   useEffect(() => {
     fetchAllCategoriesType(selectedCategory);
   }, [selectedCategory]);
@@ -108,7 +115,7 @@ const StylistCategories = () => {
                 <div className="product-card rounded-pill text-center">
                   <div className="image-container">
                     <img
-                      src={product.images || blank_img}
+                      src={product.image || blank_img}
                       alt={product.name}
                       className="img-fluid rounded-top"
                       style={{ objectFit: 'cover' }}
