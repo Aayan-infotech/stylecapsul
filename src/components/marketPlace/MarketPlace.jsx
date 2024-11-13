@@ -7,6 +7,8 @@ import one from "../../assets/marketplace/one.mp4";
 import blank_img from '../../assets/stylist/blank_img.jpg'
 import leatherjacket from "../../assets/marketplace/leatherjacket.png";
 import "../../styles/MarketPlace.scss";
+import axios from "axios";
+import { apiUrl } from "../../../apiUtils";
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
@@ -20,9 +22,10 @@ const MarketPlace = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://44.196.192.232:3555/api/marketplaces');
-      const result = await response.json();
-      setMarketPlaceCategory(result.groupedProducts);
+      const response = await axios.get(apiUrl('api/marketplaces'));
+      if (response?.data?.success) {
+        setMarketPlaceCategory(response?.data?.groupedProducts);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -144,12 +147,14 @@ const MarketPlace = () => {
             {marketPlaceCategory?.shop_menswear?.length ? (
               marketPlaceCategory?.shop_menswear.map((item, index) => (
                 <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
-                  <div className="style-item">
-                    <div className="image-container rounded-top-pill">
-                      <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                  <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
+                    <div className="style-item">
+                      <div className="image-container rounded-top-pill">
+                        <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                      </div>
+                      <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
                     </div>
-                    <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
-                  </div>
+                  </Link>
                 </div>
               ))
             ) : (
@@ -161,20 +166,22 @@ const MarketPlace = () => {
         <div className="shop-by-style mt-1">
           <h3>Shop Womenswear</h3>
           <div className="row">
-          {marketPlaceCategory?.shop_womenswear?.length ? (
+            {marketPlaceCategory?.shop_womenswear?.length ? (
               marketPlaceCategory?.shop_womenswear.map((item, index) => (
-              <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
-                <div className="style-item">
-                  <div className="image-container rounded-top-pill">
-                  <img src={item.images[0]} alt={item.name} className="img-fluid" />
-                  </div>
-                  <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
+                <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                  <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
+                    <div className="style-item">
+                      <div className="image-container rounded-top-pill">
+                        <img src={item.images[0]} alt={item.name} className="img-fluid" />
+                      </div>
+                      <p className="style-text rounded-bottom-pill fw-bold">{item?.name}</p>
+                    </div>
+                  </Link>
                 </div>
-              </div>
-           ))
-          ) : (
-            <p>No womenswear available</p>
-          )}
+              ))
+            ) : (
+              <p>No womenswear available</p>
+            )}
           </div>
         </div>
 
