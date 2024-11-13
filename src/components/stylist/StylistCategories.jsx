@@ -24,8 +24,9 @@ const StylistCategories = () => {
     setLoading(true);
     setErrorMessage(""); 
     try {
-      const url = `http://44.196.192.232:3555/api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`;
-      const response = await axios.get(url);
+      // const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`));
+      // const url = `http://44.196.192.232:3555/api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`;
+      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`));
       if (response?.data?.data) {
         setMarketPlaceCategoryType(response?.data?.data);
       } else {
