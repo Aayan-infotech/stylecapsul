@@ -27,22 +27,29 @@ const Cart = () => {
     setQuantities(initialQuantities);
   }, [cartItems]);
 
-  const handleQuantityChange = (item, change) => {
-    const newQuantity = quantities[item?.productId] + change;
-    if (newQuantity >= 0) {
-      setQuantities(prev => ({ ...prev, [item?.productId]: newQuantity }));
-      dispatch(updateCartQuantity({
-        userId: userId,
-        productId: item.productId,
-        newQuantity,
-      }))
-        .unwrap()
-        .catch((error) => {
-          console.error('Failed to update quantity:', error);
-        });
+  const handleQuantityChange = async (item, change) => {
+    try {
+      const newQuantity = quantities[item?.productId] + change;
+      if (newQuantity >= 0) {
+        const action = change > 0 ? "increase" : "decrease";
+        setQuantities(prev => ({ ...prev, [item?.productId]: newQuantity }));
+        const response = await dispatch(updateCartQuantity({
+          userId: userId,
+          productId: item.productId,
+          action,
+        })).unwrap();
+        if (response?.success) {
+          showSuccessToast(response?.message);
+        } else {
+          showErrorToast(response?.message);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to update quantity:', error);
+      showErrorToast('Failed to update quantity');
     }
   };
-
+  
 
   const subtotal = cartItems.reduce((total, cart) =>
     total + cart.items.reduce((sum, item) => sum + quantities[item.productId] * item.price, 0), 0

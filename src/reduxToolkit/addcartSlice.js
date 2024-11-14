@@ -44,19 +44,20 @@ export const getAllCarts = createAsyncThunk(
 // Thunk for updating the item quantity
 export const updateCartQuantity = createAsyncThunk(
   "cart/updateCartQuantity",
-  async ({ userId, productId, newQuantity }, { rejectWithValue }) => {
+  async ({ userId, productId, action }, { rejectWithValue }) => {
     try {
       const response = await axios.put(apiUrl('api/cart/update-quantity'), {
         userId,
         productId,
-        newQuantity,
+        action,
       }, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       });
-      return { productId, newQuantity };
+      const { success, message } = response.data;
+      return { productId, action, success, message };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
