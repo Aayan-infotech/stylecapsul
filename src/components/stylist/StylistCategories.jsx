@@ -121,7 +121,7 @@ const StylistCategories = () => {
                         src={product.image || blank_img}
                         alt={product.name}
                         className="img-fluid rounded-top"
-                        style={{ objectFit: 'cover' }}
+                        style={{ objectFit: 'fill' }}
                       />
                     </div>
                     <div className="product-details p-3">

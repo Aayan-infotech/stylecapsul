@@ -1,5 +1,6 @@
 .cart-container {
   padding: 6rem;
+
   @media (max-width: 768px) {
     padding: 2rem;
   }
@@ -36,9 +37,10 @@
       position: relative;
 
       .item-image {
-        height: 80px;
+        height: 120px;
         border-radius: 15px;
-        object-fit: cover;
+        object-fit: fill;
+        padding: 7px;
       }
 
       .item-details {
@@ -63,6 +65,10 @@
             font-size: 1.2rem;
             font-weight: bold;
           }
+        }
+
+        .quantity-change-btn {
+          padding: 1px 6px 1px 6px;
         }
       }
 

@@ -5,10 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllCarts, removeCart, updateCartQuantity } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import blank_img from '../../assets/stylist/blank_img.jpg'
+import moment from "moment";
 
 const Cart = () => {
   const [loading, setLoading] = useState(true);
   const cartItems = useSelector((state) => state.cart.cart);
+  console.log(cartItems, 'cartItems')
   const dispatch = useDispatch();
   const userId = getCookie('userId');
   const [quantities, setQuantities] = useState({});
@@ -49,10 +52,10 @@ const Cart = () => {
       showErrorToast('Failed to update quantity');
     }
   };
-  
+
 
   const subtotal = cartItems.reduce((total, cart) =>
-    total + cart.items.reduce((sum, item) => sum + quantities[item.productId] * item.price, 0), 0
+    total + cart.items.reduce((sum, item) => sum + quantities[item.productId] * item?.productDetails?.price, 0), 0
   );
 
   const totalQuantity = Object.values(quantities).reduce((total, quantity) => total + quantity, 0);
@@ -91,20 +94,20 @@ const Cart = () => {
                         className="cart-item d-flex align-items-center mb-2 mt-3 rounded-pill px-4"
                       >
                         <img
-                          src={item.image}
+                          src={item?.productDetails?.image || blank_img}
                           alt={item.name}
-                          className="item-image"
+                          className="item-image w-25"
                         />
                         <div className="item-details ml-3">
-                          <h5>{item.name}</h5>
-                          <p className="text-black fw-bold">Order ID - {item?.productId || 'N/A'}</p>
+                          <p className="text-black text-muted">Order ID - {item?.productId || 'N/A'}</p>
+                          <h6 className="text-black fw-bold">{item?.productDetails?.name || 'N/A'}</h6>
                           <p>{item.date}</p>
                           <div className="d-flex align-items-center">
-                            <p className="text-black fw-bold me-5">${item?.price || 'N/A'}</p>
+                            <p className="text-black fw-bold me-5">${subtotal || 'N/A'}</p>
                             <div className="quantity-controls d-flex align-items-center">
                               <button
                                 type="button"
-                                className="btn btn-dark rounded-pill"
+                                className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
                                 onClick={() => handleQuantityChange(item, -1)}
                               >
                                 <i className="fa-solid fa-minus"></i>
@@ -114,13 +117,15 @@ const Cart = () => {
                               </span>
                               <button
                                 type="button"
-                                className="btn btn-dark rounded-pill"
+                                className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
+                                style={{}}
                                 onClick={() => handleQuantityChange(item, 1)}
                               >
                                 <i className="fa-solid fa-plus"></i>
                               </button>
                             </div>
                           </div>
+                          <p className="fw-bold">{moment(item.createdAt).format('YYYY/MM/DD')}</p>
                         </div>
                         <button
                           type="button"
