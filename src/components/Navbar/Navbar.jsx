@@ -3,7 +3,7 @@ import "./Navbar.scss";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/LOGOSC.png";
 import { Logout } from "../allmodal/Logout";
-import { checkToken } from '../../utils/auth.util.js'
+import { checkToken } from "../../utils/auth.util.js";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 
@@ -28,9 +28,10 @@ function Navbar() {
   }, [dispatch]);
 
   const getTotalProductCount = () => {
-    return Array.isArray(cart) ? cart.reduce((total, item) => total + item.items.length, 0) : 0;
+    return Array.isArray(cart)
+      ? cart.reduce((total, item) => total + item.items.length, 0)
+      : 0;
   };
-
 
   return (
     <>
@@ -45,7 +46,18 @@ function Navbar() {
               />
             </Link>
           </div>
-          <div className="right">
+          <div className="right d-flex align-items-center">
+            <div>
+              <Link to="/explore" className="text-decoration-none text-black">
+                <button
+                  type="button"
+                  className="btn btn-outline-dark explore_btn rounded-pill me-2"
+                >
+                  <i className="fa-regular fa-compass fs-5 me-2"></i>
+                  <span>Explore</span>
+                </button>
+              </Link>
+            </div>
             <div className="nav-items-icon d-flex align-items-center rounded-pill">
               <Link to="/profile" className="text-decoration-none text-white">
                 <i className="fa-regular fa-user"></i>
@@ -73,7 +85,10 @@ function Navbar() {
                   aria-labelledby="dropdownMenuButton"
                 >
                   <li>
-                    <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
+                    <Link
+                      to="/scheduled-appointment"
+                      className="text-decoration-none dropdown-item"
+                    >
                       Scheduled
                     </Link>
                   </li>
@@ -83,12 +98,18 @@ function Navbar() {
                     </a>
                   </li>
                   <li>
-                    <Link to="/gift-cards" className="text-decoration-none dropdown-item">
+                    <Link
+                      to="/gift-cards"
+                      className="text-decoration-none dropdown-item"
+                    >
                       Gift Card
                     </Link>
                   </li>
                   <li>
-                    <Link to="/help-support" className="text-decoration-none dropdown-item">
+                    <Link
+                      to="/help-support"
+                      className="text-decoration-none dropdown-item"
+                    >
                       Help & Support
                     </Link>
                   </li>

@@ -22,7 +22,7 @@ const MyStyleCapsul = () => {
   const columnsData = [
     [],
     [
-      { url: "/calendarstylecapsule", src: selectedImage, top: "5%", right: "70%" },
+      { url: "/emojistylecapsule", src: selectedImage, top: "5%", right: "70%" },
     ],
     [],
   ];

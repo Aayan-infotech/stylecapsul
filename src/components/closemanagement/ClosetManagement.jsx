@@ -4,7 +4,7 @@ import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import { Link } from "react-router-dom";
-import '../../styles/closetManagement.scss'
+import "../../styles/closetManagement.scss";
 
 const cardData = [
   {
@@ -45,24 +45,29 @@ const cardData = [
 
 const ClosetManagement = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center close-management-container">
-      <div className="container w-50">
-        <div className="row g-4">
-          <h1 className="text-center fw-bold fs-1">Closet Management</h1>
-          {cardData.map((item, index) => (
-            <div key={index} className="col-md-6 col-lg-6">
-              <Link to={item.url} className="text-decoration-none">
-                <div className="card text-white w-100" style={{ backgroundColor: "#4C4C4C" }}>
-                  <div className="card-body d-flex flex-column justify-content-center align-items-center text-center">
+    <div className="close-management-container">
+      <div className="text-center">
+        <h1 className="text-center fw-bold fs-1">Closet Management</h1>
+        <div class="container text-center w-50">
+          <div class="row g-3 m-0">
+            {cardData.map((item, index) => (
+              <div key={index} class="col-12 col-md-6 col-md-4">
+                <Link to={item.url} className="text-decoration-none text-white">
+                  <div class="p-4 rounded-2" style={{ backgroundColor: "#4C4C4C" }}>
                     {item.image && (
-                      <img src={item.image} alt={item.imageAlt} className="mb-4" style={item.imageStyle} />
+                      <img
+                        src={item.image}
+                        alt={item.imageAlt}
+                        className="mb-4"
+                        style={item.imageStyle}
+                      />
                     )}
                     <h4 className="card-title fw-bold">{item.title}</h4>
                   </div>
-                </div>
-              </Link>
-            </div>
-          ))}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

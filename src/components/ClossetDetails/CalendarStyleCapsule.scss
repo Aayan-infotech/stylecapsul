@@ -1,0 +1,172 @@
+.close-management-details-container {
+//   padding-top: 6rem;
+  .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+
+      .image_scanner_card {
+          width: 100%;
+          max-width: 250px;
+          position: relative;
+
+          .card_title {
+              background-color: black;
+              height: 80px;
+              border-bottom-left-radius: 70px;
+              border-bottom-right-radius: 70px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 0 10px;
+              text-align: center;
+
+              h4 {
+                  font-size: 1.2rem;
+              }
+          }
+
+          .show_back_image {
+              width: 100%;
+              border-top-left-radius: 70px;
+              border-top-right-radius: 70px;
+              opacity: 0.3;
+              background-color: rgba(0, 0, 0, 0.5);
+          }
+
+          .scanner_icon {
+              position: absolute;
+              top: 35%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 50px;
+              height: 50px;
+
+              @media (max-width: 768px) {
+                  width: 40px;
+                  height: 40px;
+              }
+
+              @media (max-width: 576px) {
+                  width: 35px;
+                  height: 35px;
+              }
+          }
+      }
+
+      // Container for the cards section
+      .card-section {
+          border: 1px solid #ccc;
+          border-radius: 15px;
+          padding: 15px;
+          background-color: #f9f9f9;
+
+          .card-item {
+              padding: 10px 0;
+              border-bottom: 1px solid #ddd;
+
+              &:last-child {
+                  border-bottom: none;
+              }
+          }
+      }
+
+      // Styling for social media icons
+      .social-icons {
+          margin-top: 20px;
+
+          .icon-img {
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              transition: transform 0.3s ease;
+
+              &:hover {
+                  transform: scale(1.1);
+              }
+          }
+      }
+
+  }
+
+  @media (max-width: 768px) {
+      .close-management-container {
+          padding: 10px;
+
+          .row.g-2 {
+              gap: 10px;
+          }
+      }
+
+      .image_scanner_card {
+          max-width: 200px;
+      }
+
+      .card_title {
+          height: 70px;
+
+          h4 {
+              font-size: 1rem;
+          }
+      }
+  }
+
+  @media (max-width: 576px) {
+      .image_scanner_card {
+          max-width: 160px;
+      }
+
+      .card_title {
+          height: 60px;
+
+          h4 {
+              font-size: 0.9rem;
+          }
+      }
+  }
+
+
+  @media (max-width: 768px) {
+      padding-top: 6rem;
+
+      .container {
+          max-width: 90%;
+      }
+
+      .card {
+          margin-bottom: 1.5rem;
+      }
+
+      .card-title {
+          font-size: 1.2rem;
+      }
+  }
+
+  @media (max-width: 576px) {
+      padding-top: 6rem;
+
+      .container {
+          max-width: 100%;
+          padding: 0 1rem;
+      }
+
+      .card {
+          margin-bottom: 1rem;
+      }
+
+      .card-title {
+          font-size: 1rem;
+      }
+
+      .card-body {
+          padding: 1rem;
+      }
+
+      img {
+          max-width: 100%;
+      }
+  }
+}

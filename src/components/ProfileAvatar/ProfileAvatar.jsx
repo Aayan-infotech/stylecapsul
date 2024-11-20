@@ -14,7 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import standing from "../../assets/standing-human-body.png";
 import { getCookie } from "../../utils/cookieUtils.js";
-import ClosetCategories from "../closemanagement/ClosetCategories.jsx";
+import { ClossetDetails } from "../ClossetDetails/ClossetDetails.jsx";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -50,8 +50,6 @@ function ProfileAvatar() {
   const updatedProfileData = location.state?.user;
   const { user, status } = useSelector((state) => state.login);
   const user_id = user?.payload?._id;
-  // const user_id = getCookie('userId');
-  console.log(user_id, "user_id");
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
@@ -264,7 +262,7 @@ function ProfileAvatar() {
                 <br />
                 <button
                   type="button"
-                  class="btn rounded-pill w-100 p-3 mt-4 border-black text-black fw-bold"
+                  className="btn rounded-pill w-100 p-3 mt-4 border-black text-black fw-bold"
                   onClick={handleToggleDetails}
                 >
                   Details
@@ -308,7 +306,7 @@ function ProfileAvatar() {
 
         {showDetails ? (
           <div>
-            <ClosetCategories />
+            <ClossetDetails />
           </div>
         ) : (
           <div>

@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React from "react";
 import "./LandingPage.scss";
 import { Link } from "react-router-dom";
@@ -16,8 +15,6 @@ import seven from "./img/seven.png";
 import eight from "./img/eight.png";
 import nine from "./img/nine.png";
 import ten from "./img/ten.png";
-// import four from './img/four.png'
-import jeansImage from "./img/seven.png";
 
 const LandingPage = () => {
   const services = [
@@ -50,19 +47,21 @@ const LandingPage = () => {
             <div className="navbar-center">
               <h1 className="title">Style Capsule</h1>
             </div>
-
-            <div className="navbar-center">
-              <Link to="/explore" className="text-decoration-none text-black">
-                <button type="button" className="btn btn-outline-dark explore_btn rounded-pill w-50">
+            <div className="d-flex align-items-center">
+              <Link to="/login" className="text-decoration-none text-black">
+                <button
+                  type="button"
+                  className="btn btn-outline-dark explore_btn rounded-pill me-2"
+                >
                   <i className="fa-regular fa-compass fs-5 me-2"></i>
                   <span>Explore</span>
                 </button>
               </Link>
-            </div>
-            <div className="navbar-right">
-              <i className="fa-regular fa-bell"></i>
-              <i className="fa-solid fa-magnifying-glass"></i>
-              <i className="fa-solid fa-cart-shopping"></i>
+              <div className="navbar-right">
+                <i className="fa-regular fa-bell"></i>
+                <i className="fa-solid fa-magnifying-glass"></i>
+                <i className="fa-solid fa-cart-shopping"></i>
+              </div>
             </div>
           </div>
         </div>
@@ -74,7 +73,8 @@ const LandingPage = () => {
 
           <div className="capsule">
             <p>
-              Create Your Capsule <i className="fa-solid fa-arrow-right-long"></i>
+              Create Your Capsule{" "}
+              <i className="fa-solid fa-arrow-right-long"></i>
             </p>
           </div>
         </div>
@@ -98,9 +98,7 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              {/* <div className="p-3 border bg-secondary"> */}
               <img src={two} height={400} alt="" />
-              {/* </div> */}
             </div>
           </div>
 
@@ -108,7 +106,10 @@ const LandingPage = () => {
           <div className="row gx-md-5 mt-5">
             <h2 className="fw-bold fs-1 text-center">Services</h2>
             {services.map((service) => (
-              <div key={service.id} className="col-12 col-md-6 mt-4 mb-md-0 d-flex justify-content-center align-items-center">
+              <div
+                key={service.id}
+                className="col-12 col-md-6 mt-4 mb-md-0 d-flex justify-content-center align-items-center"
+              >
                 <div className="closet-management">
                   <div className="image">
                     <img src={service.imgSrc} alt={service.alt} />
@@ -120,33 +121,11 @@ const LandingPage = () => {
           </div>
         </div>
 
-        {/* -----------------------------Popular Products-------------------------- */}
-        {/* <div className="container overflow-hidden text-center">
-          <div className="row">
-            <div className="col-12 col-md-6">
-              <div className="p-3 border bg-secondary">
-                <div className="row">
-                  <div className="col-12 col-md-4">
-                    <img src={jeansImage} style={{ width: '100%', height: 'auto', objectFit: 'cover', borderBottomLeftRadius:'60px', borderTopLeftRadius:'60px' }} />
-                  </div>
-                  <div className="col-12 col-md-8">
-                    <div className="p-3 border bg-warning">Custom column padding</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-
         <div className="container landing5 mt-5">
           <div className="row">
             <h2 className="text-center fw-bold">Popular Products</h2>
             {products.map((product) => (
-              <div
-                key={product.id}
-                className="col-12 col-md-6 mt-4"
-              >
+              <div key={product.id} className="col-12 col-md-6 mt-4">
                 <div className="product-card">
                   <div className="image-container">
                     <img src={product.src} alt={product.title} />

@@ -25,7 +25,6 @@ import Appointment from "./components/Appointment/Appointment";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
 import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
 import OrderHistory from "./components/OrderHistory/OrderHistory";
-import CalendarStyleCapsule from "./components/CalendarStyleCapsule/CalendarStyleCapsule";
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
 import MainLayout from "./MainLayout";
 import GarmentsCare from "./components/garments/GarmentsCare.jsx";
@@ -48,10 +47,14 @@ import Payment from "./components/stylist/Payment.jsx";
 import ThankuPage from "./components/stylist/ThankuPage.jsx";
 import AuthRoute from "./AuthRoute.jsx";
 import PageNotFound from "./components/PageNotFound/PageNotFound.jsx";
-// import { SocialUserDetails } from "./components/explore/SocialUserDetails.jsx";
+import { ClossetDetails } from "./components/ClossetDetails/ClossetDetails.jsx";
+import Explore from "./components/explore/Explore.jsx";
+import { SocialUserDetails } from "./components/explore/SocialUserDetails.jsx";
+import { Cloths } from "./components/explore/Cloths.jsx";
+import { ClothsDetails } from "./components/explore/ClothsDetails.jsx";
+import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCalendarDetails.jsx";
 
 const Routing = () => {
-
   return (
     <Router>
       <AuthRoute>
@@ -64,45 +67,49 @@ const Routing = () => {
             <Route path="/full-avatar" element={<FullAvatar />} />
             <Route path="/body" element={<Body />} />
             <Route path="/scheduled-appointment" element={<Appointment />} />
-            <Route path="/setting-and-security" element={<SettingAndSecurity />} />
+            <Route path="/setting-and-security" element={<SettingAndSecurity />}/>
             <Route path="/closet-management" element={<ClosetManagement />} />
             <Route path="/closet-categories" element={<ClosetCategories />} />
-            <Route path="/close-management_style_scan" element={<StyleScan />} />
+            <Route path="/close-management_style_scan" element={<StyleScan />}/>
             <Route path="/upload-image-scan" element={<UploadScanImage />} />
-            <Route path="/scanned-image-wardrobe" element={<ScannedImageWardrobe />} />
+            <Route path="/scanned-image-wardrobe" element={<ScannedImageWardrobe />}/>
             <Route path="/market-place" element={<MarketPlace />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
-            <Route path="/all-clothes-list/:category" element={<ClothesList />} />
+            <Route path="/all-clothes-list/:category" element={<ClothesList />}/>
             <Route path="/clothes-details" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-profile" element={<StylistDetails />} />
             <Route path="/stylist-list" element={<StylistMessageList />} />
             <Route path="/chat" element={<Chat />} />
-            {/* <Route path="/categories-type" element={<StylistCategories />} /> */}
-            <Route path="/categories-type/:categoryId" element={<StylistCategories />} />
+            <Route path="/categories-type/:categoryId" element={<StylistCategories />}/>
             <Route path="/category-details" element={<CategoryDetails />} />
             <Route path="/address" element={<Address />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/thanku" element={<ThankuPage />} />
             <Route path="/gift-cards" element={<GiftCards />} />
-            <Route path="/gift-card-details/:id" element={<GiftCardDetails />} />
+            <Route path="/gift-card-details/:id" element={<GiftCardDetails />}/>
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
             <Route path="/help-support" element={<HelpAndSupport />} />
             <Route path="/closet-overview" element={<ClosetOverview />} />
-            <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />} />
+            <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />}/>
             <Route path="/try-avtar" element={<TryAvtar />} />
             <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/myaddedproducts" element={<MyAddedProducts />} />
             <Route path="/orderhistory" element={<OrderHistory />} />
-            <Route path="/calendarstylecapsule" element={<CalendarStyleCapsule />} />
+            <Route path="/closet-details" element={<ClossetDetails />} />
             <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/garment-care" element={<GarmentsCare />} />
-            <Route path="/service-provider/:garmentId" element={<ServiceProvider />} />
+            <Route path="/service-provider/:garmentId" element={<ServiceProvider />}/>
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
-            {/* <Route path="/socialUserDetails" element={<SocialUserDetails />} /> */}
+            -------------------------------social media-----------------
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/socialUserDetails" element={<SocialUserDetails />} />
+            <Route path="/cloths" element={<Cloths />} />
+            <Route path="/cloths-details/:id" element={<ClothsDetails />} />
+            <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

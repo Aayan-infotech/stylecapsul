@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, IconButton } from "@mui/material";
 import showimg4 from "../../assets/marketplace/showimg4.jpg";
 import { Edit, Delete, Share } from "@mui/icons-material";
@@ -11,6 +11,11 @@ import day4formal from "../../assets/myCapsuleAddAvtar/for6.png";
 import Explore from "./Explore";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-creative";
+import { EffectCreative } from "swiper/modules";
+import Loader from "../Loader/Loader";
 
 export const SocialUserDetails = () => {
   const categories = [
@@ -37,6 +42,7 @@ export const SocialUserDetails = () => {
   ];
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDetails, setSelectedDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
   const clothesOnDates = {
     "2024-11-05": { thumbnail: day4formal },
     "2024-11-06": { thumbnail: day1formal },
@@ -48,7 +54,7 @@ export const SocialUserDetails = () => {
 
   const tileContent = ({ date, view }) => {
     const formattedDate = format(date, "yyyy-MM-dd");
-    console.log(formattedDate, 'formattedDate')
+    console.log(formattedDate, "formattedDate");
     if (view === "month" && clothesOnDates[formattedDate]) {
       return (
         <div className="thumbnail">
@@ -87,97 +93,162 @@ export const SocialUserDetails = () => {
     }
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+  
+
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center mt-5 mb-5">
-        <div className="text-center w-100">
-          <div className="profile-section mb-5 text-center">
-            <Avatar
-              src={showimg4}
-              alt="User Avatar"
-              sx={{
-                width: { xs: 100, sm: 150 },
-                height: { xs: 100, sm: 150 },
-                margin: "0 auto",
-              }}
-            />
-            <h1 className="fw-bold mt-3">Anshuman</h1>
-            <p className="text-muted">Elizabeth@gmail.com</p>
-            <div className="d-flex justify-content-center align-items-center flex-wrap">
-              <blockquote className="fw-bold me-3 mb-2 text-center">
-                "Fashions fade, style is eternal."
-              </blockquote>
-              <IconButton
-                className="btn-dark rounded-circle text-white"
-                sx={{ bgcolor: "black", mt: { xs: 2, md: 0 } }}
-                aria-label="share"
-              >
-                <Share />
-              </IconButton>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ paddingTop: "6rem" }}
+        >
+          <div className="text-center w-100">
+            <div className="profile-section mb-2 text-center">
+              <Avatar
+                src={showimg4}
+                alt="User Avatar"
+                sx={{
+                  width: { xs: 100, sm: 150 },
+                  height: { xs: 100, sm: 150 },
+                  margin: "0 auto",
+                }}
+              />
+              <h1 className="fw-bold mt-3">Anshuman</h1>
+              <p className="text-muted">Elizabeth@gmail.com</p>
+              <div className="d-flex justify-content-center align-items-center flex-wrap">
+                <blockquote className="fw-bold me-3 mb-2 text-center">
+                  "Fashions fade, style is eternal."
+                </blockquote>
+                <IconButton
+                  className="btn-dark rounded-circle text-white"
+                  sx={{ bgcolor: "black", mt: { xs: 2, md: 0 } }}
+                  aria-label="share"
+                >
+                  <Share />
+                </IconButton>
+              </div>
             </div>
-          </div>
 
-          <div className="container d-block">
-            <div className="row">
-              {categories?.map((item, index) => (
-                <div className="col-12 col-md-6 mt-4" key={index}>
-                  <div
-                    className="rounded-pill mb-3"
-                    style={{ backgroundColor: "#4C4C4C" }}
-                    onClick={() => handleClick(item)}
-                  >
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="profile-image rounded-start-pill"
-                        style={{ width: "100%", maxWidth: "200px" }}
-                      />
-                      <div className="text-start p-3 d-flex flex-column justify-content-center text-white w-100">
-                        <h4 className="fw-bold mb-0">{item?.title}</h4>
-                        <div className="d-flex align-items-center">
-                          <h6 className="mb-0 me-4">{item?.date}</h6>
-                          <h6 className="edit-text text-decoration-underline">
-                            Edit
-                          </h6>
+            <div className="container d-block">
+              <div className="row m-0">
+                {categories?.map((item, index) => (
+                  <div className="col-12 col-md-6" key={index}>
+                    <div
+                      className="rounded-pill mb-3"
+                      style={{ backgroundColor: "#4C4C4C" }}
+                      onClick={() => handleClick(item)}
+                    >
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="profile-image rounded-start-pill"
+                          style={{ width: "100%", maxWidth: "200px" }}
+                        />
+                        <div className="text-start p-3 d-flex flex-column justify-content-center text-white w-100">
+                          <h4 className="fw-bold mb-0">{item?.title}</h4>
+                          <div className="d-flex align-items-center">
+                            <h6 className="mb-0 me-4">{item?.date}</h6>
+                            <h6 className="edit-text text-decoration-underline">
+                              Edit
+                            </h6>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn btn-dark rounded-pill w-50 mt-2 d-flex justify-content-center align-items-center px-2 py-1"
+                            style={{ fontSize: "0.8rem" }}
+                          >
+                            Delete{" "}
+                            <Delete className="ms-2" fontSize="x-small" />
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          className="btn btn-dark rounded-pill w-50 mt-2 d-flex justify-content-center align-items-center px-2 py-1"
-                          style={{ fontSize: "0.8rem" }}
-                        >
-                          Delete <Delete className="ms-2" fontSize="x-small" />
-                        </button>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="row gx-5 mt-4">
-              <div className="col-12 col-md-6">
-                <Calendar
-                  value={selectedDate}
-                  tileContent={tileContent}
-                  tileClassName={tileClassName}
-                  onClickDay={(date) => {
-                    setSelectedDate(date);
-                    handleSelectOutFits(date);
-                  }}
-                />
+                ))}
               </div>
-              <div className="col-12 col-md-6 text-start">
-                <p>User Name: Anshuman Radha</p>
-                <p>Email: anshumanradha@gmail.com</p>
-                <p>Followers: 24</p>
-                <p>Latest Comment: 4</p>
-                <p>Status: Active</p>
+
+              <div className="row gx-5 mt-4">
+                <div className="col-12 col-md-6">
+                  <Calendar
+                    value={selectedDate}
+                    tileContent={tileContent}
+                    tileClassName={tileClassName}
+                    onClickDay={(date) => {
+                      setSelectedDate(date);
+                      handleSelectOutFits(date);
+                    }}
+                  />
+                </div>
+                <div className="col-12 col-md-6 text-start">
+                  <Swiper
+                    grabCursor={true}
+                    effect={"creative"}
+                    style={{ backgroundColor: "azure" }}
+                    creativeEffect={{
+                      prev: {
+                        shadow: true,
+                        translate: ["-120%", 0, -500],
+                      },
+                      next: {
+                        shadow: true,
+                        translate: ["120%", 0, -500],
+                      },
+                    }}
+                    modules={[EffectCreative]}
+                    className="mySwiper2"
+                  >
+                    <SwiperSlide>
+                      <div className="text-center">
+                        <img src={day1formal} className="me-2" height={200} />
+                        <div className="text-start">
+                          <h6>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Odio cumque nisi ipsa quibusdam quidem cum.
+                          </h6>
+                          <h6>Lorem ipsum dolor sit amet.</h6>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <div>
+                        <img src={day1formal} className="me-2" height={200} />
+                        <div className="text-start">
+                          <h6>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Odio cumque nisi ipsa quibusdam quidem cum.
+                          </h6>
+                          <h6>Lorem ipsum dolor sit amet.</h6>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                    <SwiperSlide>
+                      <div>
+                        <img src={day1formal} className="me-2" height={200} />
+                        <div className="text-start">
+                          <h6>
+                            Lorem ipsum dolor sit amet consectetur adipisicing
+                            elit. Odio cumque nisi ipsa quibusdam quidem cum.
+                          </h6>
+                          <h6>Lorem ipsum dolor sit amet.</h6>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  </Swiper>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
