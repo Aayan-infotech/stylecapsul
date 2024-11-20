@@ -5,7 +5,7 @@ import GifBoxIcon from "@mui/icons-material/GifBox";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Box, InputAdornment, TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 
