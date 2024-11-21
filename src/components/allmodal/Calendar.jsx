@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/CalendarStyles.css';
@@ -6,10 +6,26 @@ import day1formal from '../../assets/myCapsuleAddAvtar/for2-removebg-preview.png
 import day2formal from '../../assets/myCapsuleAddAvtar/for4-removebg-preview.png';
 import day3formal from '../../assets/myCapsuleAddAvtar/for5-removebg-preview.png';
 import day4formal from '../../assets/myCapsuleAddAvtar/for6.png';
+import axios from 'axios';
 
 const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
+
+    // const fetchDayByCloths = async () => {
+    //     try {
+    //         // const response = await axios.post(apiUrl(`/api/myStyleCapsule/getStyle/${67063c8d075869029d823a17}`))
+    //   const response = await axios.get('http://44.196.192.232:3555/api/myStyleCapsule/getStyle/67063c8d075869029d823a17');
+    //         console.log(response, 'response'); 
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchDayByCloths();
+    // }, []);
+
     const [clothesOnDates] = useState({
         '2024-11-09': { thumbnail: day4formal },
         '2024-11-18': { thumbnail: day1formal },

@@ -53,6 +53,7 @@ import { SocialUserDetails } from "./components/explore/SocialUserDetails.jsx";
 import { Cloths } from "./components/explore/Cloths.jsx";
 import { ClothsDetails } from "./components/explore/ClothsDetails.jsx";
 import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCalendarDetails.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 
 const Routing = () => {
   return (
@@ -114,6 +115,7 @@ const Routing = () => {
           </Route>
         </Routes>
       </AuthRoute>
+      <Footer/>
     </Router>
   );
 };

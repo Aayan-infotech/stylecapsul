@@ -10,8 +10,8 @@ const MyStyleCapsul = () => {
   const [selectedDate, setSelectedDate] = useState("");
 
   const handleSave = (image, date) => {
-    setSelectedImage(image); // Set the selected image
-    setSelectedDate(date);   // Set the selected date
+    setSelectedImage(image);
+    setSelectedDate(date);
   };
 
   const getDayOfWeek = (dateString) => {
@@ -36,7 +36,7 @@ const MyStyleCapsul = () => {
             <button type="button" className="btn btn-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#openCalendarDialogCurrent">
               <i className="fa-solid fa-calendar-days me-2"></i>Calendar
             </button>
-            <Calendar onSave={handleSave} /> 
+            <Calendar onSave={handleSave} />
           </div>
           <div className="text-center mt-4">
             {selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}
