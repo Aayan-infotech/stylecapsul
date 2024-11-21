@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./EmojiStyleCapsule.scss";
 import addIcon from "./img/first-img.png";
 import firstImg from "./img/cute-first.png";
@@ -23,8 +23,11 @@ import secondOccasion from "./img/date-7.png";
 import thirdOccasion from "./img/wedding-8.png";
 import fourthOccasion from "./img/chill-9.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function EmojiStyleCapsule() {
+
+  const [daysByMoods, setDaysByMoods] = useState([]);
   const [styles, setStyles] = useState([
     firstStyle,
     secondStyle,
@@ -75,65 +78,117 @@ function EmojiStyleCapsule() {
     ));
   };
 
+  const fetchAllDayMoods = async () => {
+    try {
+      const response = await axios.get('http://44.196.192.232:3555/api/entity/get');
+      if (response?.data?.success) {
+        setDaysByMoods(response?.data?.data)
+      };
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  useEffect(() => {
+    fetchAllDayMoods();
+  }, []);
+
   return (
-    <div className="emoji-style-capsule">
-      <h1 className="main-heading">My Style Capsule</h1>
-      <Link to="/myCapsuleAddAvtart">Next Page</Link>
-      <div className="sub-heading">
-        <button className="sub-button">Items</button>
-        <button className="sub-button">Outfits</button>
-      </div>
+    <div>
+      <div className="emoji-style-capsule">
+        <h1 className="main-heading">My Style Capsule</h1>
+        <div className="container d-block">
+          <div className="row m-0 g-2">
+            <h2 className="fw-bold">Moods</h2>
+            {daysByMoods?.mood?.map((item, index) => (
+              <div className="col-12 col-md-2" key={index}>
+                <div className="p-2 border border-secondary rounded-4">
+                  <img src={item?.image} style={{objectFit:"cover"}} className="w-100" alt="df" />
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <div className="moods-section section">
-        <h2 className="moods-heading head">Moods</h2>
-        <div className="first-mood moods">
-          <img className="mood-img" src={firstImg} alt="" />
-          <img className="mood-img" src={secondImg} alt="" />
-          <img className="mood-img" src={thirdImg} alt="" />
-          <img className="mood-img" src={fourthImg} alt="" />
-          <img className="mood-img" src={fifthImg} alt="" />
-        </div>
-        <div className="second-mood moods">
-          <img className="mood-img" src={sixthImg} alt="" />
-          <img className="mood-img" src={seventhImg} alt="" />
-          <img className="mood-img" src={eightImg} alt="" />
-          <img className="mood-img" src={ninthImg} alt="" />
-          <img className="mood-img" src={tenthImg} alt="" />
-        </div>
-        <div className="third-mood moods">
-          <img className="mood-img" src={elevenImg} alt="" />
-        </div>
-      </div>
+          <div className="row m-0 g-2 mt-4">
+            <h2 className="fw-bold">Styles</h2>
+            {daysByMoods?.occassion?.map((item, index) => (
+              <div className="col-12 col-md-2" key={index}>
+                <div className="p-2 border-secondary rounded-4">
+                  <img src={item?.image} style={{objectFit:"cover"}} className="w-100" alt="df" />
+                </div>
+              </div>
+            ))}
+          </div>
 
-      <div className="styles-section section">
-        <h2 className="styles-heading head">Styles</h2>
-        {renderImages(styles)}
-        <div className="moods">
-          <label>
-            <img className="mood-img" src={addIcon} alt="Add" />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, setStyles, styles)}
-            />
-          </label>
+          <div className="row m-0 g-2 mt-4">
+            <h2 className="fw-bold">Occasions</h2>
+            {daysByMoods?.style?.map((item, index) => (
+              <div className="col-12 col-md-2" key={index}>
+                <div className="p-2 border-secondary rounded-4">
+                  <img src={item?.image} alt="df" style={{objectFit:"cover"}} className="w-100"/>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="occasions-section section">
-        <h2 className="styles-heading head">Occasions</h2>
-        {renderImages(occasions)}
-        <div className="moods">
-          <label>
-            <img className="mood-img" src={addIcon} alt="Add" />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, setOccasions, occasions)}
-            />
-          </label>
+        <Link to="/myCapsuleAddAvtart">Next Page</Link>
+        <div className="sub-heading">
+          <button className="sub-button">Items</button>
+          <button className="sub-button">Outfits</button>
+        </div>
+
+        <div className="moods-section section">
+          <h2 className="moods-heading head">Moods</h2>
+          <div className="first-mood moods">
+            <img className="mood-img" src={firstImg} alt="" />
+            <img className="mood-img" src={secondImg} alt="" />
+            <img className="mood-img" src={thirdImg} alt="" />
+            <img className="mood-img" src={fourthImg} alt="" />
+            <img className="mood-img" src={fifthImg} alt="" />
+          </div>
+          <div className="second-mood moods">
+            <img className="mood-img" src={sixthImg} alt="" />
+            <img className="mood-img" src={seventhImg} alt="" />
+            <img className="mood-img" src={eightImg} alt="" />
+            <img className="mood-img" src={ninthImg} alt="" />
+            <img className="mood-img" src={tenthImg} alt="" />
+          </div>
+          <div className="third-mood moods">
+            <img className="mood-img" src={elevenImg} alt="" />
+          </div>
+        </div>
+
+        <div className="styles-section section">
+          <h2 className="styles-heading head">Styles</h2>
+          {renderImages(styles)}
+          <div className="moods">
+            <label>
+              <img className="mood-img" src={addIcon} alt="Add" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, setStyles, styles)}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="occasions-section section">
+          <h2 className="styles-heading head">Occasions</h2>
+          {renderImages(occasions)}
+          <div className="moods">
+            <label>
+              <img className="mood-img" src={addIcon} alt="Add" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, setOccasions, occasions)}
+              />
+            </label>
+          </div>
         </div>
       </div>
     </div>
