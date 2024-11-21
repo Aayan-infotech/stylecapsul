@@ -59,7 +59,6 @@ const LandingPage = () => {
     try {
       // const response = await axios.post(apiUrl('/api/marketPlaceSubcat/popularSubcats'))
       const response = await axios.get('http://44.196.192.232:3555/api/marketPlaceSubcat/popularSubcats');
-      console.log(response?.data?.data, 'response')
       if (response?.data?.success) {
         setPopularsProducts(response?.data?.data);
       }
