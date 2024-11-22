@@ -131,10 +131,10 @@ const MarketPlace = () => {
           <div className="row">
             <div className="col d-flex justify-content-start gap-3 overflow-control flex-wrap flex-row">
               <Stack direction="row" spacing={1}>
-                <Chip label="  SHOP ALL" variant="outlined" />
-                <Chip label=" CHROME HEARTS" variant="outlined" />
-                <Chip label="   BALENCIAGA" variant="outlined" />
-                <Chip label=" CASUAL CHIC" variant="outlined" />
+                <Chip label=" SHOP ALL" variant="outlined" />
+                <Chip label="CHROME HEARTS" variant="outlined" />
+                <Chip label="BALENCIAGA" variant="outlined" />
+                <Chip label="CASUAL CHIC" variant="outlined" />
               </Stack>
             </div>
           </div>

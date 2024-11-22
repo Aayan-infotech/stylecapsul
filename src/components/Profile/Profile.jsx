@@ -16,13 +16,13 @@ import Loader from "../Loader/Loader.jsx";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [logedInUserData, setLogedInUserData] = useState(null);
+  const [logedInUserData, setLogedInUserData] = useState({});
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   const { user, status } = useSelector((state) => state.login);
-  const singleUser = user;
+  const singleUser = user ? user.payload : user;
 
   useEffect(() => {
     if (status === "succeeded") {

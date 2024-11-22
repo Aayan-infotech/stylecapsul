@@ -4,18 +4,14 @@ import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.scss";
 import { Link } from "react-router-dom";
 import Calendar from "../allmodal/Calendar";
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Import Swiper styles
-import 'swiper/css';
 
 const MyStyleCapsul = () => {
   const [selectedImage, setSelectedImage] = useState(blankimage);
   const [selectedDate, setSelectedDate] = useState("");
 
   const handleSave = (image, date) => {
-    setSelectedImage(image); // Set the selected image
-    setSelectedDate(date);   // Set the selected date
+    setSelectedImage(image);
+    setSelectedDate(date);
   };
 
   const getDayOfWeek = (dateString) => {
@@ -26,89 +22,106 @@ const MyStyleCapsul = () => {
   const columnsData = [
     [],
     [
-      { url: "/emojistylecapsule", src: selectedImage, top: "5%", right: "70%" },
+      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for2-removebg-preview.png", top: "10%" },
+      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for4-removebg-preview.png", top: "30%" },
+      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for5-removebg-preview.png", top: "50%" },
     ],
     [],
   ];
 
   return (
-    <>
-      <div className="my-style-capsule-container">
-        <div className="container">
-          <h1 className="text-center fw-bold fs-1">My Style Capsule</h1>
-          <div className="d-flex justify-content-center justify-content-lg-end align-items-center">
-            <button type="button" className="btn btn-dark rounded-pill" data-bs-toggle="modal" data-bs-target="#openCalendarDialogCurrent">
+    <div className="my-style-capsule-container mb-4">
+      <div className="container">
+        <div className="d-flex justify-content-between align-items-center px-4">
+          <div className="text-center">
+            <h4 className="fw-bold">{selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}</h4>
+            <h6 className="fw-bold">{selectedDate || "No Date Selected"}</h6>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="btn btn-dark rounded-pill"
+              data-bs-toggle="modal"
+              data-bs-target="#openCalendarDialogCurrent"
+            >
               <i className="fa-solid fa-calendar-days me-2"></i>Calendar
             </button>
-            <Calendar onSave={handleSave} /> 
+            <Calendar onSave={handleSave} />
           </div>
-          <div className="text-center mt-4">
-            {selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}
-            <h5 className="fw-bold">{selectedDate || "No Date Selected"}</h5>
-          </div>
-          <div className="mt-5">
-            <div className="row gx-5 m-auto">
-              {columnsData.map((column, columnIndex) => (
-                <div key={columnIndex} className="col inner-img">
-                  <img
-                    src={capsulimg}
-                    style={{ position: "relative" }}
-                    alt={`Capsule ${columnIndex}`}
-                  />
-                  {column.length === 0 ? (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                      }}>
-                      <div>
-                        <img
-                          style={{ marginLeft: "4rem" }}
-                          src={blankimage}
-                          height={50}
-                          width={50}
-                          alt="No Image"
-                        />
-                        <br />
-                        <br />
-                        <h6
-                          style={{ marginLeft: "2rem" }}
-                          className="fs-6 text-center mt-2"
-                        >
-                          What is your outfit for today going to be?
-                        </h6>
-                      </div>
+        </div>
+
+        {/* Image columns */}
+        <div className="mt-1" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div className="row m-0 gx-5">
+            {columnsData.map((column, columnIndex) => (
+              <div key={columnIndex} className="col inner-img">
+                <img
+                  src={capsulimg}
+                  style={{ position: "relative" }}
+                  alt={`Capsule ${columnIndex}`}
+                />
+                {column.length === 0 ? (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                    }}>
+                    <div>
+                      <img
+                        style={{ marginLeft: "4rem" }}
+                        src={blankimage}
+                        height={50}
+                        width={50}
+                        alt="No Image"
+                      />
+                      <br />
+                      <br />
+                      <h6
+                        style={{ marginLeft: "2rem" }}
+                        className="fs-6 text-center mt-2"
+                      >
+                        What is your outfit for today going to be?
+                      </h6>
                     </div>
-                  ) : (
-                    column.map((image, imageIndex) => (
-                      <Link key={imageIndex} to={image.url}>
-                        <div
-                          key={imageIndex}
-                          style={{
-                            position: "absolute",
-                            top: image.top,
-                            left: image.left,
-                            right: image.right,
-                          }}
-                        >
-                          <img
-                            src={image.src}
-                            width={200}
-                            alt={`Image ${imageIndex}`}
-                          />
-                        </div>
-                      </Link>
-                    ))
-                  )}
-                </div>
-              ))}
+                  </div>
+                ) : (
+                  column.map((image, imageIndex) => (
+                    <Link key={imageIndex} to={image.url}>
+                      <div
+                        key={imageIndex}
+                        style={{
+                          position: "absolute",
+                          top: image.top,
+                          left: image.left,
+                          right: image.right,
+                        }}
+                      >
+                        <img
+                          src={image.src}
+                          width={200}
+                          alt={`Image ${imageIndex}`}
+                        />
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Like, Comment, and Share section */}
+          <div className="border-bottom w-100 mt-4">
+            <div className="d-flex justify-content-end align-items-center text-black">
+              <h5 style={{ cursor: "pointer" }}>
+                <i className="fa-solid fa-share me-2"></i> Share
+              </h5>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default MyStyleCapsul;

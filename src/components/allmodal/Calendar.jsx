@@ -10,12 +10,19 @@ import day4formal from '../../assets/myCapsuleAddAvtar/for6.png';
 const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [clothesOnDates] = useState({
-        '2024-11-09': { thumbnail: day4formal },
-        '2024-11-18': { thumbnail: day1formal },
-        '2024-11-14': { thumbnail: day2formal },
-        '2024-11-120': { thumbnail: day3formal },
-    });
+    const [activeStartDate, setActiveStartDate] = useState(new Date());
+
+    const [clothesOnDates] = useState([
+        {
+            id: 1, date: '2024-11-09', thumbnail: [day1formal, day2formal, day3formal]
+        },
+        {
+            id: 2, date: '2024-11-15', thumbnail: [day1formal, day2formal, day3formal]
+        },
+        {
+            id: 3, date: '2024-11-20', thumbnail: [day1formal, day2formal, day3formal]
+        },
+    ]);
 
     const handleModalToggle = () => {
         setOpenCalendarDialog(!openCalendarDialog);
@@ -25,34 +32,54 @@ const ClothesCalendar = ({ onSave }) => {
         setSelectedDate(date);
     };
 
-    const tileContent = ({ date, view }) => {
-        const formattedDate = date.toISOString().split('T')[0];
-        if (view === 'month' && clothesOnDates[formattedDate]) {
-            return (
-                <div className="thumbnail">
-                    <img
-                        src={clothesOnDates[formattedDate].thumbnail}
-                        alt="outfit"
-                        className="outfit-thumbnail"
-                    />
-                </div>
-            );
-        }
-        return null;
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
-    const tileClassName = ({ date, view }) => {
-        const formattedDate = date.toISOString().split('T')[0];
-        if (view === 'month' && clothesOnDates[formattedDate]) {
-            return 'date-with-image';
+    const tileContent = ({ date, view }) => {
+        const formattedDate = formatDate(date);
+
+        if (view === 'month') {
+            const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
+            if (dateEntry) {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '4px',
+                        flex: '0 0 14.2857%',
+                        overflow: 'hidden',
+                        marginInlineEnd: '0px'
+                    }}>
+                        {dateEntry.thumbnail.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                alt={`Outfit ${index + 1}`}
+                                style={{
+                                    width: '15px',
+                                    height: 'auto',
+                                    objectFit: 'cover',
+                                    borderRadius: '4px'
+                                }}
+                            />
+                        ))}
+                    </div>
+                );
+            }
         }
         return null;
     };
 
     const handleSave = () => {
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-        if (clothesOnDates[formattedDate]) {
-            onSave(clothesOnDates[formattedDate].thumbnail, formattedDate);
+        const formattedDate = formatDate(selectedDate);
+        const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
+        if (dateEntry) {
+            onSave(dateEntry.thumbnail, formattedDate);  // Passing the selected image to the parent component
         }
         const modalElement = document.getElementById('openCalendarDialogCurrent');
         if (modalElement) {
@@ -72,12 +99,10 @@ const ClothesCalendar = ({ onSave }) => {
                 aria-hidden="true"
                 style={{ display: openCalendarDialog ? 'block' : 'none' }}
             >
-                <div className="modal-dialog modal-dialog-centered modal-lg">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">
-                                Select a Date
-                            </h1>
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Select a Date</h1>
                             <button
                                 type="button"
                                 className="btn-close"
@@ -91,7 +116,6 @@ const ClothesCalendar = ({ onSave }) => {
                                 onChange={handleDateChange}
                                 value={selectedDate}
                                 tileContent={tileContent}
-                                tileClassName={tileClassName}
                             />
                         </div>
                         <div className="modal-footer">

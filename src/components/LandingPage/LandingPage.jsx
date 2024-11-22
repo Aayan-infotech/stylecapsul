@@ -1,22 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./LandingPage.scss";
 import { Link } from "react-router-dom";
-
 import Footer from "../Footer/Footer";
 import one from "./img/one.mp4";
 import two from "./img/two.png";
-
 import three from "./img/three.png";
 import four from "./img/four.png";
 import five from "./img/five.png";
 import six from "./img/six.png";
-
 import seven from "./img/seven.png";
 import eight from "./img/eight.png";
 import nine from "./img/nine.png";
 import ten from "./img/ten.png";
+import { useSelector } from "react-redux";
+import Loader from "../Loader/Loader";
+import axios from "axios";
+import { loginUser } from "../../reduxToolkit/loginSlice";
+import { ToastContainer, toast } from 'react-toastify';
 
 const LandingPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [popularsProducts, setPopularsProducts] = useState([]);
+  const token = useSelector((state) => state?.login?.token);
+
   const services = [
     { id: 1, imgSrc: three, alt: "Closet Icon", text: "Closet Management" },
     { id: 2, imgSrc: four, alt: "Closet Icon", text: "My Style Capsule" },
@@ -31,127 +37,163 @@ const LandingPage = () => {
     { id: 4, src: ten, title: "Blue Jeans", price: "$28" },
   ];
 
+  const handleServiceClick = (route) => {
+    if (!token) {
+      toast.error("You need to log in first!", {
+        autoClose: 1000,
+        hideProgressBar: true,
+        style: {
+          backgroundColor: 'black',
+          color: '#C8B199',
+          borderRadius: '50px',
+          padding: '10px 20px',
+        }
+      });
+    } else {
+      navigate(route);
+    }
+  }
+  const fetchPopularsSubCategory = async () => {
+    setLoading(true);
+    try {
+      // const response = await axios.post(apiUrl('/api/marketPlaceSubcat/popularSubcats'))
+      const response = await axios.get('http://44.196.192.232:3555/api/marketPlaceSubcat/popularSubcats');
+      console.log(response?.data?.data, 'response')
+      if (response?.data?.success) {
+        setPopularsProducts(response?.data?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchPopularsSubCategory();
+  }, []);
+
   return (
     <>
-      <div className="main-landing-page-home">
-        <div className="outer-navbar">
-          <div className="navbar">
-            <div className="navbar-left">
-              <Link to="/login">
-                <button className="login-btn">Log In</button>
-              </Link>
-              <Link to="/signup">
-                <button className="signup-btn">Sign Up</button>
-              </Link>
-            </div>
-            <div className="navbar-center">
-              <h1 className="title">Style Capsule</h1>
-            </div>
-            <div className="d-flex align-items-center">
-              <Link to="/login" className="text-decoration-none text-black">
-                <button
-                  type="button"
-                  className="btn btn-outline-dark explore_btn rounded-pill me-2"
-                >
-                  <i className="fa-regular fa-compass fs-5 me-2"></i>
-                  <span>Explore</span>
-                </button>
-              </Link>
-              <div className="navbar-right">
-                <i className="fa-regular fa-bell"></i>
-                <i className="fa-solid fa-magnifying-glass"></i>
-                <i className="fa-solid fa-cart-shopping"></i>
+      {loading ? (
+        <Loader />
+      ) : (
+        <><ToastContainer /><div className="main-landing-page-home">
+          <div className="outer-navbar">
+            <div className="navbar">
+              <div className="navbar-left">
+                <Link to="/login">
+                  <button className="login-btn">Log In</button>
+                </Link>
+                <Link to="/signup">
+                  <button className="signup-btn">Sign Up</button>
+                </Link>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="landing1">
-          <div className="vid">
-            <video src={one} alt="Video" autoPlay loop muted />
-          </div>
-
-          <div className="capsule">
-            <p>
-              Create Your Capsule{" "}
-              <i className="fa-solid fa-arrow-right-long"></i>
-            </p>
-          </div>
-        </div>
-
-        <div className="landing2">
-          <div className="marquee">
-            <p>REVOLUTIONIZE YOUR CLOSET</p>
-            <p>REVOLUTIONIZE YOUR CLOSET</p>
-            <p>REVOLUTIONIZE YOUR CLOSET</p>
-            <p>REVOLUTIONIZE YOUR CLOSET</p>
-          </div>
-        </div>
-
-        <div className="container custom-container">
-          <div className="row gx-5">
-            <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              <div className="p-2">
-                <h2 className="text-size">
-                  Most of us don't wear 82% of our closet contents.*
-                </h2>
+              <div className="navbar-center">
+                <h1 className="title">Style Capsule</h1>
               </div>
-            </div>
-            <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              <img src={two} height={400} alt="" />
-            </div>
-          </div>
-
-          {/* -----------------------------service-------------------------- */}
-          <div className="row gx-md-5 mt-5">
-            <h2 className="fw-bold fs-1 text-center">Services</h2>
-            {services.map((service) => (
-              <div
-                key={service.id}
-                className="col-12 col-md-6 mt-4 mb-md-0 d-flex justify-content-center align-items-center"
-              >
-                <div className="closet-management">
-                  <div className="image">
-                    <img src={service.imgSrc} alt={service.alt} />
-                  </div>
-                  <div className="text fw-bold">{service.text}</div>
+              <div className="d-flex align-items-center">
+                <Link to="/login" className="text-decoration-none text-black">
+                  <button
+                    type="button"
+                    className="btn btn-outline-dark explore_btn rounded-pill me-2"
+                  >
+                    <i className="fa-regular fa-compass fs-5 me-2"></i>
+                    <span>Explore</span>
+                  </button>
+                </Link>
+                <div className="navbar-right">
+                  <i className="fa-regular fa-bell"></i>
+                  <i className="fa-solid fa-magnifying-glass"></i>
+                  <i className="fa-solid fa-cart-shopping"></i>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
 
-        <div className="container landing5 mt-5">
-          <div className="row">
-            <h2 className="text-center fw-bold">Popular Products</h2>
-            {products.map((product) => (
-              <div key={product.id} className="col-12 col-md-6 mt-4">
-                <div className="product-card">
-                  <div className="image-container">
-                    <img src={product.src} alt={product.title} />
+          <div className="landing1">
+            <div className="vid">
+              <video src={one} alt="Video" autoPlay loop muted />
+            </div>
+
+            <div className="capsule">
+              <p>
+                Create Your Capsule{" "}
+                <i className="fa-solid fa-arrow-right-long"></i>
+              </p>
+            </div>
+          </div>
+
+          <div className="landing2">
+            <div className="marquee">
+              <p>REVOLUTIONIZE YOUR CLOSET</p>
+              <p>REVOLUTIONIZE YOUR CLOSET</p>
+              <p>REVOLUTIONIZE YOUR CLOSET</p>
+              <p>REVOLUTIONIZE YOUR CLOSET</p>
+            </div>
+          </div>
+
+          <div className="container custom-container">
+            <div className="row gx-5">
+              <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+                <div className="p-2">
+                  <h2 className="text-size">
+                    Most of us don't wear 82% of our closet contents.*
+                  </h2>
+                </div>
+              </div>
+              <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+                <img src={two} height={400} alt="" />
+              </div>
+            </div>
+
+            {/* -----------------------------service-------------------------- */}
+            <div className="row gx-md-5 mt-5">
+              <h2 className="fw-bold fs-1 text-center">Services</h2>
+              {services.map((service) => (
+                <div key={service.id} className="col-12 col-md-6 mt-4 mb-md-0 d-flex justify-content-center align-items-center"
+                >
+                  <div className="closet-management" onClick={() => handleServiceClick(service?.route)}>
+                    <div className="image">
+                      <img src={service.imgSrc} alt={service.alt} />
+                    </div>
+                    <div className="text fw-bold">{service.text}</div>
                   </div>
-                  <div className="text-container">
-                    <div className="info">
-                      <h3>{product.title}</h3>
-                      <div className="description-price">
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing e
-                        </p>
-                        <div className="price">{product.price}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="container landing5 mt-5">
+            <div className="row">
+              <h2 className="text-center fw-bold">Popular Products</h2>
+              {popularsProducts?.map((product, index) => (
+                <div key={index} className="col-12 col-md-6 mt-4">
+                  <div className="product-card">
+                    <div className="image-container">
+                      <img src={product?.image} alt={product?.name} />
+                    </div>
+                    <div className="text-container">
+                      <div className="info">
+                        <h3>{product?.name || 'N/A'}</h3>
+                        <div className="description-price">
+                          <p> {product?.description ? product.description.length >40 ? `${product.description.slice(0, 40)}...` : product.description : 'N/A'} </p>
+                          <div className="price">${product?.price || 'N/A'}</div>
+                        </div>
+                      </div>
+                      <div className="actions">
+                        <button className="add-to-cart" onClick={() => handleServiceClick(product?.route)}>Add to cart</button>
+                        <button className="buy" onClick={() => handleServiceClick(product?.route)}>Buy</button>
                       </div>
                     </div>
-                    <div className="actions">
-                      <button className="add-to-cart">Add to cart</button>
-                      <button className="buy">Buy</button>
-                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-        <Footer />
-      </div>
+          <Footer />
+        </div></>
+      )}
     </>
   );
 };

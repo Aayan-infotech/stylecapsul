@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./EmojiStyleCapsule.scss";
 import addIcon from "./img/first-img.png";
 import firstImg from "./img/cute-first.png";
@@ -23,8 +23,11 @@ import secondOccasion from "./img/date-7.png";
 import thirdOccasion from "./img/wedding-8.png";
 import fourthOccasion from "./img/chill-9.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 
 function EmojiStyleCapsule() {
+  const [getStableMoods, setGetStableMoods] = useState([]);
   const [styles, setStyles] = useState([
     firstStyle,
     secondStyle,
@@ -75,9 +78,62 @@ function EmojiStyleCapsule() {
     ));
   };
 
+  const fetchAllStylsMoods = async () => {
+    try {
+      const response = await axios.get("http://44.196.192.232:3555/api/entity/get");
+      console.log(response?.data?.data);
+      if (response?.data?.success) {
+        setGetStableMoods(response?.data?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllStylsMoods();
+  }, []);
+
+
   return (
     <div className="emoji-style-capsule">
       <h1 className="main-heading">My Style Capsule</h1>
+
+      <div class="container d-block">
+        <div class="row m-0 g-2">
+          <h2 className="fw-bold">Moods</h2>
+          {getStableMoods?.mood?.map((item, index) => (
+            <div class="col-12 col-md-2" key={index}>
+              <div class="p-1 border border-1">
+                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="row m-0 g-2 mt-4">
+          <h2 className="fw-bold">Style</h2>
+          {getStableMoods?.style?.map((item, index) => (
+            <div class="col-12 col-md-2" key={index}>
+              <div class="p-1 border border-1">
+                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="row m-0 g-2 mt-4">
+          <h2 className="fw-bold">Occassion</h2>
+          {getStableMoods?.occassion?.map((item, index) => (
+            <div class="col-12 col-md-2" key={index}>
+              <div class="p-1 border border-1">
+                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <Link to="/myCapsuleAddAvtart">Next Page</Link>
       <div className="sub-heading">
         <button className="sub-button">Items</button>

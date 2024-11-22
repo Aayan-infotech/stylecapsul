@@ -4,9 +4,9 @@
     .container{
         display: block;
 
-        .inner-img:hover {
-            transform: scale(1.1);
-        }
+        // .inner-img:hover {
+        //     transform: scale(1.1);
+        // }
         
         .inner-img {
             transition: transform 0.5s;
