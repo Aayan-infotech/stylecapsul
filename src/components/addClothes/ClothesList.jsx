@@ -108,10 +108,10 @@ function ClothesList() {
             <ToastContainer />
             <div className="clothes-list-main-container">
                 <div className="container w-75 clothes-list-container">
-                    <div className="row">
+                    <div className="row align-items-center">
                         <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
-                            <h1 className="text-center fw-bold fs-1 mb-3 mb-md-0">{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</h1>
-                            <div className="search-box mt-3 mt-md-0">
+                            <h1 className="text-center fw-bold fs-1 mb-0">{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</h1>
+                            <div className="search-box ">
                                 <i className="fa fa-search"></i>
                                 <input
                                     type="text"
@@ -151,8 +151,9 @@ function ClothesList() {
                                                         <i className="fa-regular fa-pen-to-square"></i>
                                                     </button>
                                                 </div>
-                                                <i className="fa-solid fa-circle-xmark close-icon" onClick={() => deleteCloth(product._id)}></i>
+                                              
                                             </div>
+                                            <i className="fa-solid fa-circle-xmark close-icon" onClick={() => deleteCloth(product._id)}></i>
                                         </div>
                                     </div>
                                 ))

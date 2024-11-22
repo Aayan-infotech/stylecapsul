@@ -101,8 +101,8 @@ function Profile() {
                         className="text-decoration-none"
                       >
                         <button className="action-button">
-                          <FaCalendarAlt className="icon" /> Scheduled
-                          Appointment{" "}
+                          <FaCalendarAlt className="icon" /> 
+                          <span>Scheduled Appointment</span>
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>

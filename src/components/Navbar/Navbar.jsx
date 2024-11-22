@@ -46,7 +46,7 @@ function Navbar() {
               />
             </Link>
           </div>
-          <div className="right d-flex align-items-center">
+          <div className="right d-flex align-items-center px-3 px-lg-0">
             <div>
               <Link to="/explore" className="text-decoration-none text-black">
                 <button

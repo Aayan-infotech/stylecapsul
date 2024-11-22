@@ -113,6 +113,9 @@ $button-font-size: 0.875rem;
   }
 }
 @media (max-width: 767px) {
+  .categories-type-container {
+    padding-top: 11rem;
+}
   .stylist-content {
     .row {
       flex-direction: column;

@@ -196,8 +196,8 @@ const Explore = ({ isAuth }) => {
                           <h6 className="mt-1">{post.likes}</h6>
                         </div>
                       </div>
-                      <div className="d-flex align-items-center text-black">
-                        <h6 className="me-3">
+                      <div className="d-flex align-items-center text-black gap-3 justify-content-center">
+                        <h6 className="">
                           {post.comments.length} Comments
                         </h6>
                         <h6>{post.shares} Shares</h6>

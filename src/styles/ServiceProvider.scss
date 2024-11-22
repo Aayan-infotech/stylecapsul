@@ -42,3 +42,11 @@
   }
 }
 
+@media (max-width: 767px) {
+  .service-provider-sections{
+    padding-top: 11rem !important;
+  }
+  .container {
+    width: 90%;
+  }
+}

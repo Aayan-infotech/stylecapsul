@@ -64,8 +64,8 @@ const ServiceProvider = () => {
   return (
     <>
       <div className="service-provider-sections">
-        <div className="container w-75">
-          <div className="row">
+        <div className="container w-75 align-items-center justify-content-center">
+          <div className="row w-100 m-auto">
             <div className="col-12">
               <h1 className="fw-bold fs-2 text-center text-md-start">Service Provider</h1>
             </div>

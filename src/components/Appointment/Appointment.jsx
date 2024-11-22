@@ -33,18 +33,18 @@ function Appointment() {
       <div className='scheduled-appointment-container'>
         <div className="container w-75" style={{ display: "block" }}>
           <h1 className="fw-bold fs-4 text-center text-md-start mt-2">All Appointments</h1>
-          <div className="row m-0">
+          <div className="row m-0 gy-3">
             {allGarmentsServices.map((item, index) => {
               const formattedStartTime = format(new Date(item.startTime), 'dd-MM-yyyy - hh:mm a');
               return (
                 <div className="col-12 mt-2 text-white" key={index}>
-                  <div className="p-3 rounded-pill appointment-box d-flex justify-content-between align-items-center">
-                    <div className='d-flex align-items-center'>
-                      <img src={Schedule} height={40} className='me-4' alt="Schedule Icon" />
-                      <h4>{item.service}</h4>
+                  <div className="p-3 rounded-pill appointment-box d-flex gap-4 flex-wrap justify-content-center justify-content-lg-between align-items-center">
+                    <div className='d-flex align-items-center gap-3 justify-content-between justify-content-lg-start'>
+                      <img src={Schedule} height={40}  alt="Schedule Icon" />
+                      <h4>{item.service || 'N/A'}</h4>
                     </div>
                     <div className='d-flex align-items-center'>
-                      <div className='me-4'>
+                      <div >
                         <h5>{formattedStartTime}</h5>
                       </div>
                     </div>

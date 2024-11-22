@@ -45,12 +45,12 @@ const SettingAndSecurity = () => {
   return (
     <div className="align-items-center" style={{ paddingTop: "6rem" }}>
       <div className="container w-50" style={{ display: "block" }}>
-        <div className="row m-0 g-2">
+        <div className="row m-0 g-2 gy-3">
           <h1 className="text-center fw-bold fs-1">Settings & Security</h1>
           {securityData?.map((item, index) => (
             <div className="col-12 col-md-6 col-lg-6" key={index}>
-              <Link to={item?.url} className="text-decoration-none text-white w-100">
-                <div className="card" style={{ height: "150px", backgroundColor: "#4C4C4C", }}>
+              <Link to={item?.url} className="text-decoration-none text-white d-flex align-items-center justify-content-center">
+                <div className="card m-0 w-100" style={{ height: "150px", backgroundColor: "#4C4C4C", }}>
                   <div className="card-body d-flex flex-column justify-content-center align-items-center">
                     {item?.icon && (
                       <i

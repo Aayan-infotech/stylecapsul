@@ -45,15 +45,15 @@ const cardData = [
 
 const ClosetManagement = () => {
   return (
-    <div className="close-management-container">
+    <div className="closet-management-container">
       <div className="text-center">
         <h1 className="text-center fw-bold fs-1">Closet Management</h1>
-        <div class="container text-center w-50">
-          <div class="row g-3 m-0">
+        <div className="container p-3 text-center w-50 pt-0">
+          <div className="row g-3 m-0">
             {cardData.map((item, index) => (
-              <div key={index} class="col-12 col-md-6 col-md-4">
+              <div key={index} className="col-12 col-md-6 col-md-4">
                 <Link to={item.url} className="text-decoration-none text-white">
-                  <div class="p-4 rounded-2" style={{ backgroundColor: "#4C4C4C" }}>
+                  <div className="p-4 rounded-2" style={{ backgroundColor: "#4C4C4C" }}>
                     {item.image && (
                       <img
                         src={item.image}

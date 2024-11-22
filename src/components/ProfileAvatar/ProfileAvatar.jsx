@@ -244,7 +244,7 @@ function ProfileAvatar() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-6 d-flex justify-content-start align-items-center">
+            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-start align-items-center">
               <div className="p-2">
                 <Link
                   to="/full-avatar"
@@ -272,8 +272,8 @@ function ProfileAvatar() {
           </div>
 
           {/* -------------------------tab section----------------------- */}
-          <div className="row mt-4 tab-section">
-            <div className="col-12 col-md-6 d-flex justify-content-end">
+          <div className="row mt-4 gy-4 tab-section ">
+            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
               <button
                 type="button"
                 className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
@@ -284,7 +284,7 @@ function ProfileAvatar() {
                 Basic
               </button>
             </div>
-            <div className="col-12 col-md-6">
+            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
               <button
                 type="button"
                 className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
@@ -775,17 +775,17 @@ function ProfileAvatar() {
                     <div className="col-12 col-md-6 d-flex justify-content-center align-items-center mb-2 mb-md-0">
                       <button
                         type="button"
-                        className="btn btn-dark w-50 w-md-50 rounded-pill p-3 fw-bold"
+                        className="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold mx-200"
                         onClick={handleUpdate}
                       >
                         Update
                       </button>
                     </div>
                     <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-                      <Link to="/profile" className="w-100 w-md-50">
+                      <Link to="/profile" className=" justify-content-center align-items-center d-flex mx-200 w-100 text-decoration-none">
                         <button
                           type="button"
-                          className="btn btn-light w-50 rounded-pill p-3 fw-bold"
+                          className="btn btn-light w-100 rounded-pill p-3 fw-bold mx-200"
                         >
                           Cancel
                         </button>

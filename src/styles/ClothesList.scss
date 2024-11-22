@@ -150,26 +150,59 @@
           }
         }
   
-        .close-icon {
-          position: relative;
-          top: 4px;
-          left: 35px;
-          font-size: 35px;
-          cursor: pointer;
-          background: #fff;
-          color: black;
-          border-radius: 50%;
-          box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
-        }
+       
       }
     }
   }
+  .products-container{
+    position: relative;
+  }
+  .close-icon {
+    position: absolute;
+    top: 42px;
+    right: -17px;
+    font-size: 35px;
+    cursor: pointer;
+    background: #fff;
+    color: black;
+    border-radius: 50%;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+  }
 
-// @media (max-width: 992px) {
-//     .my-added-product {
-//         margin: 100px 110px 0;
-//     }    
-// }
+@media (max-width: 992px) {
+  .clothes-list-main-container {
+    padding-top: 11rem;
+}  
+.clothes-list-main-container .clothes-list-container .search-box {
+  position: relative;
+  width: 50%;
+}
+
+.clothes-list-main-container .products-container .products-added {
+ height: auto !important;
+  gap: 15px;
+}
+.clothes-list-main-container .clothes-list-container .search-box input {
+  padding: 10px 15px 10px 43px;
+
+}
+.clothes-list-main-container .products-container .products-added .product-text{
+  padding:  0 !important;
+}
+.clothes-list-main-container .clothes-list-container .search-box .fa-search {
+  font-size: 1rem;
+}
+.clothes-list-main-container .products-container .products-added .product-text .first-text h3 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: bold;
+  max-width: 150px;
+  word-wrap: break-word;
+}
+.fs-1 {
+  font-size: 1.3rem !important;
+}
+}
 
 // @media (max-width: 768px) {
 //   .my-added-product {

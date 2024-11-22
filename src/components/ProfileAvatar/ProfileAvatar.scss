@@ -139,6 +139,37 @@
 // Media Queries for Responsive Design
 
 @media (max-width: 768px) {
+
+  .top .top1 .right {
+    width: 100% !important;
+    flex-direction: row !important;
+    align-items: flex-start;
+}
+.top .top1 {
+  padding: 12px 18px;
+}
+.home-container-title .closet-management {
+ 
+  margin: 0; 
+
+}
+.container .p-3 {
+   padding: 1rem !important; 
+}
+.container .px-5 {
+  padding: 0 3rem !important;
+}
+.mx-200{
+  max-width: 200px !important;
+}
+.scheduled-appointment-container h5 , .scheduled-appointment-container h4{
+font-size: 1rem !important;
+}
+.top .top1 .right .hamburger i {
+  margin: 0 1rem; 
+  font-size: 2rem;
+  cursor: pointer;
+}
   .avatar {
     padding-top: 8rem;
   }

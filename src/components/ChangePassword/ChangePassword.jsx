@@ -67,9 +67,9 @@ const ChangePassword = () => {
       <ToastContainer />
       <div className="change-password-container">
         <h1 className="text-center fw-bold fs-1">Change Password</h1>
-        <div className="container" style={{display:"block"}}>
+        <div className="container pt-0" style={{display:"block"}}>
           <div className="card password-card-container">
-            <div className="card-body p-5">
+            <div className="card-body p-lg-5 p-0">
               <form onSubmit={handleSubmit}>
                 <div className="mb-2 position-relative">
                   <label htmlFor="oldpassword" className="form-label fw-bold">

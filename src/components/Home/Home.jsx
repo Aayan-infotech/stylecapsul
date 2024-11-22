@@ -39,7 +39,7 @@ const Home = () => {
       ) : (
         <div className="home-container-title">
           <div className="container text-center" style={{ maxWidth: "1025px" }}>
-            <div className="row gy-0">
+            <div className="row gy-4">
               <h3 className="fw-bold text-decoration-underline">Home</h3>
               {itemsLeft.map((item, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">

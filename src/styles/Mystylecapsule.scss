@@ -64,3 +64,12 @@
         }
     }
 }
+@media (max-width: 767px) {
+    .my-style-capsule-container {
+        padding-top: 11rem;
+    }
+    .my-style-capsule-container .container .inner-img img:nth-of-type(1) {
+         top: 0; 
+         left: 0; 
+    }
+}

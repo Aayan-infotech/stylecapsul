@@ -176,8 +176,8 @@ const AddClothes = () => {
         <div className="container">
           <div className="card card-btn">
             <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="row g-2">
+              <form onSubmit={handleSubmit} className="w-100">
+                <div className="row g-2 w-100 m-0">
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
                       <label htmlFor="category" className="form-label text-white">
@@ -309,9 +309,9 @@ const AddClothes = () => {
                     </div>
                   </div>
                   <div className="col-12 col-md-2 d-flex justify-content-center align-items-center">
-                    <div className="col-12 col-md-2 d-flex justify-content-center align-items-center">
-                      <div className="text-center">
-                        <div className="mt-4">
+                 
+                      <div className="text-center mb-4 mb-lg-0">
+                        <div className="mt-lg-4 ">
                           <img
                             src={imagePreview}
                             height={100}
@@ -330,7 +330,7 @@ const AddClothes = () => {
                           style={{ display: 'none' }}
                         />
                       </div>
-                    </div>
+                  
                   </div>
                 </div>
                 <button

@@ -40,6 +40,21 @@
 }
 
 @media (max-width: 768px) {
+    
+.add-clothes-card {
+    padding-top: 11rem;
+    
+}
+.card-btn .add-btn {
+    position: absolute;
+    top: 98%;
+    right: 31%;
+    width: 150px !important;
+}
+.add-clothes-card .card {
+   
+     padding: 0 
+}
     .container {
         width: 100%;
         padding-top: 5rem;

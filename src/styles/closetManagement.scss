@@ -1,12 +1,17 @@
-.close-management-container {
+.closet-management-container{
     padding-top: 6rem;
-  
+}
     @media (max-width: 768px) {
-      padding-top: 5rem;
   
+      .closet-management-container {
+        padding-top: 13rem !important;
+    }
+    .close-management-container {
+      padding-top: 13rem !important;
+  }
       .container {
         max-width: 90%;
-        padding: 10px;
+        padding-top: 0 !important;
   
         .row {
           gap: 1rem;
@@ -29,7 +34,7 @@
   
     /* Mobile view adjustments */
     @media (max-width: 576px) {
-      padding-top: 14rem;
+   
   
       .container {
         max-width: 100%;
@@ -53,5 +58,4 @@
         }
       }
     }
-  }
   
