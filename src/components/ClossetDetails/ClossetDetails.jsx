@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import notification from "../../assets/closetmanagement/Group 1806.png";
 import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
@@ -55,7 +55,26 @@ const allProfileImages1 = [
   [fav3, fav4, fav3],
 ];
 
+
 export const ClossetDetails = () => {
+  const [showFavourite, setShowFavourite] = useState([]);
+
+  const fetchFavouriteDesiner = async () => {
+    try {
+      const response = await axios.get("http://44.196.192.232:3555/api/stylist/getFav");
+      console.log(response?.data?.data);  
+      if (response?.data?.success) {
+        setShowFavourite(response?.data?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFavouriteDesiner();
+  }, []);
+
   return (
     <div className="d-flex justify-content-center align-items-center close-management-details-container">
       <div className="container w-50">

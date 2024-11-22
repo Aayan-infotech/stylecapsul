@@ -244,7 +244,7 @@ function ProfileAvatar() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-start align-items-center">
+            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start align-items-center">
               <div className="p-2">
                 <Link
                   to="/full-avatar"
@@ -284,7 +284,7 @@ function ProfileAvatar() {
                 Basic
               </button>
             </div>
-            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
+            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start">
               <button
                 type="button"
                 className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${

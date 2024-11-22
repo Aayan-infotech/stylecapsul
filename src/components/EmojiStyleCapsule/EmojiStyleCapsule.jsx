@@ -81,7 +81,7 @@ function EmojiStyleCapsule() {
   const fetchAllStylsMoods = async () => {
     try {
       const response = await axios.get("http://44.196.192.232:3555/api/entity/get");
-      console.log(response?.data?.data);
+      console.log(response?.data?.data);  
       if (response?.data?.success) {
         setGetStableMoods(response?.data?.data);
       }
