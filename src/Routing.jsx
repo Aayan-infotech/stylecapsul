@@ -77,7 +77,7 @@ const Routing = () => {
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
             <Route path="/all-clothes-list/:category" element={<ClothesList />}/>
-            <Route path="/clothes-details" element={<ShowClothesDetails />} />
+            <Route path="/clothes-details/:clothid" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-profile" element={<StylistDetails />} />
             <Route path="/stylist-list" element={<StylistMessageList />} />

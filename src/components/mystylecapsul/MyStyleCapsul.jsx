@@ -34,7 +34,7 @@ const MyStyleCapsul = () => {
       <div className="container">
         <div className="d-flex justify-content-between align-items-center px-4">
           <div className="text-center">
-            <h4 className="fw-bold">{selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}</h4>
+            <h5 className="fw-bold">{selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}</h5>
             <h6 className="fw-bold">{selectedDate || "No Date Selected"}</h6>
           </div>
           <div>

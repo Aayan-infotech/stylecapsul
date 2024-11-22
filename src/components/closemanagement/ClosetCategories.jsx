@@ -52,7 +52,7 @@ const ClosetCategories = () => {
           {cardData.map((item, index) => (
             <div className="col-md-6" key={index}>
               <Link to={item.url} className="text-decoration-none">
-                <div className="p-4 bg-secondary text-white text-center rounded">
+                <div className="p-4 text-white text-center rounded" style={{backgroundColor:"rgb(76, 76, 76)"}}>
                   {item.image && (
                     <img
                       src={item.image}

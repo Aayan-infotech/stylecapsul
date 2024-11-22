@@ -22,7 +22,7 @@ function Profile() {
   const navigate = useNavigate();
 
   const { user, status } = useSelector((state) => state.login);
-  const singleUser = user ? user.payload : user;
+  const singleUser = user?.payload || user;
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -101,7 +101,7 @@ function Profile() {
                         className="text-decoration-none"
                       >
                         <button className="action-button">
-                          <FaCalendarAlt className="icon" /> 
+                          <FaCalendarAlt className="icon" />
                           <span>Scheduled Appointment</span>
                           <IoIosArrowForward className="arrow-icon" />
                         </button>

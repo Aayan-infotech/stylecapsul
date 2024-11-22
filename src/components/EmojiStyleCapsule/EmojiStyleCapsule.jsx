@@ -25,9 +25,11 @@ import fourthOccasion from "./img/chill-9.png";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import blank_img from "../../assets/stylist/blank_img.jpg";
+import Loader from "../Loader/Loader";
 
 function EmojiStyleCapsule() {
   const [getStableMoods, setGetStableMoods] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [styles, setStyles] = useState([
     firstStyle,
     secondStyle,
@@ -79,14 +81,17 @@ function EmojiStyleCapsule() {
   };
 
   const fetchAllStylsMoods = async () => {
+    setLoading(true);
     try {
       const response = await axios.get("http://44.196.192.232:3555/api/entity/get");
-      console.log(response?.data?.data);  
+      console.log(response?.data?.data);
       if (response?.data?.success) {
         setGetStableMoods(response?.data?.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,103 +101,108 @@ function EmojiStyleCapsule() {
 
 
   return (
-    <div className="emoji-style-capsule">
-      <h1 className="main-heading">My Style Capsule</h1>
-
-      <div class="container d-block">
-        <div class="row m-0 g-2">
-          <h2 className="fw-bold">Moods</h2>
-          {getStableMoods?.mood?.map((item, index) => (
-            <div class="col-12 col-md-2" key={index}>
-              <div class="p-1 border border-1">
-                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
-              </div>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="emoji-style-capsule">
+          <h1 className="main-heading">My Style Capsule</h1>
+          <div class="container d-block">
+            <div class="row m-0 g-2">
+              <h2 className="fw-bold">Moods</h2>
+              {getStableMoods?.mood?.map((item, index) => (
+                <div class="col-12 col-md-2" key={index}>
+                  <div class="p-1 border border-1">
+                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div class="row m-0 g-2 mt-4">
-          <h2 className="fw-bold">Style</h2>
-          {getStableMoods?.style?.map((item, index) => (
-            <div class="col-12 col-md-2" key={index}>
-              <div class="p-1 border border-1">
-                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
-              </div>
+            <div class="row m-0 g-2 mt-4">
+              <h2 className="fw-bold">Style</h2>
+              {getStableMoods?.style?.map((item, index) => (
+                <div class="col-12 col-md-2" key={index}>
+                  <div class="p-1 border border-1">
+                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div class="row m-0 g-2 mt-4">
-          <h2 className="fw-bold">Occassion</h2>
-          {getStableMoods?.occassion?.map((item, index) => (
-            <div class="col-12 col-md-2" key={index}>
-              <div class="p-1 border border-1">
-                <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
-              </div>
+            <div class="row m-0 g-2 mt-4">
+              <h2 className="fw-bold">Occassion</h2>
+              {getStableMoods?.occassion?.map((item, index) => (
+                <div class="col-12 col-md-2" key={index}>
+                  <div class="p-1 border border-1">
+                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <Link to="/myCapsuleAddAvtart">Next Page</Link>
-      <div className="sub-heading">
-        <button className="sub-button">Items</button>
-        <button className="sub-button">Outfits</button>
-      </div>
+          <Link to="/myCapsuleAddAvtart">Next Page</Link>
+          <div className="sub-heading">
+            <button className="sub-button">Items</button>
+            <button className="sub-button">Outfits</button>
+          </div>
 
-      <div className="moods-section section">
-        <h2 className="moods-heading head">Moods</h2>
-        <div className="first-mood moods">
-          <img className="mood-img" src={firstImg} alt="" />
-          <img className="mood-img" src={secondImg} alt="" />
-          <img className="mood-img" src={thirdImg} alt="" />
-          <img className="mood-img" src={fourthImg} alt="" />
-          <img className="mood-img" src={fifthImg} alt="" />
-        </div>
-        <div className="second-mood moods">
-          <img className="mood-img" src={sixthImg} alt="" />
-          <img className="mood-img" src={seventhImg} alt="" />
-          <img className="mood-img" src={eightImg} alt="" />
-          <img className="mood-img" src={ninthImg} alt="" />
-          <img className="mood-img" src={tenthImg} alt="" />
-        </div>
-        <div className="third-mood moods">
-          <img className="mood-img" src={elevenImg} alt="" />
-        </div>
-      </div>
+          <div className="moods-section section">
+            <h2 className="moods-heading head">Moods</h2>
+            <div className="first-mood moods">
+              <img className="mood-img" src={firstImg} alt="" />
+              <img className="mood-img" src={secondImg} alt="" />
+              <img className="mood-img" src={thirdImg} alt="" />
+              <img className="mood-img" src={fourthImg} alt="" />
+              <img className="mood-img" src={fifthImg} alt="" />
+            </div>
+            <div className="second-mood moods">
+              <img className="mood-img" src={sixthImg} alt="" />
+              <img className="mood-img" src={seventhImg} alt="" />
+              <img className="mood-img" src={eightImg} alt="" />
+              <img className="mood-img" src={ninthImg} alt="" />
+              <img className="mood-img" src={tenthImg} alt="" />
+            </div>
+            <div className="third-mood moods">
+              <img className="mood-img" src={elevenImg} alt="" />
+            </div>
+          </div>
 
-      <div className="styles-section section">
-        <h2 className="styles-heading head">Styles</h2>
-        {renderImages(styles)}
-        <div className="moods">
-          <label>
-            <img className="mood-img" src={addIcon} alt="Add" />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, setStyles, styles)}
-            />
-          </label>
-        </div>
-      </div>
+          <div className="styles-section section">
+            <h2 className="styles-heading head">Styles</h2>
+            {renderImages(styles)}
+            <div className="moods">
+              <label>
+                <img className="mood-img" src={addIcon} alt="Add" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, setStyles, styles)}
+                />
+              </label>
+            </div>
+          </div>
 
-      <div className="occasions-section section">
-        <h2 className="styles-heading head">Occasions</h2>
-        {renderImages(occasions)}
-        <div className="moods">
-          <label>
-            <img className="mood-img" src={addIcon} alt="Add" />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, setOccasions, occasions)}
-            />
-          </label>
+          <div className="occasions-section section">
+            <h2 className="styles-heading head">Occasions</h2>
+            {renderImages(occasions)}
+            <div className="moods">
+              <label>
+                <img className="mood-img" src={addIcon} alt="Add" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, setOccasions, occasions)}
+                />
+              </label>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

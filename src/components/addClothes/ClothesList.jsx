@@ -10,6 +10,7 @@ import blank_img from '../../assets/stylist/blank_img.jpg';
 import { getCookie } from '../../utils/cookieUtils';
 import { useDispatch } from 'react-redux';
 import { allAddedClothList } from '../../reduxToolkit/addClothesSlice';
+import Loader from "../Loader/Loader.jsx";
 
 function ClothesList() {
     const [loading, setLoading] = useState(true);
@@ -26,6 +27,7 @@ function ClothesList() {
     }, [dispatch]);
 
     const fetchClothesByCategory = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(apiUrl(`api/cloths/get-by-category/${category}`), {
                 headers: {
@@ -103,69 +105,76 @@ function ClothesList() {
         navigate('/add-clothes', { state: { updateCloth: cloth, currentCategory: category } });
     }
 
+    const handleClothDetails = (cloth) => {
+        navigate(`/clothes-details/${cloth?._id}`);
+    }
+
     return (
         <>
-            <ToastContainer />
-            <div className="clothes-list-main-container">
-                <div className="container w-75 clothes-list-container">
-                    <div className="row align-items-center">
-                        <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
-                            <h1 className="text-center fw-bold fs-1 mb-0">{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</h1>
-                            <div className="search-box ">
-                                <i className="fa fa-search"></i>
-                                <input
-                                    type="text"
-                                    placeholder="Search"
-                                    value={searchTerm}
-                                    onChange={handleSearch}
-                                />
-                                <i className="fa-solid fa-sliders"></i>
-                            </div>
-                        </div>
-                        {loading ? (
-                            <div className="col-12 text-center">
-                                <div className="spinner-border text-secondary" role="status">
-                                    <span className="visually-hidden text-black">Loading...</span>
+            {loading ? (
+                <Loader />
+            ) : (
+                <div className="clothes-list-main-container">
+                    <ToastContainer />
+                    <div className="container w-75 clothes-list-container">
+                        <div className="row align-items-center">
+                            <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                                <h1 className="text-center fw-bold fs-1 mb-0">{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()}</h1>
+                                <div className="search-box ">
+                                    <i className="fa fa-search"></i>
+                                    <input
+                                        type="text"
+                                        placeholder="Search"
+                                        value={searchTerm}
+                                        onChange={handleSearch} />
+                                    <i className="fa-solid fa-sliders"></i>
                                 </div>
                             </div>
-                        ) : (
-                            categoryCloth.length > 0 ? (
-                                categoryCloth.map((product, index) => (
-                                    <div className="col-12" key={index}>
-                                        <div className="products-container">
-                                            <div className="products-added rounded-pill">
-                                                <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}>
+                            {loading ? (
+                                <div className="col-12 text-center">
+                                    <div className="spinner-border text-secondary" role="status">
+                                        <span className="visually-hidden text-black">Loading...</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                categoryCloth.length > 0 ? (
+                                    categoryCloth.map((product, index) => (
+                                        <div className="col-12" key={index}>
+                                            <div className="products-container">
+                                                <div className="products-added rounded-pill" onClick={() => { handleClothDetails(product) }}>
+                                                    {/* <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}> */}
                                                     <div className="product-img">
                                                         <img src={product?.picture || blank_img} alt="cloth" />
                                                     </div>
-                                                </Link>
-                                                <div className="product-text">
-                                                    <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}>
-                                                        <div className="first-text">
-                                                            <h3 className='fw-bold fs-3'>{product?.category}</h3>
-                                                            <p className="m-0">{product?.typesOfCloths}</p>
-                                                            <p className="mt-0 m-0 p-0">{format(new Date(product?.purchaseDate), 'MM-dd-yyyy')}</p>
-                                                        </div>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-outline-dark" onClick={() => updateCloth(product)}>
-                                                        <i className="fa-regular fa-pen-to-square"></i>
-                                                    </button>
+                                                    {/* </Link> */}
+                                                    <div className="product-text">
+                                                        {/* <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}> */}
+                                                            <div className="first-text">
+                                                                <h3 className='fw-bold fs-3'>{product?.category}</h3>
+                                                                <p className="m-0">{product?.typesOfCloths}</p>
+                                                                <p className="mt-0 m-0 p-0">{format(new Date(product?.purchaseDate), 'MM-dd-yyyy')}</p>
+                                                            </div>
+                                                        {/* </Link> */}
+                                                        <button type="button" className="btn btn-outline-dark" onClick={() => updateCloth(product)}>
+                                                            <i className="fa-regular fa-pen-to-square"></i>
+                                                        </button>
+                                                    </div>
+
                                                 </div>
-                                              
+                                                <i className="fa-solid fa-circle-xmark close-icon" onClick={() => deleteCloth(product._id)}></i>
                                             </div>
-                                            <i className="fa-solid fa-circle-xmark close-icon" onClick={() => deleteCloth(product._id)}></i>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="col-12 text-center">
+                                        <h3 className='text-dark'>No clothes found</h3>
                                     </div>
-                                ))
-                            ) : (
-                                <div className="col-12 text-center">
-                                    <h3 className='text-dark'>No clothes found</h3>
-                                </div>
-                            )
-                        )}
+                                )
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }
