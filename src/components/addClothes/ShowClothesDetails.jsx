@@ -19,7 +19,7 @@ const ShowClothesDetails = () => {
     const fetchClothDetails = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:3000/api/cloths/getClothById/${clothid}`, {
+            const response = await axios.get(`http://44.196.192.232:3555/api/cloths/getClothById/${clothid}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
