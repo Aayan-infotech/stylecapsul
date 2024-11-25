@@ -6,28 +6,25 @@ import { Link } from "react-router-dom";
 import Calendar from "../allmodal/Calendar";
 
 const MyStyleCapsul = () => {
-  const [selectedImage, setSelectedImage] = useState(blankimage);
   const [selectedDate, setSelectedDate] = useState("");
+  const [middleColumnData, setMiddleColumnData] = useState([]); 
 
-  const handleSave = (image, date) => {
-    setSelectedImage(image);
+  const handleSave = (images, date) => {
     setSelectedDate(date);
+
+    const updatedMiddleColumn = images.map((img, index) => ({
+      url: "/emojistylecapsule",
+      src: img,
+      top: `${index * 30 + 5}%`, 
+      right: "70%", 
+    }));
+    setMiddleColumnData(updatedMiddleColumn);
   };
 
   const getDayOfWeek = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { weekday: "long" })
-  }
-
-  const columnsData = [
-    [],
-    [
-      { url: "/emojistylecapsule", src: "/src/assets/mystylecapsule/fullshirt.jpg", top: "2%", right:"70%" },
-      { url: "/emojistylecapsule", src: "/src//assets/mystylecapsule/flexibaljeans.jpg", top: "36%", right:"70%" },
-      { url: "/emojistylecapsule", src: "/src/assets/mystylecapsule/formalshoes.avif", top: "74%", right:"70%" },
-    ],
-    [],
-  ];
+    return date.toLocaleDateString("en-US", { weekday: "long" });
+  };
 
   return (
     <div className="my-style-capsule-container mb-4">
@@ -53,62 +50,131 @@ const MyStyleCapsul = () => {
         {/* Image columns */}
         <div className="mt-1" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="row m-0 gx-5">
-            {columnsData.map((column, columnIndex) => (
-              <div key={columnIndex} className="col inner-img">
-                <img
-                  src={capsulimg}
-                  style={{ position: "relative" }}
-                  alt={`Capsule ${columnIndex}`}
-                />
-                {column.length === 0 ? (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                    }}>
-                    <div>
-                      <img
-                        style={{ marginLeft: "4rem" }}
-                        src={blankimage}
-                        height={50}
-                        width={50}
-                        alt="No Image"
-                      />
-                      <br />
-                      <br />
-                      <h6
-                        style={{ marginLeft: "2rem" }}
-                        className="fs-6 text-center mt-2"
-                      >
-                        What is your outfit for today going to be?
-                      </h6>
-                    </div>
-                  </div>
-                ) : (
-                  column.map((image, imageIndex) => (
-                    <Link key={imageIndex} to={image.url}>
-                      <div
-                        key={imageIndex}
-                        style={{
-                          position: "absolute",
-                          top: image.top,
-                          left: image.left,
-                          right: image.right,
-                        }}
-                      >
-                        <img
-                          src={image.src}
-                          width={200}
-                          alt={`Image ${imageIndex}`}
-                        />
-                      </div>
-                    </Link>
-                  ))
-                )}
+            {/* Left Column */}
+            <div className="col inner-img">
+              <img
+                src={capsulimg}
+                style={{ position: "relative" }}
+                alt="Capsule Left"
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div>
+                  <img
+                    style={{ marginLeft: "4rem" }}
+                    src={blankimage}
+                    height={50}
+                    width={50}
+                    alt="No Image"
+                  />
+                  <br />
+                  <br />
+                  <h6
+                    style={{ marginLeft: "2rem" }}
+                    className="fs-6 text-center mt-2"
+                  >
+                    What is your outfit for today going to be?
+                  </h6>
+                </div>
               </div>
-            ))}
+            </div>
+
+            {/* Middle Column */}
+            <div className="col inner-img">
+              <img
+                src={capsulimg}
+                style={{ position: "relative" }}
+                alt="Capsule Middle"
+              />
+              {middleColumnData.length === 0 ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  <div>
+                    <img
+                      style={{ marginLeft: "4rem" }}
+                      src={blankimage}
+                      height={50}
+                      width={50}
+                      alt="No Image"
+                    />
+                    <br />
+                    <br />
+                    <h6
+                      style={{ marginLeft: "2rem" }}
+                      className="fs-6 text-center mt-2"
+                    >
+                      What is your outfit for today going to be?
+                    </h6>
+                  </div>
+                </div>
+              ) : (
+                middleColumnData.map((image, imageIndex) => (
+                  <Link key={imageIndex} to={image.url}>
+                    <div
+                      key={imageIndex}
+                      style={{
+                        position: "absolute",
+                        top: image.top,
+                        right: image.right,
+                      }}
+                    >
+                      <img
+                        src={image.src}
+                        width={200}
+                        alt={`Image ${imageIndex}`}
+                      />
+                    </div>
+                  </Link>
+                ))
+              )}
+            </div>
+
+            {/* Right Column */}
+            <div className="col inner-img">
+              <img
+                src={capsulimg}
+                style={{ position: "relative" }}
+                alt="Capsule Right"
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div>
+                  <img
+                    style={{ marginLeft: "4rem" }}
+                    src={blankimage}
+                    height={50}
+                    width={50}
+                    alt="No Image"
+                  />
+                  <br />
+                  <br />
+                  <h6
+                    style={{ marginLeft: "2rem" }}
+                    className="fs-6 text-center mt-2"
+                  >
+                    What is your outfit for today going to be?
+                  </h6>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Like, Comment, and Share section */}
@@ -124,4 +190,5 @@ const MyStyleCapsul = () => {
     </div>
   );
 };
+
 export default MyStyleCapsul;

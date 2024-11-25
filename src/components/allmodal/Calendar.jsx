@@ -1,31 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/CalendarStyles.css';
-import day1formal from '../../assets/myCapsuleAddAvtar/for2-removebg-preview.png';
-import day2formal from '../../assets/myCapsuleAddAvtar/for4-removebg-preview.png';
-import day3formal from '../../assets/myCapsuleAddAvtar/for5-removebg-preview.png';
-import day4formal from '../../assets/myCapsuleAddAvtar/for6.png';
-import formalshirt from '../../assets/mystylecapsule/fullshirt.jpg';
-import flexibaljeans from '../../assets/mystylecapsule/flexibaljeans.jpg';
-import formalshoes from '../../assets/mystylecapsule/formalshoes.avif';
+import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
 
 const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeStartDate, setActiveStartDate] = useState(new Date());
+    const [clothesOnDates, setClothesOnDates] = useState([]);
 
-    const [clothesOnDates] = useState([
-        {
-            id: 1, date: '2024-11-09', thumbnail: [formalshirt, flexibaljeans, formalshoes]
-        },
-        {
-            id: 2, date: '2024-11-15', thumbnail: [day1formal, day2formal, day3formal]
-        },
-        {
-            id: 3, date: '2024-11-20', thumbnail: [day1formal, day2formal, day4formal]
-        },
-    ]);
+    const token = getCookie("authToken");
+
+    const fetchDayByCloths = async () => {
+        try {
+            const response = await axios.get("http://localhost:3000/api/myStyleCapsule/getStyle", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            const data = response?.data?.data?.styleOfTheDay || [];
+            const formattedData = data.map(item => ({
+                // id: item.id,
+                date: item.date,
+                thumbnail: item.picture.map(picture => `http://localhost:3000/uploads/${picture}`)
+            }));
+            setClothesOnDates(formattedData);
+        } catch (error) {
+            console.error("Error fetching clothes data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDayByCloths();
+    }, []);
 
     const handleModalToggle = () => {
         setOpenCalendarDialog(!openCalendarDialog);
@@ -46,7 +55,7 @@ const ClothesCalendar = ({ onSave }) => {
         const formattedDate = formatDate(date);
 
         if (view === 'month') {
-            const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
+            const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
             if (dateEntry) {
                 return (
                     <div style={{
@@ -54,9 +63,7 @@ const ClothesCalendar = ({ onSave }) => {
                         flexDirection: 'column',
                         alignItems: 'center',
                         gap: '4px',
-                        flex: '0 0 14.2857%',
                         overflow: 'hidden',
-                        marginInlineEnd: '0px'
                     }}>
                         {dateEntry.thumbnail.map((image, index) => (
                             <img
@@ -80,7 +87,7 @@ const ClothesCalendar = ({ onSave }) => {
 
     const handleSave = () => {
         const formattedDate = formatDate(selectedDate);
-        const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
+        const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
         if (dateEntry) {
             onSave(dateEntry.thumbnail, formattedDate); 
         }
