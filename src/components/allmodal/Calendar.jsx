@@ -6,6 +6,9 @@ import day1formal from '../../assets/myCapsuleAddAvtar/for2-removebg-preview.png
 import day2formal from '../../assets/myCapsuleAddAvtar/for4-removebg-preview.png';
 import day3formal from '../../assets/myCapsuleAddAvtar/for5-removebg-preview.png';
 import day4formal from '../../assets/myCapsuleAddAvtar/for6.png';
+import formalshirt from '../../assets/mystylecapsule/fullshirt.jpg';
+import flexibaljeans from '../../assets/mystylecapsule/flexibaljeans.jpg';
+import formalshoes from '../../assets/mystylecapsule/formalshoes.avif';
 
 const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
@@ -14,13 +17,13 @@ const ClothesCalendar = ({ onSave }) => {
 
     const [clothesOnDates] = useState([
         {
-            id: 1, date: '2024-11-09', thumbnail: [day1formal, day2formal, day3formal]
+            id: 1, date: '2024-11-09', thumbnail: [formalshirt, flexibaljeans, formalshoes]
         },
         {
             id: 2, date: '2024-11-15', thumbnail: [day1formal, day2formal, day3formal]
         },
         {
-            id: 3, date: '2024-11-20', thumbnail: [day1formal, day2formal, day3formal]
+            id: 3, date: '2024-11-20', thumbnail: [day1formal, day2formal, day4formal]
         },
     ]);
 
@@ -79,7 +82,7 @@ const ClothesCalendar = ({ onSave }) => {
         const formattedDate = formatDate(selectedDate);
         const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
         if (dateEntry) {
-            onSave(dateEntry.thumbnail, formattedDate);  // Passing the selected image to the parent component
+            onSave(dateEntry.thumbnail, formattedDate); 
         }
         const modalElement = document.getElementById('openCalendarDialogCurrent');
         if (modalElement) {

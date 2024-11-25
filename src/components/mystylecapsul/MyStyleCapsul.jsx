@@ -22,9 +22,9 @@ const MyStyleCapsul = () => {
   const columnsData = [
     [],
     [
-      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for2-removebg-preview.png", top: "10%" },
-      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for4-removebg-preview.png", top: "30%" },
-      { url: "/emojistylecapsule", src: "/src/assets/myCapsuleAddAvtar/for5-removebg-preview.png", top: "50%" },
+      { url: "/emojistylecapsule", src: "/src/assets/mystylecapsule/fullshirt.jpg", top: "2%", right:"70%" },
+      { url: "/emojistylecapsule", src: "/src//assets/mystylecapsule/flexibaljeans.jpg", top: "36%", right:"70%" },
+      { url: "/emojistylecapsule", src: "/src/assets/mystylecapsule/formalshoes.avif", top: "74%", right:"70%" },
     ],
     [],
   ];
