@@ -88,12 +88,12 @@ const StylistCategories = () => {
       <ToastContainer />
       <div className="categories-type-container">
         <div className="container w-75 mt-2 stylist-content" style={{ display: "block" }}>
-          <div className="row gx-2">
+          <div className="row gap-0 gx-2 flex-row flex-wrap m-auto">
             {["Buy", "Rent", "Swap"].map((cat) => (
-              <div key={cat} className="col-12 col-md-4 mt-3" style={{ margin: "auto", textAlign: "center" }}>
+              <div key={cat} className="col-4 mt-3" style={{  textAlign: "center" }}>
                 <button
                   type="button"
-                  className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"} rounded-pill w-50 p-2`}
+                  className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"} rounded-pill w-100 p-2`}
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}
@@ -134,7 +134,7 @@ const StylistCategories = () => {
                       <div className="d-flex justify-content-center mb-3">
                         <button
                           type="button"
-                          className="btn btn-outline-dark rounded-pill me-2"
+                          className="btn btn-outline-dark rounded-pill me-2 w-100"
                           onClick={() => handleAddToCart(product)}
                         >
                           Add to cart

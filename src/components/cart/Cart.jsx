@@ -96,7 +96,7 @@ const Cart = () => {
                         <img
                           src={item?.productDetails?.image || blank_img}
                           alt={item.name}
-                          className="item-image w-25"
+                          className="item-image w-100"
                         />
                         <div className="item-details ml-3">
                           <p className="text-black text-muted">Order ID - {item?.productId || 'N/A'}</p>

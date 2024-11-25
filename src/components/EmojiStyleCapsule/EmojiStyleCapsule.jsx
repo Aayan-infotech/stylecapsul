@@ -26,10 +26,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import Loader from "../Loader/Loader";
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
 function EmojiStyleCapsule() {
   const [getStableMoods, setGetStableMoods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedMood, setSelectedMood] = useState(null);
+  const [selectedStyle, setSelectedStyle] = useState(null);
+  const [selectedOccasion, setSelectedOccasion] = useState(null);
   const [styles, setStyles] = useState([
     firstStyle,
     secondStyle,
@@ -99,7 +103,17 @@ function EmojiStyleCapsule() {
     fetchAllStylsMoods();
   }, []);
 
+  const handleSelectMood = (index) => {
+    setSelectedMood(index === selectedMood ? null : index);
+  };
 
+  const handleSelectStyle = (index) => {
+    setSelectedStyle(index === selectedStyle ? null : index);
+  };
+
+  const handleSelectOccasion = (index) => {
+    setSelectedOccasion(index === selectedOccasion ? null : index);
+  };
   return (
     <>
       {loading ? (
@@ -107,35 +121,80 @@ function EmojiStyleCapsule() {
       ) : (
         <div className="emoji-style-capsule">
           <h1 className="main-heading">My Style Capsule</h1>
-          <div class="container d-block">
-            <div class="row m-0 g-2">
+          <div className="container d-block">
+            <div className="row m-0 g-2">
               <h2 className="fw-bold">Moods</h2>
               {getStableMoods?.mood?.map((item, index) => (
-                <div class="col-12 col-md-2" key={index}>
-                  <div class="p-1 border border-1">
-                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                <div className="col-12 col-md-2" key={index}>
+                  <div className="d-flex justify-content-center align-items-center">
+                  <div
+                    className={`p-1 border border-1 position-relative ${selectedMood === index ? "border-success" : ""
+                      }`}
+                    onClick={() => handleSelectMood(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src={item?.image || blank_img}
+                      className="object-fit-cover"
+                      style={{  width:"130px" }}
+                      alt={`Mood ${index}`}
+                    />
+                    {selectedMood === index && (
+                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                    )}
+                  </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div class="row m-0 g-2 mt-4">
+            <div className="row m-0 g-2 mt-4">
               <h2 className="fw-bold">Style</h2>
               {getStableMoods?.style?.map((item, index) => (
-                <div class="col-12 col-md-2" key={index}>
-                  <div class="p-1 border border-1">
-                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                <div className="col-12 col-md-2" key={index}>
+                  <div className="d-flex justify-content-center align-items-center">
+                  <div
+                    className={`p-1 border border-1 position-relative ${selectedStyle === index ? "border-success" : ""
+                      }`}
+                    onClick={() => handleSelectStyle(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src={item?.image || blank_img}
+                    className="object-fit-cover"
+                    style={{  width:"130px" }}
+                      alt={`Style ${index}`}
+                    />
+                    {selectedStyle === index && (
+                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                    )}
+                  </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div class="row m-0 g-2 mt-4">
+            <div className="row m-0 g-2 mt-4">
               <h2 className="fw-bold">Occassion</h2>
               {getStableMoods?.occassion?.map((item, index) => (
-                <div class="col-12 col-md-2" key={index}>
-                  <div class="p-1 border border-1">
-                    <img src={item?.image || blank_img} className="w-100" style={{ maxHeight: "122px" }} />
+                <div className="col-12 col-md-2" key={index}>
+                      <div className="d-flex justify-content-center align-items-center">
+                  <div
+                    className={`p-1 border border-1 position-relative ${selectedOccasion === index ? "border-success" : ""
+                      }`}
+                    onClick={() => handleSelectOccasion(index)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <img
+                      src={item?.image || blank_img}
+                      className="object-fit-cover"
+                      style={{  width:"130px" }}
+                      alt={`Occasion ${index}`}
+                    />
+                    {selectedOccasion === index && (
+                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                    )}
+                  </div>
                   </div>
                 </div>
               ))}
@@ -152,12 +211,12 @@ function EmojiStyleCapsule() {
             <h2 className="moods-heading head">Moods</h2>
             <div className="first-mood moods">
               <img className="mood-img" src={firstImg} alt="" />
-              <img className="mood-img" src={secondImg} alt="" />
+              {/* <img className="mood-img" src={secondImg} alt="" />
               <img className="mood-img" src={thirdImg} alt="" />
               <img className="mood-img" src={fourthImg} alt="" />
-              <img className="mood-img" src={fifthImg} alt="" />
+              <img className="mood-img" src={fifthImg} alt="" /> */}
             </div>
-            <div className="second-mood moods">
+            {/* <div className="second-mood moods">
               <img className="mood-img" src={sixthImg} alt="" />
               <img className="mood-img" src={seventhImg} alt="" />
               <img className="mood-img" src={eightImg} alt="" />
@@ -166,7 +225,7 @@ function EmojiStyleCapsule() {
             </div>
             <div className="third-mood moods">
               <img className="mood-img" src={elevenImg} alt="" />
-            </div>
+            </div> */}
           </div>
 
           <div className="styles-section section">

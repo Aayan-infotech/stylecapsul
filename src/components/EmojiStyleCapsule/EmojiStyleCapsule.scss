@@ -125,8 +125,10 @@
     .section {
       .moods {
         .mood-img {
-          height: 130px;
+          height: 100%;
           width: 130px;
+          max-height: 180px;
+
         }
       }
     }
@@ -135,7 +137,7 @@
 
 @media (max-width: 600px) {
   .emoji-style-capsule {
-    margin: 120px 40px 80px 40px;
+    margin: 160px 40px 80px 40px;
 
     .main-heading {
       font-size: 3rem;

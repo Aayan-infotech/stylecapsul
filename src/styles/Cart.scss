@@ -1,5 +1,5 @@
 .cart-container {
-  padding: 6rem;
+  padding-top: 9rem;
 
   @media (max-width: 768px) {
     padding: 2rem;
@@ -41,6 +41,7 @@
         border-radius: 15px;
         object-fit: fill;
         padding: 7px;
+        max-width: 140px;
       }
 
       .item-details {
@@ -54,7 +55,7 @@
         p {
           margin: 0.2rem 0;
           color: #999;
-          font-size: 0.9rem;
+          font-size: 0.8rem;
         }
 
         .quantity-controls {
@@ -106,8 +107,9 @@
 }
 
 @media (max-width: 768px) {
+  
   .cart-container {
-    padding: 2rem 1rem;
+    padding: 11rem 1rem 0 1rem;
 
     .buy-cart-list {
       height: auto;
@@ -117,7 +119,7 @@
     .cart-item {
       flex-direction: column;
       align-items: flex-start;
-      padding: 1rem;
+      padding: 4rem 2rem !important;
 
       .item-image {
         width: 100px;
