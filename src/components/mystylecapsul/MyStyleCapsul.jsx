@@ -8,10 +8,11 @@ import Calendar from "../allmodal/Calendar";
 const MyStyleCapsul = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [middleColumnData, setMiddleColumnData] = useState([]); 
+  const [capsuleId, setCapsuleId] = useState("");
 
-  const handleSave = (images, date) => {
+  const handleSave = (images, date, id) => {
     setSelectedDate(date);
-
+    setCapsuleId(id);
     const updatedMiddleColumn = images.map((img, index) => ({
       url: "/emojistylecapsule",
       src: img,
@@ -19,6 +20,7 @@ const MyStyleCapsul = () => {
       right: "70%", 
     }));
     setMiddleColumnData(updatedMiddleColumn);
+    console.log("Capsule ID:", id)
   };
 
   const getDayOfWeek = (dateString) => {

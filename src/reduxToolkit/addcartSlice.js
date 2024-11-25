@@ -3,10 +3,8 @@ import axios from "axios";
 import { apiUrl } from "../../apiUtils";
 import { getCookie } from "../utils/cookieUtils";
 
-// Get the authentication token from cookies
 const token = getCookie('authToken');
 
-// Thunk for adding an item to the cart
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }, { rejectWithValue }) => {

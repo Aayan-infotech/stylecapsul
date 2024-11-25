@@ -14,7 +14,7 @@ const ClothesCalendar = ({ onSave }) => {
 
     const fetchDayByCloths = async () => {
         try {
-            const response = await axios.get("http://localhost:3000/api/myStyleCapsule/getStyle", {
+            const response = await axios.get("http://44.196.192.232:3555/api/myStyleCapsule/getStyle", {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -22,9 +22,9 @@ const ClothesCalendar = ({ onSave }) => {
             });
             const data = response?.data?.data?.styleOfTheDay || [];
             const formattedData = data.map(item => ({
-                // id: item.id,
                 date: item.date,
-                thumbnail: item.picture.map(picture => `http://localhost:3000/uploads/${picture}`)
+                thumbnail: item.picture.map(picture => `http://44.196.192.232:3555/uploads/${picture}`),
+                id: response?.data?.data?._id || null
             }));
             setClothesOnDates(formattedData);
         } catch (error) {
@@ -89,7 +89,7 @@ const ClothesCalendar = ({ onSave }) => {
         const formattedDate = formatDate(selectedDate);
         const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
         if (dateEntry) {
-            onSave(dateEntry.thumbnail, formattedDate); 
+            onSave(dateEntry.thumbnail, formattedDate, dateEntry.id); 
         }
         const modalElement = document.getElementById('openCalendarDialogCurrent');
         if (modalElement) {
