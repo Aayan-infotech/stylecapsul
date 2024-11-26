@@ -4,7 +4,6 @@ import '../../styles/ShowClothesDetails.scss';
 import blank_image from '../../assets/stylist/blank_img.jpg'
 import { format } from 'date-fns';
 import axios from 'axios';
-import { apiUrl } from '../../../apiUtils';
 import { getCookie } from '../../utils/cookieUtils';
 import Loader from "../Loader/Loader.jsx";
 import { apiUrl } from "../../../apiUtils";

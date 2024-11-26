@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import notification from "../../assets/closetmanagement/Group 1806.png";
 import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import { Link } from "react-router-dom";
 import "../../styles/closetManagement.scss";
+import Loader from "../Loader/Loader";
 
 const cardData = [
   {
@@ -44,33 +45,48 @@ const cardData = [
 ];
 
 const ClosetManagement = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="closet-management-container">
-      <div className="text-center">
-        <h1 className="text-center fw-bold fs-1">Closet Management</h1>
-        <div className="container p-3 text-center w-50 pt-0">
-          <div className="row g-3 m-0">
-            {cardData.map((item, index) => (
-              <div key={index} className="col-12 col-md-6 col-md-4">
-                <Link to={item.url} className="text-decoration-none text-white">
-                  <div className="p-4 rounded-2" style={{ backgroundColor: "#4C4C4C" }}>
-                    {item.image && (
-                      <img
-                        src={item.image}
-                        alt={item.imageAlt}
-                        className="mb-4"
-                        style={item.imageStyle}
-                      />
-                    )}
-                    <h4 className="card-title fw-bold">{item.title}</h4>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="closet-management-container">
+          <div className="text-center">
+            <h1 className="text-center fw-bold fs-1">Closet Management</h1>
+            <div className="container p-3 text-center w-50 pt-0">
+              <div className="row g-3 m-0">
+                {cardData.map((item, index) => (
+                  <div key={index} className="col-12 col-md-6 col-md-4">
+                    <Link to={item.url} className="text-decoration-none text-white">
+                      <div className="p-4 rounded-2" style={{ backgroundColor: "#4C4C4C" }}>
+                        {item.image && (
+                          <img
+                            src={item.image}
+                            alt={item.imageAlt}
+                            className="mb-4"
+                            style={item.imageStyle}
+                          />
+                        )}
+                        <h4 className="card-title fw-bold">{item.title}</h4>
+                      </div>
+                    </Link>
                   </div>
-                </Link>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -132,10 +132,10 @@ const MarketPlace = () => {
               <div className="row">
                 <div className="col d-flex justify-content-start gap-3 overflow-control flex-wrap flex-row">
                   <Stack direction="row" spacing={1}>
-                    <Chip label=" SHOP ALL" variant="outlined" />
-                    <Chip label="CHROME HEARTS" variant="outlined" />
-                    <Chip label="BALENCIAGA" variant="outlined" />
-                    <Chip label="CASUAL CHIC" variant="outlined" />
+                    <Chip label=" Shop All" variant="outlined" />
+                    <Chip label="Chrome Hearts" variant="outlined" />
+                    <Chip label="Balenciaga" variant="outlined" />
+                    <Chip label="Casual Chic" variant="outlined" />
                   </Stack>
                 </div>
               </div>
@@ -242,7 +242,6 @@ const MarketPlace = () => {
 
             {/* -----------------------Featured Collection------------------------- */}
             <Swiper
-              // install Swiper modules
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={50}
               className="swiper-types-custom"
@@ -265,34 +264,32 @@ const MarketPlace = () => {
             >
               <div className="d-flex flex-nowrap">
                 {featuredCollection.map((style, index) => (
-                  <>
-                    <SwiperSlide>
-                      <div className="col flex-shrink-0" key={index}>
+                  <SwiperSlide key={index}>
+                    <div className="col flex-shrink-0">
+                      <div>
                         <div>
-                          <div>
-                            <img
-                              src={style.imgSrc}
-                              className="w-100 h-100"
-                              style={{
-                                borderTopRightRadius: "60px",
-                                borderTopLeftRadius: "60px",
-                              }}
-                              alt={style.name} />
-                          </div>
-                          <h6
-                            className="text-white d-flex justify-content-center align-items-center w-100 h-100 py-4"
+                          <img
+                            src={style.imgSrc}
+                            className="w-100 h-100"
                             style={{
-                              backgroundColor: "#4C4C4C",
-                              borderBottomRightRadius: "60px",
-                              borderBottomLeftRadius: "60px",
+                              borderTopRightRadius: "60px",
+                              borderTopLeftRadius: "60px",
                             }}
-                          >
-                            {style.name}
-                          </h6>
+                            alt={style.name} />
                         </div>
+                        <h6
+                          className="text-white d-flex justify-content-center align-items-center w-100 h-100 py-4"
+                          style={{
+                            backgroundColor: "#4C4C4C",
+                            borderBottomRightRadius: "60px",
+                            borderBottomLeftRadius: "60px",
+                          }}
+                        >
+                          {style.name}
+                        </h6>
                       </div>
-                    </SwiperSlide>
-                  </>
+                    </div>
+                  </SwiperSlide>
                 ))}
               </div>
             </Swiper>
