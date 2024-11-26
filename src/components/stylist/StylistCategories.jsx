@@ -21,14 +21,19 @@ const StylistCategories = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = getCookie("userId");
+  const token = getCookie("authToken");
   const { categoryId } = useParams();
 
   const fetchAllCategoriesType = async () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      const url = `http://44.196.192.232:3555/api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`;
-      const response = await axios.get(url);
+      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
       if (response?.data?.data) {
         setMarketPlaceCategoryType(response?.data?.data);
       } else {
@@ -104,9 +109,8 @@ const StylistCategories = () => {
               >
                 <button
                   type="button"
-                  className={`btn ${
-                    selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
-                  } rounded-pill w-100 p-2`}
+                  className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
+                    } rounded-pill w-100 p-2`}
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}

@@ -27,6 +27,8 @@ import axios from "axios";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import Loader from "../Loader/Loader";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
 
 function EmojiStyleCapsule() {
   const [getStableMoods, setGetStableMoods] = useState([]);
@@ -49,6 +51,7 @@ function EmojiStyleCapsule() {
     fourthOccasion,
     secondStyle,
   ]);
+  const token = getCookie("authToken");
 
   const handleImageUpload = (e, setStateFunc, currentImages) => {
     if (currentImages.length < 18) {
@@ -87,7 +90,12 @@ function EmojiStyleCapsule() {
   const fetchAllStylsMoods = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://44.196.192.232:3555/api/entity/get");
+      const response = await axios.get(apiUrl('api/entity/allEntity'), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
       console.log(response?.data?.data);
       if (response?.data?.success) {
         setGetStableMoods(response?.data?.data);
@@ -127,22 +135,22 @@ function EmojiStyleCapsule() {
               {getStableMoods?.mood?.map((item, index) => (
                 <div className="col-12 col-md-2" key={index}>
                   <div className="d-flex justify-content-center align-items-center">
-                  <div
-                    className={`p-1 border border-1 position-relative ${selectedMood === index ? "border-success" : ""
-                      }`}
-                    onClick={() => handleSelectMood(index)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <img
-                      src={item?.image || blank_img}
-                      className="object-fit-cover"
-                      style={{  width:"130px" }}
-                      alt={`Mood ${index}`}
-                    />
-                    {selectedMood === index && (
-                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
-                    )}
-                  </div>
+                    <div
+                      className={`p-1 border border-1 position-relative ${selectedMood === index ? "border-success" : ""
+                        }`}
+                      onClick={() => handleSelectMood(index)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={item?.image || blank_img}
+                        className="object-fit-cover"
+                        style={{ width: "130px" }}
+                        alt={`Mood ${index}`}
+                      />
+                      {selectedMood === index && (
+                        <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -153,22 +161,22 @@ function EmojiStyleCapsule() {
               {getStableMoods?.style?.map((item, index) => (
                 <div className="col-12 col-md-2" key={index}>
                   <div className="d-flex justify-content-center align-items-center">
-                  <div
-                    className={`p-1 border border-1 position-relative ${selectedStyle === index ? "border-success" : ""
-                      }`}
-                    onClick={() => handleSelectStyle(index)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <img
-                      src={item?.image || blank_img}
-                    className="object-fit-cover"
-                    style={{  width:"130px" }}
-                      alt={`Style ${index}`}
-                    />
-                    {selectedStyle === index && (
-                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
-                    )}
-                  </div>
+                    <div
+                      className={`p-1 border border-1 position-relative ${selectedStyle === index ? "border-success" : ""
+                        }`}
+                      onClick={() => handleSelectStyle(index)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={item?.image || blank_img}
+                        className="object-fit-cover"
+                        style={{ width: "130px" }}
+                        alt={`Style ${index}`}
+                      />
+                      {selectedStyle === index && (
+                        <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -178,23 +186,23 @@ function EmojiStyleCapsule() {
               <h2 className="fw-bold">Occassion</h2>
               {getStableMoods?.occassion?.map((item, index) => (
                 <div className="col-12 col-md-2" key={index}>
-                      <div className="d-flex justify-content-center align-items-center">
-                  <div
-                    className={`p-1 border border-1 position-relative ${selectedOccasion === index ? "border-success" : ""
-                      }`}
-                    onClick={() => handleSelectOccasion(index)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <img
-                      src={item?.image || blank_img}
-                      className="object-fit-cover"
-                      style={{  width:"130px" }}
-                      alt={`Occasion ${index}`}
-                    />
-                    {selectedOccasion === index && (
-                      <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
-                    )}
-                  </div>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <div
+                      className={`p-1 border border-1 position-relative ${selectedOccasion === index ? "border-success" : ""
+                        }`}
+                      onClick={() => handleSelectOccasion(index)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <img
+                        src={item?.image || blank_img}
+                        className="object-fit-cover"
+                        style={{ width: "130px" }}
+                        alt={`Occasion ${index}`}
+                      />
+                      {selectedOccasion === index && (
+                        <TaskAltIcon style={{ position: "absolute", top: "10px", right: "10px", color: "green", fontSize: "24px", }} />
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

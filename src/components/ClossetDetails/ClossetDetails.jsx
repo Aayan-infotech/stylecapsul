@@ -17,6 +17,7 @@ import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { FaCheckCircle } from "react-icons/fa";
 import Loader from "../Loader/Loader";
+import { apiUrl } from "../../../apiUtils";
 
 const cardData = [
   {
@@ -64,12 +65,12 @@ export const ClossetDetails = () => {
   const fetchFavouriteDesiner = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://44.196.192.232:3555/api/stylist/getFav", {
+      const response = await axios.get(apiUrl('api/stylist/getFav'), {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
-      });
+    })
       if (response?.data?.success) {
         setShowFavourite(response?.data?.data);
       }

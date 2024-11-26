@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux"; // Import useDispatch
-import { addToCart } from "../../reduxToolkit/addcartSlice"; // Import addToCart action
+import { useDispatch } from "react-redux"; 
+import { addToCart } from "../../reduxToolkit/addcartSlice"; 
 import "../../styles/CategoryDetails.scss";
 import { Link, useLocation } from "react-router-dom";
 import blank_image from "../../assets/stylist/blank_img.jpg";
@@ -11,7 +11,7 @@ const CategoryDetails = () => {
   const cat_Details = location?.state?.product;
   const initialQuantity = location?.state?.quantity || 1; 
   const [quantity, setQuantity] = useState(initialQuantity);
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch(); 
 
   const increment = () => {
     setQuantity(quantity + 1);
@@ -24,9 +24,9 @@ const CategoryDetails = () => {
   };
 
   const handleAddToCart = () => {
-    const userId = getCookie("userId"); // Replace with actual user ID
-    const productId = cat_Details?.id; // Assuming `id` is the product identifier
-    dispatch(addToCart({ userId, productId, quantity })); // Dispatch the action
+    const userId = getCookie("userId");
+    const productId = cat_Details?.id; 
+    dispatch(addToCart({ userId, productId, quantity })); 
   };
 
   return (
