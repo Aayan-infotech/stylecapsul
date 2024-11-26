@@ -21,9 +21,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
+import { apiUrl } from "../../../apiUtils";
 
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
+  const [allSocialPosts, setAllSocialPosts] = useState([]);
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -63,7 +67,67 @@ const Explore = ({ isAuth }) => {
       showComments: false,
       newComment: "",
     },
+    {
+      id: 2,
+      userName: "Anshuman Ray",
+      postDate: "October 11",
+      email: "Elizabeth@gmail.com",
+      description: "“Fashions fade, style is eternal.”",
+      avatarUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu5uvKyZDNWgp-mBB2qY_is0IrPhHOVtwUkw&s",
+      postContent:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores quos ipsum alias optio ut excepturi facilis cumque numquam corporis doloribus!",
+      hashtags: "#hashtag",
+      cardContent: [
+        {
+          title: "Headline: 32 characters",
+          text: "Description: 18 characters",
+          imageUrl:
+            "https://img.freepik.com/free-photo/medium-shot-romantic-couple-with-plaid-blanket_23-2150561506.jpg",
+        },
+        {
+          title: "Headline: 32 characters",
+          text: "Description: 18 characters",
+          imageUrl:
+            "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
+        },
+        {
+          title: "Headline: 32 characters",
+          text: "Description: 18 characters",
+          imageUrl: "https://m.media-amazon.com/images/I/61zj4JTBO4L.jpg",
+        },
+      ],
+      likes: 177,
+      liked: false,
+      comments: [],
+      shares: 42,
+      shared: false,
+      showComments: false,
+      newComment: "",
+    },
   ]);
+
+  const token = getCookie("authToken");
+
+  const fetchDayByCloths = async () => {
+    try {
+      const response = await axios.get(apiUrl(''), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response?.data?.success) {
+        setAllSocialPosts(response?.data?.data);
+      }
+    } catch (error) {
+      console.error("Error fetching clothes data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDayByCloths();
+  }, []);
 
   const handleCommentChange = (index, e) => {
     const updatedPosts = [...posts];
@@ -124,8 +188,8 @@ const Explore = ({ isAuth }) => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="mb-4" style={{marginTop:"8rem"}}>
-          <div className="text-center p-3 px-5 pt-5">
+        <div className="mb-4" style={{ marginTop: "6rem" }}>
+          <div className="text-center p-3 px-4">
             <TextField
               variant="outlined"
               placeholder="Search"
@@ -134,7 +198,7 @@ const Explore = ({ isAuth }) => {
               className="w-75"
             />
           </div>
-          <div className="container w-75 mt-3">
+          <div className="container d-block w-75">
             {posts.map((post, index) => (
               <>
                 <div className="row g-2" key={post.id}>
@@ -168,14 +232,21 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </Link>
                         <div>
-                          <i className="fa-solid fa-ellipsis-vertical fs-4 text-black"></i>
+                          {/* <i className="fa-solid fa-ellipsis-vertical fs-4 text-black"></i> */}
+                          <i id="dropdownIcon"
+                            class="fa-solid fa-ellipsis-vertical fs-4 text-black"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"></i>
+
+                          <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownIcon">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                          </ul>
                         </div>
                       </div>
                       <div className="text-black mt-2">
                         <p className="fw-bold">{post.postContent}</p>
-                        <a href="#" className="text-decoration-none">
-                          {post.hashtags}
-                        </a>
                       </div>
 
                       <div className="d-flex mt-3">

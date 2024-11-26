@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import previewImage1 from "../../assets/myCapsuleAddAvtar/previewImage1.jpg";
 import previewImage2 from "../../assets/myCapsuleAddAvtar/previewImage2.jpg";
 import previewImage3 from "../../assets/myCapsuleAddAvtar/previewImage3.jpg";
@@ -12,8 +12,12 @@ import previewImage9 from "../../assets/myCapsuleAddAvtar/previewImage9.jpg";
 import previewImage10 from "../../assets/myCapsuleAddAvtar/previewImage10.png";
 import { Link } from "react-router-dom";
 import "../../styles/MyCapsuleAddAvtar.scss";
+import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
+import { apiUrl } from "../../../apiUtils";
 
 const MyCapsuleAddAvtar = () => {
+  const [selectItemsOutfits, setSelectItemsOutfits] = useState([]);
   const selectAvtar = [
     { id: "1", title: "check this", src: previewImage1 },
     { id: "2", title: "check this", src: previewImage2 },
@@ -40,6 +44,30 @@ const MyCapsuleAddAvtar = () => {
   ];
 
   const [activeTab, setActiveTab] = useState("items");
+
+  const token = getCookie("authToken");
+
+  const fetchDayByCloths = async () => {
+    try {
+      const response = await axios.get(apiUrl(''), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response?.data?.success) {
+        setSelectItemsOutfits(response?.data?.data);
+      }
+    } catch (error) {
+      console.error("Error fetching clothes data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDayByCloths();
+  }, []);
+
+
   return (
     <div className="capsule-main-container">
       <div className="container w-50">
@@ -48,9 +76,8 @@ const MyCapsuleAddAvtar = () => {
           <div className="col-6 d-flex justify-content-center align-items-center">
             <button
               type="button"
-              className={`btn btn-outline-secondary p-2 w-75 rounded-pill fw-bold fs-5 custom-button ${
-                activeTab === "items" ? "btn-active" : ""
-              }`}
+              className={`btn btn-outline-secondary p-2 w-75 rounded-pill fw-bold fs-5 custom-button ${activeTab === "items" ? "btn-active" : ""
+                }`}
               onClick={() => setActiveTab("items")}
             >
               Items
@@ -59,9 +86,8 @@ const MyCapsuleAddAvtar = () => {
           <div className="col-6 d-flex justify-content-center align-items-center">
             <button
               type="button"
-              className={`btn btn-outline-secondary p-2 w-75 rounded-pill fw-bold fs-5 custom-button ${
-                activeTab === "outfits" ? "btn-active" : ""
-              }`}
+              className={`btn btn-outline-secondary p-2 w-75 rounded-pill fw-bold fs-5 custom-button ${activeTab === "outfits" ? "btn-active" : ""
+                }`}
               onClick={() => setActiveTab("outfits")}
             >
               Outfits

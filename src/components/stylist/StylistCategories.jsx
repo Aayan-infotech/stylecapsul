@@ -68,7 +68,7 @@ const StylistCategories = () => {
   };
 
   const handleBuyClick = (prod) => {
-    navigate("/category-details", {
+    navigate(`/category-details/${prod._id}`, {
       state: {
         product: prod,
         quantity: quantity,

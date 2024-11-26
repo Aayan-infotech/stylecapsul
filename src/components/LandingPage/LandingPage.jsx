@@ -17,6 +17,7 @@ import Loader from "../Loader/Loader";
 import axios from "axios";
 import { loginUser } from "../../reduxToolkit/loginSlice";
 import { ToastContainer, toast } from 'react-toastify';
+import { apiUrl } from "../../../apiUtils";
 
 const LandingPage = () => {
   const [loading, setLoading] = useState(true);
@@ -56,9 +57,7 @@ const LandingPage = () => {
   const fetchPopularsSubCategory = async () => {
     setLoading(true);
     try {
-      // const response = await axios.post(apiUrl('/api/marketPlaceSubcat/popularSubcats'))
-      const response = await axios.get('http://18.209.197.35:3555/api/marketPlaceSubcat/popularSubcats');
-      console.log(response?.data?.data, 'response')
+      const response = await axios.get(apiUrl('api/marketPlaceSubcat/popularSubcats'))
       if (response?.data?.success) {
         setPopularsProducts(response?.data?.data);
       }

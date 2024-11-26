@@ -90,13 +90,12 @@ function EmojiStyleCapsule() {
   const fetchAllStylsMoods = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl('api/entity/allEntity'), {
+      const response = await axios.get(apiUrl('api/entity/get'), {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       })
-      console.log(response?.data?.data);
       if (response?.data?.success) {
         setGetStableMoods(response?.data?.data);
       }
@@ -219,10 +218,10 @@ function EmojiStyleCapsule() {
             <h2 className="moods-heading head">Moods</h2>
             <div className="first-mood moods">
               <img className="mood-img" src={firstImg} alt="" />
-              {/* <img className="mood-img" src={secondImg} alt="" />
+              <img className="mood-img" src={secondImg} alt="" />
               <img className="mood-img" src={thirdImg} alt="" />
               <img className="mood-img" src={fourthImg} alt="" />
-              <img className="mood-img" src={fifthImg} alt="" /> */}
+              <img className="mood-img" src={fifthImg} alt="" />
             </div>
             {/* <div className="second-mood moods">
               <img className="mood-img" src={sixthImg} alt="" />
