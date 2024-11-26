@@ -6,7 +6,7 @@ import { addToCart, getAllCarts } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import blank_img from '../../assets/stylist/no_image.png'
+import blank_img from "../../assets/stylist/no_image.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { showSuccessToast, showErrorToast } from "../toastMessage/Toast";
@@ -35,7 +35,9 @@ const StylistCategories = () => {
         setErrorMessage("No subcategories found for the selected category.");
       }
     } catch (error) {
-      setErrorMessage(error.response ? error.response.data.message : "Error fetching data.");
+      setErrorMessage(
+        error.response ? error.response.data.message : "Error fetching data."
+      );
     } finally {
       setLoading(false);
     }
@@ -45,10 +47,10 @@ const StylistCategories = () => {
     fetchAllCategoriesType(selectedCategory);
   }, [selectedCategory]);
 
-
   const getFilteredProducts = () => {
     return marketPlaceCategoryType.filter(
-      (product) => product?.sellType.toLowerCase() === selectedCategory.toLowerCase()
+      (product) =>
+        product?.sellType.toLowerCase() === selectedCategory.toLowerCase()
     );
   };
 
@@ -64,22 +66,24 @@ const StylistCategories = () => {
     navigate("/category-details", {
       state: {
         product: prod,
-        quantity: quantity
-      }
+        quantity: quantity,
+      },
     });
   };
 
   const handleAddToCart = async (product) => {
     try {
-      const response = await dispatch(addToCart({
-        userId,
-        productId: product?._id,
-        quantity: quantity
-      }));
-      showSuccessToast(response.message)
+      const response = await dispatch(
+        addToCart({
+          userId,
+          productId: product?._id,
+          quantity: quantity,
+        })
+      );
+      showSuccessToast(response.message);
       await dispatch(getAllCarts());
     } catch (error) {
-      showErrorToast(error?.message)
+      showErrorToast(error?.message);
     }
   };
 
@@ -87,13 +91,22 @@ const StylistCategories = () => {
     <>
       <ToastContainer />
       <div className="categories-type-container">
-        <div className="container w-75 mt-2 stylist-content" style={{ display: "block" }}>
+        <div
+          className="container w-75 mt-2 stylist-content"
+          style={{ display: "block" }}
+        >
           <div className="row gap-0 gx-2 flex-row flex-wrap m-auto">
             {["Buy", "Rent", "Swap"].map((cat) => (
-              <div key={cat} className="col-4 mt-3" style={{  textAlign: "center" }}>
+              <div
+                key={cat}
+                className="col-4 mt-3"
+                style={{ textAlign: "center" }}
+              >
                 <button
                   type="button"
-                  className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"} rounded-pill w-100 p-2`}
+                  className={`btn ${
+                    selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
+                  } rounded-pill w-100 p-2`}
                   onClick={() => setSelectedCategory(cat)}
                 >
                   {cat}
@@ -102,56 +115,63 @@ const StylistCategories = () => {
             ))}
           </div>
 
-
-          <div className="row gx-2 ms-1">
-            {loading ? (
-              <div className="text-center text-muted w-100 mt-4">
-                <p>Loading...</p>
-              </div>
-            ) : errorMessage ? (
-              <div className="text-center text-danger w-100">
-                <p>{errorMessage}</p>
-              </div>
-            ) : getFilteredProducts()?.length > 0 ? (
-              getFilteredProducts().map((product, index) => (
-                <div key={index} className="col-12 col-md-4 p-3">
-                  <div className="product-card rounded-pill text-center">
-                    <div className="image-container">
-                      <img
-                        src={product.image || blank_img}
-                        alt={product.name}
-                        className="img-fluid rounded-top"
-                        style={{ objectFit: 'fill' }}
-                      />
-                    </div>
-                    <div className="product-details p-3">
-                      <div onClick={() => handleBuyClick(product)} style={{ cursor: "pointer" }}>
-                        <h3 className="product-name fw-bold">{product.name}</h3>
-                        <p className="product-description text-muted">
-                          {truncateText(product.description, 10)}
-                        </p>
+          <div className="container-fluid">
+            <div className="row gx-2">
+              {loading ? (
+                <div className="text-center text-muted w-100 mt-4">
+                  <p>Loading...</p>
+                </div>
+              ) : errorMessage ? (
+                <div className="text-center text-danger w-100">
+                  <p>{errorMessage}</p>
+                </div>
+              ) : getFilteredProducts()?.length > 0 ? (
+                getFilteredProducts().map((product, index) => (
+                  <div key={index} className="col-12 col-md-4 p-3">
+                    <div className="product-card rounded-pill text-center">
+                      <div className="image-container">
+                        <img
+                          src={product.image || blank_img}
+                          alt={product.name}
+                          className="img-fluid rounded-top"
+                          style={{ objectFit: "fill" }}
+                        />
                       </div>
-                      <div className="d-flex justify-content-center mb-3">
-                        <button
-                          type="button"
-                          className="btn btn-outline-dark rounded-pill me-2 w-100"
-                          onClick={() => handleAddToCart(product)}
+                      <div className="product-details p-3">
+                        <div
+                          onClick={() => handleBuyClick(product)}
+                          style={{ cursor: "pointer" }}
                         >
-                          Add to cart
-                        </button>
+                          <h3 className="product-name fw-bold">
+                            {product.name}
+                          </h3>
+                          <p className="product-description text-muted">
+                            {truncateText(product.description, 10)}
+                          </p>
+                        </div>
+                        <div className="d-flex justify-content-center mb-3">
+                          <button
+                            type="button"
+                            className="btn btn-outline-dark rounded-pill mx-4 w-100"
+                            onClick={() => handleAddToCart(product)}
+                          >
+                            Add to cart
+                          </button>
+                        </div>
+                        <h3 className="product-price fw-bold">
+                          ${product.price}
+                        </h3>
                       </div>
-                      <h3 className="product-price fw-bold">${product.price}</h3>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="text-center w-100">
+                  <p>No products available for the selected category.</p>
                 </div>
-              ))
-            ) : (
-              <div className="text-center w-100">
-                <p>No products available for the selected category.</p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-
           {!loading && !errorMessage && getFilteredProducts()?.length > 0 && (
             <div className="text-center">
               <button

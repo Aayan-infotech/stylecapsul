@@ -183,7 +183,7 @@ const Address = () => {
                     ))
                 )}
 
-                <div className="text-end">
+                <div className="text-center my-5">
                     <a href='#' className='text-black fw-bold text-decoration-none' onClick={() => setShowModal(true)}>
                         <i className="fa-solid fa-plus me-2"></i>
                         Add Address

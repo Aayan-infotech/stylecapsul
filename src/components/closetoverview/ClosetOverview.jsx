@@ -28,9 +28,10 @@ const ClosetOverview = () => {
   return (
     <div
       className="d-flex justify-content-center align-items-center closet-overview"
-      style={{ paddingTop: "6rem" }}
+      style={{ padding: "12rem 0 6rem 0" }}
     >
       <div className="container w-50">
+        <div className="d-flex flex-column flex-lg-row justify-content-center align-items-center">
         <h1 className="text-center fw-bold fs-1">Closet Overview</h1>
         <div className="row g-4 mt-2">
           {cardData.map((item, index) => (
@@ -45,6 +46,7 @@ const ClosetOverview = () => {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

@@ -103,7 +103,7 @@ const GiftCardDetails = () => {
 
                         <div className="col-12 col-md-6 p-3 gift-service-details">
                             <div>
-                                <div className='d-flex align-items-center'>
+                                <div className='d-flex flex-column flex-lg-row align-items-start align-items-lg-center '>
                                     <h5 className='me-3'>{giftDetails?.giftTitle}</h5>
                                     <h5>
                                         <span className="badge text-bg-dark">

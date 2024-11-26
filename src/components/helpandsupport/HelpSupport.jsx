@@ -27,7 +27,7 @@ const HelpSupport = () => {
   return (
     <div className="help-support-container">
       <div className="container w-75">
-        <div className="row mt-4">
+        <div className="row mt-4 mx-0">
           <h1 className="fw-bold fs-1">Help & Support</h1>
           <div className="col-12 mt-2">
             <div className="p-3 rounded" style={{ backgroundColor: "#EAEAEA" }}>

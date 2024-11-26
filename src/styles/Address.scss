@@ -1,5 +1,5 @@
 .address-details-container {
-    padding-top: 6rem;
+    padding-top: 8rem;
     max-width: 400px;
     margin: auto;
 
@@ -34,5 +34,12 @@
                 margin-left: 10px;
             }
         }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .address-details-container {
+        padding-top: 10rem;
+       
     }
 }

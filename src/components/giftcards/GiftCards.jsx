@@ -136,7 +136,7 @@ const GiftCards = () => {
               {/* </Link> */}
             </div>
           ))}
-          <div className="col-12 col-md-4 d-flex justify-content-center align-items-center">
+          <div className="col-12 col-md-4 mx-lg-auto d-flex justify-content-center align-items-center">
             <div>
               <div className="outline-border">
                 <button type="button" className="btn btn-dark gitcard-btn">

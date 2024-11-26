@@ -91,8 +91,9 @@ const Cart = () => {
                     cart.items.map((item, itemIndex) => (
                       <div
                         key={`${cartIndex}-${itemIndex}`}
-                        className="cart-item d-flex align-items-center mb-2 mt-3 rounded-pill px-4"
+                        className=" d-flex align-items-center justify-content-center"
                       >
+                        <div className="cart-item  mb-2 mt-3 rounded-pill px-4 w-100">
                         <img
                           src={item?.productDetails?.image || blank_img}
                           alt={item.name}
@@ -134,6 +135,7 @@ const Cart = () => {
                         >
                           <i className="fa-solid fa-xmark"></i>
                         </button>
+                      </div>
                       </div>
                     ))
                   )}

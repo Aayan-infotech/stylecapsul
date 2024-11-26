@@ -9,7 +9,7 @@
     .buy-cart-list {
       max-height: 440px;
       overflow-y: auto;
-
+    
       &::-webkit-scrollbar {
         width: 6px;
       }
@@ -35,6 +35,7 @@
       display: flex;
       align-items: center;
       position: relative;
+      
 
       .item-image {
         height: 120px;
@@ -107,7 +108,14 @@
 }
 
 @media (max-width: 768px) {
-  
+  .cart-item {
+   
+   
+    max-width: calc(100% - 15%);
+  }
+  .buy-cart-list::-webkit-scrollbar {
+    display: none;
+  }
   .cart-container {
     padding: 11rem 1rem 0 1rem;
 

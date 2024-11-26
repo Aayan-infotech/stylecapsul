@@ -139,7 +139,10 @@
 // Media Queries for Responsive Design
 
 @media (max-width: 768px) {
-
+  
+  .update-profile-container {
+    padding-top: 11rem;
+  }
   .top .top1 .right {
     width: 100% !important;
     flex-direction: row !important;
