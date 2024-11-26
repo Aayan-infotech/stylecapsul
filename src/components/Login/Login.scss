@@ -1,12 +1,31 @@
 $primary-color: #000;
 $background-color: #D9D9D9;
 $font-family: 'Arial, sans-serif';
-
+.fs-1 {
+  font-size: calc(1.375rem + 1.5vw) !important;
+}
+.outside-heading{
+  // position: relative;
+  // z-index: -1;
+}
+.outside-heading::after{
+  // position: absolute;
+  // content: "";
+  // border: 2px solid black;
+  // border-radius: 30px;
+  // width: 200px;
+  // height: 20px;
+  // top: 50%;
+  // right: 40%;
+  // z-index: 2;
+  // transform: rotate(-10deg) ;
+}
 .custom-container {
   display: block;
-  justify-content: center;
-  align-items: center;
+  justify-items: center;
+  align-content: center;
   flex-direction: column; 
+  height: 100vh;
 
   .outside-heading {
     font-size: 1.5rem;
@@ -43,7 +62,7 @@ $font-family: 'Arial, sans-serif';
 
     .btn-link {
       position: absolute;
-      top: 68%;
+      top: 72%;
       right: 10px;
       transform: translateY(-50%);
       color: $primary-color;

@@ -54,11 +54,11 @@ const Login = () => {
   return (
     <>
       <ToastContainer />
-      <div className="custom-container mt-5">
-        <div>
+      <div className="custom-container">
+        <div className="w-100">
           <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
-          <div className="card custom-card border-0">
-            <div className="card-body p-5 text-black">
+          <div className="card custom-card border-0 p-2">
+            <div className="card-body p-4 text-black">
               <h2 className="card-title fs-4 text-center fw-bold">Login</h2>
               <form className="mt-4" onSubmit={handleSubmit}>
                 <div className="mb-2">

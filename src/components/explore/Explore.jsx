@@ -188,8 +188,13 @@ const Explore = ({ isAuth }) => {
       {loading ? (
         <Loader />
       ) : (
+<<<<<<< Updated upstream
         <div className="mb-4" style={{ marginTop: "6rem" }}>
           <div className="text-center p-3 px-4">
+=======
+        <div className="mb-4" style={{marginTop:"8rem"}}>
+          <div className="text-center p-3 px-5">
+>>>>>>> Stashed changes
             <TextField
               variant="outlined"
               placeholder="Search"
@@ -253,7 +258,7 @@ const Explore = ({ isAuth }) => {
                         <Swiper
                           // install Swiper modules
                           modules={[Navigation, Pagination, Scrollbar, A11y]}
-                          spaceBetween={50}
+                          spaceBetween={20}
                           className="swiper-types-custom"
                           autoplay={{
                             delay: 2500,
@@ -276,7 +281,7 @@ const Explore = ({ isAuth }) => {
                             <>
                               <SwiperSlide>
                                 <div
-                                  className="card me-3 text-black"
+                                  className="card text-black"
                                   style={{
                                     width: "18rem",
                                     backgroundColor: "#e8e8e8",
@@ -285,7 +290,7 @@ const Explore = ({ isAuth }) => {
                                 >
                                   <img
                                     src={card.imageUrl}
-                                    className="card-img-top"
+                                    className="card-img-top object-fit-cover"
                                     height={300}
                                     alt="..."
                                   />

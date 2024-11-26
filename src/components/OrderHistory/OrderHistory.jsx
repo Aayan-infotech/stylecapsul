@@ -16,8 +16,9 @@ function OrderHistory() {
 
 
   return (
-    <div className="order-history d-flex justify-content-center align-items-center">
-      <div className="w-75">
+    <div className="container">
+    <div className="order-history d-flex justify-content-center align-items-center w-100">
+      <div className="w-100 mx-750">
         <div className="products-heading">
           <h1>Order History</h1>
           <div className="search-box">
@@ -48,6 +49,7 @@ function OrderHistory() {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

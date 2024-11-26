@@ -6,7 +6,6 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookieUtils';
 import Loader from "../Loader/Loader.jsx";
-import { apiUrl } from "../../../apiUtils";
 
 const ShowClothesDetails = () => {
     const [showClothesDetails, setShowClothesDetails] = useState({});

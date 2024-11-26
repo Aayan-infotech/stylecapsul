@@ -123,14 +123,17 @@
 }
 
 @media (max-width: 992px) {
+  // .order-history {
+  //   margin: 100px 110px 0;
+  // }
   .order-history {
-    margin: 100px 110px 0;
+    padding-top: 10rem;
   }
 }
 
 @media (max-width: 768px) {
   .order-history {
-    margin: 100px 80px 0;
+    // margin: 100px 80px 0;
     .products-heading {
       .search-box {
         position: relative;
@@ -158,7 +161,7 @@
 
 @media (max-width: 600px) {
   .order-history {
-    margin: 120px 50px 80px 45px;
+    // margin: 120px 50px 80px 45px;
 
     .products-heading {
       display: flex;
@@ -207,7 +210,7 @@
 
 @media screen and (max-width: 350px) {
   .order-history{
-    margin: 120px 50px 160px 35px;
+    // margin: 120px 50px 160px 35px;
 
     .products-container{
       .products-added {
@@ -226,4 +229,11 @@
       }
     }
   }
+}
+
+@media  screen and (min-width:768px) {
+  .mx-750{
+    max-width: 75% !important;
+  }
+  
 }
