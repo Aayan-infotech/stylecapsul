@@ -6,7 +6,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import StripeCheckout from "react-stripe-checkout";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 
 
@@ -15,6 +15,7 @@ const Payment = () => {
   const location = useLocation();
   const { paymentDetailsWithaddressId } = location.state || {};
   const userId = getCookie("userId");
+  const navigate = useNavigate();
   console.log(paymentDetailsWithaddressId, userId, 'paymentDetailsWithaddressId')
 
   const openCreditCardModal = () => {
@@ -27,14 +28,21 @@ const Payment = () => {
 
   const onToken = async (token) => {
     try {
-      // const response = await axios.post('/save-stripe-token', {
-      //   token: token
-      // });
-      // // const data = response.data;
-      console.log(token, 'token');
-
+      const response = await axios.post("http://localhost:3000/api/payment-method/create-payment", {
+        token,
+        paymentDetails: paymentDetailsWithaddressId?.paymentDetails,
+        selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
+      });
+  
+      if (response.data.success) {
+        showSuccessToast("Payment successful!");
+        navigate("/success", { state: { charge: response.data.charge } });
+      } else {
+        showErrorToast("Payment failed. Please try again.");
+      }
     } catch (error) {
-      console.log(error, 'Something went wrong');
+      console.error("Error processing payment:", error);
+      showErrorToast("An error occurred. Please try again.");
     }
   };
 
@@ -44,7 +52,7 @@ const Payment = () => {
         <h1 className="fw-bold text-center fs-1">Payment</h1>
         <StripeCheckout
           token={onToken}
-          stripeKey="pk_test_51Q1PseGRhtXSqN5r6gIVupZtgmP6FK0qRafVle9JXGmAVmtGYbAhUhGY4Xgl3vhvuMTB8y9IvUA6HlevjftLCuCJ00ulU282LE"
+          stripeKey="pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
           amount={paymentDetailsWithaddressId?.paymentDetails?.totalAmount} 
           name="Style Capsule"
           ComponentClass="div"

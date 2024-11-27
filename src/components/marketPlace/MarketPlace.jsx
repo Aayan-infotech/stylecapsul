@@ -26,10 +26,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.cart);
 
   const featuredCollection = [
     { name: "Leather Jackets", imgSrc: leatherjacket },
@@ -56,6 +60,19 @@ const MarketPlace = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchItem = async () => {
+      await dispatch(getAllCarts());
+    };
+    fetchItem();
+  }, [dispatch]);
+
+  const getTotalProductCount = () => {
+    return Array.isArray(cart)
+      ? cart.reduce((total, item) => total + item.items.length, 0)
+      : 0;
+  };
 
   return (
     <>
@@ -100,7 +117,14 @@ const MarketPlace = () => {
             <div className="navbar-right d-flex">
               <i className="fa-regular fa-bell me-2"></i>
               <i className="fa-solid fa-magnifying-glass me-2"></i>
-              <i className="fa-solid fa-cart-shopping"></i>
+              <Link to="/cart" className="text-decoration-none text-white">
+                <div className="cart-icon position-relative">
+                  <i className="fa-solid fa-cart-shopping"></i>
+                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                    {getTotalProductCount()}
+                  </span>
+                </div>
+              </Link>
             </div>
           </div>
         </div><div className="landing1" style={{ position: "relative" }}>

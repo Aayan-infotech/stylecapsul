@@ -70,7 +70,6 @@ const ClothesCalendar = ({ onSave }) => {
                             <img
                                 key={index}
                                 src={image}
-                                alt={`Outfit ${index + 1}`}
                                 style={{
                                     width: '15px',
                                     height: 'auto',
