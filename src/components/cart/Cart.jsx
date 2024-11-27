@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Cart.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCarts, removeCart, updateCartQuantity } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
@@ -10,11 +10,11 @@ import moment from "moment";
 
 const Cart = () => {
   const [loading, setLoading] = useState(true);
+  const [quantities, setQuantities] = useState({});
   const cartItems = useSelector((state) => state.cart.cart);
-  console.log(cartItems, 'cartItems')
   const dispatch = useDispatch();
   const userId = getCookie('userId');
-  const [quantities, setQuantities] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllCarts());
@@ -74,6 +74,21 @@ const Cart = () => {
     }
   };
 
+  const handleClick = () => {
+    const paymentDetails = {
+      totalAmount: total.toFixed(2),
+      totalQuantity,
+      cartItems: cartItems.map(cart =>
+        cart.items.map(item => ({
+          productId: item.productId,
+          quantity: quantities[item.productId],
+          price: item?.productDetails?.price,
+        }))
+      ).flat()
+    };
+    navigate("/address", { state: { paymentDetails } });
+  };
+
   return (
     <>
       {/* <Toast /> */}
@@ -94,48 +109,48 @@ const Cart = () => {
                         className=" d-flex align-items-center justify-content-center"
                       >
                         <div className="cart-item  mb-2 mt-3 rounded-pill px-4 w-100">
-                        <img
-                          src={item?.productDetails?.image || blank_img}
-                          alt={item.name}
-                          className="item-image w-100"
-                        />
-                        <div className="item-details ml-3">
-                          <p className="text-black text-muted">Order ID - {item?.productId || 'N/A'}</p>
-                          <h6 className="text-black fw-bold">{item?.productDetails?.name || 'N/A'}</h6>
-                          <p>{item.date}</p>
-                          <div className="d-flex align-items-center">
-                            <p className="text-black fw-bold me-5">${subtotal || 'N/A'}</p>
-                            <div className="quantity-controls d-flex align-items-center">
-                              <button
-                                type="button"
-                                className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
-                                onClick={() => handleQuantityChange(item, -1)}
-                              >
-                                <i className="fa-solid fa-minus"></i>
-                              </button>
-                              <span className="quantity mx-3">
-                                {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
-                              </span>
-                              <button
-                                type="button"
-                                className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
-                                style={{}}
-                                onClick={() => handleQuantityChange(item, 1)}
-                              >
-                                <i className="fa-solid fa-plus"></i>
-                              </button>
+                          <img
+                            src={item?.productDetails?.image || blank_img}
+                            alt={item.name}
+                            className="item-image w-100"
+                          />
+                          <div className="item-details ml-3">
+                            <p className="text-black text-muted">Order ID - {item?.productId || 'N/A'}</p>
+                            <h5 className="text-black fw-bold m-0">{item?.productDetails?.name || 'N/A'}</h5>
+                            <p className="m-0">{item.date}</p>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <p className="text-black fw-bold me-5">${subtotal || 'N/A'}</p>
+                              <div className="quantity-controls d-flex align-items-center">
+                                <button
+                                  type="button"
+                                  className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
+                                  onClick={() => handleQuantityChange(item, -1)}
+                                >
+                                  <i className="fa-solid fa-minus small"></i>
+                                </button>
+                                <span className="quantity mx-3">
+                                  {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
+                                </span>
+                                <button
+                                  type="button"
+                                  className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
+                                  style={{}}
+                                  onClick={() => handleQuantityChange(item, 1)}
+                                >
+                                  <i className="fa-solid fa-plus small"></i>
+                                </button>
+                              </div>
                             </div>
+                            <p className="fw-bold">{moment(item.createdAt).format('YYYY/MM/DD')}</p>
                           </div>
-                          <p className="fw-bold">{moment(item.createdAt).format('YYYY/MM/DD')}</p>
+                          <button
+                            type="button"
+                            className="btn btn-dark rounded-pill remove-btn"
+                            onClick={() => handleRemove(item?.productId)}
+                          >
+                            <i className="fa-solid fa-xmark"></i>
+                          </button>
                         </div>
-                        <button
-                          type="button"
-                          className="btn btn-dark rounded-pill remove-btn"
-                          onClick={() => handleRemove(item?.productId)}
-                        >
-                          <i className="fa-solid fa-xmark"></i>
-                        </button>
-                      </div>
                       </div>
                     ))
                   )}
@@ -174,14 +189,15 @@ const Cart = () => {
                       </div>
                     </div>
                   </div>
-                  <Link to="/address">
-                    <button
-                      type="button"
-                      className="btn btn-dark w-100 mt-3 rounded-pill"
-                    >
-                      Proceed to Checkout
-                    </button>
-                  </Link>
+                  {/* <Link to="/address"> */}
+                  <button
+                    type="button"
+                    className="btn btn-dark w-100 mt-3 rounded-pill"
+                    onClick={handleClick}
+                  >
+                    Proceed to Checkout
+                  </button>
+                  {/* </Link> */}
                 </div>
               </>
             )}

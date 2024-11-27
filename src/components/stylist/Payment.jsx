@@ -6,10 +6,16 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import StripeCheckout from "react-stripe-checkout";
+import { useLocation } from "react-router-dom";
+import { getCookie } from "../../utils/cookieUtils";
 
 
 const Payment = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
+  const location = useLocation();
+  const { paymentDetailsWithaddressId } = location.state || {};
+  const userId = getCookie("userId");
+  console.log(paymentDetailsWithaddressId, userId, 'paymentDetailsWithaddressId')
 
   const openCreditCardModal = () => {
     setSelectedMethod("credit");
@@ -21,11 +27,11 @@ const Payment = () => {
 
   const onToken = async (token) => {
     try {
-      const response = await axios.post('/save-stripe-token', {
-        token: token
-      });
-      const data = response.data;
-      console.log(`We are in business, ${data.email}`);
+      // const response = await axios.post('/save-stripe-token', {
+      //   token: token
+      // });
+      // // const data = response.data;
+      console.log(token, 'token');
 
     } catch (error) {
       console.log(error, 'Something went wrong');
@@ -39,7 +45,7 @@ const Payment = () => {
         <StripeCheckout
           token={onToken}
           stripeKey="pk_test_51Q1PseGRhtXSqN5r6gIVupZtgmP6FK0qRafVle9JXGmAVmtGYbAhUhGY4Xgl3vhvuMTB8y9IvUA6HlevjftLCuCJ00ulU282LE"
-          amount={5000} 
+          amount={paymentDetailsWithaddressId?.paymentDetails?.totalAmount} 
           name="Style Capsule"
           ComponentClass="div"
           image="https://www.shutterstock.com/image-vector/nature-capsule-vector-logo-template-600nw-2381326435.jpg"

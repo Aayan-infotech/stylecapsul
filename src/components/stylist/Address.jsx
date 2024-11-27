@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import "../../styles/Address.scss";
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addAddress, deleteAddress, fetchAddresses, updateAddress } from '../../reduxToolkit/AddressSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../../../src/components/Loader/Loader'
+import Loader from "../Loader/Loader";
 
 const Address = () => {
     const dispatch = useDispatch();
@@ -21,6 +21,9 @@ const Address = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(true);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { paymentDetails } = location.state || {};
 
     useEffect(() => {
         if (addressStatus === 'idle') {
@@ -127,10 +130,18 @@ const Address = () => {
         }
     };
 
+    const handleClickPayment = () => {
+        const paymentDetailsWithaddressId = {
+            paymentDetails,
+            selectedAddressId,
+        };
+        navigate("/payment", { state: { paymentDetailsWithaddressId } });
+    };
+
     if (addressStatus === 'loading') {
         return <Loader />;
     }
-    
+
 
     return (
         <>
@@ -191,9 +202,7 @@ const Address = () => {
                 </div>
             </div>
             <div className="text-center mt-2">
-                <Link to="/payment">
-                    <button type="submit" className="btn btn-dark rounded-pill w-25" style={{ backgroundColor: "black" }}>Submit</button>
-                </Link>
+                <button onClick={handleClickPayment} type="submit" disabled={!selectedAddressId} className="btn btn-dark rounded-pill w-25" style={{ backgroundColor: "black" }}>Submit</button>
             </div>
             {/* Address Modal */}
             {showModal && (

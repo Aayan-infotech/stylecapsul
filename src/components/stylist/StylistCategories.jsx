@@ -10,6 +10,7 @@ import blank_img from "../../assets/stylist/no_image.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { showSuccessToast, showErrorToast } from "../toastMessage/Toast";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const StylistCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState("Buy");
@@ -17,6 +18,7 @@ const StylistCategories = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [loadingProductId, setLoadingProductId] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -77,20 +79,28 @@ const StylistCategories = () => {
   };
 
   const handleAddToCart = async (product) => {
-    try {
-      const response = await dispatch(
-        addToCart({
-          userId,
-          productId: product?._id,
-          quantity: quantity,
-        })
-      );
-      showSuccessToast(response.message);
-      await dispatch(getAllCarts());
-    } catch (error) {
-      showErrorToast(error?.message);
-    }
+    setLoadingProductId(product._id);
+  
+    setTimeout(async () => {
+      try {
+        const response = await dispatch(
+          addToCart({
+            userId,
+            productId: product?._id,
+            quantity: quantity,
+          })
+        );
+        showSuccessToast(response.message);
+        await dispatch(getAllCarts());
+      } catch (error) {
+        showErrorToast(error?.message);
+      } finally {
+        setLoadingProductId(null); 
+      }
+    }, 2000); 
   };
+  
+
 
   return (
     <>
@@ -152,19 +162,26 @@ const StylistCategories = () => {
                           <p className="product-description text-muted">
                             {truncateText(product.description, 10)}
                           </p>
+                          <h3 className="product-price fw-bold"> ${product.price}</h3>  
                         </div>
                         <div className="d-flex justify-content-center mb-3">
-                          <button
-                            type="button"
-                            className="btn btn-outline-dark rounded-pill mx-4 w-100"
+                        <LoadingButton
+                            variant="outlined"
+                            loading={loadingProductId === product._id}
+                            disabled={loadingProductId === product._id}
                             onClick={() => handleAddToCart(product)}
+                            style={{
+                              maxWidth: "200px",
+                              backgroundColor:
+                                loadingProductId === product._id ? "#e0e0e0" : "white",
+                              color: loadingProductId === product._id ? "#a0a0a0" : "black", 
+                              cursor: loadingProductId === product._id ? "not-allowed" : "pointer", 
+                            }}
+                            className="rounded-pill text-black fw-bold border border-black"
                           >
-                            Add to cart
-                          </button>
+                            Add to Cart
+                          </LoadingButton>
                         </div>
-                        <h3 className="product-price fw-bold">
-                          ${product.price}
-                        </h3>
                       </div>
                     </div>
                   </div>
