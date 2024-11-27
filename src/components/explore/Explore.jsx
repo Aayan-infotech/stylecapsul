@@ -15,14 +15,14 @@ import {
   A11y,
   Autoplay,
 } from "swiper/modules";
-
+import "./explore.scss"
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import axios from 'axios';
-import { getCookie } from '../../utils/cookieUtils';
+import axios from "axios";
+import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 
 const Explore = ({ isAuth }) => {
@@ -111,12 +111,12 @@ const Explore = ({ isAuth }) => {
 
   const fetchDayByCloths = async () => {
     try {
-      const response = await axios.get(apiUrl(''), {
+      const response = await axios.get(apiUrl(""), {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-      })
+      });
       if (response?.data?.success) {
         setAllSocialPosts(response?.data?.data);
       }
@@ -188,13 +188,8 @@ const Explore = ({ isAuth }) => {
       {loading ? (
         <Loader />
       ) : (
-<<<<<<< Updated upstream
-        <div className="mb-4" style={{ marginTop: "6rem" }}>
+        <div className="mb-4 explore-container" >
           <div className="text-center p-3 px-4">
-=======
-        <div className="mb-4" style={{marginTop:"8rem"}}>
-          <div className="text-center p-3 px-5">
->>>>>>> Stashed changes
             <TextField
               variant="outlined"
               placeholder="Search"
@@ -206,7 +201,7 @@ const Explore = ({ isAuth }) => {
           <div className="container d-block w-75">
             {posts.map((post, index) => (
               <>
-                <div className="row g-2" key={post.id}>
+                <div className="row g-2 m-0" key={post.id}>
                   <div className="col-12">
                     <div
                       className="p-3 border-1 text-black"
@@ -238,15 +233,32 @@ const Explore = ({ isAuth }) => {
                         </Link>
                         <div>
                           {/* <i className="fa-solid fa-ellipsis-vertical fs-4 text-black"></i> */}
-                          <i id="dropdownIcon"
+                          <i
+                            id="dropdownIcon"
                             class="fa-solid fa-ellipsis-vertical fs-4 text-black"
                             data-bs-toggle="dropdown"
-                            aria-expanded="false"></i>
+                            aria-expanded="false"
+                          ></i>
 
-                          <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="dropdownIcon">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                          <ul
+                            class="dropdown-menu dropdown-menu-start"
+                            aria-labelledby="dropdownIcon"
+                          >
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                Action
+                              </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                Another action
+                              </a>
+                            </li>
+                            <li>
+                              <a class="dropdown-item" href="#">
+                                Something else here
+                              </a>
+                            </li>
                           </ul>
                         </div>
                       </div>

@@ -18,6 +18,7 @@ import axios from "axios";
 import { loginUser } from "../../reduxToolkit/loginSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import { apiUrl } from "../../../apiUtils";
+import blank_img from '../../assets/stylist/blank_img.jpg';
 
 const LandingPage = () => {
   const [loading, setLoading] = useState(true);
@@ -132,7 +133,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          <div className="container custom-container">
+          <div className="container custom-container h-100">
             <div className="row gx-5">
               <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                 <div className="p-2">
@@ -169,8 +170,8 @@ const LandingPage = () => {
               {popularsProducts?.map((product, index) => (
                 <div key={index} className="col-12 col-md-6 mt-4">
                   <div className="product-card">
-                    <div className="image-container">
-                      <img src={product?.image} alt={product?.name} />
+                    <div className="image-container h-100">
+                      <img src={product?.image || blank_img } alt={product?.name} />
                     </div>
                     <div className="text-container">
                       <div className="info">

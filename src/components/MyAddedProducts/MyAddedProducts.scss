@@ -48,7 +48,7 @@
 
 
   .products-container {
-    max-height: 500px;
+    // max-height: 500px;
     margin-top: 20px;
 
     .products-added {
@@ -161,12 +161,14 @@
 
 @media (max-width: 600px) {
   .my-added-product {
-    margin: 120px 50px 100px 45px !important;
+    margin: 150px 20px 50px 20px !important;
 
     .products-heading {
       display: flex;
       flex-direction: column;
-      float: left;
+      // float: left;
+      margin-bottom: 30px;
+      justify-content: center;
 
       .search-box {
         position: relative;

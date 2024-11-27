@@ -77,7 +77,7 @@ const Signup = () => {
     <>
       <ToastContainer />
       <div className="container signup-main-container d-flex justify-content-center align-items-center">
-        <div className="">
+        <div className="my-5 my-lg-0">
             <h1 className="text-center outside-heading fs-1 fw-bold">
               Style Capsule
             </h1>
