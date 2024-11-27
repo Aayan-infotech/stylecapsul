@@ -35,8 +35,8 @@ const Payment = () => {
       });
   
       if (response.data.success) {
-        showSuccessToast("Payment successful!");
-        navigate("/success", { state: { charge: response.data.charge } });
+        showSuccessToast(response.data.message || "Payment successful!");
+        navigate("/thanku", { state: { charge: response.data.charge } });
       } else {
         showErrorToast("Payment failed. Please try again.");
       }

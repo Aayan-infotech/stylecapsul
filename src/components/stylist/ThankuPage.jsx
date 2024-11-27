@@ -2,13 +2,13 @@ import React from "react";
 
 const ThankuPage = () => {
   return (
-    <div className="thanku-container-page">
+    <div className="thanku-container-page mb-5">
       <div
         className="container text-center"
         style={{ paddingTop: "6rem", display: "block" }}
       >
-        <h1 className="display-4">Successfull</h1>
-        <div className="my-4">
+        <h1 className="display-4 fw-bold mt-2">Successful</h1>
+        <div className="my-5">
           <i
             className="fa-solid fa-circle-check"
             style={{ fontSize: "6rem", color: "green" }}
