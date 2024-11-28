@@ -1,61 +1,112 @@
-.closet-management-container{
-    padding-top: 6rem;
+.closet-management-container {
+  padding-top: 6rem;
 }
-    @media (max-width: 768px) {
-  
-      .closet-management-container {
-        padding-top: 13rem !important;
-    }
-    .close-management-container {
-      padding-top: 13rem !important;
+
+.image_scanner_card {
+  position: relative;
+  border-radius: 60px;
+  background: black;
+  width: fit-content;
+  padding-bottom: 10px;
+
+  .show_back_image {
+    border-radius: 60px 60px 0 0;
+    min-height: 150px;
+    max-width: 180px;
   }
-      .container {
-        max-width: 90%;
-        padding-top: 0 !important;
-  
-        .row {
-          gap: 1rem;
-        }
-  
-        .card-body {
-          padding: 1rem;
-  
-          img {
-            width: 45px;
-            height: 40px;
-          }
-  
-          h4 {
-            font-size: 1.2rem;
-          }
-        }
+}
+
+.image_scanner_card .black::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .5);
+  height: 100%;
+  width: 100%;
+  border-radius: 60px
+}
+
+.image_scanner_card h4 {
+  position: relative;
+  z-index: 1;
+}
+
+.image_scanner_card .scanner_icon {
+  position: relative;
+  z-index: 1;
+}
+
+.pos-icon {
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  top: 20%;
+  transform: translate(-32px, 0px);
+
+}
+
+@media (max-width: 768px) {
+
+  .closet-management-container {
+    padding-top: 13rem !important;
+  }
+
+  .close-management-container {
+    padding-top: 13rem !important;
+  }
+
+  .container {
+    max-width: 90%;
+    padding-top: 0 !important;
+
+    .row {
+      gap: 1rem;
+    }
+
+    .card-body {
+      padding: 1rem;
+
+      img {
+        width: 45px;
+        height: 40px;
+      }
+
+      h4 {
+        font-size: 1.2rem;
       }
     }
-  
-    /* Mobile view adjustments */
-    @media (max-width: 576px) {
-   
-  
-      .container {
-        max-width: 100%;
-        padding: 0 1rem;
-  
-        .row {
-          gap: 0.5rem;
-        }
-  
-        .card-body {
-          padding: 0.8rem;
-  
-          img {
-            width: 40px;
-            height: 35px;
-          }
-  
-          h4 {
-            font-size: 1rem;
-          }
-        }
+  }
+}
+
+@media (max-width: 576px) {
+
+
+  .container {
+    max-width: 100%;
+    padding: 0 1rem;
+
+    .row {
+      gap: 0.5rem;
+    }
+
+    .card-body {
+      padding: 0.8rem;
+
+      img {
+        width: 40px;
+        height: 35px;
+      }
+
+      h4 {
+        font-size: 1rem;
       }
     }
-  
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .w750 {
+    width: 75% !important;
+  }
+}
