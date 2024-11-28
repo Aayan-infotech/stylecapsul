@@ -1,25 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../../styles/CalendarStyles.css';
-import day1formal from '../../assets/myCapsuleAddAvtar/for2-removebg-preview.png';
-import day2formal from '../../assets/myCapsuleAddAvtar/for4-removebg-preview.png';
-import day3formal from '../../assets/myCapsuleAddAvtar/for5-removebg-preview.png';
-import day4formal from '../../assets/myCapsuleAddAvtar/for6.png';
+import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
+import { apiUrl } from "../../../apiUtils";
 
 const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeStartDate, setActiveStartDate] = useState(new Date());
+    const [clothesOnDates, setClothesOnDates] = useState([]);
 
-    const [clothesOnDates] = useState({
-        '2024-11-09': { thumbnail: day4formal },
-        '2024-11-18': { thumbnail: day1formal },
-        '2024-11-14': { thumbnail: day2formal },
-        '2024-11-20': { thumbnail: day3formal },
-        '2024-12-09': { thumbnail: day4formal },
-        '2024-12-18': { thumbnail: day1formal },
-    });
+    const token = getCookie("authToken");
+
+    const fetchDayByCloths = async () => {
+        try {
+            const response = await axios.get(apiUrl('api/myStyleCapsule/getStyle'), {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = response?.data?.data?.styleOfTheDay || [];
+            const formattedData = data.map(item => ({
+                date: item.date,
+                thumbnail: item.picture.map(picture => apiUrl(`uploads/${picture}`)),
+                id: response?.data?.data?._id || null
+            }));
+            setClothesOnDates(formattedData);
+        } catch (error) {
+            console.error("Error fetching clothes data:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchDayByCloths();
+    }, []);
 
     const handleModalToggle = () => {
         setOpenCalendarDialog(!openCalendarDialog);
@@ -38,32 +54,42 @@ const ClothesCalendar = ({ onSave }) => {
 
     const tileContent = ({ date, view }) => {
         const formattedDate = formatDate(date);
-        if (view === 'month' && clothesOnDates[formattedDate]) {
-            return (
-                <div className="thumbnail">
-                    <img
-                        src={clothesOnDates[formattedDate].thumbnail}
-                        alt="outfit"
-                        className="outfit-thumbnail"
-                    />
-                </div>
-            );
-        }
-        return null;
-    };
 
-    const tileClassName = ({ date, view }) => {
-        const formattedDate = formatDate(date);
-        if (view === 'month' && clothesOnDates[formattedDate]) {
-            return 'date-with-image';
+        if (view === 'month') {
+            const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
+            if (dateEntry) {
+                return (
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '4px',
+                        overflow: 'hidden',
+                    }}>
+                        {dateEntry.thumbnail.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image}
+                                style={{
+                                    width: '15px',
+                                    height: 'auto',
+                                    objectFit: 'cover',
+                                    borderRadius: '4px'
+                                }}
+                            />
+                        ))}
+                    </div>
+                );
+            }
         }
         return null;
     };
 
     const handleSave = () => {
         const formattedDate = formatDate(selectedDate);
-        if (clothesOnDates[formattedDate]) {
-            onSave(clothesOnDates[formattedDate].thumbnail, formattedDate);
+        const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
+        if (dateEntry) {
+            onSave(dateEntry.thumbnail, formattedDate, dateEntry.id);
         }
         const modalElement = document.getElementById('openCalendarDialogCurrent');
         if (modalElement) {
@@ -71,18 +97,6 @@ const ClothesCalendar = ({ onSave }) => {
             modalInstance && modalInstance.hide();
         }
         setOpenCalendarDialog(false);
-    };
-
-    const handleNextMonth = () => {
-        const newDate = new Date(activeStartDate);
-        newDate.setMonth(activeStartDate.getMonth() + 2);
-        setActiveStartDate(newDate);
-    };
-
-    const handlePrevMonth = () => {
-        const newDate = new Date(activeStartDate);
-        newDate.setMonth(activeStartDate.getMonth() - 2);
-        setActiveStartDate(newDate);
     };
 
     return (
@@ -95,12 +109,10 @@ const ClothesCalendar = ({ onSave }) => {
                 aria-hidden="true"
                 style={{ display: openCalendarDialog ? 'block' : 'none' }}
             >
-                <div className="modal-dialog modal-dialog-centered modal-xl">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">
-                                Select a Date
-                            </h1>
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Select a Date</h1>
                             <button
                                 type="button"
                                 className="btn-close"
@@ -110,41 +122,11 @@ const ClothesCalendar = ({ onSave }) => {
                             ></button>
                         </div>
                         <div className="modal-body">
-                            <div className="row gx-5">
-                                {/* First Calendar */}
-                                <div className="col-12 col-md-6 calendar-left">
-                                    <Calendar
-                                        onChange={handleDateChange}
-                                        value={selectedDate}
-                                        tileContent={tileContent}
-                                        tileClassName={tileClassName}
-                                        activeStartDate={activeStartDate}
-                                        onActiveStartDateChange={({ activeStartDate }) => setActiveStartDate(activeStartDate)}
-                                        prev2Label={null}
-                                        next2Label={null}
-                                        onClickNext={handleNextMonth}
-                                        onClickPrev={handlePrevMonth}
-                                    />
-                                </div>
-                                {/* Second Calendar */}
-                                <div className="col-12 col-md-6 calendar-right">
-                                    <Calendar
-                                        onChange={handleDateChange}
-                                        value={selectedDate}
-                                        tileContent={tileContent}
-                                        tileClassName={tileClassName}
-                                        activeStartDate={new Date(
-                                            activeStartDate.getFullYear(),
-                                            activeStartDate.getMonth() + 1
-                                        )}
-                                        onActiveStartDateChange={({ activeStartDate }) => setActiveStartDate(activeStartDate)}
-                                        prev2Label={null}
-                                        next2Label={null}
-                                        onClickNext={handleNextMonth}
-                                        onClickPrev={handlePrevMonth}
-                                    />
-                                </div>
-                            </div>
+                            <Calendar
+                                onChange={handleDateChange}
+                                value={selectedDate}
+                                tileContent={tileContent}
+                            />
                         </div>
                         <div className="modal-footer">
                             <button
@@ -166,16 +148,6 @@ const ClothesCalendar = ({ onSave }) => {
                     </div>
                 </div>
             </div>
-            <style jsx>{`
-                /* Hide next button in the first calendar */
-                .calendar-left .react-calendar__navigation__next-button {
-                    visibility: hidden;
-                }
-                /* Hide previous button in the second calendar */
-                .calendar-right .react-calendar__navigation__prev-button {
-                    visibility: hidden;
-                }
-            `}</style>
         </div>
     );
 };

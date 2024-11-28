@@ -16,6 +16,9 @@ import "swiper/css";
 import "swiper/css/effect-creative";
 import { EffectCreative } from "swiper/modules";
 import Loader from "../Loader/Loader";
+import axios from 'axios';
+import { getCookie } from '../../utils/cookieUtils';
+import { apiUrl } from "../../../apiUtils";
 
 export const SocialUserDetails = () => {
   const categories = [
@@ -43,36 +46,70 @@ export const SocialUserDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDetails, setSelectedDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const clothesOnDates = {
-    "2024-11-05": { thumbnail: day4formal },
-    "2024-11-06": { thumbnail: day1formal },
-    "2024-11-11": { thumbnail: day2formal },
-    "2024-11-15": { thumbnail: day3formal },
-  };
+  const [clothesOnDates, setClothesOnDates] = useState([]);
 
   const navigate = useNavigate();
+  const token = getCookie("authToken");
 
-  const tileContent = ({ date, view }) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    console.log(formattedDate, "formattedDate");
-    if (view === "month" && clothesOnDates[formattedDate]) {
-      return (
-        <div className="thumbnail">
-          <img
-            src={clothesOnDates[formattedDate].thumbnail}
-            alt="outfit"
-            className="outfit-thumbnail"
-          />
-        </div>
-      );
+  const fetchDayByCloths = async () => {
+    try {
+      const response = await axios.get(apiUrl('api/myStyleCapsule/getStyle'), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      const data = response?.data?.data?.styleOfTheDay || [];
+      const formattedData = data.map(item => ({
+        date: item.date,
+        thumbnail: item.picture.map(picture => apiUrl(`uploads/${picture}`)),
+        id: response?.data?.data?._id || null
+      }));
+      setClothesOnDates(formattedData);
+    } catch (error) {
+      console.error("Error fetching clothes data:", error);
     }
-    return null;
   };
 
-  const tileClassName = ({ date, view }) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    if (view === "month" && clothesOnDates[formattedDate]) {
-      return "date-with-image";
+  useEffect(() => {
+    fetchDayByCloths();
+  }, []);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const tileContent = ({ date, view }) => {
+    const formattedDate = formatDate(date);
+    if (view === 'month') {
+      const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
+      if (dateEntry) {
+        return (
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '4px',
+            overflow: 'hidden',
+          }}>
+            {dateEntry.thumbnail.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                style={{
+                  width: '15px',
+                  height: 'auto',
+                  objectFit: 'cover',
+                  borderRadius: '4px'
+                }}
+              />
+            ))}
+          </div>
+        );
+      }
     }
     return null;
   };
@@ -82,16 +119,18 @@ export const SocialUserDetails = () => {
   };
 
   const handleSelectOutFits = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    const details = clothesOnDates[formattedDate];
+    const formattedDate = formatDate(date); 
+    const details = clothesOnDates.find(item => item.date === formattedDate); 
     if (details) {
-      const selectedData = { date: formattedDate, image: details.thumbnail };
+      const selectedData = { date: formattedDate, images: details.thumbnail };
       setSelectedDetails(selectedData);
       navigate("/capsulerangecalendardetails", { state: { selectedData } });
     } else {
       setSelectedDetails(null);
+      console.log("No data found for this date.");
     }
   };
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -99,7 +138,7 @@ export const SocialUserDetails = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-  
+
 
   return (
     <>
@@ -181,7 +220,6 @@ export const SocialUserDetails = () => {
                   <Calendar
                     value={selectedDate}
                     tileContent={tileContent}
-                    tileClassName={tileClassName}
                     onClickDay={(date) => {
                       setSelectedDate(date);
                       handleSelectOutFits(date);

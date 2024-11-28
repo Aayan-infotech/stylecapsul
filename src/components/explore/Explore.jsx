@@ -235,27 +235,27 @@ const Explore = ({ isAuth }) => {
                           {/* <i className="fa-solid fa-ellipsis-vertical fs-4 text-black"></i> */}
                           <i
                             id="dropdownIcon"
-                            class="fa-solid fa-ellipsis-vertical fs-4 text-black"
+                            className="fa-solid fa-ellipsis-vertical fs-4 text-black"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
                           ></i>
 
                           <ul
-                            class="dropdown-menu dropdown-menu-start"
+                            className="dropdown-menu dropdown-menu-start"
                             aria-labelledby="dropdownIcon"
                           >
                             <li>
-                              <a class="dropdown-item" href="#">
+                              <a className="dropdown-item" href="#">
                                 Action
                               </a>
                             </li>
                             <li>
-                              <a class="dropdown-item" href="#">
+                              <a className="dropdown-item" href="#">
                                 Another action
                               </a>
                             </li>
                             <li>
-                              <a class="dropdown-item" href="#">
+                              <a className="dropdown-item" href="#">
                                 Something else here
                               </a>
                             </li>

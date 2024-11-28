@@ -13,6 +13,7 @@ const MyStyleCapsul = () => {
   const handleSave = (images, date, id) => {
     setSelectedDate(date);
     setCapsuleId(id);
+    
     const updatedMiddleColumn = images.map((img, index) => ({
       url: "/emojistylecapsule",
       src: img,

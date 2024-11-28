@@ -1,32 +1,22 @@
-import React, { useState } from "react";
-import capsulimg from "../../assets/mystylecapsule/capsulimg1.png";
+import React, { useState, useEffect } from "react";
 import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.scss";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import CapsuleDialog from "../../components/explore/CapsuleDialog";
 import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
-import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Avatar, Box, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Avatar } from "@mui/material";
 
 export const CapsuleRangeCalendarDetails = () => {
+  const [capsuleId, setCapsuleId] = useState([]);
   const location = useLocation();
   const { selectedData } = location.state || {};
+  console.log(selectedData, 'selectedData');
 
   const [selectedImage, setSelectedImage] = useState(selectedData?.image || blankimage);
   const [selectedDate, setSelectedDate] = useState(selectedData?.date || "");
 
-  const handleSave = (image, date) => {
-    setSelectedImage(image || selectedData?.image || blankimage);
-    setSelectedDate(date || selectedData?.date || "");
-  };
-
-  const getDayOfWeek = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { weekday: "long" });
-  };
-
-  const columnsData = [
+  const [columnsData, setColumnsData] = useState([
     [],
     [
       {
@@ -37,7 +27,47 @@ export const CapsuleRangeCalendarDetails = () => {
       },
     ],
     [],
-  ];
+  ]);
+
+  // Update columnsData when selectedData is available
+  useEffect(() => {
+    if (selectedData && selectedData.images) {
+      const updatedMiddleColumn = selectedData.images.map((img) => ({
+        url: "#",
+        src: img,
+        top: "5%",
+        right: "70%",
+      }));
+      setColumnsData((prevData) => {
+        const newColumnsData = [...prevData];
+        newColumnsData[1] = updatedMiddleColumn; // Set the images in the middle column
+        return newColumnsData;
+      });
+    }
+  }, [selectedData]);
+
+  const handleSave = (images, date, id) => {
+    setSelectedDate(date);
+    setCapsuleId(id);
+    const updatedMiddleColumn = images.map((img) => ({
+      url: "#",
+      src: img,
+      top: "5%",
+      right: "70%",
+    }));
+    setColumnsData((prevData) => {
+      const newColumnsData = [...prevData];
+      newColumnsData[1] = updatedMiddleColumn; 
+      return newColumnsData;
+    });
+
+    console.log("Capsule ID:", id);
+  };
+
+  const getDayOfWeek = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { weekday: "long" });
+  };
 
   return (
     <div>
