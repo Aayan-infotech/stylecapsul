@@ -68,7 +68,7 @@ const AvatarCanvas = ({ shirtTexture, jeansTexture, shoeTexture }) => {
     <div style={{ textAlign: "center" }}>
       <div style={{ marginTop: "20px" }}>
         <button onClick={handleDecrease} type="button" class="btn btn-dark"><RemoveIcon/></button>
-        <span style={{ margin: "0 10px" }}>Scale: {scale.toFixed(1)}</span>
+        <span style={{ margin: "0 10px" }} className="fw-bold">Scale: {scale.toFixed(1)}</span>
         <button onClick={handleIncrease} type="button" class="btn btn-dark"><AddIcon/></button>
       </div>
       <Canvas
