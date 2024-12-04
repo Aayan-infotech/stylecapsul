@@ -51,6 +51,8 @@ function ProfileAvatar() {
   const { user, status } = useSelector((state) => state.login);
   const user_id = user?.payload?._id;
 
+  // const { shirtTexture, jeansTexture, shoeTexture } = location.state || {};
+
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
   };
