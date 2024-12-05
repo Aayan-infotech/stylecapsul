@@ -86,8 +86,8 @@ const Stylist = () => {
                 </div>
               ) : (
                 showstylists.map((stylist) => (
-                  <Link to="/stylist-profile" className="text-decoration-none" state={{ stylist }} key={stylist._id}>
-                    <div className="col-12 w-100 mt-3">
+                  <Link to="/stylist-profile" className="text-decoration-none p-0" state={{ stylist }} key={stylist._id}>
+                    <div className="col-12 w-100 mt-3 p-0">
                       <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
                         <div className="me-2">
                           <img

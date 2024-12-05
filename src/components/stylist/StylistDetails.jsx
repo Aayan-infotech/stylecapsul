@@ -3,9 +3,17 @@ import { Link, useLocation } from 'react-router-dom';
 import '../../styles/StylistDetails.scss';
 import blank_image from '../../assets/stylist/blank_img.jpg';
 import image_1 from '../../assets/marketplace/showimg5.jpg';
+import axios from "axios";
+import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
 
 const StylistDetails = () => {
     const [showStylistProfileDetails, setSshowStylistProfileDetails] = useState(null);
+    const [vendorDetails, setVendorDetails] = useState({});
+
+    const token = getCookie("authToken");
+    const userId = getCookie("userId");
+
 
     const ratingsData = [
         { stars: 5, percentage: 70, count: 488 },
@@ -28,6 +36,71 @@ const StylistDetails = () => {
     const hasHalfStar = (profile_details?.ratings) % 1 !== 0;
     const totalStars = 5;
 
+    const workHistory = [
+        {
+            role: 'Fashion Designer',
+            company: 'Elegance Couture',
+            location: 'New York, NY',
+            duration: '2021 – Present',
+            description: '- Designed seasonal collections and oversaw garment production.',
+        },
+        {
+            role: 'Stylist',
+            company: 'Vogue Boutique',
+            location: 'Los Angeles, CA',
+            duration: '2019 – 2021',
+            description: '- Styled clients for events and curated looks for photoshoots.',
+        },
+        {
+            role: 'Fashion Design Intern',
+            company: 'Urban Threads',
+            location: 'San Francisco, CA',
+            duration: '2018 – 2019',
+            description: '- Assisted in sketching designs and preparing for photoshoots.',
+        },
+    ];
+
+    const reviews = [
+        {
+            date: 'Dec 20, 2024',
+            stars: 3,
+            reviewer: 'Abinash Sinha',
+            role: 'Software Developer',
+            review:
+                "Working at Sam.AI has been an incredible journey so far. The technology we're building is truly cutting-edge, and being a part of a team that's revolutionizing how people achieve their goals is immensely fulfilling.",
+        },
+        {
+            date: 'Jan 20, 2024',
+            stars: 5,
+            reviewer: 'Alex K.',
+            role: 'Senior Analyst',
+            review:
+                "Working at Sam.AI has been an incredible journey so far. The technology we're building is truly cutting-edge, and being a part of a team that's revolutionizing how people achieve their goals is immensely fulfilling.",
+        }
+    ];
+
+    const fetchVendorDetials = async () => {
+        try {
+          const response = await axios.get(apiUrl('api/stylist/vendor-details'),{
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          if (response?.data?.success) {
+            setVendorDetails(response?.data?.data);
+          }
+        } catch (error) {
+          console.error("Error fetching clothes data:", error);
+        }
+      };
+    
+      useEffect(() => {
+        if(userId){
+          fetchVendorDetials();
+        }
+      }, [userId]);
+
     return (
         <div className="stylist-main-container-sections">
             <div className="container w-75">
@@ -35,7 +108,7 @@ const StylistDetails = () => {
                     <div className="col-12">
                         <h1 className="fw-bold fs-1 text-center text-md-start">Stylist</h1>
                     </div>
-                    <div className="col-12 col-md-3 d-flex justify-content-center">
+                    <div className="col-12 col-md-3">
                         <img src={profile_details?.profilePicture || blank_image} className='stylist-profile-image rounded-pill' alt="Stylist" />
                     </div>
                     <div className="col-12 col-md-8">
@@ -80,15 +153,15 @@ const StylistDetails = () => {
                         <h4 className="fw-bold fs-4">Skills</h4>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <h4 className="fw-bold fs-4">Work History</h4>
-                        <h6 className="fw-bold fs-6">Fashion Designer</h6>
-                        <p><strong>Elegance Couture</strong> | New York, NY 2021 – Present</p>
-                        <p>- Designed seasonal collections and oversaw garment production.</p>
-                        <h6 className="fw-bold fs-6">Stylist</h6>
-                        <p><strong>Vogue Boutique</strong> | Los Angeles, CA 2019 – 2021</p>
-                        <p>- Styled clients for events and curated looks for photoshoots.</p>
-                        <h6 className="fw-bold fs-6">Fashion Design Intern</h6>
-                        <p><strong>Urban Threads</strong> | San Francisco, CA 2018 – 2019</p>
-                        <p>- Assisted in sketching designs and preparing for photoshoots.</p>
+                        {workHistory.map((job, index) => (
+                            <div key={index}>
+                                <h6 className="fw-bold fs-6">{job.role}</h6>
+                                <p>
+                                    <strong>{job.company}</strong> | {job.location} {job.duration}
+                                </p>
+                                <p>{job.description}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
                 <div>
@@ -137,7 +210,7 @@ const StylistDetails = () => {
                         </div>
                     </div>
                     <div className="row mt-4">
-                        <span className="text-muted">Jan 20, 2024</span>
+                        {/* <span className="text-muted">Jan 20, 2024</span>
                         <div className="col-12 mt-2">
                             <div className="d-flex align-items-center mb-3">
                                 {[...Array(5)].map((_, index) => (
@@ -158,7 +231,37 @@ const StylistDetails = () => {
                                     Working at Sam.AI has been an incredible journey so far. The technology we're building is truly cutting-edge, and being a part of a team that's revolutionizing how people achieve their goals is immensely fulfilling.
                                 </p>
                             </div>
-                        </div>
+                        </div> */}
+                          {reviews.map((review, index) => (
+                            <div key={index} className="col-12 mt-2">
+                                <span className="text-muted">{review.date}</span>
+                                <div className="d-flex align-items-center mb-3">
+                                    {[...Array(5)].map((_, index) => (
+                                        <i
+                                            key={index}
+                                            className={`fa fa-star ${index < review.stars ? 'text-warning' : ''}`}
+                                        ></i>
+                                    ))}
+                                </div>
+                                <div className="d-flex align-items-center">
+                                    <div className="me-3">
+                                        <div
+                                            className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                            style={{ width: '50px', height: '50px' }}
+                                        >
+                                            {review.reviewer.split(' ').map((n) => n[0]).join('')}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 className="m-0">{review.reviewer}</h6>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small className="text-muted">{review.role}</small>
+                                    <p>{review.review}</p>
+                                </div>
+                            </div>
+                        ))}
                         <hr className="text-muted mt-4" />
                     </div>
                 </div>

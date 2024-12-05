@@ -23,12 +23,14 @@ function FullAvatar() {
   };
 
   const handleSubmitAvatar = () => {
-    navigate("/edit-profile-avatar", {
-      state: { shirtTexture, jeansTexture, shoeTexture },
-    });
-    console.log();
+    // const canvas = document.querySelector("canvas");
+    // const avatarImage = canvas.toDataURL("image/png"); 
+    // navigate("/edit-profile-avatar", {
+    //   state: { avatarImage }, 
+    // });
+    navigate("/edit-profile-avatar");
   };
-
+  
   return (
     <>
       <div className="capsule-main-container">

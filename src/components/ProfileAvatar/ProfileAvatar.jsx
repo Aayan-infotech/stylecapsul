@@ -51,7 +51,8 @@ function ProfileAvatar() {
   const { user, status } = useSelector((state) => state.login);
   const user_id = user?.payload?._id;
 
-  // const { shirtTexture, jeansTexture, shoeTexture } = location.state || {};
+  // const { avatarImage } = location.state || {};
+  // console.log(avatarImage, "avatarImage");
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
@@ -78,25 +79,25 @@ function ProfileAvatar() {
         setSelectMaterialStatus(profileData?.measurements?.maritalStatus);
         if (profileData) {
           const { measurements } = profileData;
-          setActiveGenderType(updatedProfileData.gender || selectGender);
-          setActiveBodySize(updatedProfileData.bodySize || bodySize);
-          setActiveEyeColor(updatedProfileData.eyeColor || selectEyeColor);
-          setActiveHairColor(updatedProfileData.hairColor || selectHiarColor);
-          setActiveAgeRange(updatedProfileData.age || selectAgeRange);
+          setActiveGenderType(updatedProfileData?.gender || selectGender);
+          setActiveBodySize(updatedProfileData?.bodySize || bodySize);
+          setActiveEyeColor(updatedProfileData?.eyeColor || selectEyeColor);
+          setActiveHairColor(updatedProfileData?.hairColor || selectHiarColor);
+          setActiveAgeRange(updatedProfileData?.age || selectAgeRange);
           setActiveMaterialStatus(
-            updatedProfileData.maritalStatus || selectMaterialStatus
+            updatedProfileData?.maritalStatus || selectMaterialStatus
           );
-          setHeight(updatedProfileData.height || measurements.height?.value);
-          setWeight(updatedProfileData.weight || measurements.weight?.value);
-          setShoes(updatedProfileData.shoes || measurements.shoes?.size);
+          setHeight(updatedProfileData?.height || measurements?.height?.value);
+          setWeight(updatedProfileData?.weight || measurements?.weight?.value);
+          setShoes(updatedProfileData?.shoes || measurements?.shoes?.size);
           setShoulders(
-            updatedProfileData.shoulders || measurements.shoulders?.value
+            updatedProfileData?.shoulders || measurements?.shoulders?.value
           );
-          setChest(updatedProfileData.chest || measurements.chest?.value);
-          setWaist(updatedProfileData.waist || measurements.waist?.value);
-          setHips(updatedProfileData.hips || measurements.hips?.value);
+          setChest(updatedProfileData?.chest || measurements?.chest?.value);
+          setWaist(updatedProfileData?.waist || measurements?.waist?.value);
+          setHips(updatedProfileData?.hips || measurements?.hips?.value);
           setHighHips(
-            updatedProfileData.highHips || measurements.highHips?.value
+            updatedProfileData?.highHips || measurements?.highHips?.value
           );
         }
       } catch (error) {
@@ -282,33 +283,38 @@ function ProfileAvatar() {
           </div>
         ) : (
           <>
-          <div className="container">
-            <div className="row mt-4 gy-4 tab-section ">
-              <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
-                <button
-                  type="button"
-                  className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "basic" ? "btn-active" : ""}`}
-                  onClick={() => setActiveTab("basic")}
-                >
-                  Basic
-                </button>
+            <div className="container">
+              <div className="row mt-4 gy-4 tab-section ">
+                <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
+                  <button
+                    type="button"
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                      activeTab === "basic" ? "btn-active" : ""
+                    }`}
+                    onClick={() => setActiveTab("basic")}
+                  >
+                    Basic
+                  </button>
+                </div>
+                <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start">
+                  <button
+                    type="button"
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                      activeTab === "questionnaire" ? "btn-active" : ""
+                    }`}
+                    onClick={() => setActiveTab("questionnaire")}
+                  >
+                    Questionnaire
+                  </button>
+                </div>
               </div>
-              <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start">
-                <button
-                  type="button"
-                  className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "questionnaire" ? "btn-active" : ""}`}
-                  onClick={() => setActiveTab("questionnaire")}
-                >
-                  Questionnaire
-                </button>
+              <div className="row mt-4">
+                <div className="col-12 w-100">
+                  <hr />
+                </div>
               </div>
             </div>
-            <div className="row mt-4">
-              <div className="col-12 w-100">
-                <hr />
-              </div>
-            </div>
-          </div><div>
+            <div>
               {activeTab === "basic" && (
                 <div className="container w-75">
                   <div className="row">
@@ -333,7 +339,8 @@ function ProfileAvatar() {
                               style={{ color: "#6c757d" }}
                               data-bs-toggle="tooltip"
                               data-bs-placement="bottom"
-                              title="Not editable" />
+                              title="Not editable"
+                            />
                           </div>
                           <div className="mb-3">
                             <label
@@ -349,7 +356,8 @@ function ProfileAvatar() {
                               rows="1"
                               name="bio"
                               value={formData.bio}
-                              onChange={handleInputChange} />
+                              onChange={handleInputChange}
+                            />
                           </div>
                           <div className="mb-3">
                             <label
@@ -369,7 +377,8 @@ function ProfileAvatar() {
                               onChange={handleInputChange}
                               data-bs-toggle="tooltip"
                               data-bs-placement="bottom"
-                              title="Not editable" />
+                              title="Not editable"
+                            />
                           </div>
                           <div className="mb-3">
                             <label
@@ -384,7 +393,8 @@ function ProfileAvatar() {
                               placeholder="Enter Mobile Number"
                               name="mobileNumber"
                               value={formData.mobileNumber}
-                              onChange={handleInputChange} />
+                              onChange={handleInputChange}
+                            />
                           </div>
                         </form>
                       </div>
@@ -643,7 +653,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeGenderType === gender_type ? "selected" : ""}`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeGenderType === gender_type ? "selected" : ""
+                            }`}
                             onClick={() => handleClickGenderType(gender_type)}
                           >
                             {gender_type}
@@ -661,7 +673,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeBodySize === body_size ? "selected" : ""}`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeBodySize === body_size ? "selected" : ""
+                            }`}
                             onClick={() => handleClickBodySize(body_size)}
                           >
                             {body_size}
@@ -679,7 +693,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeEyeColor === eye_color ? "selected" : ""}`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeEyeColor === eye_color ? "selected" : ""
+                            }`}
                             onClick={() => handleClickEyeColor(eye_color)}
                           >
                             {eye_color}
@@ -698,7 +714,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeHairColor === hair_color ? "selected" : ""}`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeHairColor === hair_color ? "selected" : ""
+                            }`}
                             onClick={() => handleClickHairColor(hair_color)}
                           >
                             {hair_color}
@@ -708,7 +726,9 @@ function ProfileAvatar() {
                     </div>
                     {/* -------------------------What age range you're in?------------------------------- */}
                     <div className="row g-2" style={{ paddingTop: "5rem" }}>
-                      <h1 className="fw-bold fs-3">What age range you're in?</h1>
+                      <h1 className="fw-bold fs-3">
+                        What age range you're in?
+                      </h1>
                       {selectAgeRange.map((age_range) => (
                         <div
                           className="col-12 col-md-4 d-flex align-items-center text-center"
@@ -716,7 +736,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeAgeRange === age_range ? "selected" : ""}`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeAgeRange === age_range ? "selected" : ""
+                            }`}
                             onClick={() => handleClickAgeRange(age_range)}
                           >
                             {age_range}
@@ -734,10 +756,14 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeMaterialStatus === material_status
-                              ? "selected"
-                              : ""}`}
-                            onClick={() => handleClickMaterialStatus(material_status)}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeMaterialStatus === material_status
+                                ? "selected"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handleClickMaterialStatus(material_status)
+                            }
                           >
                             {material_status}
                           </button>
@@ -763,7 +789,10 @@ function ProfileAvatar() {
                         </button>
                       </div>
                       <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-                        <Link to="/profile" className=" justify-content-center align-items-center d-flex mx-200 w-100 text-decoration-none">
+                        <Link
+                          to="/profile"
+                          className=" justify-content-center align-items-center d-flex mx-200 w-100 text-decoration-none"
+                        >
                           <button
                             type="button"
                             className="btn btn-light w-100 rounded-pill p-3 fw-bold mx-200"
@@ -781,7 +810,8 @@ function ProfileAvatar() {
                   <Questionnaire />
                 </div>
               )}
-            </div></>
+            </div>
+          </>
         )}
       </div>
     </>

@@ -22,8 +22,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import axios from "axios";
-import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
 
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -108,15 +108,17 @@ const Explore = ({ isAuth }) => {
   ]);
 
   const token = getCookie("authToken");
+  const userId = getCookie("userId");
 
   const fetchDayByCloths = async () => {
     try {
-      const response = await axios.get(apiUrl(""), {
+      const response = await axios.get(apiUrl('api/explore/get-post/674ebd35c888b274b031ebcd'),{
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
       });
+      console.log(response?.data?.data, 'response----')
       if (response?.data?.success) {
         setAllSocialPosts(response?.data?.data);
       }
@@ -126,8 +128,10 @@ const Explore = ({ isAuth }) => {
   };
 
   useEffect(() => {
-    fetchDayByCloths();
-  }, []);
+    if(userId){
+      fetchDayByCloths();
+    }
+  }, [userId]);
 
   const handleCommentChange = (index, e) => {
     const updatedPosts = [...posts];
@@ -183,6 +187,14 @@ const Explore = ({ isAuth }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // const formatDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const day = date.getDate().toString().padStart(2, "0"); 
+  //   const month = date.toLocaleString("en-US", { month: "short" }); 
+  //   return `${day} ${month}`;
+  // };
+  // {formatDate(updatedAt)}
+
   return (
     <>
       {loading ? (
@@ -199,9 +211,10 @@ const Explore = ({ isAuth }) => {
             />
           </div>
           <div className="container d-block w-75">
-            {posts.map((post, index) => (
+            {allSocialPosts?.user?.firstName}
+            {posts?.map((post, index) => (
               <>
-                <div className="row g-2 m-0" key={post.id}>
+                <div className="row g-2 m-0" key={index}>
                   <div className="col-12">
                     <div
                       className="p-3 border-1 text-black"
