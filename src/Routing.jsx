@@ -106,7 +106,7 @@ const Routing = () => {
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
             -------------------------------social media-----------------
             <Route path="/explore" element={<Explore />} />
-            <Route path="/socialUserDetails" element={<SocialUserDetails />} />
+            <Route path="/socialUserDetails/:postId" element={<SocialUserDetails />} />
             <Route path="/cloths" element={<Cloths />} />
             <Route path="/cloths-details/:id" element={<ClothsDetails />} />
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>

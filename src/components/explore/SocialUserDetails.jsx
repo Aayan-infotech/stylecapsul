@@ -5,20 +5,17 @@ import { Edit, Delete, Share } from "@mui/icons-material";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import day1formal from "../../assets/myCapsuleAddAvtar/for2-removebg-preview.png";
-import day2formal from "../../assets/myCapsuleAddAvtar/for4-removebg-preview.png";
-import day3formal from "../../assets/myCapsuleAddAvtar/for5-removebg-preview.png";
-import day4formal from "../../assets/myCapsuleAddAvtar/for6.png";
 import Explore from "./Explore";
-import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-creative";
 import { EffectCreative } from "swiper/modules";
 import Loader from "../Loader/Loader";
-import axios from 'axios';
-import { getCookie } from '../../utils/cookieUtils';
+import axios from "axios";
+import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 
 export const SocialUserDetails = () => {
   const categories = [
@@ -45,25 +42,27 @@ export const SocialUserDetails = () => {
   ];
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDetails, setSelectedDetails] = useState(null);
+  const [userPostDetails, setUserPostDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [clothesOnDates, setClothesOnDates] = useState([]);
 
   const navigate = useNavigate();
   const token = getCookie("authToken");
+  const { postId } = useParams();
 
   const fetchDayByCloths = async () => {
     try {
-      const response = await axios.get(apiUrl('api/myStyleCapsule/getStyle'), {
+      const response = await axios.get(apiUrl("api/myStyleCapsule/getStyle"), {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-      })
+      });
       const data = response?.data?.data?.styleOfTheDay || [];
-      const formattedData = data.map(item => ({
+      const formattedData = data.map((item) => ({
         date: item.date,
-        thumbnail: item.picture.map(picture => apiUrl(`uploads/${picture}`)),
-        id: response?.data?.data?._id || null
+        thumbnail: item.picture.map((picture) => apiUrl(`uploads/${picture}`)),
+        id: response?.data?.data?._id || null,
       }));
       setClothesOnDates(formattedData);
     } catch (error) {
@@ -71,39 +70,66 @@ export const SocialUserDetails = () => {
     }
   };
 
+  const fetchPostDetails = async () => {
+    try {
+      const response = await axios.get(
+        apiUrl(`api/explore/get-post/${postId}`),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response?.data?.data, "response?.data?.data");
+      if (response?.data?.success) {
+        setUserPostDetails(response?.data?.data);
+      }
+    } catch (error) {
+      console.error("Error fetching clothes data:", error);
+    }
+  };
+
   useEffect(() => {
     fetchDayByCloths();
-  }, []);
+    if (postId) {
+      fetchPostDetails();
+    }
+  }, [postId]);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
   const tileContent = ({ date, view }) => {
     const formattedDate = formatDate(date);
-    if (view === 'month') {
-      const dateEntry = clothesOnDates.find(item => item.date === formattedDate);
+    if (view === "month") {
+      const dateEntry = clothesOnDates.find(
+        (item) => item.date === formattedDate
+      );
       if (dateEntry) {
         return (
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            overflow: 'hidden',
-          }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "4px",
+              overflow: "hidden",
+            }}
+          >
             {dateEntry.thumbnail.map((image, index) => (
               <img
                 key={index}
                 src={image}
                 style={{
-                  width: '15px',
-                  height: 'auto',
-                  objectFit: 'cover',
-                  borderRadius: '4px'
+                  width: "15px",
+                  height: "auto",
+                  objectFit: "cover",
+                  borderRadius: "4px",
                 }}
               />
             ))}
@@ -119,8 +145,8 @@ export const SocialUserDetails = () => {
   };
 
   const handleSelectOutFits = (date) => {
-    const formattedDate = formatDate(date); 
-    const details = clothesOnDates.find(item => item.date === formattedDate); 
+    const formattedDate = formatDate(date);
+    const details = clothesOnDates.find((item) => item.date === formattedDate);
     if (details) {
       const selectedData = { date: formattedDate, images: details.thumbnail };
       setSelectedDetails(selectedData);
@@ -131,14 +157,12 @@ export const SocialUserDetails = () => {
     }
   };
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
 
   return (
     <>
@@ -160,11 +184,16 @@ export const SocialUserDetails = () => {
                   margin: "0 auto",
                 }}
               />
-              <h1 className="fw-bold mt-3">Anshuman</h1>
-              <p className="text-muted">Elizabeth@gmail.com</p>
+              <h1 className="fw-bold mt-3">
+                {userPostDetails?.user?.firstName
+                  ? userPostDetails?.user?.firstName.charAt(0).toUpperCase() +
+                    userPostDetails?.user?.firstName.slice(1).toLowerCase()
+                  : ""}
+              </h1>
+              <p className="text-muted">{userPostDetails?.user?.email}</p>
               <div className="d-flex justify-content-center align-items-center flex-wrap">
                 <blockquote className="fw-bold me-3 mb-2 text-center">
-                  "Fashions fade, style is eternal."
+                  "{userPostDetails?.user?.bio || "“N/A”"}"
                 </blockquote>
                 <IconButton
                   className="btn-dark rounded-circle text-white"

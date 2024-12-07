@@ -49,7 +49,6 @@ const Explore = ({ isAuth }) => {
         }));
         setAllSocialPosts(updatedPosts);
       }
-      console.log(response?.data?.data, "lskdfhsdjf");
     } catch (error) {
       console.error("Error fetching clothes data:", error);
     }
@@ -276,11 +275,7 @@ const Explore = ({ isAuth }) => {
                       style={{ backgroundColor: "#f5f5f56e" }}
                     >
                       <div className="d-flex justify-content-between align-items-center">
-                        <Link
-                          to={{ pathname: "/socialUserDetails" }}
-                          state={{ post }}
-                          className="text-decoration-none"
-                        >
+                      <Link to={`/socialUserDetails/${post._id}`}className="text-decoration-none">
                           <div className="d-flex justify-content-between align-items-center">
                             <Avatar
                               alt="profile image"

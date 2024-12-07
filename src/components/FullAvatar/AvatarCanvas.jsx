@@ -6,7 +6,6 @@ import scenes from "../../assets/defalutAvatar/source/base-avatar.glb";
 import "../FullAvatar/AvatarGenerator.scss";
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { Button } from "@mui/material";
 
 const Avatar = ({ shirtTexture, jeansTexture, shoeTexture, scale }) => {
   const { scene } = useGLTF(scenes);
@@ -67,7 +66,7 @@ const AvatarCanvas = ({ shirtTexture, jeansTexture, shoeTexture }) => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ marginTop: "20px" }}>
+      <div className="mt-4 mb-4">
         <button onClick={handleDecrease} type="button" className="btn btn-dark small"><RemoveIcon/></button>
         <span style={{ margin: "0 10px" }} className="fw-bold">Scale: {scale.toFixed(1)}</span>
         <button onClick={handleIncrease} type="button" className="btn btn-dark small"><AddIcon/></button>
