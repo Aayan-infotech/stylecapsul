@@ -15,7 +15,7 @@ import {
   A11y,
   Autoplay,
 } from "swiper/modules";
-import "./explore.scss"
+import "./explore.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -24,143 +24,150 @@ import "swiper/css/scrollbar";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
+import blank_img from "../../assets/stylist/blank_img.jpg";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
   const [allSocialPosts, setAllSocialPosts] = useState([]);
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      userName: "John Doe",
-      postDate: "October 11",
-      email: "Elizabeth@gmail.com",
-      description: "“Fashions fade, style is eternal.”",
-      avatarUrl:
-        "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
-      postContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores quos ipsum alias optio ut excepturi facilis cumque numquam corporis doloribus!",
-      hashtags: "#hashtag",
-      cardContent: [
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://img.freepik.com/free-photo/medium-shot-romantic-couple-with-plaid-blanket_23-2150561506.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl: "https://m.media-amazon.com/images/I/61zj4JTBO4L.jpg",
-        },
-      ],
-      likes: 177,
-      liked: false,
-      comments: [],
-      shares: 42,
-      shared: false,
-      showComments: false,
-      newComment: "",
-    },
-    {
-      id: 2,
-      userName: "Anshuman Ray",
-      postDate: "October 11",
-      email: "Elizabeth@gmail.com",
-      description: "“Fashions fade, style is eternal.”",
-      avatarUrl:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu5uvKyZDNWgp-mBB2qY_is0IrPhHOVtwUkw&s",
-      postContent:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores quos ipsum alias optio ut excepturi facilis cumque numquam corporis doloribus!",
-      hashtags: "#hashtag",
-      cardContent: [
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://img.freepik.com/free-photo/medium-shot-romantic-couple-with-plaid-blanket_23-2150561506.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl:
-            "https://www.stylecraze.com/wp-content/uploads/2013/06/Different-Beautiful-American-Girls.jpg",
-        },
-        {
-          title: "Headline: 32 characters",
-          text: "Description: 18 characters",
-          imageUrl: "https://m.media-amazon.com/images/I/61zj4JTBO4L.jpg",
-        },
-      ],
-      likes: 177,
-      liked: false,
-      comments: [],
-      shares: 42,
-      shared: false,
-      showComments: false,
-      newComment: "",
-    },
-  ]);
-
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
   const fetchDayByCloths = async () => {
     try {
-      const response = await axios.get(apiUrl('api/explore/get-post/674ebd35c888b274b031ebcd'),{
+      const response = await axios.get(apiUrl("api/explore/getall"), {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
-      console.log(response?.data?.data, 'response----')
       if (response?.data?.success) {
-        setAllSocialPosts(response?.data?.data);
+        const updatedPosts = response?.data?.data.map((post) => ({
+          ...post,
+          showComments: false,
+        }));
+        setAllSocialPosts(updatedPosts);
       }
+      console.log(response?.data?.data, "lskdfhsdjf");
     } catch (error) {
       console.error("Error fetching clothes data:", error);
     }
   };
 
   useEffect(() => {
-    if(userId){
+    if (userId) {
       fetchDayByCloths();
     }
   }, [userId]);
 
   const handleCommentChange = (index, e) => {
-    const updatedPosts = [...posts];
+    const updatedPosts = [...allSocialPosts];
     updatedPosts[index].newComment = e.target.value;
-    setPosts(updatedPosts);
+    setAllSocialPosts(updatedPosts);
   };
 
-  const handleCommentSubmit = (index, e) => {
+  const handleCommentSubmit = async (index, e) => {
     e.preventDefault();
-    const updatedPosts = [...posts];
-    const newComment = updatedPosts[index].newComment.trim();
+    const updatedPosts = [...allSocialPosts];
+    const newComment = updatedPosts[index].newComment;
     if (newComment) {
-      updatedPosts[index].comments.push(newComment);
-      updatedPosts[index].newComment = "";
+      try {
+        const { data } = await axios.post(
+          apiUrl("api/explore/comment"),
+          {
+            postId: updatedPosts[index]._id,
+            userId,
+            text: newComment,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (data?.success) {
+          updatedPosts[index].comments.push({ text: newComment });
+          updatedPosts[index].newComment = "";
+          setAllSocialPosts(updatedPosts);
+        } else {
+          showErrorToast(data.message);
+        }
+      } catch (error) {
+        console.error("Error submitting comment:", error);
+      }
     }
-    setPosts(updatedPosts);
+  };
+
+  const handleDeleteComment = async (postIndex, commentIndex) => {
+    const post = allSocialPosts[postIndex];
+    const comment = post.comments[commentIndex];
+
+    try {
+      const response = await axios.delete(
+        apiUrl(`api/explore/delete-comment/${userId}`),
+        {
+          data: {
+            commentId: comment._id,
+            postId: post._id,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response?.data?.success) {
+        showSuccessToast("Comment deleted successfully!");
+        const updatedPosts = [...allSocialPosts];
+        updatedPosts[postIndex].comments.splice(commentIndex, 1);
+        setAllSocialPosts(updatedPosts);
+      } else {
+        showErrorToast("Failed to delete comment");
+      }
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
   };
 
   const toggleCommentSection = (index) => {
-    const updatedPosts = [...posts];
+    const updatedPosts = [...allSocialPosts];
     updatedPosts[index].showComments = !updatedPosts[index].showComments;
-    setPosts(updatedPosts);
+    setAllSocialPosts(updatedPosts);
   };
 
-  const handleLike = (index) => {
-    const updatedPosts = [...posts];
-    updatedPosts[index].liked = !updatedPosts[index].liked;
-    updatedPosts[index].likes += updatedPosts[index].liked ? 1 : -1;
-    setPosts(updatedPosts);
+  const handleLike = async (index, post_id) => {
+    try {
+      const { data } = await axios.post(
+        apiUrl("api/explore/like"),
+        { userId, postId: post_id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      data?.success
+        ? showSuccessToast(data.message)
+        : showErrorToast(data.message);
+      fetchDayByCloths();
+      setAllSocialPosts((prevPosts) =>
+        prevPosts.map((post, idx) =>
+          idx === index
+            ? {
+                ...post,
+                liked: !post.liked,
+                likes: post.likes + (post.liked ? -1 : 1),
+              }
+            : post
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleShare = (index) => {
@@ -180,6 +187,7 @@ const Explore = ({ isAuth }) => {
       alert("Sharing is not supported in this browser.");
     }
   };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -187,20 +195,68 @@ const Explore = ({ isAuth }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // const formatDate = (dateString) => {
-  //   const date = new Date(dateString);
-  //   const day = date.getDate().toString().padStart(2, "0"); 
-  //   const month = date.toLocaleString("en-US", { month: "short" }); 
-  //   return `${day} ${month}`;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = date.toLocaleString("en-US", { month: "short" });
+    return `${day} ${month}`;
+  };
+
+  // const handleReplyChange = (postIndex, commentIndex, value) => {
+  //   const updatedPosts = [...allSocialPosts];
+  //   updatedPosts[postIndex].comments[commentIndex].newReply = value;
+  //   setAllSocialPosts(updatedPosts);
   // };
-  // {formatDate(updatedAt)}
+
+  // const handleReplySubmit = async (postIndex, commentIndex) => {
+  //   const post = allSocialPosts[postIndex];
+  //   const comment = post.comments[commentIndex];
+  //   const newReply = comment.newReply;
+
+  //   if (newReply) {
+  //     try {
+  //       const response = await axios.post(
+  //         apiUrl("api/explore/reply"),
+  //         {
+  //           postId: post._id,
+  //           userId,
+  //           commentId: comment._id,
+  //           text: newReply,
+  //         },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+
+  //       if (response?.data?.success) {
+  //         showSuccessToast("Reply added successfully!");
+  //         const updatedPosts = [...allSocialPosts];
+  //         updatedPosts[postIndex].comments[commentIndex].replies =
+  //           updatedPosts[postIndex].comments[commentIndex].replies || [];
+  //         updatedPosts[postIndex].comments[commentIndex].replies.push({
+  //           text: newReply,
+  //           userId,
+  //         });
+  //         updatedPosts[postIndex].comments[commentIndex].newReply = "";
+  //         setAllSocialPosts(updatedPosts);
+  //       } else {
+  //         showErrorToast("Failed to add reply");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error adding reply:", error);
+  //     }
+  //   }
+  // };
 
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div className="mb-4 explore-container" >
+        <div className="mb-4 explore-container">
           <div className="text-center p-3 px-4">
             <TextField
               variant="outlined"
@@ -211,8 +267,7 @@ const Explore = ({ isAuth }) => {
             />
           </div>
           <div className="container d-block w-75">
-            {allSocialPosts?.user?.firstName}
-            {posts?.map((post, index) => (
+            {allSocialPosts?.map((post, index) => (
               <>
                 <div className="row g-2 m-0" key={index}>
                   <div className="col-12">
@@ -228,24 +283,23 @@ const Explore = ({ isAuth }) => {
                         >
                           <div className="d-flex justify-content-between align-items-center">
                             <Avatar
-                              alt={post.userName}
+                              alt="profile image"
                               sx={{ width: 56, height: 56 }}
                               className="me-3"
-                              src={post.avatarUrl}
+                              src={blank_img}
                             />
                             <div className="text-black">
                               <h5 style={{ lineHeight: "1.2" }}>
-                                {post.userName}
+                                {post?.user?.firstName}
                               </h5>
                               <h6 style={{ fontSize: "13px" }}>
-                                {post.postDate} •{" "}
+                                {formatDate(post.updatedAt)} •{" "}
                                 <i className="fa-solid fa-earth-americas"></i>
                               </h6>
                             </div>
                           </div>
                         </Link>
                         <div>
-                          {/* <i className="fa-solid fa-ellipsis-vertical fs-4 text-black"></i> */}
                           <i
                             id="dropdownIcon"
                             className="fa-solid fa-ellipsis-vertical fs-4 text-black"
@@ -276,12 +330,11 @@ const Explore = ({ isAuth }) => {
                         </div>
                       </div>
                       <div className="text-black mt-2">
-                        <p className="fw-bold">{post.postContent}</p>
+                        <p className="fw-bold">{post?.description}</p>
                       </div>
 
                       <div className="d-flex mt-3">
                         <Swiper
-                          // install Swiper modules
                           modules={[Navigation, Pagination, Scrollbar, A11y]}
                           spaceBetween={20}
                           className="swiper-types-custom"
@@ -302,26 +355,26 @@ const Explore = ({ isAuth }) => {
                             },
                           }}
                         >
-                          {post.cardContent.map((card, cardIndex) => (
+                          {post?.image.map((imageUrl, cardIndex) => (
                             <>
-                              <SwiperSlide>
+                              <SwiperSlide key={cardIndex}>
                                 <div
                                   className="card text-black"
                                   style={{
                                     width: "18rem",
                                     backgroundColor: "#e8e8e8",
                                   }}
-                                  key={cardIndex}
                                 >
                                   <img
-                                    src={card.imageUrl}
+                                    src={imageUrl}
                                     className="card-img-top object-fit-cover"
                                     height={300}
-                                    alt="..."
+                                    alt={`Image ${cardIndex + 1}`}
                                   />
                                   <div className="card-body">
-                                    <h5 className="card-title">{card.title}</h5>
-                                    <p className="card-text">{card.text}</p>
+                                    <p className="card-text">
+                                      {post?.description}
+                                    </p>
                                   </div>
                                 </div>
                               </SwiperSlide>
@@ -334,11 +387,10 @@ const Explore = ({ isAuth }) => {
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="d-flex align-items-center text-black">
                             <ThumbUpIcon
-                              onClick={() => handleLike(index)}
                               className="fs-5 me-3"
-                              color={post.liked ? "primary" : "inherit"}
+                              color={post.likes ? "primary" : "inherit"}
                             />
-                            <h6 className="mt-1 mb-0">{post.likes}</h6>
+                            <h6 className="mt-1 mb-0">{post.likes.length}</h6>
                           </div>
                         </div>
                         <div className="d-flex align-items-center text-black gap-3 justify-content-center">
@@ -350,13 +402,13 @@ const Explore = ({ isAuth }) => {
                       <hr />
                       <div className="d-flex justify-content-evenly align-items-center text-black">
                         <h5
-                          onClick={() => handleLike(index)}
+                          onClick={() => handleLike(index, post)}
                           style={{ cursor: "pointer" }}
                         >
                           <i className="fa-regular fa-thumbs-up me-2"></i> Like
                         </h5>
                         <h5
-                          onClick={() => toggleCommentSection(index)}
+                          onClick={() => toggleCommentSection(index, post)}
                           style={{ cursor: "pointer" }}
                         >
                           <i className="fa-regular fa-comment me-2"></i> Comment
@@ -376,7 +428,7 @@ const Explore = ({ isAuth }) => {
                               alt="Remy Sharp"
                               sx={{ width: 40, height: 40, marginRight: 2 }}
                               className="me-3"
-                              src={post.avatarUrl}
+                              src={blank_img}
                             />
                             <TextField
                               variant="outlined"
@@ -390,10 +442,7 @@ const Explore = ({ isAuth }) => {
                               value={post.newComment}
                               onChange={(e) => handleCommentChange(index, e)}
                               onKeyDown={(e) => {
-                                if (
-                                  e.key === "Enter" &&
-                                  post.newComment.trim()
-                                ) {
+                                if (e.key === "Enter" && post.newComment) {
                                   handleCommentSubmit(index, e);
                                 }
                               }}
@@ -401,7 +450,7 @@ const Explore = ({ isAuth }) => {
                                 sx: { borderRadius: "25px" },
                                 endAdornment: (
                                   <InputAdornment position="end">
-                                    {post.newComment.trim() ? (
+                                    {post.newComment ? (
                                       <SendIcon
                                         onClick={(e) =>
                                           handleCommentSubmit(index, e)
@@ -419,33 +468,118 @@ const Explore = ({ isAuth }) => {
                               }}
                             />
                           </div>
-
-                          {/* Display comments */}
-                          <div className="comments-list px-5 mt-3">
+                          <div className="comments-list mt-3">
+                            {post.showComments && (
+                              <div className="comments-list px-5 mt-3">
+                                {post.comments.length > 0 ? (
+                                  post.comments.map((comment, commentIndex) => (
+                                    <div
+                                      key={commentIndex}
+                                      className="d-flex justify-content-between align-items-center mb-2 text-black"
+                                    >
+                                      <div className="d-flex">
+                                      <Avatar
+                                        alt="User Avatar"
+                                        sx={{ width: 30, height: 30 }}
+                                        className="me-2"
+                                        src={blank_img}
+                                      />
+                                      <p
+                                        className="mb-0 text-black p-2 rounded-3"
+                                        style={{ backgroundColor: "#e0e0e0" }}
+                                      >
+                                        {comment?.text}
+                                      </p>
+                                      </div>
+                                      <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
+                                    </div>
+                                  ))
+                                ) : (
+                                  <p className="text-black">No comments yet!</p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          {/* <div className="comments-list px-5 mt-3">
                             {post.comments.length > 0 ? (
                               post.comments.map((comment, commentIndex) => (
-                                <div
-                                  key={commentIndex}
-                                  className="d-flex mb-2 text-black"
-                                >
-                                  <Avatar
-                                    alt="User Avatar"
-                                    sx={{ width: 30, height: 30 }}
-                                    className="me-2"
-                                    src={post.avatarUrl}
-                                  />
-                                  <p
-                                    className="mb-0 text-black p-2 rounded-3"
-                                    style={{ backgroundColor: "#e0e0e0" }}
-                                  >
-                                    {comment}
-                                  </p>
+                                <div key={commentIndex} className="mb-3">
+                                  <div className="d-flex justify-content-between align-items-center mb-2 text-black">
+                                    <div className="d-flex">
+                                      <Avatar
+                                        alt="User Avatar"
+                                        sx={{ width: 30, height: 30 }}
+                                        className="me-2"
+                                        src={blank_img}
+                                      />
+                                      <p
+                                        className="mb-0 text-black p-2 rounded-3"
+                                        style={{ backgroundColor: "#e0e0e0" }}
+                                      >
+                                        {comment?.text}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  {comment.replies &&
+                                    comment.replies.length > 0 && (
+                                      <div className="ms-5">
+                                        {comment.replies.map(
+                                          (reply, replyIndex) => (
+                                            <div
+                                              key={replyIndex}
+                                              className="d-flex align-items-center mb-2 text-black"
+                                            >
+                                              <Avatar
+                                                alt="User Avatar"
+                                                sx={{ width: 25, height: 25 }}
+                                                className="me-2"
+                                                src={blank_img}
+                                              />
+                                              <p
+                                                className="mb-0 text-black p-2 rounded-3"
+                                                style={{
+                                                  backgroundColor: "#f0f0f0",
+                                                }}
+                                              >
+                                                {reply?.text}
+                                              </p>
+                                            </div>
+                                          )
+                                        )}
+                                      </div>
+                                    )}
+                                  <div className="ms-5 mt-2">
+                                    <input
+                                      type="text"
+                                      className="form-control mb-2"
+                                      placeholder="Write a reply..."
+                                      value={comment.newReply || ""}
+                                      onChange={(e) =>
+                                        handleReplyChange(
+                                          postIndex,
+                                          commentIndex,
+                                          e.target.value
+                                        )
+                                      }
+                                    />
+                                    <button
+                                      className="btn btn-primary btn-sm"
+                                      onClick={() =>
+                                        handleReplySubmit(
+                                          postIndex,
+                                          commentIndex
+                                        )
+                                      }
+                                    >
+                                      Reply
+                                    </button>
+                                  </div>
                                 </div>
                               ))
                             ) : (
-                              <p className="text-black">No comments yet !.</p>
+                              <p className="text-black">No comments yet!</p>
                             )}
-                          </div>
+                          </div> */}
                         </div>
                       )}
                     </div>
