@@ -4,30 +4,74 @@ import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.scss";
 import { Link } from "react-router-dom";
 import Calendar from "../allmodal/Calendar";
+import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import axios from "axios";
 
 const MyStyleCapsul = () => {
   const [selectedDate, setSelectedDate] = useState("");
-  const [middleColumnData, setMiddleColumnData] = useState([]); 
+  const [middleColumnData, setMiddleColumnData] = useState([]);
   const [capsuleId, setCapsuleId] = useState("");
+
+  const userId = getCookie("userId");
+  const token = getCookie("authToken");
 
   const handleSave = (images, date, id) => {
     setSelectedDate(date);
     setCapsuleId(id);
-    
+
     const updatedMiddleColumn = images.map((img, index) => ({
       url: "/emojistylecapsule",
       src: img,
-      top: `${index * 30 + 5}%`, 
-      right: "70%", 
+      top: `${index * 30 + 5}%`,
+      right: "70%",
     }));
     setMiddleColumnData(updatedMiddleColumn);
     console.log("Capsule ID:", id)
   };
 
+  console.log(middleColumnData, 'middleColumnData')
+
   const getDayOfWeek = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", { weekday: "long" });
   };
+
+  const handleShare = async () => {
+    try {
+      if (!capsuleId) {
+        showErrorToast("Style Capsule ID is required.");
+        return;
+      }
+      const payload = {
+        userId: userId, 
+        styleCapsuleId: capsuleId,
+      };
+  
+      const response = await axios.post(apiUrl('api/explore/create'), payload, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response?.data?.success) {
+        const successMessage = response?.data?.message;
+        showSuccessToast(successMessage);
+      } else {
+        showErrorToast(response?.data?.message);
+      }
+    } catch (error) {
+      console.log(error?.response, 'error');
+      if (error?.response?.data?.message) {
+        showErrorToast(error?.response?.data?.message);
+      } else {
+        showErrorToast("Error sharing data");
+      }
+    }
+  };
+  
+
 
   return (
     <div className="my-style-capsule-container mb-4">
@@ -49,11 +93,8 @@ const MyStyleCapsul = () => {
             <Calendar onSave={handleSave} />
           </div>
         </div>
-
-        {/* Image columns */}
         <div className="mt-1" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="row m-0 gx-5">
-            {/* Left Column */}
             <div className="col inner-img">
               <img
                 src={capsulimg}
@@ -87,8 +128,6 @@ const MyStyleCapsul = () => {
                 </div>
               </div>
             </div>
-
-            {/* Middle Column */}
             <div className="col inner-img">
               <img
                 src={capsulimg}
@@ -143,8 +182,6 @@ const MyStyleCapsul = () => {
                 ))
               )}
             </div>
-
-            {/* Right Column */}
             <div className="col inner-img">
               <img
                 src={capsulimg}
@@ -179,11 +216,9 @@ const MyStyleCapsul = () => {
               </div>
             </div>
           </div>
-
-          {/* Like, Comment, and Share section */}
           <div className="border-bottom w-100 mt-4">
             <div className="d-flex justify-content-end align-items-center text-black">
-              <h5 style={{ cursor: "pointer" }}>
+              <h5 style={{ cursor: "pointer" }} onClick={handleShare}>
                 <i className="fa-solid fa-share me-2"></i> Share
               </h5>
             </div>

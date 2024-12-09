@@ -5,7 +5,7 @@ import GifBoxIcon from "@mui/icons-material/GifBox";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Box, InputAdornment, TextField } from "@mui/material";
+import { Box, InputAdornment, TextField, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import {
@@ -157,10 +157,10 @@ const Explore = ({ isAuth }) => {
         prevPosts.map((post, idx) =>
           idx === index
             ? {
-                ...post,
-                liked: !post.liked,
-                likes: post.likes + (post.liked ? -1 : 1),
-              }
+              ...post,
+              liked: !post.liked,
+              likes: post.likes + (post.liked ? -1 : 1),
+            }
             : post
         )
       );
@@ -275,7 +275,7 @@ const Explore = ({ isAuth }) => {
                       style={{ backgroundColor: "#f5f5f56e" }}
                     >
                       <div className="d-flex justify-content-between align-items-center">
-                      <Link to={`/socialUserDetails/${post._id}`}className="text-decoration-none">
+                        <Link to={`/socialUserDetails/${post._id}`} className="text-decoration-none">
                           <div className="d-flex justify-content-between align-items-center">
                             <Avatar
                               alt="profile image"
@@ -389,7 +389,7 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </div>
                         <div className="d-flex align-items-center text-black gap-3 justify-content-center">
-                          <h6 className="">{post.comments.length} Comments</h6>
+                          <h6 style={{ cursor: "pointer" }} onClick={() => toggleCommentSection(index, post)}>{post.comments.length} Comments</h6>
                           <h6>{post.shares} Shares</h6>
                         </div>
                       </div>
@@ -465,7 +465,7 @@ const Explore = ({ isAuth }) => {
                           </div>
                           <div className="comments-list mt-3">
                             {post.showComments && (
-                              <div className="comments-list px-5 mt-3">
+                              <div className="comments-list px-5 mt-4">
                                 {post.comments.length > 0 ? (
                                   post.comments.map((comment, commentIndex) => (
                                     <div
@@ -473,18 +473,16 @@ const Explore = ({ isAuth }) => {
                                       className="d-flex justify-content-between align-items-center mb-2 text-black"
                                     >
                                       <div className="d-flex">
-                                      <Avatar
-                                        alt="User Avatar"
-                                        sx={{ width: 30, height: 30 }}
-                                        className="me-2"
-                                        src={blank_img}
-                                      />
-                                      <p
-                                        className="mb-0 text-black p-2 rounded-3"
-                                        style={{ backgroundColor: "#e0e0e0" }}
-                                      >
-                                        {comment?.text}
-                                      </p>
+                                        <Avatar
+                                          alt="User Avatar"
+                                          sx={{ width: 30, height: 30 }}
+                                          className="me-2"
+                                          src={blank_img}
+                                        />
+                                        <div className="text-black p-2 rounded-3" style={{ backgroundColor: "#e0e0e0" }}>
+                                          {/* <Typography variant="subtitle2" className="fw-bold">{comment?.user?.firstName}</Typography> */}
+                                          <Typography variant="body2" gutterBottom>{comment?.text}</Typography>
+                                        </div>
                                       </div>
                                       <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
                                     </div>
