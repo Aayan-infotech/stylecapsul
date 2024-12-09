@@ -157,10 +157,10 @@ const Explore = ({ isAuth }) => {
         prevPosts.map((post, idx) =>
           idx === index
             ? {
-              ...post,
-              liked: !post.liked,
-              likes: post.likes + (post.liked ? -1 : 1),
-            }
+                ...post,
+                liked: !post.liked,
+                likes: post.likes + (post.liked ? -1 : 1),
+              }
             : post
         )
       );
@@ -275,7 +275,10 @@ const Explore = ({ isAuth }) => {
                       style={{ backgroundColor: "#f5f5f56e" }}
                     >
                       <div className="d-flex justify-content-between align-items-center">
-                        <Link to={`/socialUserDetails/${post._id}`} className="text-decoration-none">
+                        <Link
+                          to={`/socialUserDetails/${post._id}`}
+                          className="text-decoration-none"
+                        >
                           <div className="d-flex justify-content-between align-items-center">
                             <Avatar
                               alt="profile image"
@@ -284,9 +287,14 @@ const Explore = ({ isAuth }) => {
                               src={blank_img}
                             />
                             <div className="text-black">
-                              <h5 style={{ lineHeight: "1.2" }}>
-                                {post?.user?.firstName}
-                              </h5>
+                              {/* <h5 style={{ lineHeight: "1.2" }}> */}
+                              {/* {post?.user?.firstName} */}
+                              <Typography variant="h6" className="fw-bold">
+                                {post?.user?.firstName.charAt(0).toUpperCase() +
+                                  post?.user?.firstName.slice(1).toLowerCase()}
+                              </Typography>
+
+                              {/* </h5> */}
                               <h6 style={{ fontSize: "13px" }}>
                                 {formatDate(post.updatedAt)} •{" "}
                                 <i className="fa-solid fa-earth-americas"></i>
@@ -389,7 +397,12 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </div>
                         <div className="d-flex align-items-center text-black gap-3 justify-content-center">
-                          <h6 style={{ cursor: "pointer" }} onClick={() => toggleCommentSection(index, post)}>{post.comments.length} Comments</h6>
+                          <h6
+                            style={{ cursor: "pointer" }}
+                            onClick={() => toggleCommentSection(index, post)}
+                          >
+                            {post.comments.length} Comments
+                          </h6>
                           <h6>{post.shares} Shares</h6>
                         </div>
                       </div>
@@ -479,12 +492,40 @@ const Explore = ({ isAuth }) => {
                                           className="me-2"
                                           src={blank_img}
                                         />
-                                        <div className="text-black p-2 rounded-3" style={{ backgroundColor: "#e0e0e0" }}>
-                                          {/* <Typography variant="subtitle2" className="fw-bold">{comment?.user?.firstName}</Typography> */}
-                                          <Typography variant="body2" gutterBottom>{comment?.text}</Typography>
+                                        <div
+                                          className="text-black p-2 rounded-3"
+                                          style={{ backgroundColor: "#e0e0e0" }}
+                                        >
+                                          <Typography
+                                            variant="subtitle2"
+                                            className="fw-bold"
+                                          >
+                                            {comment?.user?.firstName
+                                              .charAt(0)
+                                              .toUpperCase() +
+                                              comment?.user?.firstName
+                                                .slice(1)
+                                                .toLowerCase()}
+                                          </Typography>
+
+                                          <Typography
+                                            variant="body2"
+                                            gutterBottom
+                                          >
+                                            {comment?.text}
+                                          </Typography>
                                         </div>
                                       </div>
-                                      <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
+                                      <DeleteOutlineIcon
+                                        size="small"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() =>
+                                          handleDeleteComment(
+                                            index,
+                                            commentIndex
+                                          )
+                                        }
+                                      />
                                     </div>
                                   ))
                                 ) : (
