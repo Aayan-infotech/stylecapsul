@@ -201,54 +201,70 @@ const Explore = ({ isAuth }) => {
     return `${day} ${month}`;
   };
 
-  // const handleReplyChange = (postIndex, commentIndex, value) => {
-  //   const updatedPosts = [...allSocialPosts];
-  //   updatedPosts[postIndex].comments[commentIndex].newReply = value;
-  //   setAllSocialPosts(updatedPosts);
-  // };
+  const handleReplyChange = (postIndex, commentIndex, value) => {
+    const updatedPosts = allSocialPosts.map((post, idx) => {
+      if (idx === postIndex) {
+        return {
+          ...post,
+          comments: post.comments.map((comment, cIdx) => {
+            if (cIdx === commentIndex) {
+              return {
+                ...comment,
+                newReply: value,
+              };
+            }
+            return comment;
+          }),
+        };
+      }
+      return post;
+    });
 
-  // const handleReplySubmit = async (postIndex, commentIndex) => {
-  //   const post = allSocialPosts[postIndex];
-  //   const comment = post.comments[commentIndex];
-  //   const newReply = comment.newReply;
+    setAllSocialPosts(updatedPosts);
+  };
 
-  //   if (newReply) {
-  //     try {
-  //       const response = await axios.post(
-  //         apiUrl("api/explore/reply"),
-  //         {
-  //           postId: post._id,
-  //           userId,
-  //           commentId: comment._id,
-  //           text: newReply,
-  //         },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
+  const handleReplySubmit = async (postIndex, commentIndex) => {
+    const post = allSocialPosts[postIndex];
+    const comment = post.comments[commentIndex];
+    const newReply = comment.newReply;
 
-  //       if (response?.data?.success) {
-  //         showSuccessToast("Reply added successfully!");
-  //         const updatedPosts = [...allSocialPosts];
-  //         updatedPosts[postIndex].comments[commentIndex].replies =
-  //           updatedPosts[postIndex].comments[commentIndex].replies || [];
-  //         updatedPosts[postIndex].comments[commentIndex].replies.push({
-  //           text: newReply,
-  //           userId,
-  //         });
-  //         updatedPosts[postIndex].comments[commentIndex].newReply = "";
-  //         setAllSocialPosts(updatedPosts);
-  //       } else {
-  //         showErrorToast("Failed to add reply");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error adding reply:", error);
-  //     }
-  //   }
-  // };
+    if (newReply) {
+      try {
+        const response = await axios.post(
+          apiUrl("api/explore/reply"),
+          {
+            postId: post._id,
+            userId,
+            commentId: comment._id,
+            text: newReply,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response?.data?.success) {
+          showSuccessToast("Reply added successfully!");
+          const updatedPosts = [...allSocialPosts];
+          updatedPosts[postIndex].comments[commentIndex].replies =
+            updatedPosts[postIndex].comments[commentIndex].replies || [];
+          updatedPosts[postIndex].comments[commentIndex].replies.push({
+            text: newReply,
+            userId,
+          });
+          updatedPosts[postIndex].comments[commentIndex].newReply = "";
+          setAllSocialPosts(updatedPosts);
+        } else {
+          showErrorToast("Failed to add reply");
+        }
+      } catch (error) {
+        console.error("Error adding reply:", error);
+      }
+    }
+  };
 
   return (
     <>
@@ -421,11 +437,17 @@ const Explore = ({ isAuth }) => {
                         >
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
-                        <h5
+                        {/* <h5
                           onClick={() => handleShare(index)}
                           style={{ cursor: "pointer" }}
                         >
                           <i className="fa-solid fa-share me-2"></i> Share
+                        </h5> */}
+                        <h5 style={{ cursor: "pointer" }}>
+                          <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer"
+                            style={{ textDecoration: "none", color: "inherit" }}>
+                            <i className="fa-solid fa-share me-2"></i> Share
+                          </a>
                         </h5>
                       </div>
                       <hr />
@@ -476,69 +498,11 @@ const Explore = ({ isAuth }) => {
                               }}
                             />
                           </div>
-                          <div className="comments-list mt-3">
-                            {post.showComments && (
-                              <div className="comments-list px-5 mt-4">
-                                {post.comments.length > 0 ? (
-                                  post.comments.map((comment, commentIndex) => (
-                                    <div
-                                      key={commentIndex}
-                                      className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                    >
-                                      <div className="d-flex">
-                                        <Avatar
-                                          alt="User Avatar"
-                                          sx={{ width: 30, height: 30 }}
-                                          className="me-2"
-                                          src={blank_img}
-                                        />
-                                        <div
-                                          className="text-black p-2 rounded-3"
-                                          style={{ backgroundColor: "#e0e0e0" }}
-                                        >
-                                          <Typography
-                                            variant="subtitle2"
-                                            className="fw-bold"
-                                          >
-                                            {comment?.user?.firstName
-                                              .charAt(0)
-                                              .toUpperCase() +
-                                              comment?.user?.firstName
-                                                .slice(1)
-                                                .toLowerCase()}
-                                          </Typography>
-
-                                          <Typography
-                                            variant="body2"
-                                            gutterBottom
-                                          >
-                                            {comment?.text}
-                                          </Typography>
-                                        </div>
-                                      </div>
-                                      <DeleteOutlineIcon
-                                        size="small"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() =>
-                                          handleDeleteComment(
-                                            index,
-                                            commentIndex
-                                          )
-                                        }
-                                      />
-                                    </div>
-                                  ))
-                                ) : (
-                                  <p className="text-black">No comments yet!</p>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                          {/* <div className="comments-list px-5 mt-3">
+                          <div className="comments-list px-5 mt-3">
                             {post.comments.length > 0 ? (
                               post.comments.map((comment, commentIndex) => (
                                 <div key={commentIndex} className="mb-3">
-                                  <div className="d-flex justify-content-between align-items-center mb-2 text-black">
+                                  {/* <div className="d-flex justify-content-between align-items-center mb-2 text-black">
                                     <div className="d-flex">
                                       <Avatar
                                         alt="User Avatar"
@@ -553,30 +517,109 @@ const Explore = ({ isAuth }) => {
                                         {comment?.text}
                                       </p>
                                     </div>
+                                  </div> */}
+                                  <div
+                                    key={commentIndex}
+                                    className="d-flex justify-content-between align-items-center mb-2 text-black"
+                                  >
+                                    <div className="d-flex">
+                                      <Avatar
+                                        alt="User Avatar"
+                                        sx={{ width: 30, height: 30 }}
+                                        className="me-2"
+                                        src={blank_img}
+                                      />
+                                      <div
+                                        className="text-black p-2 rounded-3"
+                                        style={{ backgroundColor: "#e0e0e0" }}
+                                      >
+                                        <Typography
+                                          variant="subtitle2"
+                                          className="fw-bold"
+                                        >
+                                          {comment?.user?.firstName
+                                            .charAt(0)
+                                            .toUpperCase() +
+                                            comment?.user?.firstName
+                                              .slice(1)
+                                              .toLowerCase()}
+                                        </Typography>
+                                        <Typography
+                                          variant="body2"
+                                          gutterBottom
+                                        >
+                                          {comment?.text}
+                                        </Typography>
+                                      </div>
+                                    </div>
+                                    <DeleteOutlineIcon
+                                      size="small"
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() =>
+                                        handleDeleteComment(index, commentIndex)
+                                      }
+                                    />
                                   </div>
                                   {comment.replies &&
                                     comment.replies.length > 0 && (
                                       <div className="ms-5">
                                         {comment.replies.map(
                                           (reply, replyIndex) => (
+                                            // <div
+                                            //   key={replyIndex}
+                                            //   className="d-flex align-items-center mb-2 text-black"
+                                            // >
+                                            //   <Avatar
+                                            //     alt="User Avatar"
+                                            //     sx={{ width: 25, height: 25 }}
+                                            //     className="me-2"
+                                            //     src={blank_img}
+                                            //   />
+                                            //   <p
+                                            //     className="mb-0 text-black p-2 rounded-3"
+                                            //     style={{
+                                            //       backgroundColor: "#f0f0f0",
+                                            //     }}
+                                            //   >
+                                            //     {reply?.text}
+                                            //   </p>
+                                            // </div>
                                             <div
-                                              key={replyIndex}
-                                              className="d-flex align-items-center mb-2 text-black"
+                                              key={commentIndex}
+                                              className="d-flex justify-content-between align-items-center mb-2 text-black"
                                             >
-                                              <Avatar
-                                                alt="User Avatar"
-                                                sx={{ width: 25, height: 25 }}
-                                                className="me-2"
-                                                src={blank_img}
-                                              />
-                                              <p
-                                                className="mb-0 text-black p-2 rounded-3"
-                                                style={{
-                                                  backgroundColor: "#f0f0f0",
-                                                }}
-                                              >
-                                                {reply?.text}
-                                              </p>
+                                              <div className="d-flex">
+                                                <Avatar
+                                                  alt="User Avatar"
+                                                  sx={{ width: 30, height: 30 }}
+                                                  className="me-2"
+                                                  src={blank_img}
+                                                />
+                                                <div
+                                                  className="text-black p-2 rounded-3"
+                                                  style={{
+                                                    backgroundColor: "#e0e0e0",
+                                                  }}
+                                                >
+                                                  <Typography
+                                                    variant="subtitle2"
+                                                    className="fw-bold"
+                                                  >
+                                                    {comment?.user?.firstName
+                                                      .charAt(0)
+                                                      .toUpperCase() +
+                                                      comment?.user?.firstName
+                                                        .slice(1)
+                                                        .toLowerCase()}
+                                                  </Typography>
+                                                  <Typography
+                                                    variant="body2"
+                                                    gutterBottom
+                                                  >
+                                                    {reply?.text}
+                                                  </Typography>
+                                                </div>
+                                              </div>
                                             </div>
                                           )
                                         )}
@@ -590,19 +633,17 @@ const Explore = ({ isAuth }) => {
                                       value={comment.newReply || ""}
                                       onChange={(e) =>
                                         handleReplyChange(
-                                          postIndex,
+                                          index,
                                           commentIndex,
                                           e.target.value
                                         )
                                       }
                                     />
+
                                     <button
                                       className="btn btn-primary btn-sm"
                                       onClick={() =>
-                                        handleReplySubmit(
-                                          postIndex,
-                                          commentIndex
-                                        )
+                                        handleReplySubmit(index, commentIndex)
                                       }
                                     >
                                       Reply
@@ -613,7 +654,7 @@ const Explore = ({ isAuth }) => {
                             ) : (
                               <p className="text-black">No comments yet!</p>
                             )}
-                          </div> */}
+                          </div>
                         </div>
                       )}
                     </div>
