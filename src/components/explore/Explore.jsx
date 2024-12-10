@@ -54,12 +54,6 @@ const Explore = ({ isAuth }) => {
     }
   };
 
-  useEffect(() => {
-    if (userId) {
-      fetchDayByCloths();
-    }
-  }, [userId]);
-
   const handleCommentChange = (index, e) => {
     const updatedPosts = [...allSocialPosts];
     updatedPosts[index].newComment = e.target.value;
@@ -257,6 +251,7 @@ const Explore = ({ isAuth }) => {
           });
           updatedPosts[postIndex].comments[commentIndex].newReply = "";
           setAllSocialPosts(updatedPosts);
+          fetchDayByCloths();
         } else {
           showErrorToast("Failed to add reply");
         }
@@ -265,6 +260,12 @@ const Explore = ({ isAuth }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (userId) {
+      fetchDayByCloths();
+    }
+  }, [userId]);
 
   return (
     <>
