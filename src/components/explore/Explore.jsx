@@ -444,8 +444,12 @@ const Explore = ({ isAuth }) => {
                           <i className="fa-solid fa-share me-2"></i> Share
                         </h5> */}
                         <h5 style={{ cursor: "pointer" }}>
-                          <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer"
-                            style={{ textDecoration: "none", color: "inherit" }}>
+                          <a
+                            href="https://www.instagram.com/thestylecapsule/?hl=en"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ textDecoration: "none", color: "inherit" }}
+                          >
                             <i className="fa-solid fa-share me-2"></i> Share
                           </a>
                         </h5>
@@ -626,6 +630,24 @@ const Explore = ({ isAuth }) => {
                                       </div>
                                     )}
                                   <div className="ms-5 mt-2">
+                                    {/* <input
+                                      type="text"
+                                      className="form-control mb-2"
+                                      placeholder="Write a reply..."
+                                      value={comment.newReply || ""}
+                                      onChange={(e) =>
+                                        handleReplyChange(
+                                          index,
+                                          commentIndex,
+                                          e.target.value
+                                        )
+                                      }
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter" && post.newComment) {
+                                          handleCommentSubmit(index, e);
+                                        }
+                                      }}
+                                    /> */}
                                     <input
                                       type="text"
                                       className="form-control mb-2"
@@ -638,6 +660,18 @@ const Explore = ({ isAuth }) => {
                                           e.target.value
                                         )
                                       }
+                                      onKeyDown={(e) => {
+                                        if (
+                                          e.key === "Enter" &&
+                                          comment.newReply?.trim()
+                                        ) {
+                                          handleReplySubmit(
+                                            index,
+                                            commentIndex
+                                          );
+                                          e.preventDefault();
+                                        }
+                                      }}
                                     />
 
                                     <button
