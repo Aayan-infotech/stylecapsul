@@ -517,12 +517,12 @@ const Explore = ({ isAuth }) => {
                                         className="text-black p-2 rounded-3"
                                         style={{ backgroundColor: "#e0e0e0" }}
                                       >
-                                        <Typography
+{/*                                         <Typography
                                           variant="subtitle2"
                                           className="fw-bold"
                                         >
                                           {comment?.user?.firstName.charAt(0).toUpperCase() + comment?.user?.firstName.slice(1).toLowerCase()}
-                                        </Typography>
+                                        </Typography> */}
                                         <Typography
                                           variant="body2"
                                           gutterBottom
