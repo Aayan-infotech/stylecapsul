@@ -24,6 +24,7 @@ const Address = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { paymentDetails } = location.state || {};
+    console.log(paymentDetails, 'paymentDetails---');
 
     useEffect(() => {
         if (addressStatus === 'idle') {

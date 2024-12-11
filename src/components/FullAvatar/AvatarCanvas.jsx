@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { useEffect, useState, useRef } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import scenes from "../../assets/defalutAvatar/source/base-avatar.glb";
@@ -53,8 +53,29 @@ const applyTexture = (mesh, textureURL) => {
   });
 };
 
+// Helper component to use WebGLRenderer for capturing the scene
+const CaptureScene = ({ onCapture }) => {
+  const { gl, scene, camera } = useThree();
+  useEffect(() => {
+    if (onCapture) {
+      const renderer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(1024, 1024);
+      renderer.render(scene, camera);
+      const imgData = renderer.domElement.toDataURL("image/png");
+      console.log(imgData, 'imgData');
+      onCapture(imgData);
+      renderer.dispose();
+    }
+  }, [onCapture, gl, scene, camera]);
+
+  return null;
+};
+
+
 const AvatarCanvas = ({ shirtTexture, jeansTexture, shoeTexture }) => {
   const [scale, setScale] = useState(1);
+  const [capture, setCapture] = useState(null);
 
   const handleIncrease = () => {
     setScale((prev) => Math.min(prev + 0.1, 1.8));
@@ -64,9 +85,19 @@ const AvatarCanvas = ({ shirtTexture, jeansTexture, shoeTexture }) => {
     setScale((prev) => Math.max(prev - 0.1, 0.5));
   };
 
+  const handleCaptureImage = () => {
+    setCapture(() => (imgData) => {
+      const a = document.createElement("a");
+      a.href = imgData;
+      a.download = "avatar.png";
+      a.click();
+    });
+  };
+
   return (
     <div style={{ textAlign: "center" }}>
       <div className="mt-4 mb-4">
+        <button onClick={handleCaptureImage} type="button" className="btn btn-success small">Capture</button>
         <button onClick={handleDecrease} type="button" className="btn btn-dark small"><RemoveIcon/></button>
         <span style={{ margin: "0 10px" }} className="fw-bold">Scale: {scale.toFixed(1)}</span>
         <button onClick={handleIncrease} type="button" className="btn btn-dark small"><AddIcon/></button>
@@ -87,6 +118,7 @@ const AvatarCanvas = ({ shirtTexture, jeansTexture, shoeTexture }) => {
           shoeTexture={shoeTexture}
           scale={[scale, scale, scale]}
         />
+        {capture && <CaptureScene onCapture={capture} />}
       </Canvas>
     </div>
   );

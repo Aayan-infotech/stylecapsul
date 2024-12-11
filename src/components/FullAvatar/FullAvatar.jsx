@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import "./FullAvatar.scss";
 import three from "./img/three.png";
 import AvatarCanvas from "./AvatarCanvas";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function FullAvatar() {
   const [shirtTexture, setShirtTexture] = useState(null);
   const [jeansTexture, setJeansTexture] = useState(null);
   const [shoeTexture, setShoeTexture] = useState(null);
+  const [capturedImage, setCapturedImage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -23,26 +24,40 @@ function FullAvatar() {
   };
 
   const handleSubmitAvatar = () => {
-    // const canvas = document.querySelector("canvas");
-    // const avatarImage = canvas.toDataURL("image/png"); 
-    // navigate("/edit-profile-avatar", {
-    //   state: { avatarImage }, 
-    // });
     navigate("/edit-profile-avatar");
+    // if (capturedImage) {
+    //   navigate("/edit-profile-avatar", {
+    //     state: { avatarImage: capturedImage },
+    //   });
+    // } else {
+    //   alert("Please capture the avatar image first.");
+    // }
   };
-  
+
   return (
     <>
       <div className="capsule-main-container">
         <div className="container text-center">
+          {/* <Link to="/profile">check</Link> */}
           <div className="row g-2">
             <div className="col-12 col-md-6">
               <AvatarCanvas
                 shirtTexture={shirtTexture}
                 jeansTexture={jeansTexture}
                 shoeTexture={shoeTexture}
+                onCapture={setCapturedImage}
               />
             </div>
+            {capturedImage && (
+              <div className="mt-3">
+                <h5>Captured Avatar Preview:</h5>
+                <img
+                  src={capturedImage}
+                  alt="Captured Avatar"
+                  style={{ width: "100%" }}
+                />
+              </div>
+            )}
             <div className="col-12 col-md-6 d-flex align-items-center">
               <div className="text-start">
                 <div className="mb-2">

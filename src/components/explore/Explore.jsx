@@ -34,7 +34,7 @@ const Explore = ({ isAuth }) => {
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
-  const fetchDayByCloths = async () => {
+  const fetchExplorePostMedia = async () => {
     try {
       const response = await axios.get(apiUrl("api/explore/getall"), {
         headers: {
@@ -87,6 +87,7 @@ const Explore = ({ isAuth }) => {
         } else {
           showErrorToast(data.message);
         }
+        // fetchExplorePostMedia();
       } catch (error) {
         console.error("Error submitting comment:", error);
       }
@@ -96,7 +97,6 @@ const Explore = ({ isAuth }) => {
   const handleDeleteComment = async (postIndex, commentIndex) => {
     const post = allSocialPosts[postIndex];
     const comment = post.comments[commentIndex];
-
     try {
       const response = await axios.delete(
         apiUrl(`api/explore/delete-comment/${userId}`),
@@ -111,7 +111,6 @@ const Explore = ({ isAuth }) => {
           },
         }
       );
-
       if (response?.data?.success) {
         showSuccessToast("Comment deleted successfully!");
         const updatedPosts = [...allSocialPosts];
@@ -146,7 +145,7 @@ const Explore = ({ isAuth }) => {
       data?.success
         ? showSuccessToast(data.message)
         : showErrorToast(data.message);
-      fetchDayByCloths();
+      fetchExplorePostMedia();
       setAllSocialPosts((prevPosts) =>
         prevPosts.map((post, idx) =>
           idx === index
@@ -224,9 +223,7 @@ const Explore = ({ isAuth }) => {
 
     if (newReply) {
       try {
-        const response = await axios.post(
-          apiUrl("api/explore/reply"),
-          {
+        const response = await axios.post(apiUrl("api/explore/reply"), {
             postId: post._id,
             userId,
             commentId: comment._id,
@@ -239,7 +236,6 @@ const Explore = ({ isAuth }) => {
             },
           }
         );
-
         if (response?.data?.success) {
           showSuccessToast("Reply added successfully!");
           const updatedPosts = [...allSocialPosts];
@@ -250,8 +246,8 @@ const Explore = ({ isAuth }) => {
             userId,
           });
           updatedPosts[postIndex].comments[commentIndex].newReply = "";
+          fetchExplorePostMedia();
           setAllSocialPosts(updatedPosts);
-          fetchDayByCloths();
         } else {
           showErrorToast("Failed to add reply");
         }
@@ -263,7 +259,7 @@ const Explore = ({ isAuth }) => {
 
   useEffect(() => {
     if (userId) {
-      fetchDayByCloths();
+      fetchExplorePostMedia();
     }
   }, [userId]);
 
@@ -454,16 +450,6 @@ const Explore = ({ isAuth }) => {
                         >
                           <i className="fa-solid fa-share me-2"></i> Share
                         </h5>
-                        {/* <h5 style={{ cursor: "pointer" }}>
-                          <a
-                            href="https://www.instagram.com/thestylecapsule/?hl=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                          >
-                            <i className="fa-solid fa-share me-2"></i> Share
-                          </a>
-                        </h5> */}
                       </div>
                       <hr />
                       {post.showComments && (
@@ -484,10 +470,10 @@ const Explore = ({ isAuth }) => {
                                 backgroundColor: "#f0f2f5",
                                 borderRadius: 25,
                               }}
-                              value={post.newComment}
+                              value={post?.newComment}
                               onChange={(e) => handleCommentChange(index, e)}
                               onKeyDown={(e) => {
-                                if (e.key === "Enter" && post.newComment) {
+                                if (e.key === "Enter" && post?.newComment) {
                                   handleCommentSubmit(index, e);
                                 }
                               }}
@@ -495,7 +481,7 @@ const Explore = ({ isAuth }) => {
                                 sx: { borderRadius: "25px" },
                                 endAdornment: (
                                   <InputAdornment position="end">
-                                    {post.newComment ? (
+                                    {post?.newComment ? (
                                       <SendIcon
                                         onClick={(e) =>
                                           handleCommentSubmit(index, e)
@@ -514,27 +500,10 @@ const Explore = ({ isAuth }) => {
                             />
                           </div>
                           <div className="comments-list px-5 mt-3">
-                            {post.comments.length > 0 ? (
-                              post.comments.map((comment, commentIndex) => (
+                            {post?.comments?.length > 0 ? (
+                              post?.comments?.map((comment, commentIndex) => (
                                 <div key={commentIndex} className="mb-3">
-                                  {/* <div className="d-flex justify-content-between align-items-center mb-2 text-black">
-                                    <div className="d-flex">
-                                      <Avatar
-                                        alt="User Avatar"
-                                        sx={{ width: 30, height: 30 }}
-                                        className="me-2"
-                                        src={blank_img}
-                                      />
-                                      <p
-                                        className="mb-0 text-black p-2 rounded-3"
-                                        style={{ backgroundColor: "#e0e0e0" }}
-                                      >
-                                        {comment?.text}
-                                      </p>
-                                    </div>
-                                  </div> */}
-                                  <div
-                                    key={commentIndex}
+                                  <div key={commentIndex}
                                     className="d-flex justify-content-between align-items-center mb-2 text-black"
                                   >
                                     <div className="d-flex">
@@ -552,12 +521,7 @@ const Explore = ({ isAuth }) => {
                                           variant="subtitle2"
                                           className="fw-bold"
                                         >
-                                          {comment?.user?.firstName
-                                            .charAt(0)
-                                            .toUpperCase() +
-                                            comment?.user?.firstName
-                                              .slice(1)
-                                              .toLowerCase()}
+                                          {comment?.user?.firstName.charAt(0).toUpperCase() + comment?.user?.firstName.slice(1).toLowerCase()}
                                         </Typography>
                                         <Typography
                                           variant="body2"
@@ -580,27 +544,8 @@ const Explore = ({ isAuth }) => {
                                       <div className="ms-5">
                                         {comment.replies.map(
                                           (reply, replyIndex) => (
-                                            // <div
-                                            //   key={replyIndex}
-                                            //   className="d-flex align-items-center mb-2 text-black"
-                                            // >
-                                            //   <Avatar
-                                            //     alt="User Avatar"
-                                            //     sx={{ width: 25, height: 25 }}
-                                            //     className="me-2"
-                                            //     src={blank_img}
-                                            //   />
-                                            //   <p
-                                            //     className="mb-0 text-black p-2 rounded-3"
-                                            //     style={{
-                                            //       backgroundColor: "#f0f0f0",
-                                            //     }}
-                                            //   >
-                                            //     {reply?.text}
-                                            //   </p>
-                                            // </div>
                                             <div
-                                              key={commentIndex}
+                                              key={replyIndex}
                                               className="d-flex justify-content-between align-items-center mb-2 text-black"
                                             >
                                               <div className="d-flex">
@@ -641,24 +586,6 @@ const Explore = ({ isAuth }) => {
                                       </div>
                                     )}
                                   <div className="ms-5 mt-2">
-                                    {/* <input
-                                      type="text"
-                                      className="form-control mb-2"
-                                      placeholder="Write a reply..."
-                                      value={comment.newReply || ""}
-                                      onChange={(e) =>
-                                        handleReplyChange(
-                                          index,
-                                          commentIndex,
-                                          e.target.value
-                                        )
-                                      }
-                                      onKeyDown={(e) => {
-                                        if (e.key === "Enter" && post.newComment) {
-                                          handleCommentSubmit(index, e);
-                                        }
-                                      }}
-                                    /> */}
                                     <input
                                       type="text"
                                       className="form-control mb-2"

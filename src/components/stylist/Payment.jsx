@@ -8,15 +8,17 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import StripeCheckout from "react-stripe-checkout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
-
+import { apiUrl } from '../../../apiUtils';
 
 const Payment = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const location = useLocation();
   const { paymentDetailsWithaddressId } = location.state || {};
+  console.log(paymentDetailsWithaddressId?.addedCartId, 'paymentDetailsWithaddressId')
+
   const userId = getCookie("userId");
+  const authToken = getCookie("authToken");
   const navigate = useNavigate();
-  console.log(paymentDetailsWithaddressId, userId, 'paymentDetailsWithaddressId')
 
   const openCreditCardModal = () => {
     setSelectedMethod("credit");
@@ -28,12 +30,18 @@ const Payment = () => {
 
   const onToken = async (token) => {
     try {
-      const response = await axios.post("http://localhost:3000/api/payment-method/create-payment", {
-        token,
-        paymentDetails: paymentDetailsWithaddressId?.paymentDetails,
-        selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
-      });
-  
+      const response = await axios.post(apiUrl("api/payment-method/create-payment"), {
+          token,
+          paymentDetails: paymentDetailsWithaddressId?.paymentDetails,
+          selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
+          // selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
+        },{
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+          },
+        }
+      );
       if (response.data.success) {
         showSuccessToast(response.data.message || "Payment successful!");
         navigate("/thanku", { state: { charge: response.data.charge } });
@@ -53,7 +61,7 @@ const Payment = () => {
         <StripeCheckout
           token={onToken}
           stripeKey="pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
-          amount={paymentDetailsWithaddressId?.paymentDetails?.totalAmount} 
+          amount={paymentDetailsWithaddressId?.paymentDetails?.totalAmount}
           name="Style Capsule"
           ComponentClass="div"
           image="https://www.shutterstock.com/image-vector/nature-capsule-vector-logo-template-600nw-2381326435.jpg"
@@ -116,6 +124,5 @@ const Payment = () => {
     </div>
   );
 };
-
 
 export default Payment;
