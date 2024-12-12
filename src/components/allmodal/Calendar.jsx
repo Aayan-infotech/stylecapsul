@@ -10,9 +10,7 @@ const ClothesCalendar = ({ onSave }) => {
     const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [clothesOnDates, setClothesOnDates] = useState([]);
-
     const token = getCookie("authToken");
-
     const fetchDayByCloths = async () => {
         try {
             const response = await axios.get(apiUrl('api/myStyleCapsule/getStyle'), {
