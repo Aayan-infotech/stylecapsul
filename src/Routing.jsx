@@ -53,6 +53,7 @@ import { SocialUserDetails } from "./components/explore/SocialUserDetails.jsx";
 import { Cloths } from "./components/explore/Cloths.jsx";
 import { ClothsDetails } from "./components/explore/ClothsDetails.jsx";
 import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCalendarDetails.jsx";
+import ExploreUserProfileDetails from "./components/explore/ExploreUserProfileDetails.jsx";
 
 const Routing = () => {
   return (
@@ -110,6 +111,7 @@ const Routing = () => {
             <Route path="/cloths" element={<Cloths />} />
             <Route path="/cloths-details/:id" element={<ClothsDetails />} />
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>
+            <Route path="user-profile" element={<ExploreUserProfileDetails />}/>
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

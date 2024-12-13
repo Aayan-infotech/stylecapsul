@@ -241,6 +241,7 @@ const ClothesCalendar = ({ onSave }) => {
                 onChange={handleDateChange}
                 value={selectedDate}
                 tileContent={tileContent}
+                minDate={new Date()}
               />
             </div>
             <div className="modal-footer">

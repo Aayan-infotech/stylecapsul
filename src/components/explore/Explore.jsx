@@ -5,15 +5,10 @@ import GifBoxIcon from "@mui/icons-material/GifBox";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import {InputAdornment, TextField, Typography } from "@mui/material";
+import { InputAdornment, TextField, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-} from "swiper/modules";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "./explore.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -222,7 +217,9 @@ const Explore = ({ isAuth }) => {
 
     if (newReply) {
       try {
-        const response = await axios.post(apiUrl("api/explore/reply"), {
+        const response = await axios.post(
+          apiUrl("api/explore/reply"),
+          {
             postId: post._id,
             userId,
             commentId: comment._id,
@@ -268,16 +265,43 @@ const Explore = ({ isAuth }) => {
         <Loader />
       ) : (
         <div className="mb-4 explore-container">
-          <div className="text-center p-3 px-4">
-            <TextField
-              variant="outlined"
-              placeholder="Search"
-              fullWidth
-              size="small"
-              className="w-75"
-            />
-          </div>
           <div className="container d-block w-75">
+            <div className="d-flex align-items-center justify-content-center">
+              <TextField
+                variant="outlined"
+                placeholder="Search"
+                fullWidth
+                size="small"
+                className="me-2 w-100"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "50px",
+                    padding: "10px",
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    padding: "7px 14px",
+                  },
+                }}
+              />
+              <div
+                style={{
+                  border: "2px solid black",
+                  padding: "5px",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
+                  cursor: "pointer",
+                }}
+                className="rounded-circle"
+              >
+                <Link to="/user-profile">
+                <Avatar
+                  alt="Remy Sharp"
+                  className="rounded-circle"
+                  src="https://media.licdn.com/dms/image/v2/D5603AQEI-2FuEsjaEg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1692079184005?e=1739404800&v=beta&t=xK0RYDevMVI0l3bn_PqGpJDXCzrlOC4QqJA_STSjOOI"
+                />
+                </Link>
+              </div>
+            </div>
             {allSocialPosts?.map((post, index) => (
               <>
                 <div className="row g-2 m-0" key={index}>
@@ -417,15 +441,18 @@ const Explore = ({ isAuth }) => {
                           </h6>
                           {/* <h6>{post.shares} Shares</h6> */}
                           <h5 style={{ cursor: "pointer" }}>
-                          <a
-                            href="https://www.instagram.com/thestylecapsule/?hl=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ textDecoration: "none", color: "inherit" }}
-                          >
-                            <i className="fa-solid fa-share me-2"></i> Share
-                          </a>
-                        </h5>
+                            <a
+                              href="https://www.instagram.com/thestylecapsule/?hl=en"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              <i className="fa-solid fa-share me-2"></i> Share
+                            </a>
+                          </h5>
                         </div>
                       </div>
 
@@ -502,7 +529,8 @@ const Explore = ({ isAuth }) => {
                             {post?.comments?.length > 0 ? (
                               post?.comments?.map((comment, commentIndex) => (
                                 <div key={commentIndex} className="mb-3">
-                                  <div key={commentIndex}
+                                  <div
+                                    key={commentIndex}
                                     className="d-flex justify-content-between align-items-center mb-2 text-black"
                                   >
                                     <div className="d-flex">
@@ -516,7 +544,7 @@ const Explore = ({ isAuth }) => {
                                         className="text-black p-2 rounded-3"
                                         style={{ backgroundColor: "#e0e0e0" }}
                                       >
-{/*                                         <Typography
+                                        {/*                                         <Typography
                                           variant="subtitle2"
                                           className="fw-bold"
                                         >
