@@ -11,6 +11,7 @@ import { Button, Tab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ClothesCalendar = ({ onSave }) => {
   const [openCalendarDialog, setOpenCalendarDialog] = useState(false);
@@ -109,13 +110,6 @@ const ClothesCalendar = ({ onSave }) => {
         }
       );
       console.log(response?.data?.data);
-      //   if (response?.data?.status === 200) {
-      //     showSuccessToast(
-      //       response?.data?.message || "Images saved successfully!"
-      //     );
-      //     setOpenImageDialog(false);
-      //     fetchDayByCloths();
-      //   }
       setOpenImageDialog(false);
       fetchDayByCloths();
     } catch (error) {
@@ -137,6 +131,29 @@ const ClothesCalendar = ({ onSave }) => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  };
+
+  const handleDeleteImage = async (dateEntryId) => {
+    console.log(dateEntryId);
+    try {
+      const response = await axios.delete(
+        apiUrl(`api/myStyleCapsule/delete/${dateEntryId?.id}`),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response?.data, "abinsh");
+      showSuccessToast(
+        response?.data?.message || "Image deleted successfully."
+      );
+      fetchDayByCloths();
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      showErrorToast("An error occurred while deleting the image.");
+    }
   };
 
   const tileContent = ({ date, view }) => {
@@ -168,6 +185,15 @@ const ClothesCalendar = ({ onSave }) => {
                 }}
               />
             ))}
+            <DeleteIcon
+              style={{
+                color: "red",
+                fontSize: "16px",
+                cursor: "pointer",
+                marginTop: "4px",
+              }}
+              onClick={() => handleDeleteImage(dateEntry)}
+            />
           </div>
         );
       } else {

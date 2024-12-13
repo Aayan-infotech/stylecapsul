@@ -40,38 +40,6 @@ const MyStyleCapsul = () => {
     return date.toLocaleDateString("en-US", { weekday: "long" });
   };
 
-  // const handleShare = async () => {
-  //   try {
-  //     if (!capsuleId) {
-  //       showErrorToast("Style Capsule ID is required.");
-  //       return;
-  //     }
-  //     const payload = {
-  //       userId: userId,
-  //       styleCapsuleId: capsuleId,
-  //     };
-  //     const response = await axios.post(apiUrl('api/explore/create'), payload, {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`,
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  //     if (response?.data?.success) {
-  //       const successMessage = response?.data?.message;
-  //       showSuccessToast(successMessage);
-  //     } else {
-  //       showErrorToast(response?.data?.message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error?.response, 'error');
-  //     if (error?.response?.data?.message) {
-  //       showErrorToast(error?.response?.data?.message);
-  //     } else {
-  //       showErrorToast("Error sharing data");
-  //     }
-  //   }
-  // };
-
   const handleExploreShare = async () => {
     try {
       if (!capsuleId) {
