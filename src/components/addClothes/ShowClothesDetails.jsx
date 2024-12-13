@@ -4,6 +4,7 @@ import '../../styles/ShowClothesDetails.scss';
 import blank_image from '../../assets/stylist/blank_img.jpg'
 import { format } from 'date-fns';
 import axios from 'axios';
+import { apiUrl } from '../../../apiUtils';
 import { getCookie } from '../../utils/cookieUtils';
 import Loader from "../Loader/Loader.jsx";
 
@@ -17,12 +18,6 @@ const ShowClothesDetails = () => {
     const fetchClothDetails = async () => {
         setLoading(true);
         try {
-            // const response = await axios.get(`http://44.196.192.232:3555/api/cloths/getClothById/${clothid}`, {
-            //     headers: {
-            //         'Authorization': `Bearer ${token}`,
-            //         'Content-Type': 'application/json',
-            //     },
-            // });
             const response = await axios.get(apiUrl(`api/cloths/getClothById/${clothid}`), {
                 headers: {
                     'Authorization': `Bearer ${token}`,

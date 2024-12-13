@@ -29,6 +29,8 @@ const QuestionnaireUpdate = () => {
     wear_time: null,
     never_wear_time: null,
   });
+
+  const token = getCookie('authToken')
   const userId = getCookie('userId')
 
   const profile = useSelector((state) => state.profile?.data);

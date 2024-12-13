@@ -2,23 +2,18 @@ import React, { useEffect, useState } from "react";
 import "../../styles/Cart.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  getAllCarts,
-  removeCart,
-  updateCartQuantity,
-} from "../../reduxToolkit/addcartSlice";
+import { getAllCarts, removeCart, updateCartQuantity } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
-import blank_img from "../../assets/stylist/blank_img.jpg";
+import blank_img from '../../assets/stylist/blank_img.jpg'
 import moment from "moment";
 
 const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
   const cartItems = useSelector((state) => state.cart.cart);
-  console.log(cartItems?._id, 'cartItems---')
   const dispatch = useDispatch();
-  const userId = getCookie("userId");
+  const userId = getCookie('userId');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +22,8 @@ const Cart = () => {
 
   useEffect(() => {
     const initialQuantities = {};
-    cartItems.forEach((cart) => {
-      cart.items.forEach((item) => {
+    cartItems.forEach(cart => {
+      cart.items.forEach(item => {
         initialQuantities[item.productId] = item.quantity;
       });
     });
@@ -40,14 +35,12 @@ const Cart = () => {
       const newQuantity = quantities[item?.productId] + change;
       if (newQuantity >= 0) {
         const action = change > 0 ? "increase" : "decrease";
-        setQuantities((prev) => ({ ...prev, [item?.productId]: newQuantity }));
-        const response = await dispatch(
-          updateCartQuantity({
-            userId: userId,
-            productId: item.productId,
-            action,
-          })
-        ).unwrap();
+        setQuantities(prev => ({ ...prev, [item?.productId]: newQuantity }));
+        const response = await dispatch(updateCartQuantity({
+          userId: userId,
+          productId: item.productId,
+          action,
+        })).unwrap();
         if (response?.success) {
           showSuccessToast(response?.message);
         } else {
@@ -55,28 +48,17 @@ const Cart = () => {
         }
       }
     } catch (error) {
-      console.error("Failed to update quantity:", error);
-      showErrorToast("Failed to update quantity");
+      console.error('Failed to update quantity:', error);
+      showErrorToast('Failed to update quantity');
     }
   };
 
-  const subtotal = cartItems.reduce(
-    (total, cart) =>
-      total +
-      cart.items.reduce(
-        (sum, item) =>
-          sum +
-          (quantities[item.productId] || 0) *
-            (item?.productDetails?.price || 0),
-        0
-      ),
-    0
+
+  const subtotal = cartItems.reduce((total, cart) =>
+    total + cart.items.reduce((sum, item) => sum + quantities[item.productId] * item?.productDetails?.price, 0), 0
   );
 
-  const totalQuantity = Object.values(quantities).reduce(
-    (total, quantity) => total + (quantity || 0),
-    0
-  );
+  const totalQuantity = Object.values(quantities).reduce((total, quantity) => total + quantity, 0);
 
   const discount = 4;
   const deliveryCharges = 2;
@@ -84,13 +66,11 @@ const Cart = () => {
 
   const handleRemove = async (productId) => {
     try {
-      const response = await dispatch(
-        removeCart({ userId: userId, productId })
-      ).unwrap();
+      const response = await dispatch(removeCart({ userId: userId, productId })).unwrap();
       showSuccessToast(response.message);
       dispatch(getAllCarts());
     } catch (error) {
-      showErrorToast("Failed to remove item:", error.message || error);
+      showErrorToast('Failed to remove item:', error.message || error);
     }
   };
 
@@ -98,15 +78,13 @@ const Cart = () => {
     const paymentDetails = {
       totalAmount: total.toFixed(2),
       totalQuantity,
-      cartItems: cartItems.map((cart) =>
-          cart.items.map((item) => ({
-            addedCartId: item?._id,
-            productId: item.productId,
-            quantity: quantities[item.productId],
-            price: item?.productDetails?.price,
-          }))
-        )
-        .flat(),
+      cartItems: cartItems.map(cart =>
+        cart.items.map(item => ({
+          productId: item.productId,
+          quantity: quantities[item.productId],
+          price: item?.productDetails?.price,
+        }))
+      ).flat()
     };
     navigate("/address", { state: { paymentDetails } });
   };
@@ -137,17 +115,11 @@ const Cart = () => {
                             className="item-image w-100"
                           />
                           <div className="item-details ml-3">
-                            <p className="text-black text-muted">
-                              Order ID - {item?.productId || "N/A"}
-                            </p>
-                            <h5 className="text-black fw-bold m-0">
-                              {item?.productDetails?.name || "N/A"}
-                            </h5>
+                            <p className="text-black text-muted">Order ID - {item?.productId || 'N/A'}</p>
+                            <h5 className="text-black fw-bold m-0">{item?.productDetails?.name || 'N/A'}</h5>
                             <p className="m-0">{item.date}</p>
                             <div className="d-flex align-items-center justify-content-between">
-                              <p className="text-black fw-bold me-5">
-                              ${((quantities[item?.productId] || 0) * (item?.productDetails?.price || 0)).toFixed(2)}
-                              </p>
+                              <p className="text-black fw-bold me-5">${item?.productDetails?.price || 'N/A'}</p>
                               <div className="quantity-controls d-flex align-items-center">
                                 <button
                                   type="button"
@@ -157,9 +129,7 @@ const Cart = () => {
                                   <i className="fa-solid fa-minus small"></i>
                                 </button>
                                 <span className="quantity mx-3">
-                                  {quantities[item?.productId] < 10
-                                    ? `0${quantities[item?.productId]}`
-                                    : quantities[item?.productId]}
+                                  {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
                                 </span>
                                 <button
                                   type="button"
@@ -171,9 +141,7 @@ const Cart = () => {
                                 </button>
                               </div>
                             </div>
-                            <p className="fw-bold">
-                              {moment(item.createdAt).format("YYYY/MM/DD")}
-                            </p>
+                            <p className="fw-bold">{moment(item.createdAt).format('YYYY/MM/DD')}</p>
                           </div>
                           <button
                             type="button"
@@ -191,9 +159,7 @@ const Cart = () => {
                   <h1 className="text-start fw-bold fs-1 mb-1">Cart</h1>
                   <div className="order-summary-container rounded">
                     <div className="order-summary-card">
-                      <h3 className="order-summary-title fw-bold">
-                        Order Summary
-                      </h3>
+                      <h3 className="order-summary-title fw-bold">Order Summary</h3>
                       <div className="order-summary-details">
                         <div className="summary-item">
                           <span>Total Items</span>
@@ -201,28 +167,29 @@ const Cart = () => {
                         </div>
                         <div className="summary-item">
                           <span>Total Quantity</span>
-                          <span>{totalQuantity || "N/A"}</span>
+                          <span>{totalQuantity || 'N/A'}</span>
                         </div>
                         <div className="summary-item">
                           <span>Subtotal</span>
-                          <span>${subtotal.toFixed(2) || "N/A"}</span>
+                          <span>${subtotal.toFixed(2) || 'N/A'}</span>
                         </div>
                         <div className="summary-item">
                           <span>Discount</span>
-                          <span>${discount.toFixed(2) || "N/A"}</span>
+                          <span>${discount.toFixed(2) || 'N/A'}</span>
                         </div>
                         <div className="summary-item">
                           <span>Delivery Charges</span>
-                          <span>${deliveryCharges.toFixed(2) || "N/A"}</span>
+                          <span>${deliveryCharges.toFixed(2) || 'N/A'}</span>
                         </div>
                         <hr />
                         <div className="summary-item total">
                           <span>Total</span>
-                          <span>${total.toFixed(2) || "N/A"}</span>
+                          <span>${total.toFixed(2) || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {/* <Link to="/address"> */}
                   <button
                     type="button"
                     className="btn btn-dark w-100 mt-3 rounded-pill"
@@ -230,6 +197,7 @@ const Cart = () => {
                   >
                     Proceed to Checkout
                   </button>
+                  {/* </Link> */}
                 </div>
               </>
             )}

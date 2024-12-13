@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import standing from "../../assets/standing-human-body.png";
 import { getCookie } from "../../utils/cookieUtils.js";
 import { ClossetDetails } from "../ClossetDetails/ClossetDetails.jsx";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -49,8 +50,8 @@ function ProfileAvatar() {
 
   const updatedProfileData = location.state?.user;
   const { user, status } = useSelector((state) => state.login);
-  const user_id = user?.payload?._id;
-
+  const user_id = user?.payload?._id || user?._id;
+  
   // const { avatarImage } = location.state || {};
   // console.log(avatarImage, "avatarImage");
 
@@ -184,26 +185,15 @@ function ProfileAvatar() {
         })
       ).unwrap();
       if (actionResult.success) {
-        toast.success(actionResult?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        // navigate("/profile");
+        showSuccessToast(actionResult?.message);
         setTimeout(() => {
-          navigate("/profile");
-        }, 1000);
+          window.location.replace("/profile");
+        }, 0);
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage);
     }
   };
 

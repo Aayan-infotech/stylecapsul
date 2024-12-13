@@ -3,9 +3,9 @@ import './Appointment.scss';
 import { Link } from 'react-router-dom';
 import Schedule from './img/Schedule.png';
 import { apiUrl } from '../../../apiUtils';
+import { getCookie } from '../../utils/cookieUtils';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { getCookie } from '../../utils/cookieUtils';
 
 function Appointment() {
   const [allGarmentsServices, setAllGarmentsServices] = useState([]);

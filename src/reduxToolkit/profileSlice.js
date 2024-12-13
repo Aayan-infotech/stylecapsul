@@ -1,10 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { apiUrl } from '../../apiUtils';
+import { getCookie } from '../utils/cookieUtils';
+
+const token = getCookie('authToken');
 
 export const fetchProfile = createAsyncThunk('profile/fetchProfile', async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get(apiUrl('api/user-profile'));
+        const response = await axios.get(apiUrl('api/user-profile'), {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`, 
+              },
+        });
         return response.data;
     } catch (error) {
         return rejectWithValue(error.response.data);

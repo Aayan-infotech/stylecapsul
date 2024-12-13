@@ -116,7 +116,7 @@ const MarketPlace = () => {
             </div>
             <div className="navbar-right d-flex">
               <i className="fa-regular fa-bell me-2"></i>
-              <i className="fa-solid fa-magnifying-glass me-2"></i>
+              {/* <i className="fa-solid fa-magnifying-glass me-2"></i> */}
               <Link to="/cart" className="text-decoration-none text-white">
                 <div className="cart-icon position-relative">
                   <i className="fa-solid fa-cart-shopping"></i>
@@ -265,7 +265,7 @@ const MarketPlace = () => {
             </div>
 
             {/* -----------------------Featured Collection------------------------- */}
-            <Swiper
+            {/* <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={50}
               className="swiper-types-custom"
@@ -316,7 +316,7 @@ const MarketPlace = () => {
                   </SwiperSlide>
                 ))}
               </div>
-            </Swiper>
+            </Swiper> */}
           </div></>
       )}
     </>

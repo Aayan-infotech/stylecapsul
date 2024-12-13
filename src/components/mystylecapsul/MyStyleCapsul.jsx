@@ -13,6 +13,8 @@ const MyStyleCapsul = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [middleColumnData, setMiddleColumnData] = useState([]);
   const [capsuleId, setCapsuleId] = useState("");
+  const [isLoadingExplore, setIsLoadingExplore] = useState(false);
+  const [isLoadingInstagram, setIsLoadingInstagram] = useState(false);
 
   const userId = getCookie("userId");
   const token = getCookie("authToken");
@@ -28,57 +30,99 @@ const MyStyleCapsul = () => {
       right: "70%",
     }));
     setMiddleColumnData(updatedMiddleColumn);
-    console.log("Capsule ID:", id)
+    console.log("Capsule ID:", id);
   };
 
-  console.log(middleColumnData, 'middleColumnData')
+  console.log(middleColumnData, "middleColumnData");
 
   const getDayOfWeek = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", { weekday: "long" });
   };
 
-  const handleShare = async () => {
+  // const handleShare = async () => {
+  //   try {
+  //     if (!capsuleId) {
+  //       showErrorToast("Style Capsule ID is required.");
+  //       return;
+  //     }
+  //     const payload = {
+  //       userId: userId,
+  //       styleCapsuleId: capsuleId,
+  //     };
+  //     const response = await axios.post(apiUrl('api/explore/create'), payload, {
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  //     if (response?.data?.success) {
+  //       const successMessage = response?.data?.message;
+  //       showSuccessToast(successMessage);
+  //     } else {
+  //       showErrorToast(response?.data?.message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error?.response, 'error');
+  //     if (error?.response?.data?.message) {
+  //       showErrorToast(error?.response?.data?.message);
+  //     } else {
+  //       showErrorToast("Error sharing data");
+  //     }
+  //   }
+  // };
+
+  const handleExploreShare = async () => {
     try {
       if (!capsuleId) {
-        showErrorToast("Style Capsule ID is required.");
+        showErrorToast("Please select a capsule to share.");
         return;
       }
       const payload = {
-        userId: userId, 
+        userId: userId,
         styleCapsuleId: capsuleId,
       };
-  
-      const response = await axios.post(apiUrl('api/explore/create'), payload, {
+      setIsLoadingExplore(true);
+      const response = await axios.post(apiUrl("api/explore/create"), payload, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
       if (response?.data?.success) {
         const successMessage = response?.data?.message;
         showSuccessToast(successMessage);
+        setMiddleColumnData([]);
+        setSelectedDate("");
+        setCapsuleId("");
       } else {
         showErrorToast(response?.data?.message);
       }
     } catch (error) {
-      console.log(error?.response, 'error');
+      console.log(error?.response, "error");
       if (error?.response?.data?.message) {
         showErrorToast(error?.response?.data?.message);
       } else {
-        showErrorToast("Error sharing data");
+        showErrorToast("Error sharing data on Explore.");
       }
+    } finally {
+      setIsLoadingExplore(false);
     }
   };
-  
 
+  const handleInstagramShare = () => {
+    const instagramShareUrl = `https://www.instagram.com/stylecapsule/`;
+    window.open(instagramShareUrl, "_blank");
+  };
 
   return (
     <div className="my-style-capsule-container mb-4">
       <div className="container">
         <div className="d-flex justify-content-between align-items-center px-4">
           <div className="text-center">
-            <h5 className="fw-bold">{selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}</h5>
+            <h5 className="fw-bold">
+              {selectedDate ? getDayOfWeek(selectedDate) : "No Day Selected"}
+            </h5>
             <h6 className="fw-bold">{selectedDate || "No Date Selected"}</h6>
           </div>
           <div>
@@ -93,7 +137,14 @@ const MyStyleCapsul = () => {
             <Calendar onSave={handleSave} />
           </div>
         </div>
-        <div className="mt-1" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div
+          className="mt-1"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
           <div className="row m-0 gx-5">
             <div className="col inner-img">
               <img
@@ -217,10 +268,52 @@ const MyStyleCapsul = () => {
             </div>
           </div>
           <div className="border-bottom w-100 mt-4">
-            <div className="d-flex justify-content-end align-items-center text-black">
-              <h5 style={{ cursor: "pointer" }} onClick={handleShare}>
-                <i className="fa-solid fa-share me-2"></i> Share
-              </h5>
+            <div className="border-bottom w-100 mt-4">
+              <div className="d-flex justify-content-end align-items-center text-black">
+                <h5
+                  style={{
+                    cursor: capsuleId ? "pointer" : "not-allowed",
+                    position: "relative",
+                    opacity: capsuleId ? 1 : 0.5,
+                  }}
+                  onClick={capsuleId ? handleExploreShare : null}
+                  className="me-3"
+                >
+                  {isLoadingExplore ? (
+                    <span className="loading-text">
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Sharing...
+                    </span>
+                  ) : (
+                    <>
+                      <i className="fa-solid fa-share me-2"></i> Share
+                    </>
+                  )}
+                </h5>
+                <h5
+                  style={{
+                    cursor: capsuleId ? "pointer" : "not-allowed",
+                    position: "relative",
+                    opacity: capsuleId ? 1 : 0.5,
+                  }}
+                  onClick={capsuleId ? handleInstagramShare : null}
+                >
+                  {isLoadingInstagram ? (
+                    <span className="loading-text">
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Opening...
+                    </span>
+                  ) : (
+                    <div className="p-2 rounded-circle d-flex align-items-center">
+                      <img
+                        src="https://static-00.iconduck.com/assets.00/instagram-with-circle-icon-2048x2048-21sdb59c.png"
+                        height="30"
+                        alt="Instagram"
+                      />
+                    </div>
+                  )}
+                </h5>
+              </div>
             </div>
           </div>
         </div>

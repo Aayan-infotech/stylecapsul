@@ -14,7 +14,6 @@ const Payment = () => {
   const [selectedMethod, setSelectedMethod] = useState(null);
   const location = useLocation();
   const { paymentDetailsWithaddressId } = location.state || {};
-  console.log(paymentDetailsWithaddressId?.addedCartId, 'paymentDetailsWithaddressId')
 
   const userId = getCookie("userId");
   const authToken = getCookie("authToken");
@@ -34,7 +33,6 @@ const Payment = () => {
           token,
           paymentDetails: paymentDetailsWithaddressId?.paymentDetails,
           selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
-          // selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
         },{
           headers: {
             'Authorization': `Bearer ${authToken}`,

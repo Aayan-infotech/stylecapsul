@@ -62,7 +62,7 @@ function Navbar() {
               <Link to="/profile" className="text-decoration-none text-white">
                 <i className="fa-regular fa-user"></i>
               </Link>
-              <i className="fa-solid fa-magnifying-glass"></i>
+              {/* <i className="fa-solid fa-magnifying-glass"></i> */}
               <Link to="/cart" className="text-decoration-none text-white">
                 <div className="cart-icon position-relative">
                   <i className="fa-solid fa-cart-shopping"></i>

@@ -5,7 +5,7 @@ import GifBoxIcon from "@mui/icons-material/GifBox";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import {InputAdornment, TextField, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import {
@@ -13,7 +13,6 @@ import {
   Pagination,
   Scrollbar,
   A11y,
-  Autoplay,
 } from "swiper/modules";
 import "./explore.scss";
 import { Swiper, SwiperSlide } from "swiper/react";
