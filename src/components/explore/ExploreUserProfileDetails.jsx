@@ -110,14 +110,14 @@ const ExploreUserProfileDetails = () => {
           </div>
           <div className="col-12 mx-auto" style={{ maxWidth: "1000px" }}>
             <h4 className="m-0">{userProfileDetails.name}</h4>
-            <h5>{userProfileDetails.location}</h5>
+            {/* <h5>{userProfileDetails.location}</h5> */}
             <p className="m-0">{userProfileDetails.bio}</p>
-            <a
+            {/* <a
               href={userProfileDetails.website}
               className="text-decoration-none"
             >
               {userProfileDetails.website}
-            </a>
+            </a> */}
           </div>
         </div>
         <div className="row m-0 mb-4">
