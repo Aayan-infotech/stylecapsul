@@ -27,6 +27,8 @@ const Explore = ({ isAuth }) => {
   const [allSocialPosts, setAllSocialPosts] = useState([]);
   const token = getCookie("authToken");
   const userId = getCookie("userId");
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
 
   const fetchExplorePostMedia = async () => {
     try {
@@ -259,6 +261,46 @@ const Explore = ({ isAuth }) => {
     }
   }, [userId]);
 
+  let debounceTimeout;
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      if (value.trim() !== "") {
+        fetchResults(value);
+      } else {
+        setResults([]);
+      }
+    }, 300);
+  };
+
+  const fetchResults = async (searchQuery) => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3555/api/explore/search",
+        {
+          params: {
+            query: searchQuery,
+            sort: "name",
+            order: "asc",
+            page: 1,
+            limit: 5,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setResults(response.data);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -273,6 +315,8 @@ const Explore = ({ isAuth }) => {
                 fullWidth
                 size="small"
                 className="me-2 w-100"
+                onChange={handleInputChange}
+                value={query}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "50px",
@@ -294,11 +338,7 @@ const Explore = ({ isAuth }) => {
                 className="rounded-circle"
               >
                 <Link to="/user-profile">
-                <Avatar
-                  alt="Remy Sharp"
-                  className="rounded-circle"
-                  src=""
-                />
+                  <Avatar alt="Remy Sharp" className="rounded-circle" src="" />
                 </Link>
               </div>
             </div>

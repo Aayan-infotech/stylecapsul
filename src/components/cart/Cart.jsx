@@ -119,7 +119,7 @@ const Cart = () => {
                             <h5 className="text-black fw-bold m-0">{item?.productDetails?.name || 'N/A'}</h5>
                             <p className="m-0">{item.date}</p>
                             <div className="d-flex align-items-center justify-content-between">
-                              <p className="text-black fw-bold me-5">${item?.productDetails?.price || 'N/A'}</p>
+                              <p className="text-black fw-bold me-5">${quantities[item?.productId] * (item?.productDetails?.price || 0)}</p>
                               <div className="quantity-controls d-flex align-items-center">
                                 <button
                                   type="button"
@@ -163,7 +163,7 @@ const Cart = () => {
                       <div className="order-summary-details">
                         <div className="summary-item">
                           <span>Total Items</span>
-                          <span>{cartItems.length}</span>
+                          <span>{cartItems.reduce((total, cart) => total + cart.items.length, 0)}</span>
                         </div>
                         <div className="summary-item">
                           <span>Total Quantity</span>

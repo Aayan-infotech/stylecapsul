@@ -82,7 +82,7 @@ const MarketPlace = () => {
         <><><div className="outer-navbar">
           <div className="navbar d-flex justify-content-between align-items-center p-2">
             <div className="navbar-left d-flex mb-0">
-              <Link to="/myaddedproducts">
+              {/* <Link to="/myaddedproducts">
                 <button
                   type="button"
                   className="rounded-pill btn bg-black text-white me-2"
@@ -95,7 +95,7 @@ const MarketPlace = () => {
                   </span>
                   My Added Products
                 </button>
-              </Link>
+              </Link> */}
               <Link to="/orderhistory">
                 <button
                   type="button"

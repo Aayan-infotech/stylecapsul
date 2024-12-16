@@ -26,9 +26,10 @@ export const getAllCarts = createAsyncThunk(
   "cart/getAllCarts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(apiUrl('api/cart/all-cart'), {
+      const auth_token = getCookie('authToken');
+      const response = await axios.get(apiUrl('api/cart/get-cart'), {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${auth_token}`,
           'Content-Type': 'application/json',
         },
       });
