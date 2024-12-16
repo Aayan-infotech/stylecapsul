@@ -17,6 +17,7 @@ import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 
+
 export const SocialUserDetails = () => {
   const categories = [
     {

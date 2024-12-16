@@ -297,7 +297,7 @@ const Explore = ({ isAuth }) => {
                 <Avatar
                   alt="Remy Sharp"
                   className="rounded-circle"
-                  src="https://media.licdn.com/dms/image/v2/D5603AQEI-2FuEsjaEg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1692079184005?e=1739404800&v=beta&t=xK0RYDevMVI0l3bn_PqGpJDXCzrlOC4QqJA_STSjOOI"
+                  src=""
                 />
                 </Link>
               </div>
