@@ -28,12 +28,16 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
+import { getCookie } from "../../utils/cookieUtils.js";
+import { Avatar } from "@mui/material";
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
+  const [trendySearch, setTrendySearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
+  const token = getCookie("authToken");
 
   const featuredCollection = [
     { name: "Leather Jackets", imgSrc: leatherjacket },
@@ -57,8 +61,33 @@ const MarketPlace = () => {
     }
   };
 
+  const fetchTrendySearch = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        apiUrl("api/marketplaces/trendySearch"),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response?.data?.data, "abinash");
+      if (response?.data?.success) {
+        setTrendySearch(response?.data?.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchTrendySearch();
   }, []);
 
   useEffect(() => {
@@ -79,10 +108,12 @@ const MarketPlace = () => {
       {loading ? (
         <Loader />
       ) : (
-        <><><div className="outer-navbar">
-          <div className="navbar d-flex justify-content-between align-items-center p-2">
-            <div className="navbar-left d-flex mb-0">
-              {/* <Link to="/myaddedproducts">
+        <>
+          <>
+            <div className="outer-navbar">
+              <div className="navbar d-flex justify-content-between align-items-center p-2">
+                <div className="navbar-left d-flex mb-0">
+                  {/* <Link to="/myaddedproducts">
                 <button
                   type="button"
                   className="rounded-pill btn bg-black text-white me-2"
@@ -96,71 +127,81 @@ const MarketPlace = () => {
                   My Added Products
                 </button>
               </Link> */}
-              <Link to="/orderhistory">
-                <button
-                  type="button"
-                  className="rounded-pill btn bg-black text-white"
-                >
-                  <span className="border-end border-white me-2 pe-2">
-                    <img
-                      src={ellipse}
-                      alt="ellipse"
-                      style={{ width: "20px", height: "20px" }} />
-                  </span>
-                  Order History
-                </button>
-              </Link>
-            </div>
-            <div className="navbar-center text-center flex-grow-1 mt-0">
-              <h1 className="title mb-0">Market Place</h1>
-            </div>
-            <div className="navbar-right d-flex">
-              <i className="fa-regular fa-bell me-2"></i>
-              {/* <i className="fa-solid fa-magnifying-glass me-2"></i> */}
-              <Link to="/cart" className="text-decoration-none text-white">
-                <div className="cart-icon position-relative">
-                  <i className="fa-solid fa-cart-shopping"></i>
-                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
-                    {getTotalProductCount()}
-                  </span>
+                  <Link to="/orderhistory">
+                    <button
+                      type="button"
+                      className="rounded-pill btn bg-black text-white"
+                    >
+                      <span className="border-end border-white me-2 pe-2">
+                        <img
+                          src={ellipse}
+                          alt="ellipse"
+                          style={{ width: "20px", height: "20px" }}
+                        />
+                      </span>
+                      Order History
+                    </button>
+                  </Link>
                 </div>
-              </Link>
+                <div className="navbar-center text-center flex-grow-1 mt-0">
+                  <h1 className="title mb-0">Market Place</h1>
+                </div>
+                <div className="navbar-right d-flex">
+                  <i className="fa-regular fa-bell me-2"></i>
+                  <Link to="/cart" className="text-decoration-none text-white">
+                    <div className="cart-icon position-relative">
+                      <i className="fa-solid fa-cart-shopping"></i>
+                      <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                        {getTotalProductCount()}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-        </div><div className="landing1" style={{ position: "relative" }}>
-            <div className="vid">
-              <video
-                src={one}
-                alt="Video"
-                autoPlay
-                loop
-                muted
-                className="w-100 h-75"
-              ></video>
+            <div className="landing1" style={{ position: "relative" }}>
+              <div className="vid">
+                <video
+                  src={one}
+                  alt="Video"
+                  autoPlay
+                  loop
+                  muted
+                  className="w-100 h-75"
+                ></video>
+              </div>
             </div>
-          </div><div
-            className="landing2"
-            style={{ position: "absolute", color: "white" }}
+            <div
+              className="landing2"
+              style={{ position: "absolute", color: "white" }}
+            >
+              <div className="marquee">
+                <p>REVOLUTIONIZE YOUR CLOSET</p>
+                <p>REVOLUTIONIZE YOUR CLOSET</p>
+                <p>REVOLUTIONIZE YOUR CLOSET</p>
+                <p>REVOLUTIONIZE YOUR CLOSET</p>
+              </div>
+            </div>
+          </>
+          <div
+            className="container w-75 mt-4 trending-searches-section "
+            style={{ display: "block" }}
           >
-            <div className="marquee">
-              <p>REVOLUTIONIZE YOUR CLOSET</p>
-              <p>REVOLUTIONIZE YOUR CLOSET</p>
-              <p>REVOLUTIONIZE YOUR CLOSET</p>
-              <p>REVOLUTIONIZE YOUR CLOSET</p>
-            </div>
-          </div></>
-          <div className="container w-75 mt-4 trending-searches-section " style={{ display: "block" }}>
             {/* Trending Searches */}
             <div className="trending-searches pt-4">
               <h3>Trending Searches</h3>
-              <div className="row">
+              <div className="row m-0">
                 <div className="col d-flex justify-content-start gap-3 overflow-control flex-wrap flex-row">
-                  <Stack direction="row" spacing={1}>
-                    <Chip label=" Shop All" variant="outlined" />
-                    <Chip label="Chrome Hearts" variant="outlined" />
-                    <Chip label="Balenciaga" variant="outlined" />
-                    <Chip label="Casual Chic" variant="outlined" />
-                  </Stack>
+                  {trendySearch?.map((item, index) => (
+                    <Stack direction="row" spacing={1} key={index}>
+                      <Chip
+                        avatar={<img src={item?.image} className="rounded-pill" alt="no image available" />}
+                        label={item?.name}
+                        variant="outlined"
+                        className="p-2"
+                      />
+                    </Stack>
+                  ))}
                 </div>
               </div>
             </div>
@@ -183,7 +224,8 @@ const MarketPlace = () => {
                             <img
                               src={item.images[0] || blank_img}
                               alt={item.name}
-                              className="img-fluid" />
+                              className="img-fluid"
+                            />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -216,7 +258,8 @@ const MarketPlace = () => {
                             <img
                               src={item.images[0]}
                               alt={item.name}
-                              className="img-fluid" />
+                              className="img-fluid"
+                            />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -249,7 +292,8 @@ const MarketPlace = () => {
                             <img
                               src={item.images[0]}
                               alt={item.name}
-                              className="img-fluid" />
+                              className="img-fluid"
+                            />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -317,7 +361,8 @@ const MarketPlace = () => {
                 ))}
               </div>
             </Swiper> */}
-          </div></>
+          </div>
+        </>
       )}
     </>
   );

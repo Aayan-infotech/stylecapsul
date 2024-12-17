@@ -21,6 +21,8 @@ import { getCookie } from "../../utils/cookieUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import MuiPagination from "@mui/material/Pagination";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,10 @@ const Explore = ({ isAuth }) => {
   const token = getCookie("authToken");
   const userId = getCookie("userId");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const fetchExplorePostMedia = async () => {
     try {
@@ -261,45 +266,80 @@ const Explore = ({ isAuth }) => {
     }
   }, [userId]);
 
-  let debounceTimeout;
+  const fetchResults = async (searchQuery) => {
+    try {
+      const response = await axios.get(apiUrl("api/explore/search"), {
+        params: {
+          query: searchQuery,
+          sort: "name",
+          order: "asc",
+          page: page,
+          limit: 5,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        setSearchResults(response.data.data || []);
+        setTotalPages(response.data.pagination.totalPages);
+      } else {
+        setSearchResults([]);
+        setTotalPages(0);
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
-
-    if (debounceTimeout) clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-      if (value.trim() !== "") {
-        fetchResults(value);
-      } else {
-        setResults([]);
-      }
-    }, 300);
+    setPage(1);
   };
 
-  const fetchResults = async (searchQuery) => {
+  useEffect(() => {
+    if (query.trim()) {
+      fetchResults(query);
+    } else {
+      setSearchResults([]);
+      setTotalPages(0);
+    }
+  }, [page, query]);
+
+  const displayPosts = query.trim() ? searchResults : allSocialPosts;
+
+  const handleFollow = async (followedId) => {
     try {
-      const response = await axios.get(
-        "http://localhost:3555/api/explore/search",
+      const response = await axios.post(
+        apiUrl("api/explore/follow-unfollow"),
+        { userId, followedId },
         {
-          params: {
-            query: searchQuery,
-            sort: "name",
-            order: "asc",
-            page: 1,
-            limit: 5,
-          },
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
-
-      setResults(response.data);
+      if (response?.data?.success) {
+        const message = isFollowing
+          ? "Unfollowed successfully!"
+          : "Followed successfully!";
+        showSuccessToast(response?.data?.message || message);
+        setIsFollowing((prev) => !prev);
+        fetchExplorePostMedia();
+      } else {
+        showErrorToast("Failed to follow");
+      }
     } catch (error) {
-      console.error("Error fetching search results:", error);
-      setLoading(false);
+      console.log("Error following user:", error);
+      showErrorToast("An error occurred while following the user.");
     }
   };
+
+  useEffect(() => {
+    fetchExplorePostMedia();
+  }, []);
 
   return (
     <>
@@ -342,8 +382,8 @@ const Explore = ({ isAuth }) => {
                 </Link>
               </div>
             </div>
-            {allSocialPosts?.map((post, index) => (
-              <>
+            {displayPosts?.length > 0 ? (
+              displayPosts.map((post, index) => (
                 <div className="row g-2 m-0" key={index}>
                   <div className="col-12">
                     <div
@@ -363,14 +403,10 @@ const Explore = ({ isAuth }) => {
                               src={blank_img}
                             />
                             <div className="text-black">
-                              {/* <h5 style={{ lineHeight: "1.2" }}> */}
-                              {/* {post?.user?.firstName} */}
                               <Typography variant="h6" className="fw-bold">
                                 {post?.user?.firstName.charAt(0).toUpperCase() +
                                   post?.user?.firstName.slice(1).toLowerCase()}
                               </Typography>
-
-                              {/* </h5> */}
                               <h6 style={{ fontSize: "13px" }}>
                                 {formatDate(post.updatedAt)} •{" "}
                                 <i className="fa-solid fa-earth-americas"></i>
@@ -379,12 +415,22 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </Link>
                         <div>
-                          <i
-                            id="dropdownIcon"
-                            className="fa-solid fa-ellipsis-vertical fs-4 text-black"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          ></i>
+                          <div className="d-flex">
+                            <PersonAddAltIcon
+                              className="me-4 fw-bold fs-3"
+                              sx={{
+                                cursor: "pointer",
+                                color: isFollowing ? "blue" : "black",
+                              }}
+                              onClick={() => handleFollow(post?.user?._id)}
+                            />
+                            <i
+                              id="dropdownIcon"
+                              className="fa-solid fa-ellipsis-vertical fs-4 text-black"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            ></i>
+                          </div>
 
                           <ul
                             className="dropdown-menu dropdown-menu-start"
@@ -434,7 +480,7 @@ const Explore = ({ isAuth }) => {
                             },
                           }}
                         >
-                          {post?.image.map((imageUrl, cardIndex) => (
+                          {post?.image?.map((imageUrl, cardIndex) => (
                             <>
                               <SwiperSlide key={cardIndex}>
                                 <div
@@ -469,7 +515,9 @@ const Explore = ({ isAuth }) => {
                               className="fs-5 me-3"
                               color={post.likes ? "primary" : "inherit"}
                             />
-                            <h6 className="mt-1 mb-0">{post.likes.length}</h6>
+                            <h6 className="mt-1 mb-0">
+                              {post.likes && post.likes.length}
+                            </h6>
                           </div>
                         </div>
                         <div className="d-flex align-items-center text-black gap-3 justify-content-center">
@@ -477,7 +525,7 @@ const Explore = ({ isAuth }) => {
                             style={{ cursor: "pointer" }}
                             onClick={() => toggleCommentSection(index, post)}
                           >
-                            {post.comments.length} Comments
+                            {post.comments && post.comments.length} Comments
                           </h6>
                           {/* <h6>{post.shares} Shares</h6> */}
                           <h5 style={{ cursor: "pointer" }}>
@@ -699,8 +747,26 @@ const Explore = ({ isAuth }) => {
                     </div>
                   </div>
                 </div>
-              </>
-            ))}
+              ))
+            ) : (
+              <div className="text-center mt-4">
+                <Typography variant="h6">No results found</Typography>
+              </div>
+            )}
+            <div>
+              <MuiPagination
+                count={totalPages}
+                page={page}
+                onChange={(event, value) => setPage(value)}
+                color="primary"
+                size="large"
+                style={{
+                  marginTop: "2rem",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
+            </div>
           </div>
         </div>
       )}

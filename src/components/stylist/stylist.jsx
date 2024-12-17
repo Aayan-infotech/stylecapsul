@@ -14,14 +14,12 @@ const Stylist = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // const token = useSelector((state) => state.login.user);
-  // console.log(token, 'token')
+  const token = getCookie('authToken');
 
   useEffect(() => {
     const fetchUserData = async (query = "") => {
-      setLoading(true);
+      // setLoading(true);
       try {
-        const token = getCookie('authToken');
         const url = query ? apiUrl(`api/stylist/search/${query}`) : apiUrl('api/stylist/get-stylist');
         const response = await axios.get(url, {
           headers: {
@@ -40,9 +38,10 @@ const Stylist = () => {
       } catch (error) {
         setShowstylists([]);
         setMessage(error?.response?.data?.message || "An error occurred.");
-      } finally {
-        setLoading(false);
-      }
+      } 
+      // finally {
+      //   setLoading(false);
+      // }
     };
 
     fetchUserData(searchQuery);
