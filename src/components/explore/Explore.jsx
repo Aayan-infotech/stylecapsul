@@ -34,6 +34,7 @@ const Explore = ({ isAuth }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [searchResults, setSearchResults] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [displayPosts, setDisplayPosts] = useState([]);
 
   const fetchExplorePostMedia = async () => {
     try {
@@ -49,6 +50,7 @@ const Explore = ({ isAuth }) => {
           showComments: false,
         }));
         setAllSocialPosts(updatedPosts);
+        setDisplayPosts(updatedPosts);
       }
     } catch (error) {
       console.error("Error fetching clothes data:", error);
@@ -266,30 +268,31 @@ const Explore = ({ isAuth }) => {
     }
   }, [userId]);
 
-  const fetchResults = async (searchQuery) => {
+  const fetchResults = async () => {
+    // setLoading(true);
     try {
-      const response = await axios.get(apiUrl("api/explore/search"), {
-        params: {
-          query: searchQuery,
-          sort: "name",
-          order: "asc",
-          page: page,
-          limit: 5,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.data.success) {
-        setSearchResults(response.data.data || []);
+      const response = await axios.get(
+        apiUrl(
+          `api/explore/search?query=${query}&sort=name&order=asc&page=${page}&limit=5`
+        ),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response?.data?.success) {
+        setDisplayPosts(response.data.data || []);
         setTotalPages(response.data.pagination.totalPages);
       } else {
-        setSearchResults([]);
+        setDisplayPosts([]);
         setTotalPages(0);
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
-    }
+    } 
   };
 
   const handleInputChange = (e) => {
@@ -300,14 +303,12 @@ const Explore = ({ isAuth }) => {
 
   useEffect(() => {
     if (query.trim()) {
-      fetchResults(query);
+      fetchResults();
     } else {
-      setSearchResults([]);
-      setTotalPages(0);
+      setDisplayPosts(allSocialPosts);
+      setTotalPages(Math.ceil(allSocialPosts.length / 5));
     }
-  }, [page, query]);
-
-  const displayPosts = query.trim() ? searchResults : allSocialPosts;
+  }, [query, page]);
 
   const handleFollow = async (followedId) => {
     try {
@@ -332,7 +333,6 @@ const Explore = ({ isAuth }) => {
         showErrorToast("Failed to follow");
       }
     } catch (error) {
-      console.log("Error following user:", error);
       showErrorToast("An error occurred while following the user.");
     }
   };
