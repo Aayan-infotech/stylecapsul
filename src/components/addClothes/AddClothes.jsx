@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from '../../../apiUtils';
 import { getCookie } from "../../utils/cookieUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const AddClothes = () => {
   const clothingTypes = [
@@ -41,14 +42,16 @@ const AddClothes = () => {
     { value: "gloves", label: "Gloves" },
     { value: "belt", label: "Belt" },
     { value: "jewelry", label: "Jewelry" },
-    { value: "costume", label: "Costume" }
+    { value: "costume", label: "Costume" },
+    { value: "top", label: "Top" },
+    { value: "leggings", label: "Leggings" }
   ];
 
   const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
   const [formData, setFormData] = useState({
     category: '',
-    color: '',
+    part: '',
     typesOfCloths: '',
     season: '',
     brand: '',
@@ -69,7 +72,7 @@ const AddClothes = () => {
     if (updateNewCloth) {
       setFormData({
         category: updateNewCloth?.category ? updateNewCloth?.category.toLowerCase() : '',
-        color: updateNewCloth.color || '',
+        part: updateNewCloth.part || '',
         typesOfCloths: updateNewCloth.typesOfCloths || '',
         season: updateNewCloth.season || '',
         brand: updateNewCloth.brand || '',
@@ -122,16 +125,7 @@ const AddClothes = () => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        toast.success(response?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
-        });
+        showSuccessToast(response?.data?.message);
         setTimeout(() => {
           // navigate("/all-clothes-list");closet-categories
           // navigate("/closet-categories");
@@ -143,16 +137,7 @@ const AddClothes = () => {
           data.append('user_id', userId);
         }
         const addclothesresponse = await dispatch(addClothes(data)).unwrap();
-        toast.success(addclothesresponse?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
-        });
+        showErrorToast(addclothesresponse?.message);
         if (addclothesresponse.success && addclothesresponse.status === 200) {
           setTimeout(() => {
             navigate("/closet-categories");
@@ -200,15 +185,15 @@ const AddClothes = () => {
                   </div>
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
-                      <label htmlFor="color" className="form-label text-white">
+                      <label htmlFor="part" className="form-label text-white">
                         Select Out Fit
                       </label>
                       <select
                         className="form-select rounded-pill"
-                        name="color"
-                        value={formData.color}
+                        name="part"
+                        value={formData.part}
                         onChange={handleChange}
-                        aria-label="color"
+                        aria-label="part"
                       >
                         <option value="" disabled>Select</option>
                         <option value="outfitTop">Out Fit Top</option>
