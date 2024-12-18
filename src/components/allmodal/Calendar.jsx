@@ -88,8 +88,16 @@ const ClothesCalendar = ({ onSave }) => {
   const handleImageSave = async () => {
     const formattedDate = formatDate(selectedDate);
     const clothes = Object.values(selectedImages).filter((id) => id);
-    if (clothes.length === 0) {
-      showErrorToast("Please select at least one item.");
+    // if (clothes.length === 0) {
+    //   showErrorToast("Please select at least one item.");
+    //   return;
+    // }
+    if (
+      !selectedImages.outfitTop ||
+      !selectedImages.outfitBottom ||
+      !selectedImages.outfitFootwear
+    ) {
+      showErrorToast("Please select an outfit for Top, Bottom, and Footwear.");
       return;
     }
     const requestBody = {

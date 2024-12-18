@@ -25,7 +25,7 @@ export const showErrorToast = (message) => {
         hideProgressBar: true,
         style: {
             backgroundColor: "red",
-            color: "#C8B199",
+            color: "#fff",
             borderRadius: "50px",
             padding: "10px 20px",
         },
