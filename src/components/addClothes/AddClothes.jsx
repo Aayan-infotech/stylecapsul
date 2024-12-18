@@ -201,7 +201,7 @@ const AddClothes = () => {
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
                       <label htmlFor="color" className="form-label text-white">
-                        Color
+                        Select Out Fit
                       </label>
                       <select
                         className="form-select rounded-pill"
@@ -211,12 +211,12 @@ const AddClothes = () => {
                         aria-label="color"
                       >
                         <option value="" disabled>Select</option>
-                        <option value="pink">Pink</option>
-                        <option value="blue">Blue</option>
-                        <option value="red">Red</option>
-                        <option value="yellow">Yellow</option>
+                        <option value="outfitTop">Out Fit Top</option>
+                        <option value="outfitBottom">Out Fit Bottom</option>
+                        <option value="outfitFootwear">Out Fit Footwear</option>
+                        {/* <option value="yellow">Yellow</option>
                         <option value="green">Green</option>
-                        <option value="orange">Orange</option>
+                        <option value="orange">Orange</option> */}
                       </select>
                     </div>
                   </div>
