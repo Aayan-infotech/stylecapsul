@@ -137,7 +137,7 @@ const AddClothes = () => {
           data.append('user_id', userId);
         }
         const addclothesresponse = await dispatch(addClothes(data)).unwrap();
-        showErrorToast(addclothesresponse?.message);
+        showSuccessToast(addclothesresponse?.message);
         if (addclothesresponse.success && addclothesresponse.status === 200) {
           setTimeout(() => {
             navigate("/closet-categories");
