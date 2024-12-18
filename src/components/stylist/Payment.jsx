@@ -1,124 +1,156 @@
 import React, { useState } from "react";
 import "../../styles/Payment.scss";
-import creditcard from "../../assets/payment/credit.png";
 import paypal from "../../assets/payment/paypal.png";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
-import StripeCheckout from "react-stripe-checkout";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
-import { apiUrl } from '../../../apiUtils';
+import { apiUrl } from "../../../apiUtils";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
 
-const Payment = () => {
-  const [selectedMethod, setSelectedMethod] = useState(null);
-  const location = useLocation();
-  const { paymentDetailsWithaddressId } = location.state || {};
+// Initialize Stripe
+const stripePromise = loadStripe(
+  "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
+);
 
-  const userId = getCookie("userId");
-  const authToken = getCookie("authToken");
+const PaymentForm = () => {
+  const [loading, setLoading] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const stripe = useStripe();
+  const elements = useElements();
   const navigate = useNavigate();
 
-  const openCreditCardModal = () => {
-    setSelectedMethod("credit");
-  };
+  const location = useLocation();
+  const { paymentDetailsWithaddressId } = location.state || {};
+  console.log(paymentDetailsWithaddressId?.paymentDetails?.cartId, "");
+  const token = getCookie("authToken");
 
-  const openPayPalModal = () => {
-    setSelectedMethod("paypal");
-  };
-
-  const onToken = async (token) => {
+  const handleStripePayment = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    if (!stripe || !elements) {
+      return;
+    }
+  
+    const cardElement = elements.getElement(CardElement);
+  
+    if (!cardElement) {
+      showErrorToast("Card Element is not available");
+      return;
+    }
+  
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+      billing_details: {
+        name: "Customer Name",
+      },
+    });
+  
+    if (error) {
+      showErrorToast("Payment failed: " + error.message);
+      setPaymentStatus("Payment failed: " + error.message);
+      setLoading(false);
+      return;
+    }
+  
     try {
-      const response = await axios.post(apiUrl("api/payment-method/create-payment"), {
-          token,
-          paymentDetails: paymentDetailsWithaddressId?.paymentDetails,
+      const { data } = await axios.post(
+        apiUrl("api/payment-method/create-payment"),
+        {
+          cartId: paymentDetailsWithaddressId?.paymentDetails?.cartId,
+          paymentDetails: {
+            paymentMethodId: paymentMethod.id,
+            totalAmount: paymentDetailsWithaddressId?.paymentDetails?.totalAmount,
+            cartItems: paymentDetailsWithaddressId?.paymentDetails?.cartItems || [],
+          },
           selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
-        },{
+        },
+        {
           headers: {
-            'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         }
       );
-      if (response.data.success) {
-        showSuccessToast(response.data.message || "Payment successful!");
-        navigate("/thanku", { state: { charge: response.data.charge } });
-      } else {
-        showErrorToast("Payment failed. Please try again.");
+      const clientSecret = data.clientSecret;
+      const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+      if (stripeError) {
+        showErrorToast("Payment failed: " + stripeError.message);
+        setPaymentStatus("Payment failed: " + stripeError.message);
+      } else if (paymentIntent.status === "succeeded") {
+        showSuccessToast("Payment successful!");
+        setPaymentStatus("Payment successful!");
+        navigate("/thanku", { state: { paymentIntent } });
       }
     } catch (error) {
-      console.error("Error processing payment:", error);
-      showErrorToast("An error occurred. Please try again.");
+      showErrorToast("An error occurred during payment.");
+      console.error("Error creating payment intent:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  return (
+    <form onSubmit={handleStripePayment} className="mt-4">
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: "16px",
+              color: "#424770",
+              "::placeholder": { color: "#aab7c4" },
+            },
+            invalid: { color: "#9e2146" },
+          },
+        }}
+      />
+      <button
+        type="submit"
+        disabled={!stripe || loading}
+        className="btn btn-success mt-4"
+      >
+        {loading ? "Processing..." : "Pay with Card"}
+      </button>
+      {paymentStatus && <p className="mt-2">{paymentStatus}</p>}
+    </form>
+  );
+};
+
+const Payment = () => {
+  const location = useLocation();
+  const { paymentDetailsWithaddressId } = location.state || {};
 
   return (
     <div className="payment-container">
       <div className="container w-75 text-center">
         <h1 className="fw-bold text-center fs-1">Payment</h1>
-        <StripeCheckout
-          token={onToken}
-          stripeKey="pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
-          amount={paymentDetailsWithaddressId?.paymentDetails?.totalAmount}
-          name="Style Capsule"
-          ComponentClass="div"
-          image="https://www.shutterstock.com/image-vector/nature-capsule-vector-logo-template-600nw-2381326435.jpg"
-          currency="USD"
-        >
-          <div className="mt-3">
-            <button
-              type="button"
-              className="btn method btn-outline-secondary rounded-pill p-3 w-75 text-start fw-bold text-black fs-5 me-3"
-              onClick={openCreditCardModal}
-            >
-              Credit Card
-            </button>
-            <img src={creditcard} height={30} alt="Credit Card" />
-          </div>
-        </StripeCheckout>
-
-        {/* PayPal Button */}
+        <Elements stripe={stripePromise}>
+          <PaymentForm
+            paymentDetailsWithaddressId={paymentDetailsWithaddressId}
+          />
+        </Elements>
+        {/* PayPal Payment Button */}
         <div className="mt-3">
           <button
             type="button"
             className="btn method btn-outline-secondary rounded-pill p-3 w-75 text-start fw-bold text-black fs-5 me-4"
-            onClick={openPayPalModal}
           >
             PayPal
           </button>
           <img src={paypal} height={30} alt="PayPal" />
         </div>
       </div>
-
-      {/* PayPal Modal */}
-      {selectedMethod === "paypal" && (
-        <div
-          className="modal fade show"
-          style={{ display: "block" }}
-          aria-labelledby="paypalModalLabel"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="paypalModalLabel">
-                  PayPal Payment
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setSelectedMethod(null)}
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body">
-                <PayPalScriptProvider options={{ clientId: "test" }}>
-                  <PayPalButtons style={{ layout: "horizontal" }} />
-                </PayPalScriptProvider>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

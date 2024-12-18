@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addAddress, deleteAddress, fetchAddresses, updateAddress } from '../../reduxToolkit/AddressSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from "../Loader/Loader";
+import { showErrorToast, showSuccessToast } from '../toastMessage/Toast';
 
 const Address = () => {
     const dispatch = useDispatch();
@@ -90,16 +91,7 @@ const Address = () => {
         try {
             if (isEditing) {
                 await dispatch(updateAddress({ id: selectedAddressId, updatedAddress: addressForm })).unwrap();
-                toast.success("Address updated successfully", {
-                    autoClose: 1000,
-                    hideProgressBar: true,
-                    style: {
-                        backgroundColor: 'black',
-                        color: '#C8B199',
-                        borderRadius: '50px',
-                        padding: '10px 20px',
-                    }
-                });
+               showSuccessToast("Address updated successfully");
             } else {
                 await dispatch(addAddress(addressForm)).unwrap();
                 toast.success("Address added successfully", {
@@ -118,16 +110,7 @@ const Address = () => {
             setAddressForm({ streetName: '', city: '', country: '', mobileNumber: '' });
             setShowModal(false);
         } catch (error) {
-            toast.error(error.message || "Failed to save address", {
-                autoClose: 1000,
-                hideProgressBar: true,
-                style: {
-                    backgroundColor: 'red',
-                    color: '#C8B199',
-                    borderRadius: '50px',
-                    padding: '10px 20px',
-                }
-            });
+           showErrorToast(error.message || "Failed to save address")
         }
     };
 

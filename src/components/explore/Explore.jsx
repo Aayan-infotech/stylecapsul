@@ -310,32 +310,32 @@ const Explore = ({ isAuth }) => {
     }
   }, [query, page]);
 
-  const handleFollow = async (followedId) => {
-    try {
-      const response = await axios.post(
-        apiUrl("api/explore/follow-unfollow"),
-        { userId, followedId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response?.data?.success) {
-        const message = isFollowing
-          ? "Unfollowed successfully!"
-          : "Followed successfully!";
-        showSuccessToast(response?.data?.message || message);
-        setIsFollowing((prev) => !prev);
-        fetchExplorePostMedia();
-      } else {
-        showErrorToast("Failed to follow");
-      }
-    } catch (error) {
-      showErrorToast("An error occurred while following the user.");
-    }
-  };
+  // const handleFollow = async (followedId) => {
+  //   try {
+  //     const response = await axios.post(
+  //       apiUrl("api/explore/follow-unfollow"),
+  //       { userId, followedId },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     if (response?.data?.success) {
+  //       const message = isFollowing
+  //         ? "Unfollowed successfully!"
+  //         : "Followed successfully!";
+  //       showSuccessToast(response?.data?.message || message);
+  //       setIsFollowing((prev) => !prev);
+  //       fetchExplorePostMedia();
+  //     } else {
+  //       showErrorToast("Failed to follow");
+  //     }
+  //   } catch (error) {
+  //     showErrorToast("An error occurred while following the user.");
+  //   }
+  // };
 
   useEffect(() => {
     fetchExplorePostMedia();
@@ -416,14 +416,14 @@ const Explore = ({ isAuth }) => {
                         </Link>
                         <div>
                           <div className="d-flex">
-                            <PersonAddAltIcon
+                            {/* <PersonAddAltIcon
                               className="me-4 fw-bold fs-3"
                               sx={{
                                 cursor: "pointer",
                                 color: isFollowing ? "blue" : "black",
                               }}
                               onClick={() => handleFollow(post?.user?._id)}
-                            />
+                            /> */}
                             <i
                               id="dropdownIcon"
                               className="fa-solid fa-ellipsis-vertical fs-4 text-black"
@@ -481,7 +481,7 @@ const Explore = ({ isAuth }) => {
                           }}
                         >
                           {post?.image?.map((imageUrl, cardIndex) => (
-                            <>
+                            // <>
                               <SwiperSlide key={cardIndex}>
                                 <div
                                   className="card text-black"
@@ -503,7 +503,7 @@ const Explore = ({ isAuth }) => {
                                   </div>
                                 </div>
                               </SwiperSlide>
-                            </>
+                            // </>
                           ))}
                         </Swiper>
                       </div>

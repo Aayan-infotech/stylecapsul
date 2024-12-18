@@ -8,6 +8,7 @@ const token = getCookie('authToken');
 export const createBasic = createAsyncThunk(
     'profile/createBasic',
     async ({ userId, profileData }, { rejectWithValue }) => {
+        const token = getCookie('authToken');
         try {
             const response = await axios.put(apiUrl(`api/user/update-user/${userId}`), profileData, {
                 headers: {

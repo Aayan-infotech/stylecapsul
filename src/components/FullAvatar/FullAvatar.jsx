@@ -23,8 +23,8 @@ function FullAvatar() {
     }
   };
 
-  const handleSubmitAvatar = () => {
-    navigate("/edit-profile-avatar");
+  // const handleSubmitAvatar = () => {
+    // navigate("/edit-profile-avatar");
     // if (capturedImage) {
     //   navigate("/edit-profile-avatar", {
     //     state: { avatarImage: capturedImage },
@@ -32,7 +32,7 @@ function FullAvatar() {
     // } else {
     //   alert("Please capture the avatar image first.");
     // }
-  };
+  // };
 
   return (
     <>
@@ -85,14 +85,13 @@ function FullAvatar() {
                   />
                 </div>
               </div>
-              <button
+              {/* <button
                 type="button"
                 onClick={handleSubmitAvatar}
                 className="btn rounded-pill p-3 text-white fw-bold"
-                style={{ width: "200px", backgroundColor: "black" }}
-              >
+                style={{ width: "200px", backgroundColor: "black" }}>
                 <img src={three} alt="" height={25} />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

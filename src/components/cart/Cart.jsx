@@ -12,6 +12,7 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
   const cartItems = useSelector((state) => state.cart.cart);
+  const cartId = cartItems.length > 0 ? cartItems[0]._id : null;
   const dispatch = useDispatch();
   const userId = getCookie('userId');
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ const Cart = () => {
     const paymentDetails = {
       totalAmount: total.toFixed(2),
       totalQuantity,
+      cartId,
       cartItems: cartItems.map(cart =>
         cart.items.map(item => ({
           productId: item.productId,

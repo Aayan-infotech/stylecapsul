@@ -64,6 +64,7 @@ function ProfileAvatar() {
     bio: updatedProfileData?.bio || "",
     email: updatedProfileData?.email || "",
     mobileNumber: updatedProfileData?.mobileNumber || "",
+    profileImage: updatedProfileData?.profileImage || "",
   });
 
   useEffect(() => {
@@ -212,7 +213,7 @@ function ProfileAvatar() {
               <div className="p-2 d-flex justify-content-end align-items-center">
                 <div className="current-avtar">
                   <div className="avtar-background d-flex justify-content-center align-items-center">
-                    <img src={currentImageAvtar} height={300} alt="Avatar" />
+                    <img src={formData?.profileImage || currentImageAvtar} className="rounded-circle" height={300} alt="Avatar" />
                   </div>
                   <div className="change-avtar-btn">
                     {currentImageAvtar === girl && (

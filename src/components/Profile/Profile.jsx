@@ -20,6 +20,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  console.log(logedInUserData, 'logedInUserData abinash')
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
@@ -58,11 +59,12 @@ function Profile() {
                   <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                     <div className="text-center">
                       <img
-                        src={profile}
+                        src={logedInUserData?.profileImage || profile}
                         alt="Profile"
                         className="rounded-pill"
                         height={120}
                         width={120}
+                        style={{objectFit:"cover"}}
                       />
                       <div className="profile-info mt-3">
                         <h2>
