@@ -15,7 +15,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 
-// Initialize Stripe
 const stripePromise = loadStripe(
   "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
 );
@@ -28,6 +27,7 @@ const PaymentForm = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
+  const userId = getCookie("userId");
   const { paymentDetailsWithaddressId } = location.state || {};
   console.log(paymentDetailsWithaddressId?.paymentDetails?.cartId, "");
   const token = getCookie("authToken");
@@ -35,18 +35,18 @@ const PaymentForm = () => {
   const handleStripePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     if (!stripe || !elements) {
       return;
     }
-  
+
     const cardElement = elements.getElement(CardElement);
-  
+
     if (!cardElement) {
       showErrorToast("Card Element is not available");
       return;
     }
-  
+
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement,
@@ -54,37 +54,41 @@ const PaymentForm = () => {
         name: "Customer Name",
       },
     });
-  
+
     if (error) {
       showErrorToast("Payment failed: " + error.message);
       setPaymentStatus("Payment failed: " + error.message);
       setLoading(false);
       return;
     }
-  
+
     try {
       const { data } = await axios.post(
         apiUrl("api/payment-method/create-payment"),
         {
           cartId: paymentDetailsWithaddressId?.paymentDetails?.cartId,
+          user: userId,
           paymentDetails: {
             paymentMethodId: paymentMethod.id,
-            totalAmount: paymentDetailsWithaddressId?.paymentDetails?.totalAmount,
-            cartItems: paymentDetailsWithaddressId?.paymentDetails?.cartItems || [],
+            totalAmount:
+              paymentDetailsWithaddressId?.paymentDetails?.totalAmount,
+            cartItems:
+              paymentDetailsWithaddressId?.paymentDetails?.cartItems || [],
           },
           selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
       const clientSecret = data.clientSecret;
-      const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: paymentMethod.id,
-      });
+      const { paymentIntent, error: stripeError } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethod.id,
+        });
       if (stripeError) {
         showErrorToast("Payment failed: " + stripeError.message);
         setPaymentStatus("Payment failed: " + stripeError.message);
