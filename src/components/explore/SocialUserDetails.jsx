@@ -177,7 +177,7 @@ export const SocialUserDetails = () => {
           <div className="col-12 d-flex justify-content-center align-items-center">
             <div className="text-center">
               <Avatar
-                alt="User Avatar"
+                alt={blank_img}
                 className="rounded-circle mb-2"
                 sx={{ width: 200, height: 200 }}
                 src={userPostDetails?.user?.profileImage || blank_img}

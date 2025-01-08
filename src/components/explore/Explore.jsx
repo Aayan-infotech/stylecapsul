@@ -413,7 +413,7 @@ const Explore = ({ isAuth }) => {
                             <img
                               className="rounded-circle mb-2 me-2"
                               src={post?.user?.profileImage || blank_img}
-                              alt={post?.user?.profileImage || blank_img}
+                              alt={blank_img}
                               style={{
                                 border: "2px solid black",
                                 padding: "5px",
@@ -589,7 +589,7 @@ const Explore = ({ isAuth }) => {
                         <div className="comment-section mt-3">
                           <div className="comment-box d-flex align-items-center p-2">
                             <Avatar
-                              alt="Remy Sharp"
+                              alt={blank_img}
                               sx={{ width: 40, height: 40, marginRight: 2 }}
                               className="me-3"
                               src={blank_img}
@@ -645,7 +645,7 @@ const Explore = ({ isAuth }) => {
                                         alt="User Avatar"
                                         sx={{ width: 30, height: 30 }}
                                         className="me-2"
-                                        src={blank_img}
+                                        src={comment?.user?.profileImage || blank_img} 
                                       />
                                       <div
                                         className="text-black p-2 rounded-3"
@@ -724,7 +724,7 @@ const Explore = ({ isAuth }) => {
                                       type="text"
                                       className="form-control mb-2"
                                       placeholder="Write a reply..."
-                                      value={comment.newReply || ""}
+                                      value={comment?.newReply || ""}
                                       onChange={(e) =>
                                         handleReplyChange(
                                           index,
