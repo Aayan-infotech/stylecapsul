@@ -404,10 +404,16 @@ const Explore = ({ isAuth }) => {
                           className="text-decoration-none"
                         >
                           <div className="d-flex justify-content-between align-items-center">
+                            {/* <Avatar
+                              alt="profile image"
+                              sx={{ width: 56, height: 56 }}
+                             className="me-3 rounded-circle"
+                              src={post?.user?.profileImage || blank_img}
+                            /> */}
                             <img
-                              alt="User Avatar"
                               className="rounded-circle mb-2 me-2"
                               src={post?.user?.profileImage || blank_img}
+                              alt={post?.user?.profileImage || blank_img}
                               style={{
                                 border: "2px solid black",
                                 padding: "5px",
