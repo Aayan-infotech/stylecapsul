@@ -12,6 +12,7 @@ import notification from "../../assets/closetmanagement/Group 1806.png";
 import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
+import Loader from "../Loader/Loader.jsx";
 
 const ExploreUserProfileDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -58,6 +59,7 @@ const ExploreUserProfileDetails = () => {
   ];
 
   const fetchPostDetailsByUs = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         apiUrl("api/explore/user-profile-data"),
@@ -68,7 +70,7 @@ const ExploreUserProfileDetails = () => {
           },
         }
       );
-      console.log(response?.data, "response?.data");  
+      console.log(response?.data, "response?.data");
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
@@ -92,6 +94,8 @@ const ExploreUserProfileDetails = () => {
       }
     } catch (error) {
       console.error("Error fetching clothes data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -161,66 +165,70 @@ const ExploreUserProfileDetails = () => {
   }, []);
 
   return (
-    <div
-      className="container d-block userprofiledetails"
-      style={{ paddingTop: "6rem" }}
-    >
-      <div className="container d-block px-4">
-        <div className="row gy-4 m-0 mb-4">
-          <div className="col-12 d-flex justify-content-center align-items-center">
-            <div >
-              <img
-                alt="User Avatar"
-                className="rounded-circle mb-2"
-                src={userPostDetails?.user?.user?.profileImage || blank_img}
-                style={{
-                  border: "2px solid black",
-                  padding: "5px",
-                  borderRadius: "50%",
-                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
-                  cursor: "pointer",
-                  padding: "5px",
-                  height:"200px",
-                }}
-              />
-              <h4 className="fw-bold">
-              {userPostDetails?.user?.user?.firstName
-                  ? userPostDetails?.user?.user?.firstName
-                      .charAt(0)
-                      .toUpperCase() +
-                    userPostDetails?.user?.user?.firstName
-                      .slice(1)
-                      .toLowerCase()
-                  : "N/A"}
-              </h4>
-              <p className="m-0">{userPostDetails?.user?.user?.bio}</p>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div
+          className="container d-block userprofiledetails"
+          style={{ paddingTop: "6rem" }}
+        >
+          <div className="container d-block px-4">
+            <div className="row gy-4 m-0 mb-4">
+              <div className="col-12 d-flex justify-content-center align-items-center">
+                <div>
+                  <img
+                    alt="User Avatar"
+                    className="rounded-circle mb-2"
+                    src={userPostDetails?.user?.user?.profileImage || blank_img}
+                    style={{
+                      border: "2px solid black",
+                      padding: "5px",
+                      borderRadius: "50%",
+                      boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
+                      cursor: "pointer",
+                      padding: "5px",
+                      height: "200px",
+                    }}
+                  />
+                  <h4 className="fw-bold">
+                    {userPostDetails?.user?.user?.firstName
+                      ? userPostDetails?.user?.user?.firstName
+                          .charAt(0)
+                          .toUpperCase() +
+                        userPostDetails?.user?.user?.firstName
+                          .slice(1)
+                          .toLowerCase()
+                      : "N/A"}
+                  </h4>
+                  <p className="m-0">{userPostDetails?.user?.user?.bio}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="row m-0 mb-4">
-          <div className="col-12 col-md-6">
-            <Calendar
-              value={selectedDate}
-              tileContent={tileContent}
-              onClickDay={(date) => {
-                setSelectedDate(date);
-                handleSelectOutFits(date);
-              }}
-              minDate={new Date()}
-            />
-          </div>
-          <div
-            className="col-12 col-md-6"
-            style={{
-              height: "300px",
-              overflowY: "auto",
-              borderRadius: "10px",
-              backgroundColor: "#f0f0f0",
-              padding: "10px",
-            }}
-          >
-            <style>
-              {`.col-12.col-md-6::-webkit-scrollbar {
+            <div className="row m-0 mb-4">
+              <div className="col-12 col-md-6">
+                <Calendar
+                  value={selectedDate}
+                  tileContent={tileContent}
+                  onClickDay={(date) => {
+                    setSelectedDate(date);
+                    handleSelectOutFits(date);
+                  }}
+                  minDate={new Date()}
+                />
+              </div>
+              <div
+                className="col-12 col-md-6"
+                style={{
+                  height: "300px",
+                  overflowY: "auto",
+                  borderRadius: "10px",
+                  backgroundColor: "#f0f0f0",
+                  padding: "10px",
+                }}
+              >
+                <style>
+                  {`.col-12.col-md-6::-webkit-scrollbar {
                 width: 7px; 
               }
               .col-12.col-md-6::-webkit-scrollbar-track {
@@ -235,70 +243,72 @@ const ExploreUserProfileDetails = () => {
                 background: rgb(61, 61, 61);  
               }
             `}
-            </style>
-            {wardrow_categories.map((item, index) => (
-              <Link to={item?.url} className="text-decoration-none">
-                <div
-                  key={index}
-                  className="rounded-pill mb-3 d-flex align-items-center"
-                  style={{
-                    backgroundColor: "#4C4C4C",
-                    height: "100px",
-                    padding: "10px",
-                  }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="profile-image"
+                </style>
+                {wardrow_categories.map((item, index) => (
+                  <Link to={item?.url} className="text-decoration-none">
+                    <div
+                      key={index}
+                      className="rounded-pill mb-3 d-flex align-items-center"
+                      style={{
+                        backgroundColor: "#4C4C4C",
+                        height: "100px",
+                        padding: "10px",
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="profile-image"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          marginRight: "10px",
+                        }}
+                      />
+                      <div className="text-start text-white">
+                        <h4 className="fw-bold mb-1">{item.title}</h4>
+                        <h6 className="mb-0">{item.date}</h6>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div className="row gy-1 g-1 m-0">
+              {userPostDetails?.user?.image &&
+                userPostDetails.user.image.map((image, index) => (
+                  <div
+                    key={index}
+                    className="col-12 col-md-4 d-flex justify-content-center align-items-center rounded-4"
                     style={{
-                      width: "50px",
-                      height: "50px",
-                      marginRight: "10px",
+                      height: "300px",
+                      overflow: "hidden",
+                      position: "relative",
+                      backgroundColor: "#f0f0f0",
                     }}
-                  />
-                  <div className="text-start text-white">
-                    <h4 className="fw-bold mb-1">{item.title}</h4>
-                    <h6 className="mb-0">{item.date}</h6>
+                  >
+                    <img
+                      className="w-100 h-100 object-fit-cover rounded-4"
+                      src={image}
+                      alt={`User Image ${index + 1}`}
+                      style={{
+                        objectFit: "cover",
+                        transition: "transform 0.3s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.transform = "scale(0.9)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = "scale(1)";
+                      }}
+                    />
                   </div>
-                </div>
-              </Link>
-            ))}
+                ))}
+            </div>
           </div>
         </div>
-        <div className="row gy-1 g-1 m-0">
-          {userPostDetails?.user?.image &&
-            userPostDetails.user.image.map((image, index) => (
-              <div
-                key={index}
-                className="col-12 col-md-4 d-flex justify-content-center align-items-center rounded-4"
-                style={{
-                  height: "300px",
-                  overflow: "hidden",
-                  position: "relative",
-                  backgroundColor: "#f0f0f0",
-                }}
-              >
-                <img
-                  className="w-100 h-100 object-fit-cover rounded-4"
-                  src={image}
-                  alt={`User Image ${index + 1}`}
-                  style={{
-                    objectFit: "cover",
-                    transition: "transform 0.3s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = "scale(0.9)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = "scale(1)";
-                  }}
-                />
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 export default ExploreUserProfileDetails;
