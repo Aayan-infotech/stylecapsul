@@ -23,6 +23,7 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MuiPagination from "@mui/material/Pagination";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import { useSelector } from "react-redux";
 
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -36,14 +37,18 @@ const Explore = ({ isAuth }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [displayPosts, setDisplayPosts] = useState([]);
 
+  const { user, status } = useSelector((state) => state.login);
+  const singleUser = user?.payload || user;
+
   const fetchExplorePostMedia = async () => {
     try {
-      const response = await axios.get(apiUrl("api/explore/getall"), {
+      const response = await axios.get(apiUrl("api/explore/getallPosts"), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
+      console.log(response?.data?.data, "response?.data?.data");
       if (response?.data?.success) {
         const updatedPosts = response?.data?.data.map((post) => ({
           ...post,
@@ -223,7 +228,6 @@ const Explore = ({ isAuth }) => {
     const post = allSocialPosts[postIndex];
     const comment = post.comments[commentIndex];
     const newReply = comment.newReply;
-
     if (newReply) {
       try {
         const response = await axios.post(
@@ -292,7 +296,7 @@ const Explore = ({ isAuth }) => {
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
-    } 
+    }
   };
 
   const handleInputChange = (e) => {
@@ -378,7 +382,11 @@ const Explore = ({ isAuth }) => {
                 className="rounded-circle"
               >
                 <Link to="/user-profile">
-                  <Avatar alt="Remy Sharp" className="rounded-circle" src="" />
+                  <Avatar
+                    alt="Remy Sharp"
+                    className="rounded-circle"
+                    src={singleUser?.profileImage}
+                  />
                 </Link>
               </div>
             </div>
@@ -392,15 +400,22 @@ const Explore = ({ isAuth }) => {
                     >
                       <div className="d-flex justify-content-between align-items-center">
                         <Link
-                          to={`/socialUserDetails/${post._id}`}
+                          to={`/socialUserDetails/${post?.user?._id}`}
                           className="text-decoration-none"
                         >
                           <div className="d-flex justify-content-between align-items-center">
-                            <Avatar
-                              alt="profile image"
-                              sx={{ width: 56, height: 56 }}
-                              className="me-3"
-                              src={blank_img}
+                            <img
+                              alt="User Avatar"
+                              className="rounded-circle mb-2 me-2"
+                              src={post?.user?.profileImage || blank_img}
+                              style={{
+                                border: "2px solid black",
+                                padding: "5px",
+                                borderRadius: "50%",
+                                cursor: "pointer",
+                                padding: "5px",
+                                height: "60px",
+                              }}
                             />
                             <div className="text-black">
                               <Typography variant="h6" className="fw-bold">
@@ -431,7 +446,6 @@ const Explore = ({ isAuth }) => {
                               aria-expanded="false"
                             ></i>
                           </div>
-
                           <ul
                             className="dropdown-menu dropdown-menu-start"
                             aria-labelledby="dropdownIcon"
@@ -457,7 +471,6 @@ const Explore = ({ isAuth }) => {
                       <div className="text-black mt-2">
                         <p className="fw-bold">{post?.description}</p>
                       </div>
-
                       <div className="d-flex mt-3">
                         <Swiper
                           modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -482,27 +495,27 @@ const Explore = ({ isAuth }) => {
                         >
                           {post?.image?.map((imageUrl, cardIndex) => (
                             // <>
-                              <SwiperSlide key={cardIndex}>
-                                <div
-                                  className="card text-black"
-                                  style={{
-                                    width: "18rem",
-                                    backgroundColor: "#e8e8e8",
-                                  }}
-                                >
-                                  <img
-                                    src={imageUrl}
-                                    className="card-img-top object-fit-cover"
-                                    height={300}
-                                    alt={`Image ${cardIndex + 1}`}
-                                  />
-                                  <div className="card-body">
-                                    <p className="card-text">
-                                      {post?.description}
-                                    </p>
-                                  </div>
+                            <SwiperSlide key={cardIndex}>
+                              <div
+                                className="card text-black"
+                                style={{
+                                  width: "18rem",
+                                  backgroundColor: "#e8e8e8",
+                                }}
+                              >
+                                <img
+                                  src={imageUrl}
+                                  className="card-img-top object-fit-cover"
+                                  height={300}
+                                  alt={`Image ${cardIndex + 1}`}
+                                />
+                                <div className="card-body">
+                                  <p className="card-text">
+                                    {post?.description}
+                                  </p>
                                 </div>
-                              </SwiperSlide>
+                              </div>
+                            </SwiperSlide>
                             // </>
                           ))}
                         </Swiper>

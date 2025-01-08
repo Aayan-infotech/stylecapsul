@@ -23,22 +23,10 @@ function FullAvatar() {
     }
   };
 
-  // const handleSubmitAvatar = () => {
-    // navigate("/edit-profile-avatar");
-    // if (capturedImage) {
-    //   navigate("/edit-profile-avatar", {
-    //     state: { avatarImage: capturedImage },
-    //   });
-    // } else {
-    //   alert("Please capture the avatar image first.");
-    // }
-  // };
-
   return (
     <>
       <div className="capsule-main-container">
         <div className="container text-center">
-          {/* <Link to="/profile">check</Link> */}
           <div className="row g-2">
             <div className="col-12 col-md-6">
               <AvatarCanvas
@@ -85,13 +73,6 @@ function FullAvatar() {
                   />
                 </div>
               </div>
-              {/* <button
-                type="button"
-                onClick={handleSubmitAvatar}
-                className="btn rounded-pill p-3 text-white fw-bold"
-                style={{ width: "200px", backgroundColor: "black" }}>
-                <img src={three} alt="" height={25} />
-              </button> */}
             </div>
           </div>
         </div>

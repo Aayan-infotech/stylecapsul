@@ -52,10 +52,10 @@ const Stylist = () => {
   };
 
   return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
+    // <>
+    //   {loading ? (
+    //     <Loader />
+    //   ) : (
         <div className="styliset-search-container">
           <div className="row gx-5">
             <div className="col-12 col-md-6">
@@ -110,8 +110,8 @@ const Stylist = () => {
             </div>
           </div>
         </div>
-      )}
-    </>
+    //   )}
+    // </>
   );
 };
 

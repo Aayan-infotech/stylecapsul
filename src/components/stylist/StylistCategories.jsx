@@ -36,6 +36,7 @@ const StylistCategories = () => {
           'Content-Type': 'application/json',
         },
       })
+      console.log(response?.data?.data, 'response?.data?.data')
       if (response?.data?.data) {
         setMarketPlaceCategoryType(response?.data?.data);
       } else {

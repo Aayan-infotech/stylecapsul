@@ -1,9 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import "./OrderHistory.scss";
-import productleather from "./img/leather.png";
-import productleather2 from "./img/leather1.png";
-import productleather3 from "./img/leather2.png";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
@@ -54,7 +51,7 @@ function OrderHistory() {
           <div className="order-history d-flex justify-content-center align-items-center w-100">
             <div className="w-100 mx-750">
               <div className="products-heading">
-                <h1>Order History</h1>
+               <h4 className="fw-bold fs-1">Order History</h4>
                 <div className="search-box">
                   <i className="fa fa-search"></i>
                   <input type="text" placeholder="Search" />

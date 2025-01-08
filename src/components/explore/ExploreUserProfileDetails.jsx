@@ -1,55 +1,164 @@
-import React from "react";
-import Avatar from "@mui/material/Avatar";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import showimg4 from "../../assets/marketplace/showimg4.jpg";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { Avatar } from "@mui/material";
+import axios from "axios";
+import { getCookie } from "../../utils/cookieUtils";
+import { apiUrl } from "../../../apiUtils";
+import blank_img from "../../assets/stylist/blank_img.jpg";
+import notification from "../../assets/closetmanagement/Group 1806.png";
+import closet from "../../assets/closetmanagement/closet.png";
+import coinhand from "../../assets/closetmanagement/coin-hand.png";
+import imagefocus from "../../assets/closetmanagement/image-focus.png";
 
 const ExploreUserProfileDetails = () => {
-  const userProfileDetails = {
-    name: "Anshuman Rai",
-    location: "America",
-    bio: "respect is earned honesty is appreciated trust is gained loyalty is returned",
-    website:
-      "https://www.thestylecapsule.com.au/?srsltid=AfmBOopVoKLa1bj1jGgxH9gpcD61_iWxvK7E3lIiu1Ffs6-gYVRFRqDn",
-    avatarUrl: "",
-    stats: [
-      { label: "posts", value: 26 },
-      { label: "followers", value: 206 },
-      { label: "following", value: 126 },
-    ],
-    images: [
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-    ],
-    wardrow_categories: [
-      {
-        title: "Clothes",
-        date: "23 Jan 2024",
-        image: showimg4,
-      },
-      {
-        title: "Shoes",
-        date: "23 Jan 2024",
-        image: showimg4,
-      },
-      {
-        title: "Accessories",
-        date: "25 Mar 2024",
-        image: showimg4,
-      },
-      {
-        title: "Other",
-        date: "23 Jan 2024",
-        image: showimg4,
-      },
-    ],
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [userPostDetails, setUserPostDetails] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [clothesOnDates, setClothesOnDates] = useState([]);
+
+  const navigate = useNavigate();
+  const token = getCookie("authToken");
+
+  const wardrow_categories = [
+    {
+      id: 1,
+      image: notification,
+      title: "Clothes",
+      imageAlt: "Notification",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/clothes",
+    },
+    {
+      id: 2,
+      image: closet,
+      title: "Shoes",
+      imageAlt: "closet",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/shoes",
+    },
+    {
+      id: 3,
+      image: coinhand,
+      title: "Accessories",
+      imageAlt: "coinhand",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/accessories",
+    },
+    {
+      id: 4,
+      image: imagefocus,
+      title: "Miscellaneous",
+      imageAlt: "imagefocus",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/miscellaneous",
+    },
+  ];
+
+  const fetchPostDetailsByUs = async () => {
+    try {
+      const response = await axios.get(
+        apiUrl("api/explore/user-profile-data"),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response?.data, "response?.data");  
+      if (response?.data?.success) {
+        setUserPostDetails(response?.data);
+        const data = response?.data?.styleOfTheDay || [];
+        const formattedData = data
+          .map((item) => {
+            const styleOfTheDay = item?.styleOfTheDay || {};
+            const date = styleOfTheDay.date
+              ? styleOfTheDay.date.split("T")[0]
+              : null;
+            const pictures = styleOfTheDay.clothes
+              ?.filter((cloth) => cloth?.picture)
+              .map((cloth) => cloth.picture);
+            return {
+              date,
+              thumbnail: pictures || [],
+              id: item._id || null,
+            };
+          })
+          .filter((item) => item.date);
+        setClothesOnDates(formattedData);
+      }
+    } catch (error) {
+      console.error("Error fetching clothes data:", error);
+    }
   };
+
+  useEffect(() => {
+    fetchPostDetailsByUs();
+  }, []);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const tileContent = ({ date, view }) => {
+    const formattedDate = formatDate(date);
+    if (view === "month") {
+      const dateEntry = clothesOnDates.find(
+        (item) => item.date === formattedDate
+      );
+      if (dateEntry && dateEntry.thumbnail.length > 0) {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            {dateEntry.thumbnail.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={image}
+                style={{
+                  width: "15px",
+                  height: "auto",
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                }}
+              />
+            ))}
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
+  const handleSelectOutFits = (date) => {
+    const formattedDate = formatDate(date);
+    const details = clothesOnDates.find((item) => item.date === formattedDate);
+    if (details) {
+      const selectedData = { date: formattedDate, images: details.thumbnail };
+      navigate("/capsulerangecalendardetails", { state: { selectedData } });
+    } else {
+      console.log("No data found for this date.");
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div
@@ -57,72 +166,48 @@ const ExploreUserProfileDetails = () => {
       style={{ paddingTop: "6rem" }}
     >
       <div className="container d-block px-4">
-        <div className="d-flex justify-content-between mx-5">
-          <h1></h1>
-          <div className="dropdown">
-            <SettingsIcon
-              style={{ fontSize: 30, color: "black" }}
-              data-bs-toggle="dropdown"
-            />
-            <ul className="dropdown-menu">
-              <li>
-                <a className="dropdown-item" href="#">
-                  Delete Profile
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="row gy-4 m-0 mb-3">
-          <div className="col-12 col-md-3 d-flex justify-content-center align-items-center">
-            <div
-              style={{
-                border: "2px solid black",
-                padding: "5px",
-                borderRadius: "50%",
-                boxShadow: "0px 0px 15px 5px",
-                cursor: "pointer",
-              }}
-              className="rounded-circle"
-            >
-              <Avatar
+        <div className="row gy-4 m-0 mb-4">
+          <div className="col-12 d-flex justify-content-center align-items-center">
+            <div >
+              <img
                 alt="User Avatar"
-                className="rounded-circle"
-                sx={{ width: 150, height: 150 }}
-                src={userProfileDetails.avatarUrl}
+                className="rounded-circle mb-2"
+                src={userPostDetails?.user?.user?.profileImage || blank_img}
+                style={{
+                  border: "2px solid black",
+                  padding: "5px",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
+                  cursor: "pointer",
+                  padding: "5px",
+                  height:"200px",
+                }}
               />
+              <h4 className="fw-bold">
+              {userPostDetails?.user?.user?.firstName
+                  ? userPostDetails?.user?.user?.firstName
+                      .charAt(0)
+                      .toUpperCase() +
+                    userPostDetails?.user?.user?.firstName
+                      .slice(1)
+                      .toLowerCase()
+                  : "N/A"}
+              </h4>
+              <p className="m-0">{userPostDetails?.user?.user?.bio}</p>
             </div>
-          </div>
-          <div className="col-12 col-md-9">
-            <div className="d-flex justify-content-around">
-              {userProfileDetails.stats.map((stat, index) => (
-                <div key={index} className="p-2 text-center">
-                  <h4 className="fw-bold">{stat.value}</h4>
-                  <h5>{stat.label}</h5>
-                </div>
-              ))}
-            </div>
-            <div className="p-3 my-3">
-              <button type="button" class="btn btn-dark rounded-pill w-100 p-2">
-                Share Profile
-              </button>
-            </div>
-          </div>
-          <div className="col-12 mx-auto" style={{ maxWidth: "1000px" }}>
-            <h4 className="m-0">{userProfileDetails.name}</h4>
-            {/* <h5>{userProfileDetails.location}</h5> */}
-            <p className="m-0">{userProfileDetails.bio}</p>
-            {/* <a
-              href={userProfileDetails.website}
-              className="text-decoration-none"
-            >
-              {userProfileDetails.website}
-            </a> */}
           </div>
         </div>
         <div className="row m-0 mb-4">
           <div className="col-12 col-md-6">
-            <Calendar />
+            <Calendar
+              value={selectedDate}
+              tileContent={tileContent}
+              onClickDay={(date) => {
+                setSelectedDate(date);
+                handleSelectOutFits(date);
+              }}
+              minDate={new Date()}
+            />
           </div>
           <div
             className="col-12 col-md-6"
@@ -151,56 +236,69 @@ const ExploreUserProfileDetails = () => {
               }
             `}
             </style>
-            {userProfileDetails.wardrow_categories.map((item, index) => (
-              <div
-                key={index}
-                className="rounded-pill mb-3"
-                style={{ backgroundColor: "#4C4C4C" }}
-              >
-                <div className="d-flex align-items-center">
+            {wardrow_categories.map((item, index) => (
+              <Link to={item?.url} className="text-decoration-none">
+                <div
+                  key={index}
+                  className="rounded-pill mb-3 d-flex align-items-center"
+                  style={{
+                    backgroundColor: "#4C4C4C",
+                    height: "100px",
+                    padding: "10px",
+                  }}
+                >
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="profile-image rounded-start-pill"
-                    style={{ width: "100%", maxWidth: "200px" }}
+                    className="profile-image"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      marginRight: "10px",
+                    }}
                   />
-                  <div className="text-start p-3 d-flex flex-column justify-content-center text-white w-100">
-                    <h4 className="fw-bold mb-0">{item.title}</h4>
-                    <div className="d-flex align-items-center">
-                      <h6 className="mb-0 me-4">{item.date}</h6>
-                    </div>
+                  <div className="text-start text-white">
+                    <h4 className="fw-bold mb-1">{item.title}</h4>
+                    <h6 className="mb-0">{item.date}</h6>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
         <div className="row gy-1 g-1 m-0">
-          {userProfileDetails.images.map((image, index) => (
-            <div
-              key={index}
-              className="col-12 col-md-4 d-flex justify-content-center align-items-center"
-            >
-              <img
-                className="w-100 rounded-4"
-                src={image}
-                alt={`User Image ${index + 1}`}
+          {userPostDetails?.user?.image &&
+            userPostDetails.user.image.map((image, index) => (
+              <div
+                key={index}
+                className="col-12 col-md-4 d-flex justify-content-center align-items-center rounded-4"
                 style={{
-                  transition: "transform 0.3s ease",
+                  height: "300px",
+                  overflow: "hidden",
+                  position: "relative",
+                  backgroundColor: "#f0f0f0",
                 }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "scale(0.9)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "scale(1)";
-                }}
-              />
-            </div>
-          ))}
+              >
+                <img
+                  className="w-100 h-100 object-fit-cover rounded-4"
+                  src={image}
+                  alt={`User Image ${index + 1}`}
+                  style={{
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "scale(0.9)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "scale(1)";
+                  }}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>
   );
 };
-
 export default ExploreUserProfileDetails;

@@ -39,13 +39,6 @@ const MarketPlace = () => {
   const cart = useSelector((state) => state.cart.cart);
   const token = getCookie("authToken");
 
-  const featuredCollection = [
-    { name: "Leather Jackets", imgSrc: leatherjacket },
-    { name: "Leather Jackets", imgSrc: leatherjacket },
-    { name: "Leather Jackets", imgSrc: leatherjacket },
-    { name: "Leather Jackets", imgSrc: leatherjacket },
-  ];
-
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -307,60 +300,6 @@ const MarketPlace = () => {
                 )}
               </div>
             </div>
-
-            {/* -----------------------Featured Collection------------------------- */}
-            {/* <Swiper
-              modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={50}
-              className="swiper-types-custom"
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              navigation
-              breakpoints={{
-                640: {
-                  slidesPerView: 1,
-                },
-                768: {
-                  slidesPerView: 2,
-                },
-                1024: {
-                  slidesPerView: 3,
-                },
-              }}
-            >
-              <div className="d-flex flex-nowrap">
-                {featuredCollection.map((style, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="col flex-shrink-0">
-                      <div>
-                        <div>
-                          <img
-                            src={style.imgSrc}
-                            className="w-100 h-100"
-                            style={{
-                              borderTopRightRadius: "60px",
-                              borderTopLeftRadius: "60px",
-                            }}
-                            alt={style.name} />
-                        </div>
-                        <h6
-                          className="text-white d-flex justify-content-center align-items-center w-100 h-100 py-4"
-                          style={{
-                            backgroundColor: "#4C4C4C",
-                            borderBottomRightRadius: "60px",
-                            borderBottomLeftRadius: "60px",
-                          }}
-                        >
-                          {style.name}
-                        </h6>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </div>
-            </Swiper> */}
           </div>
         </>
       )}

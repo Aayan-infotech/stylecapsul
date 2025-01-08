@@ -54,6 +54,7 @@ import { Cloths } from "./components/explore/Cloths.jsx";
 import { ClothsDetails } from "./components/explore/ClothsDetails.jsx";
 import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCalendarDetails.jsx";
 import ExploreUserProfileDetails from "./components/explore/ExploreUserProfileDetails.jsx";
+import CheckoutForm from "./components/stylist/CheckoutForm.jsx";
 
 const Routing = () => {
   return (
@@ -107,7 +108,9 @@ const Routing = () => {
             <Route path="/schedule-booking" element={<ScheduleBooking />} />
             -------------------------------social media-----------------
             <Route path="/explore" element={<Explore />} />
+            <Route path="/checkoutForm" element={<CheckoutForm />} />
             <Route path="/socialUserDetails/:postId" element={<SocialUserDetails />} />
+            {/* <Route path="/socialUserDetails" element={<SocialUserDetails />} /> */}
             <Route path="/cloths" element={<Cloths />} />
             <Route path="/cloths-details/:id" element={<ClothsDetails />} />
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>

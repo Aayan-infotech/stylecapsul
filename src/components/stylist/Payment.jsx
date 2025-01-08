@@ -14,6 +14,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
 
 const stripePromise = loadStripe(
   "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
@@ -29,7 +30,6 @@ const PaymentForm = () => {
   const location = useLocation();
   const userId = getCookie("userId");
   const { paymentDetailsWithaddressId } = location.state || {};
-  console.log(paymentDetailsWithaddressId?.paymentDetails?.cartId, "");
   const token = getCookie("authToken");
 
   const handleStripePayment = async (e) => {
@@ -131,6 +131,48 @@ const PaymentForm = () => {
   );
 };
 
+const makePayment = async () => {
+  const stripe = await loadStripe(
+    "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
+  );
+  const products = [
+    {
+      dish: "Pizza",
+      imgdata: "https://example.com/pizza.jpg",
+      price: 500,
+      qnty: 2,
+    },
+    {
+      dish: "Burger",
+      imgdata: "https://example.com/burger.jpg",
+      price: 300,
+      qnty: 1,
+    },
+  ];
+
+  try {
+    const response = await axios.post(
+      "http://localhost:7000/api/create-checkout-session",
+      { products },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const { id: sessionId } = response.data;
+    const result = await stripe.redirectToCheckout({
+      sessionId,
+    });
+    navigate("/thanku", { state: { paymentIntent } });
+    if (result.error) {
+      console.error(result.error.message);
+    }
+  } catch (error) {
+    console.error("Error creating checkout session:", error);
+  }
+};
+
 const Payment = () => {
   const location = useLocation();
   const { paymentDetailsWithaddressId } = location.state || {};
@@ -139,6 +181,9 @@ const Payment = () => {
     <div className="payment-container">
       <div className="container w-75 text-center">
         <h1 className="fw-bold text-center fs-1">Payment</h1>
+        <button className="btn btn-primary" onClick={makePayment} type="button">
+          Checkout
+        </button>
         <Elements stripe={stripePromise}>
           <PaymentForm
             paymentDetailsWithaddressId={paymentDetailsWithaddressId}
@@ -155,6 +200,9 @@ const Payment = () => {
           <img src={paypal} height={30} alt="PayPal" />
         </div>
       </div>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm />
+      </Elements>
     </div>
   );
 };

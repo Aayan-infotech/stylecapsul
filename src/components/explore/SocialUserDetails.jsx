@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import showimg4 from "../../assets/marketplace/showimg4.jpg";
-import SettingsIcon from "@mui/icons-material/Settings";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Avatar, IconButton } from "@mui/material";
-import { Edit, Delete, Share } from "@mui/icons-material";
-import day1formal from "../../assets/myCapsuleAddAvtar/for2-removebg-preview.png";
-import Explore from "./Explore";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-creative";
-import { EffectCreative } from "swiper/modules";
-import Loader from "../Loader/Loader";
+import { Avatar } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
+import notification from "../../assets/closetmanagement/Group 1806.png";
+import closet from "../../assets/closetmanagement/closet.png";
+import coinhand from "../../assets/closetmanagement/coin-hand.png";
+import imagefocus from "../../assets/closetmanagement/image-focus.png";
 
 export const SocialUserDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedDetails, setSelectedDetails] = useState(null);
   const [userPostDetails, setUserPostDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [clothesOnDates, setClothesOnDates] = useState([]);
@@ -30,73 +24,46 @@ export const SocialUserDetails = () => {
   const { postId } = useParams();
 
   const userProfileDetails = {
-    name: "Anshuman Rai",
-    location: "America",
-    bio: "respect is earned honesty is appreciated trust is gained loyalty is returned",
-    website:
-      "https://www.thestylecapsule.com.au/?srsltid=AfmBOopVoKLa1bj1jGgxH9gpcD61_iWxvK7E3lIiu1Ffs6-gYVRFRqDn",
-    avatarUrl: "",
-    stats: [
-      { label: "posts", value: 26 },
-      { label: "followers", value: 206 },
-      { label: "following", value: 126 },
-    ],
-    images: [
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR__zJOFi3ef7eGRIlVWo2DKdUXKrCq8dBwtQ&s",
-    ],
     wardrow_categories: [
       {
+        id: 1,
+        image: notification,
         title: "Clothes",
-        date: "23 Jan 2024",
-        image: showimg4,
+        imageAlt: "Notification",
+        imageStyle: { width: "50px", height: "45px" },
+        url: "/all-clothes-list/clothes",
       },
       {
+        id: 2,
+        image: closet,
         title: "Shoes",
-        date: "23 Jan 2024",
-        image: showimg4,
+        imageAlt: "closet",
+        imageStyle: { width: "50px", height: "45px" },
+        url: "/all-clothes-list/shoes",
       },
       {
+        id: 3,
+        image: coinhand,
         title: "Accessories",
-        date: "25 Mar 2024",
-        image: showimg4,
+        imageAlt: "coinhand",
+        imageStyle: { width: "50px", height: "45px" },
+        url: "/all-clothes-list/accessories",
       },
       {
-        title: "Other",
-        date: "23 Jan 2024",
-        image: showimg4,
+        id: 4,
+        image: imagefocus,
+        title: "Miscellaneous",
+        imageAlt: "imagefocus",
+        imageStyle: { width: "50px", height: "45px" },
+        url: "/all-clothes-list/miscellaneous",
       },
     ],
   };
 
-  const fetchDayByCloths = async () => {
-    try {
-      const response = await axios.get(apiUrl("api/myStyleCapsule/getStyle"), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const data = response?.data?.data?.styleOfTheDay || [];
-      const formattedData = data.map((item) => ({
-        date: item.date,
-        thumbnail: item.picture.map((picture) => apiUrl(`uploads/${picture}`)),
-        id: response?.data?.data?._id || null,
-      }));
-      setClothesOnDates(formattedData);
-    } catch (error) {
-      console.error("Error fetching clothes data:", error);
-    }
-  };
-
-  const fetchPostDetails = async () => {
+  const fetchPostDetailsByUs = async () => {
     try {
       const response = await axios.get(
-        apiUrl(`api/explore/get-post/${postId}`),
+        apiUrl(`api/explore/user-posts-profile/${postId}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,9 +71,29 @@ export const SocialUserDetails = () => {
           },
         }
       );
-      console.log(response?.data?.data, "response?.data?.data");
       if (response?.data?.success) {
-        setUserPostDetails(response?.data?.data);
+        setUserPostDetails(response?.data);
+        const data = response?.data?.styleOfTheDay || [];
+
+        const formattedData = data
+          .map((item) => {
+            const styleOfTheDay = item?.styleOfTheDay || {};
+            const date = styleOfTheDay.date
+              ? styleOfTheDay.date.split("T")[0]
+              : null;
+            const pictures = styleOfTheDay.clothes
+              ?.filter((cloth) => cloth?.picture)
+              .map((cloth) => cloth.picture);
+
+            return {
+              date,
+              thumbnail: pictures || [],
+              id: item._id || null,
+            };
+          })
+          .filter((item) => item.date);
+
+        setClothesOnDates(formattedData);
       }
     } catch (error) {
       console.error("Error fetching clothes data:", error);
@@ -114,9 +101,8 @@ export const SocialUserDetails = () => {
   };
 
   useEffect(() => {
-    fetchDayByCloths();
     if (postId) {
-      fetchPostDetails();
+      fetchPostDetailsByUs();
     }
   }, [postId]);
 
@@ -133,7 +119,7 @@ export const SocialUserDetails = () => {
       const dateEntry = clothesOnDates.find(
         (item) => item.date === formattedDate
       );
-      if (dateEntry) {
+      if (dateEntry && dateEntry.thumbnail.length > 0) {
         return (
           <div
             style={{
@@ -141,13 +127,13 @@ export const SocialUserDetails = () => {
               flexDirection: "column",
               alignItems: "center",
               gap: "4px",
-              overflow: "hidden",
             }}
           >
             {dateEntry.thumbnail.map((image, index) => (
               <img
                 key={index}
                 src={image}
+                alt={image}
                 style={{
                   width: "15px",
                   height: "auto",
@@ -163,19 +149,13 @@ export const SocialUserDetails = () => {
     return null;
   };
 
-  const handleClick = (item) => {
-    navigate("/cloths", { state: { item } });
-  };
-
   const handleSelectOutFits = (date) => {
     const formattedDate = formatDate(date);
     const details = clothesOnDates.find((item) => item.date === formattedDate);
     if (details) {
       const selectedData = { date: formattedDate, images: details.thumbnail };
-      setSelectedDetails(selectedData);
       navigate("/capsulerangecalendardetails", { state: { selectedData } });
     } else {
-      setSelectedDetails(null);
       console.log("No data found for this date.");
     }
   };
@@ -193,66 +173,31 @@ export const SocialUserDetails = () => {
       style={{ paddingTop: "6rem" }}
     >
       <div className="container d-block px-4">
-        <div className="d-flex justify-content-between mx-5">
-          <h1></h1>
-          <div className="dropdown">
-            <SettingsIcon
-              style={{ fontSize: 30, color: "black" }}
-              data-bs-toggle="dropdown"
-            />
-            <ul className="dropdown-menu">
-              <li>
-                <a className="dropdown-item" href="#">
-                  Delete Profile
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
         <div className="row gy-4 m-0 mb-4">
-          <div className="col-12 col-md-3 d-flex justify-content-center align-items-center">
-            <div
-              style={{
-                border: "2px solid black",
-                padding: "5px",
-                borderRadius: "50%",
-                boxShadow: "0px 0px 15px 5px",
-                cursor: "pointer",
-              }}
-              className="rounded-circle"
-            >
+          <div className="col-12 d-flex justify-content-center align-items-center">
+            <div className="text-center">
               <Avatar
                 alt="User Avatar"
-                className="rounded-circle"
-                sx={{ width: 150, height: 150 }}
-                src={userProfileDetails.avatarUrl}
+                className="rounded-circle mb-2"
+                sx={{ width: 200, height: 200 }}
+                src={userPostDetails?.user?.profileImage || blank_img}
+                style={{
+                  border: "2px solid black",
+                  padding: "5px",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
+                  cursor: "pointer",
+                  padding: "5px",
+                }}
               />
+              <h4 className="fw-bold">
+                {userPostDetails?.user?.firstName
+                  ? userPostDetails?.user?.firstName.charAt(0).toUpperCase() +
+                    userPostDetails?.user?.firstName.slice(1).toLowerCase()
+                  : ""}
+              </h4>
+              <p className="m-0">{userPostDetails?.user?.bio}</p>
             </div>
-          </div>
-          <div className="col-12 col-md-9">
-            <div className="d-flex justify-content-around">
-              {userProfileDetails.stats.map((stat, index) => (
-                <div key={index} className="p-2 text-center">
-                  <h4 className="fw-bold">{stat.value}</h4>
-                  <h5>{stat.label}</h5>
-                </div>
-              ))}
-            </div>
-            <div className="p-3 my-3">
-              <button type="button" class="btn btn-dark rounded-pill w-100 p-2">
-                Share Profile
-              </button>
-            </div>
-          </div>
-          <div className="col-12 mx-auto" style={{ maxWidth: "1000px" }}>
-            <h4 className="m-0">{userPostDetails?.user?.firstName ? userPostDetails?.user?.firstName.charAt(0).toUpperCase() + userPostDetails?.user?.firstName.slice(1).toLowerCase() : ""}</h4>
-            <p className="m-0">{userPostDetails?.user?.bio}</p>
-            {/* <a
-              href={userProfileDetails.website}
-              className="text-decoration-none"
-            >
-              {userProfileDetails.website}
-            </a> */}
           </div>
         </div>
         <div className="row m-0 mb-4">
@@ -295,51 +240,65 @@ export const SocialUserDetails = () => {
             `}
             </style>
             {userProfileDetails.wardrow_categories.map((item, index) => (
-              <div
-                key={index}
-                className="rounded-pill mb-3"
-                style={{ backgroundColor: "#4C4C4C" }}
-              >
-                <div className="d-flex align-items-center">
+              <Link to={item.url} className="text-decoration-none">
+                <div
+                  key={index}
+                  className="rounded-pill mb-3 d-flex align-items-center"
+                  style={{
+                    backgroundColor: "#4C4C4C",
+                    height: "100px",
+                    padding: "10px",
+                  }}
+                >
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="profile-image rounded-start-pill"
-                    style={{ width: "100%", maxWidth: "200px" }}
+                    className="profile-image"
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      marginRight: "10px",
+                    }}
                   />
-                  <div className="text-start p-3 d-flex flex-column justify-content-center text-white w-100">
-                    <h4 className="fw-bold mb-0">{item.title}</h4>
-                    <div className="d-flex align-items-center">
-                      <h6 className="mb-0 me-4">{item.date}</h6>
-                    </div>
+                  <div className="text-start text-white">
+                    <h4 className="fw-bold mb-1">{item.title}</h4>
+                    <h6 className="mb-0">{item.date}</h6>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
         <div className="row gy-1 g-1 m-0">
-          {userProfileDetails.images.map((image, index) => (
-            <div
-              key={index}
-              className="col-12 col-md-4 d-flex justify-content-center align-items-center"
-            >
-              <img
-                className="w-100 rounded-4"
-                src={image}
-                alt={`User Image ${index + 1}`}
+          {userPostDetails.images &&
+            userPostDetails.images.map((image, index) => (
+              <div
+                key={index}
+                className="col-12 col-md-4 d-flex justify-content-center align-items-center rounded-4"
                 style={{
-                  transition: "transform 0.3s ease",
+                  height: "300px",
+                  overflow: "hidden",
+                  position: "relative",
+                  backgroundColor: "#f0f0f0",
                 }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = "scale(0.9)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = "scale(1)";
-                }}
-              />
-            </div>
-          ))}
+              >
+                <img
+                  className="w-100 h-100 object-fit-cover rounded-4"
+                  src={image}
+                  alt={`User Image ${index + 1}`}
+                  style={{
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "scale(0.9)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "scale(1)";
+                  }}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>
