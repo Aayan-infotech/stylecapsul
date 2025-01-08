@@ -203,6 +203,7 @@ const Explore = ({ isAuth }) => {
   };
 
   const handleReplyChange = (postIndex, commentIndex, value) => {
+    console.log(value, 'value');
     const updatedPosts = allSocialPosts.map((post, idx) => {
       if (idx === postIndex) {
         return {
@@ -676,7 +677,7 @@ const Explore = ({ isAuth }) => {
                                   {comment.replies &&
                                     comment.replies.length > 0 && (
                                       <div className="ms-5">
-                                        {comment.replies.map(
+                                        {comment?.replies?.map(
                                           (reply, replyIndex) => (
                                             <div
                                               key={replyIndex}
@@ -687,7 +688,7 @@ const Explore = ({ isAuth }) => {
                                                   alt="User Avatar"
                                                   sx={{ width: 30, height: 30 }}
                                                   className="me-2"
-                                                  src={blank_img}
+                                                  src={reply?.replies?.user?.profileImage || blank_img}
                                                 />
                                                 <div
                                                   className="text-black p-2 rounded-3"
@@ -724,7 +725,7 @@ const Explore = ({ isAuth }) => {
                                       type="text"
                                       className="form-control mb-2"
                                       placeholder="Write a reply..."
-                                      value={comment?.newReply || ""}
+                                      value={comment?.newReply}
                                       onChange={(e) =>
                                         handleReplyChange(
                                           index,
