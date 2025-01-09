@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import showimg4 from "../../assets/marketplace/showimg4.jpg";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Avatar } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
@@ -25,42 +23,40 @@ export const SocialUserDetails = () => {
   const token = getCookie("authToken");
   const { postId } = useParams();
 
-  const userProfileDetails = {
-    wardrow_categories: [
-      {
-        id: 1,
-        image: notification,
-        title: "Clothes",
-        imageAlt: "Notification",
-        imageStyle: { width: "50px", height: "45px" },
-        url: "/all-clothes-list/clothes",
-      },
-      {
-        id: 2,
-        image: closet,
-        title: "Shoes",
-        imageAlt: "closet",
-        imageStyle: { width: "50px", height: "45px" },
-        url: "/all-clothes-list/shoes",
-      },
-      {
-        id: 3,
-        image: coinhand,
-        title: "Accessories",
-        imageAlt: "coinhand",
-        imageStyle: { width: "50px", height: "45px" },
-        url: "/all-clothes-list/accessories",
-      },
-      {
-        id: 4,
-        image: imagefocus,
-        title: "Miscellaneous",
-        imageAlt: "imagefocus",
-        imageStyle: { width: "50px", height: "45px" },
-        url: "/all-clothes-list/miscellaneous",
-      },
-    ],
-  };
+  const wardrow_categories = [
+    {
+      id: 1,
+      image: notification,
+      title: "Clothes",
+      imageAlt: "Notification",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/clothes",
+    },
+    {
+      id: 2,
+      image: closet,
+      title: "Shoes",
+      imageAlt: "closet",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/shoes",
+    },
+    {
+      id: 3,
+      image: coinhand,
+      title: "Accessories",
+      imageAlt: "coinhand",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/accessories",
+    },
+    {
+      id: 4,
+      image: imagefocus,
+      title: "Miscellaneous",
+      imageAlt: "imagefocus",
+      imageStyle: { width: "50px", height: "45px" },
+      url: "/all-clothes-list/miscellaneous",
+    },
+  ]
 
   const fetchPostDetailsByUs = async () => {
     setLoading(true);
@@ -157,7 +153,7 @@ export const SocialUserDetails = () => {
     const formattedDate = formatDate(date);
     const details = clothesOnDates.find((item) => item.date === formattedDate);
     if (details) {
-      const selectedData = { date: formattedDate, images: details.thumbnail };
+      const selectedData = { date: formattedDate, images: details.thumbnail, userPostDetails:userPostDetails };
       navigate("/capsulerangecalendardetails", { state: { selectedData } });
     } else {
       console.log("No data found for this date.");
@@ -225,7 +221,7 @@ export const SocialUserDetails = () => {
               <div
                 className="col-12 col-md-6"
                 style={{
-                  height: "300px",
+                  height: "350px",
                   overflowY: "auto",
                   borderRadius: "10px",
                   backgroundColor: "#f0f0f0",
@@ -249,25 +245,25 @@ export const SocialUserDetails = () => {
               }
             `}
                 </style>
-                {userProfileDetails.wardrow_categories.map((item, index) => (
+                {wardrow_categories.map((item, index) => (
                   <Link to={item.url} className="text-decoration-none">
                     <div
                       key={index}
                       className="rounded-pill mb-3 d-flex align-items-center"
                       style={{
                         backgroundColor: "#4C4C4C",
-                        height: "100px",
+                        height: "70px",
                         padding: "10px",
                       }}
                     >
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="profile-image"
+                        className="profile-image me-3"
                         style={{
                           width: "50px",
                           height: "50px",
-                          marginRight: "10px",
+                          marginLeft: "15px",
                         }}
                       />
                       <div className="text-start text-white">

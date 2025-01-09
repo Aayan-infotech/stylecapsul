@@ -438,14 +438,6 @@ const Explore = ({ isAuth }) => {
                         </Link>
                         <div>
                           <div className="d-flex">
-                            {/* <PersonAddAltIcon
-                              className="me-4 fw-bold fs-3"
-                              sx={{
-                                cursor: "pointer",
-                                color: isFollowing ? "blue" : "black",
-                              }}
-                              onClick={() => handleFollow(post?.user?._id)}
-                            /> */}
                             <i
                               id="dropdownIcon"
                               className="fa-solid fa-ellipsis-vertical fs-4 text-black"
@@ -547,8 +539,7 @@ const Explore = ({ isAuth }) => {
                           >
                             {post.comments && post.comments.length} Comments
                           </h6>
-                          {/* <h6>{post.shares} Shares</h6> */}
-                          <h5 style={{ cursor: "pointer" }}>
+                          {/* <h5 style={{ cursor: "pointer" }}>
                             <a
                               href="https://www.instagram.com/thestylecapsule/?hl=en"
                               target="_blank"
@@ -560,7 +551,7 @@ const Explore = ({ isAuth }) => {
                             >
                               <i className="fa-solid fa-share me-2"></i> Share
                             </a>
-                          </h5>
+                          </h5> */}
                         </div>
                       </div>
 
@@ -578,12 +569,19 @@ const Explore = ({ isAuth }) => {
                         >
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
-                        <h5
-                          onClick={() => handleShare(index)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i className="fa-solid fa-share me-2"></i> Share
-                        </h5>
+                        <h5 style={{ cursor: "pointer" }}>
+                            <a
+                              href="https://www.instagram.com/thestylecapsule/?hl=en"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              <i className="fa-solid fa-share me-2"></i> Share
+                            </a>
+                          </h5>
                       </div>
                       <hr />
                       {post.showComments && (

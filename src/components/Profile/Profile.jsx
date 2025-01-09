@@ -13,14 +13,18 @@ import {
 import { IoIosArrowForward } from "react-icons/io";
 import profile from "./img/profile.png";
 import Loader from "../Loader/Loader.jsx";
+import axios from "axios";
+import { getCookie } from "../../utils/cookieUtils";
+import { apiUrl } from "../../../apiUtils";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
   const [logedInUserData, setLogedInUserData] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [uploadProgress, setUploadProgress] = useState(0);
   const navigate = useNavigate();
-  console.log(logedInUserData, 'logedInUserData abinash')
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
@@ -46,6 +50,54 @@ function Profile() {
     });
   };
 
+  const handleImageClick = () => {
+    document.getElementById("fileInput").click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPreviewImage(previewUrl);
+      handleUploadProfileImage(file);
+    }
+  };
+
+  const handleUploadProfileImage = async (file) => {
+    try {
+      const token = getCookie("authToken");
+      const userId = getCookie("userId");
+      const formData = new FormData();
+      formData.append("image", file, file.name);
+      const response = await axios.post(
+        apiUrl(`api/user/profile/${userId}`),
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setUploadProgress(percentCompleted); // Update progress state
+          },
+        }
+      );
+      if (response?.data?.profileImage) {
+        setLogedInUserData((prevData) => ({
+          ...prevData,
+          profileImage: response.data.profileImage,
+        }));
+      }
+      console.log("Upload success:", response.data);
+    } catch (error) {
+      console.error("Error uploading avatar image:", error);
+      setUploadProgress(0);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -58,14 +110,44 @@ function Profile() {
                 <div className="row gx-2">
                   <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                     <div className="text-center">
-                      <img
-                        src={logedInUserData?.profileImage || profile}
-                        alt="Profile"
-                        className="rounded-pill"
-                        height={120}
-                        width={120}
-                        style={{objectFit:"cover"}}
-                      />
+                      <div className="hover-upload-profile">
+                        <div
+                          className="profile-image-container"
+                          onClick={handleImageClick}
+                        >
+                          <img
+                            src={
+                              previewImage ||
+                              logedInUserData?.profileImage ||
+                              profile
+                            }
+                            alt="Profile"
+                            className="rounded-pill"
+                            height={200}
+                            width={200}
+                            style={{ objectFit: "cover" }}
+                          />
+                          <div className="upload-overlay">
+                            <i className="fa fa-camera"></i> {/* Upload icon */}
+                          </div>
+                        </div>
+                        <input
+                          type="file"
+                          id="fileInput"
+                          style={{ display: "none" }}
+                          accept="image/*"
+                          onChange={handleFileChange}
+                        />
+                        {uploadProgress > 0 && uploadProgress < 100 && (
+                          <div className="progress-container">
+                            <CircularProgress
+                              variant="determinate"
+                              value={uploadProgress}
+                              color="primary"
+                            />
+                          </div>
+                        )}
+                      </div>
                       <div className="profile-info mt-3">
                         <h2>
                           {(logedInUserData?.firstName || "Default Name")

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import imagepreview from "../../assets/addclothes/add-photo-style.png";
 import "../../styles/AddClothes.scss";
-import { useDispatch, useSelector } from 'react-redux';
-import { addClothes } from '../../reduxToolkit/addClothesSlice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from "react-redux";
+import { addClothes } from "../../reduxToolkit/addClothesSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { apiUrl } from '../../../apiUtils';
+import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
@@ -44,43 +44,48 @@ const AddClothes = () => {
     { value: "jewelry", label: "Jewelry" },
     { value: "costume", label: "Costume" },
     { value: "top", label: "Top" },
-    { value: "leggings", label: "Leggings" }
+    { value: "leggings", label: "Leggings" },
   ];
 
   const { user, status, error } = useSelector((state) => state.login);
   const [imagePreview, setImagePreview] = useState(imagepreview);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({
-    category: '',
-    part: '',
-    typesOfCloths: '',
-    season: '',
-    brand: '',
-    purchaseDate: '',
-    description: '',
+    category: "",
+    part: "",
+    typesOfCloths: "",
+    season: "",
+    brand: "",
+    purchaseDate: "",
+    description: "",
     image: null,
   });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const token = getCookie('authToken');
-  console.log(token)
+  const token = getCookie("authToken");
+  console.log(token);
   const updateNewCloth = location?.state?.updateCloth;
   const currentCategory = location.state?.currentCategory;
 
   useEffect(() => {
     if (updateNewCloth) {
       setFormData({
-        category: updateNewCloth?.category ? updateNewCloth?.category.toLowerCase() : '',
-        part: updateNewCloth.part || '',
-        typesOfCloths: updateNewCloth.typesOfCloths || '',
-        season: updateNewCloth.season || '',
-        brand: updateNewCloth.brand || '',
-        purchaseDate: updateNewCloth?.purchaseDate ? updateNewCloth?.purchaseDate.split('T')[0] : '',
-        description: updateNewCloth.description || '',
+        category: updateNewCloth?.category
+          ? updateNewCloth?.category.toLowerCase()
+          : "",
+        part: updateNewCloth.part || "",
+        typesOfCloths: updateNewCloth.typesOfCloths || "",
+        season: updateNewCloth.season || "",
+        brand: updateNewCloth.brand || "",
+        purchaseDate: updateNewCloth?.purchaseDate
+          ? updateNewCloth?.purchaseDate.split("T")[0]
+          : "",
+        description: updateNewCloth.description || "",
         image: null,
       });
-      setImagePreview(updateNewCloth.picture || '');
+      setImagePreview(updateNewCloth.picture || "");
     }
   }, [updateNewCloth]);
 
@@ -101,40 +106,67 @@ const AddClothes = () => {
   };
 
   const handleImageClick = () => {
-    document.getElementById('imageUpload').click();
+    document.getElementById("imageUpload").click();
   };
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split("T")[0];
+  const validateForm = () => {
+    const {
+      category,
+      part,
+      typesOfCloths,
+      season,
+      brand,
+      purchaseDate,
+      description,
+    } = formData;
+    return (
+      category &&
+      part &&
+      typesOfCloths &&
+      season &&
+      brand &&
+      purchaseDate &&
+      description
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      showErrorToast("All fields are required!");
+      return;
+    }
+    setBtnLoader(true);
     const data = new FormData();
     for (let key in formData) {
       const value = formData[key];
-      if (key === 'image' && value === null && updateNewCloth) {
-        data.append('picture', updateNewCloth.picture);
+      if (key === "image" && value === null && updateNewCloth) {
+        data.append("picture", updateNewCloth.picture);
       } else {
-        data.append(key === 'image' ? 'picture' : key, value);
+        data.append(key === "image" ? "picture" : key, value);
       }
     }
     try {
       if (updateNewCloth) {
-        data.append('user_id', updateNewCloth.user_id);
-        const response = await axios.put(apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`), data, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
+        data.append("user_id", updateNewCloth.user_id);
+        const response = await axios.put(
+          apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`),
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
           }
-        });
+        );
         showSuccessToast(response?.data?.message);
         setTimeout(() => {
-          // navigate("/all-clothes-list");closet-categories
-          // navigate("/closet-categories");
           navigate(`/all-clothes-list/${location.state?.currentCategory}`);
         }, 1000);
       } else {
         const userId = user?.payload?._id;
         if (userId) {
-          data.append('user_id', userId);
+          data.append("user_id", userId);
         }
         const addclothesresponse = await dispatch(addClothes(data)).unwrap();
         showSuccessToast(addclothesresponse?.message);
@@ -148,8 +180,10 @@ const AddClothes = () => {
       const errorMessage = error.response?.data?.message || error.message;
       toast.error(errorMessage, {
         autoClose: 2000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
+        style: { backgroundColor: "#dc3545", color: "#fff" },
       });
+    } finally {
+      setBtnLoader(false);
     }
   };
 
@@ -165,7 +199,10 @@ const AddClothes = () => {
                 <div className="row g-2 w-100 m-0">
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
-                      <label htmlFor="category" className="form-label text-white">
+                      <label
+                        htmlFor="category"
+                        className="form-label text-white"
+                      >
                         Category
                       </label>
                       <select
@@ -175,7 +212,9 @@ const AddClothes = () => {
                         onChange={handleChange}
                         aria-label="category"
                       >
-                        <option value="" disabled>Select</option>
+                        <option value="" disabled>
+                          Select
+                        </option>
                         <option value="clothes">Clothe</option>
                         <option value="shoes">Shoes</option>
                         <option value="accessories">Accessories</option>
@@ -195,7 +234,9 @@ const AddClothes = () => {
                         onChange={handleChange}
                         aria-label="part"
                       >
-                        <option value="" disabled>Select</option>
+                        <option value="" disabled>
+                          Select
+                        </option>
                         <option value="outfitTop">Out Fit Top</option>
                         <option value="outfitBottom">Out Fit Bottom</option>
                         <option value="outfitFootwear">Out Fit Footwear</option>
@@ -207,7 +248,10 @@ const AddClothes = () => {
                   </div>
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
-                      <label htmlFor="category" className="form-label text-white">
+                      <label
+                        htmlFor="category"
+                        className="form-label text-white"
+                      >
                         Type of Clothes
                       </label>
                       <select
@@ -218,15 +262,18 @@ const AddClothes = () => {
                         onChange={handleChange}
                         aria-label="category"
                       >
-                        {clothingTypes.map(type => (
-                          <option key={type.value} value={type.value} disabled={type.disabled}>
+                        {clothingTypes.map((type) => (
+                          <option
+                            key={type.value}
+                            value={type.value}
+                            disabled={type.disabled}
+                          >
                             {type.label}
                           </option>
                         ))}
                       </select>
                     </div>
                   </div>
-
 
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
@@ -262,7 +309,10 @@ const AddClothes = () => {
                   </div>
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
-                      <label htmlFor="purchaseDate" className="form-label text-white">
+                      <label
+                        htmlFor="purchaseDate"
+                        className="form-label text-white"
+                      >
                         Purchase Date
                       </label>
                       <input
@@ -279,7 +329,10 @@ const AddClothes = () => {
                   </div>
                   <div className="col-12 col-md-10">
                     <div className="mb-3">
-                      <label htmlFor="description" className="form-label text-white">
+                      <label
+                        htmlFor="description"
+                        className="form-label text-white"
+                      >
                         Description
                       </label>
                       <textarea
@@ -294,40 +347,54 @@ const AddClothes = () => {
                     </div>
                   </div>
                   <div className="col-12 col-md-2 d-flex justify-content-center align-items-center">
-                 
-                      <div className="text-center mb-4 mb-lg-0">
-                        <div className="mt-lg-4 ">
-                          <img
-                            src={imagePreview}
-                            height={100}
-                            alt="Preview"
-                            onClick={handleImageClick}
-                            style={{ cursor: 'pointer' }}
-                          />
-                        </div>
-                        <label htmlFor="purchaseDate" className="form-label text-white fw-bold">Add Images</label>
-                        <input
-                          type="file"
-                          id="imageUpload"
-                          name="image"
-                          accept="image/*"
-                          onChange={handleChange}
-                          style={{ display: 'none' }}
+                    <div className="text-center mb-4 mb-lg-0">
+                      <div className="mt-lg-4 ">
+                        <img
+                          src={imagePreview}
+                          height={100}
+                          alt="Preview"
+                          onClick={handleImageClick}
+                          style={{ cursor: "pointer" }}
                         />
                       </div>
-                  
+                      <label
+                        htmlFor="purchaseDate"
+                        className="form-label text-white fw-bold"
+                      >
+                        Add Images
+                      </label>
+                      <input
+                        type="file"
+                        id="imageUpload"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleChange}
+                        style={{ display: "none" }}
+                      />
+                    </div>
                   </div>
                 </div>
                 <button
                   type="submit"
-                  className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
-                  {updateNewCloth ? "Update" : "Add"}
+                  className="rounded-pill fs-5 fw-bold btn btn-light add-btn"
+                >
+                  {/* {updateNewCloth ? "Update" : "Add"} */}
+                  {btnLoader ? (
+                    <span>
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Adding...
+                    </span>
+                  ) : updateNewCloth ? (
+                    "Update"
+                  ) : (
+                    "Add"
+                  )}
                 </button>
               </form>
             </div>
           </div>
-        </div >
-      </div >
+        </div>
+      </div>
     </>
   );
 };

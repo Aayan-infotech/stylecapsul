@@ -3,17 +3,17 @@ import blankimage from "../../assets/mystylecapsule/Group26992.png";
 import "../../styles/Mystylecapsule.scss";
 import { useLocation } from "react-router-dom";
 import CapsuleDialog from "../../components/explore/CapsuleDialog";
-import showimg4 from "../../assets/myCapsuleAddAvtar/previewImage4.jpg";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Avatar } from "@mui/material";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 
 export const CapsuleRangeCalendarDetails = () => {
   const [capsuleId, setCapsuleId] = useState([]);
   const location = useLocation();
   const { selectedData } = location.state || {};
-  console.log(selectedData, 'selectedData');
+  console.log(selectedData, "selectedData");
 
-  const [selectedImage, setSelectedImage] = useState(selectedData?.image || blankimage);
+  const [selectedImage, setSelectedImage] = useState(
+    selectedData?.image || blankimage
+  );
   const [selectedDate, setSelectedDate] = useState(selectedData?.date || "");
 
   const [columnsData, setColumnsData] = useState([
@@ -29,7 +29,6 @@ export const CapsuleRangeCalendarDetails = () => {
     [],
   ]);
 
-  // Update columnsData when selectedData is available
   useEffect(() => {
     if (selectedData && selectedData.images) {
       const updatedMiddleColumn = selectedData.images.map((img) => ({
@@ -40,7 +39,7 @@ export const CapsuleRangeCalendarDetails = () => {
       }));
       setColumnsData((prevData) => {
         const newColumnsData = [...prevData];
-        newColumnsData[1] = updatedMiddleColumn; // Set the images in the middle column
+        newColumnsData[1] = updatedMiddleColumn;
         return newColumnsData;
       });
     }
@@ -57,7 +56,7 @@ export const CapsuleRangeCalendarDetails = () => {
     }));
     setColumnsData((prevData) => {
       const newColumnsData = [...prevData];
-      newColumnsData[1] = updatedMiddleColumn; 
+      newColumnsData[1] = updatedMiddleColumn;
       return newColumnsData;
     });
 
@@ -75,16 +74,27 @@ export const CapsuleRangeCalendarDetails = () => {
         <div className="container">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <Avatar
-                alt="Remy Sharp"
-                src={selectedImage || showimg4}
-                className="rounded-pill"
-                sx={{ height: "80px", width: "80px", backgroundColor: "#e0e0e0", objectFit: "contain" }}
+              <img
+                alt="User Avatar"
+                className="rounded-circle mb-2"
+                src={
+                  selectedData?.userPostDetails?.user?.profileImage || blank_img
+                }
+                style={{
+                  border: "2px solid black",
+                  padding: "5px",
+                  borderRadius: "50%",
+                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
+                  cursor: "pointer",
+                  padding: "5px",
+                  height: "80px", width: "80px",
+                }}
               />
-              <h5 className="fw-bold">Anshuman</h5>
-              <p className="mb-0">Elizabeth@gmail.com</p>
+              <h5 className="fw-bold">
+                {selectedData?.userPostDetails?.user?.firstName}
+              </h5>
               <blockquote className="fw-bold text-center">
-                "Fashions fade, style is eternal."
+                "{selectedData?.userPostDetails?.user?.bio}"
               </blockquote>
             </div>
 
@@ -109,12 +119,22 @@ export const CapsuleRangeCalendarDetails = () => {
           </div>
 
           {/* Image columns */}
-          <div className="mt-5" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div
+            className="my-1"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <div className="row gx-5">
               {columnsData.map((column, columnIndex) => (
                 <div key={columnIndex} className="col-12 col-md-4">
                   {column.length === 0 ? (
-                    <div className="p-3" style={{ height: "450px", backgroundColor: "#e0e0e0" }}>
+                    <div
+                      className="p-3"
+                      style={{ height: "450px", backgroundColor: "#e0e0e0" }}
+                    >
                       <div className="d-flex justify-content-center align-items-center h-100 rounded-4">
                         <div className="text-center">
                           <img src={blankimage} alt="" className="" />
@@ -124,10 +144,17 @@ export const CapsuleRangeCalendarDetails = () => {
                     </div>
                   ) : (
                     column.map((image, imageIndex) => (
-                      <div className="p-3" style={{ height: "450px", backgroundColor: "#e0e0e0" }}>
+                      <div
+                        className="p-3"
+                        style={{ height: "450px", backgroundColor: "#e0e0e0" }}
+                      >
                         <div className="d-flex justify-content-center align-items-center h-100 rounded-4">
                           <div className="text-center">
-                            <img src={image.src} alt={`Image ${imageIndex}`} className="w-100" />
+                            <img
+                              src={image.src}
+                              alt={`Image ${imageIndex}`}
+                              className="w-100"
+                            />
                           </div>
                         </div>
                       </div>
@@ -137,8 +164,7 @@ export const CapsuleRangeCalendarDetails = () => {
               ))}
             </div>
 
-            {/* Like, Comment, and Share section */}
-            <div className="border-bottom w-100">
+            {/* <div className="border-bottom w-100">
               <div className="d-flex justify-content-between pt-2 mt-4">
                 <div className="d-flex align-items-center text-black">
                   <ThumbUpIcon className="fs-5 me-3" />
@@ -160,7 +186,7 @@ export const CapsuleRangeCalendarDetails = () => {
                   <i className="fa-solid fa-share me-2"></i> Share
                 </h5>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -43,6 +43,7 @@ function ProfileAvatar() {
   const [waist, setWaist] = useState(null);
   const [hips, setHips] = useState(null);
   const [highHips, setHighHips] = useState(null);
+  const [btnLoader, setBtnLoader] = useState(false);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -51,9 +52,6 @@ function ProfileAvatar() {
   const updatedProfileData = location.state?.user;
   const { user, status } = useSelector((state) => state.login);
   const user_id = user?.payload?._id || user?._id;
-  
-  // const { avatarImage } = location.state || {};
-  // console.log(avatarImage, "avatarImage");
 
   const handleImageChange = (image) => {
     setCurrentImageAvtar(image);
@@ -103,6 +101,7 @@ function ProfileAvatar() {
           );
         }
       } catch (error) {
+        showErrorToast(error?.message);
         console.error("Error fetching profile:", error);
       }
     };
@@ -163,6 +162,7 @@ function ProfileAvatar() {
 
   const handleUpdate = async () => {
     try {
+      setBtnLoader(true);
       const actionResult = await dispatch(
         createBasic({
           userId: user_id,
@@ -195,6 +195,8 @@ function ProfileAvatar() {
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       showErrorToast(errorMessage);
+    } finally {
+      setBtnLoader(false);
     }
   };
 
@@ -213,7 +215,12 @@ function ProfileAvatar() {
               <div className="p-2 d-flex justify-content-end align-items-center">
                 <div className="current-avtar">
                   <div className="avtar-background d-flex justify-content-center align-items-center">
-                    <img src={formData?.profileImage || currentImageAvtar} className="rounded-circle" height={300} alt="Avatar" />
+                    <img
+                      src={formData?.profileImage || currentImageAvtar}
+                      className="rounded-circle"
+                      height={300}
+                      alt="Avatar"
+                    />
                   </div>
                   <div className="change-avtar-btn">
                     {currentImageAvtar === girl && (
@@ -326,8 +333,8 @@ function ProfileAvatar() {
                               name="name"
                               value={formData.name}
                               onChange={handleInputChange}
-                              readOnly
-                              style={{ color: "#6c757d" }}
+                              // readOnly
+                              // style={{ color: "#6c757d" }}
                               data-bs-toggle="tooltip"
                               data-bs-placement="bottom"
                               title="Not editable"
@@ -775,8 +782,16 @@ function ProfileAvatar() {
                           type="button"
                           className="btn btn-dark w-100 w-md-50 rounded-pill p-3 fw-bold mx-200"
                           onClick={handleUpdate}
+                          disabled={btnLoader}
                         >
-                          Update
+                          {btnLoader ? (
+                            <span>
+                              <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                              Updating...
+                            </span>
+                          ) : (
+                            "Update"
+                          )}
                         </button>
                       </div>
                       <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
