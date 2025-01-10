@@ -108,7 +108,7 @@ const AddClothes = () => {
   const handleImageClick = () => {
     document.getElementById("imageUpload").click();
   };
-  const currentDate = new Date().toISOString().split("T")[0];
+  const currentDate = new Date().toISOString().split("T")[0]
   const validateForm = () => {
     const {
       category,

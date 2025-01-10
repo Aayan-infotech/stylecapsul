@@ -5,25 +5,47 @@ import "../../styles/ChangePassword.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "../../utils/cookieUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { user } = useSelector((state) => state.login);
-  const token = getCookie('authToken');
+  const token = getCookie("authToken");
   const dispatch = useDispatch();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [btnLoader, setBtnLoader] = useState(false);
   const userId = user?.payload?._id;
 
   const togglePasswordVisibility = (setter) => {
     setter((prev) => !prev);
   };
 
+  const validateForm = () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      showErrorToast("All fields are required!");
+      return false;
+    }
+    if (newPassword.length < 8) {
+      showErrorToast("New password must be at least 8 characters long.");
+      return false;
+    }
+    if (newPassword !== confirmPassword) {
+      showErrorToast("New password and confirm password do not match.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    setBtnLoader(true);
     try {
       const changepassresult = await dispatch(
         userChangePassword({
@@ -31,22 +53,13 @@ const ChangePassword = () => {
           oldPassword,
           newPassword,
           newConfirmPassword: confirmPassword,
-          token
+          token,
         })
       );
 
       if (userChangePassword.fulfilled.match(changepassresult)) {
         const { message } = changepassresult.payload;
-        toast.success(message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        showSuccessToast(message);
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -55,10 +68,9 @@ const ChangePassword = () => {
       }
     } catch (error) {
       const errorMessage = error.message || "An error occurred";
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage);
+    } finally {
+      setBtnLoader(false);
     }
   };
 
@@ -67,7 +79,7 @@ const ChangePassword = () => {
       <ToastContainer />
       <div className="change-password-container">
         <h1 className="text-center fw-bold fs-1">Change Password</h1>
-        <div className="container pt-0" style={{display:"block"}}>
+        <div className="container pt-0" style={{ display: "block" }}>
           <div className="card password-card-container">
             <div className="card-body p-lg-5 p-0">
               <form onSubmit={handleSubmit}>
@@ -154,8 +166,9 @@ const ChangePassword = () => {
                 <button
                   type="submit"
                   className="rounded-pill fw-bold btn btn-light chagne-passwrod-submit-btn"
+                  disabled={btnLoader}
                 >
-                  Change Password
+                  {btnLoader ? "Processing..." : "Change Password"}
                 </button>
               </form>
             </div>

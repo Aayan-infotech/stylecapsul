@@ -22,7 +22,7 @@ import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MuiPagination from "@mui/material/Pagination";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
+import debounce from "lodash.debounce";
 import { useSelector } from "react-redux";
 
 const Explore = ({ isAuth }) => {
@@ -33,14 +33,12 @@ const Explore = ({ isAuth }) => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [searchResults, setSearchResults] = useState([]);
-  const [isFollowing, setIsFollowing] = useState(false);
   const [displayPosts, setDisplayPosts] = useState([]);
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
 
-  const fetchExplorePostMedia = async () => {
+  const fetchAllPostsByExplore = async () => {
     try {
       const response = await axios.get(apiUrl("api/explore/getallPosts"), {
         headers: {
@@ -95,7 +93,6 @@ const Explore = ({ isAuth }) => {
         } else {
           showErrorToast(data.message);
         }
-        // fetchExplorePostMedia();
       } catch (error) {
         console.error("Error submitting comment:", error);
       }
@@ -153,7 +150,7 @@ const Explore = ({ isAuth }) => {
       data?.success
         ? showSuccessToast(data.message)
         : showErrorToast(data.message);
-      fetchExplorePostMedia();
+      fetchAllPostsByExplore();
       setAllSocialPosts((prevPosts) =>
         prevPosts.map((post, idx) =>
           idx === index
@@ -170,24 +167,6 @@ const Explore = ({ isAuth }) => {
     }
   };
 
-  const handleShare = (index) => {
-    const updatedPosts = [...posts];
-    updatedPosts[index].shares += 1;
-    setPosts(updatedPosts);
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "Check this out!",
-          text: updatedPosts[index].postContent,
-          url: window.location.href,
-        })
-        .then(() => console.log("Post shared successfully!"))
-        .catch((error) => console.error("Error sharing the post:", error));
-    } else {
-      alert("Sharing is not supported in this browser.");
-    }
-  };
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -196,14 +175,16 @@ const Explore = ({ isAuth }) => {
   }, []);
 
   const formatDate = (dateString) => {
+    if (!dateString) return "Unknown Date";
     const date = new Date(dateString);
+    if (isNaN(date)) return "Invalid Date";
     const day = date.getDate().toString().padStart(2, "0");
     const month = date.toLocaleString("en-US", { month: "short" });
     return `${day} ${month}`;
   };
 
   const handleReplyChange = (postIndex, commentIndex, value) => {
-    console.log(value, 'value');
+    console.log(value, "value");
     const updatedPosts = allSocialPosts.map((post, idx) => {
       if (idx === postIndex) {
         return {
@@ -256,7 +237,7 @@ const Explore = ({ isAuth }) => {
             userId,
           });
           updatedPosts[postIndex].comments[commentIndex].newReply = "";
-          fetchExplorePostMedia();
+          fetchAllPostsByExplore();
           setAllSocialPosts(updatedPosts);
         } else {
           showErrorToast("Failed to add reply");
@@ -269,12 +250,11 @@ const Explore = ({ isAuth }) => {
 
   useEffect(() => {
     if (userId) {
-      fetchExplorePostMedia();
+      fetchAllPostsByExplore();
     }
   }, [userId]);
 
-  const fetchResults = async () => {
-    // setLoading(true);
+  const fetchPostsUserSearch = async () => {
     try {
       const response = await axios.get(
         apiUrl(
@@ -308,42 +288,19 @@ const Explore = ({ isAuth }) => {
 
   useEffect(() => {
     if (query.trim()) {
-      fetchResults();
+      const fetchDebounced = debounce(() => {
+        fetchPostsUserSearch();
+      }, 1000);
+      fetchDebounced();
+      return () => fetchDebounced.cancel();
     } else {
       setDisplayPosts(allSocialPosts);
       setTotalPages(Math.ceil(allSocialPosts.length / 5));
     }
   }, [query, page]);
 
-  // const handleFollow = async (followedId) => {
-  //   try {
-  //     const response = await axios.post(
-  //       apiUrl("api/explore/follow-unfollow"),
-  //       { userId, followedId },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (response?.data?.success) {
-  //       const message = isFollowing
-  //         ? "Unfollowed successfully!"
-  //         : "Followed successfully!";
-  //       showSuccessToast(response?.data?.message || message);
-  //       setIsFollowing((prev) => !prev);
-  //       fetchExplorePostMedia();
-  //     } else {
-  //       showErrorToast("Failed to follow");
-  //     }
-  //   } catch (error) {
-  //     showErrorToast("An error occurred while following the user.");
-  //   }
-  // };
-
   useEffect(() => {
-    fetchExplorePostMedia();
+    fetchAllPostsByExplore();
   }, []);
 
   return (
@@ -405,12 +362,6 @@ const Explore = ({ isAuth }) => {
                           className="text-decoration-none"
                         >
                           <div className="d-flex justify-content-between align-items-center">
-                            {/* <Avatar
-                              alt="profile image"
-                              sx={{ width: 56, height: 56 }}
-                             className="me-3 rounded-circle"
-                              src={post?.user?.profileImage || blank_img}
-                            /> */}
                             <img
                               className="rounded-circle mb-2 me-2"
                               src={post?.user?.profileImage || blank_img}
@@ -437,14 +388,6 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </Link>
                         <div>
-                          <div className="d-flex">
-                            <i
-                              id="dropdownIcon"
-                              className="fa-solid fa-ellipsis-vertical fs-4 text-black"
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            ></i>
-                          </div>
                           <ul
                             className="dropdown-menu dropdown-menu-start"
                             aria-labelledby="dropdownIcon"
@@ -493,7 +436,6 @@ const Explore = ({ isAuth }) => {
                           }}
                         >
                           {post?.image?.map((imageUrl, cardIndex) => (
-                            // <>
                             <SwiperSlide key={cardIndex}>
                               <div
                                 className="card text-black"
@@ -515,7 +457,6 @@ const Explore = ({ isAuth }) => {
                                 </div>
                               </div>
                             </SwiperSlide>
-                            // </>
                           ))}
                         </Swiper>
                       </div>
@@ -539,19 +480,6 @@ const Explore = ({ isAuth }) => {
                           >
                             {post.comments && post.comments.length} Comments
                           </h6>
-                          {/* <h5 style={{ cursor: "pointer" }}>
-                            <a
-                              href="https://www.instagram.com/thestylecapsule/?hl=en"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                textDecoration: "none",
-                                color: "inherit",
-                              }}
-                            >
-                              <i className="fa-solid fa-share me-2"></i> Share
-                            </a>
-                          </h5> */}
                         </div>
                       </div>
 
@@ -570,18 +498,18 @@ const Explore = ({ isAuth }) => {
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
                         <h5 style={{ cursor: "pointer" }}>
-                            <a
-                              href="https://www.instagram.com/thestylecapsule/?hl=en"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                textDecoration: "none",
-                                color: "inherit",
-                              }}
-                            >
-                              <i className="fa-solid fa-share me-2"></i> Share
-                            </a>
-                          </h5>
+                          <a
+                            href="https://www.instagram.com/thestylecapsule/?hl=en"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              textDecoration: "none",
+                              color: "inherit",
+                            }}
+                          >
+                            <i className="fa-solid fa-share me-2"></i> Share
+                          </a>
+                        </h5>
                       </div>
                       <hr />
                       {post.showComments && (
@@ -644,18 +572,15 @@ const Explore = ({ isAuth }) => {
                                         alt="User Avatar"
                                         sx={{ width: 30, height: 30 }}
                                         className="me-2"
-                                        src={comment?.user?.profileImage || blank_img} 
+                                        src={
+                                          comment?.user?.profileImage ||
+                                          blank_img
+                                        }
                                       />
                                       <div
                                         className="text-black p-2 rounded-3"
                                         style={{ backgroundColor: "#e0e0e0" }}
                                       >
-                                        {/*                                         <Typography
-                                          variant="subtitle2"
-                                          className="fw-bold"
-                                        >
-                                          {comment?.user?.firstName.charAt(0).toUpperCase() + comment?.user?.firstName.slice(1).toLowerCase()}
-                                        </Typography> */}
                                         <Typography
                                           variant="body2"
                                           gutterBottom
@@ -686,7 +611,11 @@ const Explore = ({ isAuth }) => {
                                                   alt="User Avatar"
                                                   sx={{ width: 30, height: 30 }}
                                                   className="me-2"
-                                                  src={reply?.replies?.user?.profileImage || blank_img}
+                                                  src={
+                                                    reply?.replies?.user
+                                                      ?.profileImage ||
+                                                    blank_img
+                                                  }
                                                 />
                                                 <div
                                                   className="text-black p-2 rounded-3"
