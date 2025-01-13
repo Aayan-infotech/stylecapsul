@@ -56,7 +56,7 @@ export const SocialUserDetails = () => {
       imageStyle: { width: "50px", height: "45px" },
       url: "/all-clothes-list/miscellaneous",
     },
-  ]
+  ];
 
   const fetchPostDetailsByUs = async () => {
     setLoading(true);
@@ -153,7 +153,11 @@ export const SocialUserDetails = () => {
     const formattedDate = formatDate(date);
     const details = clothesOnDates.find((item) => item.date === formattedDate);
     if (details) {
-      const selectedData = { date: formattedDate, images: details.thumbnail, userPostDetails:userPostDetails };
+      const selectedData = {
+        date: formattedDate,
+        images: details.thumbnail,
+        userPostDetails: userPostDetails,
+      };
       navigate("/capsulerangecalendardetails", { state: { selectedData } });
     } else {
       console.log("No data found for this date.");
@@ -185,6 +189,7 @@ export const SocialUserDetails = () => {
                     className="rounded-circle mb-2"
                     src={userPostDetails?.user?.profileImage || blank_img}
                     style={{
+                      display: "inline-block",
                       border: "2px solid black",
                       padding: "5px",
                       borderRadius: "50%",
@@ -192,6 +197,7 @@ export const SocialUserDetails = () => {
                       cursor: "pointer",
                       padding: "5px",
                       height: "200px",
+                      width: "200px",
                     }}
                   />
                   <h4 className="fw-bold">

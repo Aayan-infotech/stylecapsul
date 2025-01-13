@@ -40,7 +40,7 @@
       .item-image {
         height: 120px;
         border-radius: 15px;
-        object-fit: fill;
+        object-fit: contain;
         padding: 7px;
         max-width: 140px;
       }

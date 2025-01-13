@@ -235,6 +235,7 @@ const MyStyleCapsul = () => {
               </div>
             </div>
           </div>
+
           <div className="border-bottom w-100 mt-4">
             <div className="border-bottom w-100 mt-4">
               <div className="d-flex justify-content-end align-items-center text-black">

@@ -130,7 +130,6 @@ const ExploreUserProfileDetails = () => {
               <img
                 key={index}
                 src={image}
-                alt={image}
                 style={{
                   width: "15px",
                   height: "auto",
@@ -175,7 +174,7 @@ const ExploreUserProfileDetails = () => {
         >
           <div className="container d-block px-4">
             <div className="row gy-4 m-0 mb-4">
-              <div className="col-12 d-flex justify-content-center align-items-center">
+              <div className="col-12 d-flex justify-content-center align-items-center text-center">
                 <div>
                   <img
                     alt="User Avatar"
@@ -220,7 +219,7 @@ const ExploreUserProfileDetails = () => {
               <div
                 className="col-12 col-md-6"
                 style={{
-                  height: "300px",
+                  height: "350px",
                   overflowY: "auto",
                   borderRadius: "10px",
                   backgroundColor: "#f0f0f0",
@@ -251,7 +250,7 @@ const ExploreUserProfileDetails = () => {
                       className="rounded-pill mb-3 d-flex align-items-center"
                       style={{
                         backgroundColor: "#4C4C4C",
-                        height: "100px",
+                        height: "70px",
                         padding: "10px",
                       }}
                     >

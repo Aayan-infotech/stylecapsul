@@ -23,6 +23,7 @@ const stripePromise = loadStripe(
 const PaymentForm = () => {
   const [loading, setLoading] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
+
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
@@ -131,7 +132,13 @@ const PaymentForm = () => {
   );
 };
 
-const makePayment = async () => {
+const handleButtonClick = async (setBtnLoader, navigate) => {
+  setBtnLoader(true);
+  await makePayment(navigate);
+  setBtnLoader(false);
+};
+
+const makePayment = async (navigate) => {
   const stripe = await loadStripe(
     "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
   );
@@ -152,7 +159,7 @@ const makePayment = async () => {
 
   try {
     const response = await axios.post(
-      "http://localhost:7000/api/create-checkout-session",
+      apiUrl("api/payment-method/createpaymenttestofredirectonstripe"),
       { products },
       {
         headers: {
@@ -164,9 +171,10 @@ const makePayment = async () => {
     const result = await stripe.redirectToCheckout({
       sessionId,
     });
-    navigate("/thanku", { state: { paymentIntent } });
     if (result.error) {
       console.error(result.error.message);
+    } else {
+      navigate("/thanku", { state: { sessionId } });
     }
   } catch (error) {
     console.error("Error creating checkout session:", error);
@@ -176,33 +184,47 @@ const makePayment = async () => {
 const Payment = () => {
   const location = useLocation();
   const { paymentDetailsWithaddressId } = location.state || {};
+  const [btnLoader, setBtnLoader] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="payment-container">
       <div className="container w-75 text-center">
-        <h1 className="fw-bold text-center fs-1">Payment</h1>
-        <button className="btn btn-primary" onClick={makePayment} type="button">
-          Checkout
-        </button>
+        <h1 className="fw-bold text-center fs-1 mb-4">Payment</h1>
+        <div className="row gx-5">
+          <div className="col">
+            <button
+              type="button"
+              onClick={() => handleButtonClick(setBtnLoader, navigate)}
+              className="btn btn-dark w-100 p-3 fw-bold fs-4 rounded-pill"
+            >
+              {btnLoader ? (
+                <>
+                  <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                  Waiting...
+                </>
+              ) : (
+                "Checkout"
+              )}
+            </button>
+          </div>
+          <div className="col">
+            <button
+              type="button"
+              onClick={() => handleButtonClick(setBtnLoader, navigate)}
+              className="btn btn-light w-100 p-3 fw-bold fs-4 rounded-pill"
+            >
+              By PayPal&nbsp;&nbsp;
+              <img src={paypal} height={30} alt="PayPal" />
+            </button>
+          </div>
+        </div>
         <Elements stripe={stripePromise}>
           <PaymentForm
             paymentDetailsWithaddressId={paymentDetailsWithaddressId}
           />
         </Elements>
-        {/* PayPal Payment Button */}
-        <div className="mt-3">
-          <button
-            type="button"
-            className="btn method btn-outline-secondary rounded-pill p-3 w-75 text-start fw-bold text-black fs-5 me-4"
-          >
-            PayPal
-          </button>
-          <img src={paypal} height={30} alt="PayPal" />
-        </div>
       </div>
-      <Elements stripe={stripePromise}>
-        <CheckoutForm />
-      </Elements>
     </div>
   );
 };

@@ -81,7 +81,6 @@ const StylistCategories = () => {
 
   const handleAddToCart = async (product) => {
     setLoadingProductId(product._id);
-  
     setTimeout(async () => {
       try {
         const response = await dispatch(

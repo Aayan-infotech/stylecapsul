@@ -65,7 +65,6 @@ const AddClothes = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const token = getCookie("authToken");
-  console.log(token);
   const updateNewCloth = location?.state?.updateCloth;
   const currentCategory = location.state?.currentCategory;
 

@@ -373,6 +373,7 @@ const Explore = ({ isAuth }) => {
                                 cursor: "pointer",
                                 padding: "5px",
                                 height: "60px",
+                                width: "60px",
                               }}
                             />
                             <div className="text-black">

@@ -24,8 +24,7 @@ const Address = () => {
     const [loading, setLoading] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
-    const { paymentDetails } = location.state || {};
-    console.log(paymentDetails, 'paymentDetails---');
+    const { paymentDetails, allCartDetails } = location.state || {};
 
     useEffect(() => {
         if (addressStatus === 'idle') {
@@ -118,6 +117,7 @@ const Address = () => {
         const paymentDetailsWithaddressId = {
             paymentDetails,
             selectedAddressId,
+            allCartDetails
         };
         navigate("/payment", { state: { paymentDetailsWithaddressId } });
     };
@@ -178,7 +178,7 @@ const Address = () => {
                     ))
                 )}
 
-                <div className="text-center my-5">
+                <div className="text-center my-3">
                     <a href='#' className='text-black fw-bold text-decoration-none' onClick={() => setShowModal(true)}>
                         <i className="fa-solid fa-plus me-2"></i>
                         Add Address
