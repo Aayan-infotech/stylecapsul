@@ -168,7 +168,15 @@ const ChangePassword = () => {
                   className="rounded-pill fw-bold btn btn-light chagne-passwrod-submit-btn"
                   disabled={btnLoader}
                 >
-                  {btnLoader ? "Processing..." : "Change Password"}
+                  {btnLoader ? (
+                    <span>
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Processing...
+                    </span>
+                  ) : (
+                    "Change Password"
+                  )}
+                  {/* {btnLoader ? "Processing..." : "Change Password"} */}
                 </button>
               </form>
             </div>

@@ -219,6 +219,7 @@ function ProfileAvatar() {
                       src={formData?.profileImage || currentImageAvtar}
                       className="rounded-circle"
                       height={300}
+                      width={300}
                       alt="Avatar"
                     />
                   </div>
