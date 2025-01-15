@@ -13,6 +13,7 @@ const initialState = {
 };
 
 export const fetchAddresses = createAsyncThunk('addresses/fetchAddresses', async () => {
+    const token = getCookie('authToken');
     const response = await axios.get(apiUrl('api/address/all-address', {}, {
         withCredentials: true,
     }), {
@@ -25,6 +26,7 @@ export const fetchAddresses = createAsyncThunk('addresses/fetchAddresses', async
 });
 
 export const addAddress = createAsyncThunk('addresses/addAddress', async (newAddress) => {
+    const token = getCookie('authToken');
     const response = await axios.post(apiUrl('api/address/add-address'), newAddress, {
         headers: {
             'Authorization': `Bearer ${token}`,

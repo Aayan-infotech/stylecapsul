@@ -250,7 +250,7 @@ const MyStyleCapsul = () => {
                 >
                   {isLoadingExplore ? (
                     <span className="loading-text">
-                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>
                       Sharing...
                     </span>
                   ) : (

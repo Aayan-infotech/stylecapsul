@@ -105,6 +105,8 @@ const Cart = () => {
     const paymentDetails = {
       totalAmount: total.toFixed(2),
       totalQuantity,
+      discount,
+      deliveryCharges,
       cartId,
       cartItems: cartItems
         .map((cart) =>

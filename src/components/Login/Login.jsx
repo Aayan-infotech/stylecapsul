@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../reduxToolkit/loginSlice";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.scss";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setBtnLoader(true);
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
       if (resultAction?.status === 200) {
@@ -30,24 +32,26 @@ const Login = () => {
           autoClose: 1000,
           hideProgressBar: true,
           style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
+            backgroundColor: "black",
+            color: "#C8B199",
+            borderRadius: "50px",
+            padding: "10px 20px",
+          },
         });
         if (resultAction?.success === true && resultAction?.status === 200) {
           setTimeout(() => {
-            navigate('/');
-          })
+            navigate("/");
+          });
         }
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(errorMessage, {
         autoClose: 2000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
+        style: { backgroundColor: "#dc3545", color: "#fff" },
       });
+    } finally {
+      setBtnLoader(false);
     }
   };
 
@@ -93,7 +97,9 @@ const Login = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}
+                      className={`fa-solid ${
+                        showPassword ? "fa-eye" : "fa-eye-slash"
+                      }`}
                     ></i>
                   </button>
                 </div>
@@ -113,7 +119,10 @@ const Login = () => {
                       value=""
                       id="flexCheckDefault"
                     />
-                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
                       Remember Me
                     </label>
                   </div>
@@ -123,7 +132,14 @@ const Login = () => {
                     type="submit"
                     className="btn custom-button text-white fw-bold rounded-pill w-75 p-2"
                   >
-                    Login
+                    {btnLoader ? (
+                      <span>
+                        <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                        Logging...
+                      </span>
+                    ) : (
+                      "Login"
+                    )}
                   </button>
                   <div className="signup-link">
                     <span>Doesn't have an account? </span>
