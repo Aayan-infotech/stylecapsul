@@ -104,7 +104,7 @@ const LandingPage = () => {
                 </Link>
                 <div className="navbar-right">
                   <i className="fa-regular fa-bell"></i>
-                  <i className="fa-solid fa-magnifying-glass"></i>
+                  {/* <i className="fa-solid fa-magnifying-glass"></i> */}
                   <i className="fa-solid fa-cart-shopping"></i>
                 </div>
               </div>

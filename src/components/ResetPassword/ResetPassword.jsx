@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ResetPassword.scss";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { apiUrl } from '../../../apiUtils';
+import { apiUrl } from "../../../apiUtils";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [btnLoader, setBtnLoader] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { token } = location.state || {}; 
+  const { token } = location.state || {};
 
-  console.log(token, 'token')
+  console.log(token, "token");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -27,35 +28,39 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (newPassword !== confirmPassword) {
-    //   toast.error('Passwords do not match.');
-    //   return;
-    // }
+    setBtnLoader(true);
     try {
       const response = await axios.post(
-        apiUrl('api/auth/resetPassword'),
+        apiUrl("api/auth/resetPassword"),
         { newPassword, token: token },
         {
           headers: {
-            'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${token}`  
+            "Content-Type": "application/json",
           },
         }
       );
       toast.success(response.data.message, {
         autoClose: 1000,
-        style: { backgroundColor: '#28a745', color: '#fff' }
+        style: { backgroundColor: "#28a745", color: "#fff" },
       });
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      if (error.response?.status === 401 && error.response?.data?.message === "Token has expired. Please request a new password reset.") {
-        toast.error('Token has expired. Please request a new password reset link.');
+      if (
+        error.response?.status === 401 &&
+        error.response?.data?.message ===
+          "Token has expired. Please request a new password reset."
+      ) {
+        toast.error(
+          "Token has expired. Please request a new password reset link."
+        );
       } else {
         toast.error(error.response?.data?.message, {
           autoClose: 1000,
-          style: { backgroundColor: '#dc3545', color: '#fff' }
+          style: { backgroundColor: "#dc3545", color: "#fff" },
         });
       }
+    } finally {
+      setBtnLoader(false);
     }
   };
 
@@ -88,7 +93,9 @@ const ResetPassword = () => {
                   style={{ background: "none", border: "none" }}
                 >
                   <i
-                    className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}
+                    className={`fa-solid ${
+                      showPassword ? "fa-eye" : "fa-eye-slash"
+                    }`}
                   ></i>
                 </button>
               </div>
@@ -110,13 +117,22 @@ const ResetPassword = () => {
                   style={{ background: "none", border: "none" }}
                 >
                   <i
-                    className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}
+                    className={`fa-solid ${
+                      showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                    }`}
                   ></i>
                 </button>
               </div>
               <div className="mt-4 text-center">
                 <button type="submit" className="submit-button fw-bold">
-                  Submit
+                  {btnLoader ? (
+                    <span>
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Submitting...
+                    </span>
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>

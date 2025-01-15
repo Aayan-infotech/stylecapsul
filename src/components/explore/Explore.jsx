@@ -147,9 +147,9 @@ const Explore = ({ isAuth }) => {
           },
         }
       );
-      data?.success
-        ? showSuccessToast(data.message)
-        : showErrorToast(data.message);
+      // data?.success
+      //   ? showSuccessToast(data.message)
+      //   : showErrorToast(data.message);
       fetchAllPostsByExplore();
       setAllSocialPosts((prevPosts) =>
         prevPosts.map((post, idx) =>

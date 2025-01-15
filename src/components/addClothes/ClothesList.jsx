@@ -171,16 +171,13 @@ function ClothesList() {
                           handleClothDetails(product);
                         }}
                       >
-                        {/* <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}> */}
                         <div className="product-img">
                           <img
                             src={product?.picture || blank_img}
                             alt="cloth"
                           />
                         </div>
-                        {/* </Link> */}
                         <div className="product-text">
-                          {/* <Link to="/clothes-details" className="text-decoration-none text-black" state={{ product }}> */}
                           <div className="first-text">
                             <h3 className="fw-bold fs-3">
                               {product?.category}
@@ -193,11 +190,13 @@ function ClothesList() {
                               )}
                             </p>
                           </div>
-                          {/* </Link> */}
                           <button
                             type="button"
                             className="btn btn-outline-dark"
-                            onClick={() => updateCloth(product)}
+                            onClick={(e) => {
+                              e.stopPropagation(); 
+                              updateCloth(product);
+                            }}
                           >
                             <i className="fa-regular fa-pen-to-square"></i>
                           </button>

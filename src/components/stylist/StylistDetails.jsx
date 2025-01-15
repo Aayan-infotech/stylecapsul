@@ -28,7 +28,7 @@ const StylistDetails = () => {
   const profile_details = location.state?.stylist;
 
   useEffect(() => {
-    setLoading(true);   
+    setLoading(true);
     if (profile_details) {
       setSshowStylistProfileDetails(profile_details);
     }
@@ -171,7 +171,8 @@ const StylistDetails = () => {
                       <i className="fa-solid fa-user-plus"></i>
                     </button>
                     <Link
-                      to={{ pathname: `/stylist-list` }}
+                      // stylist-list (old route)
+                      to={{ pathname: `/chat` }}
                       state={{ profile_details }}
                       className="text-decoration-none w-100"
                     >

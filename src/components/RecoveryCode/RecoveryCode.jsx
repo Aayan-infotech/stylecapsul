@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./RecoveryCode.scss";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { apiUrl } from '../../../apiUtils';
+import { apiUrl } from "../../../apiUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const RecoveryCode = () => {
   const [values, setValues] = useState(["", "", "", ""]);
+  const [btnLoader, setBtnLoader] = useState(false);
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(0);
   const navigate = useNavigate();
 
   const handleChange = (e, index) => {
@@ -26,47 +30,63 @@ const RecoveryCode = () => {
 
   const handleVerifyToken = async (e) => {
     e.preventDefault();
-    const otp = values.join('');
-
+    setBtnLoader(true);
+    const otp = values.join("");
     try {
-      const response = await axios.post(apiUrl('api/auth/verify-otp'), {
+      const response = await axios.post(apiUrl("api/auth/verify-otp"), {
         otp,
       });
-      console.log(response, 'response')
-
       if (response.status === 200) {
-        // toast.success(response?.data.message, {
-        //   autoClose: 1000,
-        //   style: { backgroundColor: '#28a745', color: '#fff' }
-        // });
-        toast.success(response?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: 'black',
-            color: '#C8B199',
-            borderRadius: '50px',
-            padding: '10px 20px',
-          }
-        });       
+        showSuccessToast(response?.data?.message);
         setTimeout(() => {
-          // if (response?.success === true && response?.status === 200) {
-            navigate('/reset-password', { state: { token: response.data.token } });
-          // }
+          navigate("/reset-password", {
+            state: { token: response.data.token },
+          });
         }, 1000);
       } else {
-        toast.error(response?.data.message, {
-          autoClose: 1000,
-          style: { backgroundColor: '#dc3545', color: '#fff' }
-        });
+        showErrorToast(response?.data?.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        autoClose: 1000,
-        style: { backgroundColor: '#dc3545', color: '#fff' }
-      });
+      showErrorToast(error?.response?.data?.message);
+    } finally {
+      setBtnLoader(false);
     }
   };
+
+  const handleClickResendPassword = async (e) => {
+    e.preventDefault();
+    setBtnLoader(true);
+    setResendDisabled(true);
+    setResendCountdown(60);
+    try {
+      const response = await axios.post(apiUrl("api/auth/resend-otp"), {
+        email,
+      });
+      if (response.status === 200) {
+        showSuccessToast("New OTP has been sent to your email!");
+        setValues(["", "", "", ""]);
+      } else {
+        showErrorToast("Failed to resend OTP. Please try again.");
+      }
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message);
+    } finally {
+      setBtnLoader(false);
+      setTimeout(() => setResendDisabled(false), 15000); 
+    }
+  };
+
+  useEffect(() => {
+    if (resendCountdown > 0) {
+      const timer = setTimeout(
+        () => setResendCountdown(resendCountdown - 1),
+        1000
+      );
+      return () => clearTimeout(timer);
+    } else {
+      setResendDisabled(false);
+    }
+  }, [resendCountdown]);
 
   return (
     <>
@@ -75,7 +95,9 @@ const RecoveryCode = () => {
         <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
         <div className="recovery-card mt-3">
           <div className="recovery-box">
-            <h2 className="card-title fs-4 text-center fw-bold">Recovery Code</h2>
+            <h2 className="card-title fs-4 text-center fw-bold">
+              Recovery Code
+            </h2>
             <form className="recovery-form mt-2" onSubmit={handleVerifyToken}>
               <div className="text">
                 <h5 className="otp-message">
@@ -99,11 +121,32 @@ const RecoveryCode = () => {
               <div className="mt-4">
                 <p>Please enter your OTP to verify your account</p>
               </div>
-              <button type="submit" className="submit-button fw-bold"> Submit
+              <button type="submit" className="submit-button fw-bold">
+                {btnLoader ? (
+                  <span>
+                    <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                    Submitting...
+                  </span>
+                ) : (
+                  "Submit"
+                )}
               </button>
-              <div className="reset_otp">
-                <a href="#" className="text-black mt-1">
-                  Resend OTP?
+              <div className="reset_otp my-2">
+                <a
+                  onClick={handleClickResendPassword}
+                  className={`text-black ${resendDisabled ? "disabled" : ""}`}
+                  style={{ cursor: resendDisabled ? "not-allowed" : "pointer" }}
+                >
+                  {btnLoader ? (
+                    <span>
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
+                      Sending...
+                    </span>
+                  ) : resendDisabled ? (
+                    `Resend OTP in ${resendCountdown}s`
+                  ) : (
+                    "Resend OTP?"
+                  )}
                 </a>
               </div>
             </form>
