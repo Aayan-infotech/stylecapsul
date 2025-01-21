@@ -171,7 +171,6 @@ const StylistDetails = () => {
                       <i className="fa-solid fa-user-plus"></i>
                     </button>
                     <Link
-                      // stylist-list (old route)
                       to={{ pathname: `/chat` }}
                       state={{ profile_details }}
                       className="text-decoration-none w-100"

@@ -38,7 +38,6 @@ import ClosetCategories from "./components/closemanagement/ClosetCategories.jsx"
 import StyleScan from "./components/closemanagement/StyleScan.jsx";
 import UploadScanImage from "./components/closemanagement/UploadScanImage.jsx";
 import ScannedImageWardrobe from "./components/closemanagement/ScannedImageWardrobe.jsx";
-import StylistMessageList from "./components/stylist/StylistMessageList.jsx";
 import Chat from "./components/stylist/Chat.jsx";
 import StylistCategories from "./components/stylist/StylistCategories.jsx";
 import CategoryDetails from "./components/stylist/CategoryDetials.jsx";
@@ -55,6 +54,7 @@ import { ClothsDetails } from "./components/explore/ClothsDetails.jsx";
 import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCalendarDetails.jsx";
 import ExploreUserProfileDetails from "./components/explore/ExploreUserProfileDetails.jsx";
 import CheckoutForm from "./components/stylist/CheckoutForm.jsx";
+import ContactPage from "./components/helpandsupport/ContactPage.jsx";
 
 const Routing = () => {
   return (
@@ -82,7 +82,7 @@ const Routing = () => {
             <Route path="/clothes-details/:clothid" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-profile" element={<StylistDetails />} />
-            <Route path="/stylist-list" element={<StylistMessageList />} />
+           
             <Route path="/chat" element={<Chat />} />
             <Route path="/categories-type/:categoryId" element={<StylistCategories />}/>
             <Route path="/category-details/:subcatid" element={<CategoryDetails />} />
@@ -93,6 +93,7 @@ const Routing = () => {
             <Route path="/gift-card-details/:id" element={<GiftCardDetails />}/>
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
             <Route path="/help-support" element={<HelpAndSupport />} />
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/closet-overview" element={<ClosetOverview />} />
             <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />}/>
             <Route path="/try-avtar" element={<TryAvtar />} />
@@ -110,7 +111,6 @@ const Routing = () => {
             <Route path="/explore" element={<Explore />} />
             <Route path="/checkoutForm" element={<CheckoutForm />} />
             <Route path="/socialUserDetails/:postId" element={<SocialUserDetails />} />
-            {/* <Route path="/socialUserDetails" element={<SocialUserDetails />} /> */}
             <Route path="/cloths" element={<Cloths />} />
             <Route path="/cloths-details/:id" element={<ClothsDetails />} />
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>

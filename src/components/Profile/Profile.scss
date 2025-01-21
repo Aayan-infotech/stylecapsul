@@ -21,6 +21,8 @@
       .hover-upload-profile {
         position: relative;
         display: inline-block;
+        width: 200px;
+        height: 200px;
 
         img {
           border-radius: 50%;
@@ -31,8 +33,10 @@
           position: absolute;
           top: 0;
           left: 0;
-          width: 200px;
-          height: 200px;
+          width: 100%;
+          /* Match the container width */
+          height: 100%;
+          /* Match the container height */
           background-color: rgba(146, 140, 140, 0.5);
           border-radius: 50%;
           display: flex;
@@ -41,17 +45,13 @@
           opacity: 0;
           cursor: pointer;
           transition: opacity 0.3s;
-
-          i {
-            font-size: 24px;
-            color: #fff;
-          }
         }
 
         &:hover .upload-overlay {
           opacity: 1;
         }
       }
+
 
       .action-button {
         background-color: #E0E0E0;

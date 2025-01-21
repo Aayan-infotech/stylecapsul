@@ -57,11 +57,12 @@ const RecoveryCode = () => {
     e.preventDefault();
     setBtnLoader(true);
     setResendDisabled(true);
-    setResendCountdown(60);
+    setResendCountdown(20);
     try {
       const response = await axios.post(apiUrl("api/auth/resend-otp"), {
         email,
       });
+      console.log(response, "abinash");
       if (response.status === 200) {
         showSuccessToast("New OTP has been sent to your email!");
         setValues(["", "", "", ""]);
@@ -72,7 +73,7 @@ const RecoveryCode = () => {
       showErrorToast(error?.response?.data?.message);
     } finally {
       setBtnLoader(false);
-      setTimeout(() => setResendDisabled(false), 15000); 
+      setTimeout(() => setResendDisabled(false), 15000);
     }
   };
 
@@ -92,7 +93,11 @@ const RecoveryCode = () => {
     <>
       <ToastContainer />
       <div className="recovery-container">
-        <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+        <h1 className="outside-heading fs-1 fw-bold">
+          <Link to="/" className="text-decoration-none text-black">
+            Style Capsule
+          </Link>
+        </h1>
         <div className="recovery-card mt-3">
           <div className="recovery-box">
             <h2 className="card-title fs-4 text-center fw-bold">

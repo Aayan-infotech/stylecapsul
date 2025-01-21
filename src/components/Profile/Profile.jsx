@@ -81,7 +81,7 @@ function Profile() {
             const percentCompleted = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
-            setUploadProgress(percentCompleted); // Update progress state
+            setUploadProgress(percentCompleted); 
           },
         }
       );
