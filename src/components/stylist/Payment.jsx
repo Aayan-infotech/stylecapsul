@@ -136,8 +136,8 @@ const Payment = () => {
   const location = useLocation();
   const [btnLoader, setBtnLoader] = useState(false);
   const { paymentDetailsWithaddressId } = location.state || {};
-  console.log(paymentDetailsWithaddressId, "paymentDetailsWithaddressId");
   const navigate = useNavigate();
+  const token = getCookie("authToken");
 
   const handleButtonClick = async (setBtnLoader, navigate) => {
     setBtnLoader(true);
@@ -161,10 +161,11 @@ const Payment = () => {
     try {
       const response = await axios.post(
         apiUrl("api/payment-method/createpaymenttestofredirectonstripe"),
-        { paymentDetails },  // Send entire paymentDetails object
+        { paymentDetails }, 
         {
           headers: {
-            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
         }
       );

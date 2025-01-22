@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -13,39 +14,24 @@ const ForgotPassword = () => {
 
   const handleForgetPassword = async (e) => {
     e.preventDefault();
+    if (!email || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      showErrorToast("Please enter a valid email address.");
+      return;
+    }
     setBtnLoader(true);
     try {
       const response = await axios.post(apiUrl("api/auth/send-email"), {
         email,
       });
-
-      if (response.status === 200) {
-        toast.success(response?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
-        setTimeout(() => {
-          if (response?.data.message) {
-            navigate("/recovery-code");
-          }
-        }, 1000);
+      if (response?.data?.success && response?.data?.status === 200) {
+        showSuccessToast(response?.data?.message || "Email sent successfully!");
+        const timeRemaining = response?.data?.time || "1 minute remaining";
+        navigate("/recovery-code", { state: { email, time: timeRemaining } });
       } else {
-        toast.error(response?.data.message, {
-          autoClose: 1000,
-          style: { backgroundColor: "#dc3545", color: "#fff" },
-        });
+        showErrorToast(response?.data?.message || "Failed to send email.");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message, {
-        autoClose: 1000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(error.response?.data?.message || "An error occurred.");
     } finally {
       setBtnLoader(false);
     }
@@ -62,15 +48,15 @@ const ForgotPassword = () => {
               <h2 className="card-title fs-4 text-center fw-bold">
                 Forgot Password
               </h2>
-              <form className="mt-5" onSubmit={handleForgetPassword}>
-                <div className="mb-3">
+              <form className="mt-3" onSubmit={handleForgetPassword}>
+                <div className="">
                   <label htmlFor="email" className="form-label fw-bold">
                     Phone Number or Email
                   </label>
                   <input
                     type="text"
                     id="email"
-                    className="form-control rounded-pill mt-4"
+                    className="form-control rounded-pill"
                     placeholder="Phone Number or Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}

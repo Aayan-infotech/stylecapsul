@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./RecoveryCode.scss";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,9 +10,58 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 const RecoveryCode = () => {
   const [values, setValues] = useState(["", "", "", ""]);
   const [btnLoader, setBtnLoader] = useState(false);
-  const [resendDisabled, setResendDisabled] = useState(false);
-  const [resendCountdown, setResendCountdown] = useState(0);
+  const [resendBtnLoader, setResendBtnLoader] = useState(false);
+  const [resendDisabled, setResendDisabled] = useState(true);
+  const [resendCountdown, setResendCountdown] = useState(60);
+  const location = useLocation();
+  const { email, time } = location.state;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (resendDisabled) {
+      const timer = setInterval(() => {
+        setResendCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setResendDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [resendDisabled]);
+
+  const handleResendOtp = async (e) => {
+    e.preventDefault();
+    if (!email || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      showErrorToast("Please enter a valid email address.");
+      return;
+    }
+    if (!resendDisabled) {
+      setResendDisabled(true);
+      setResendCountdown(60);
+    }
+    setResendBtnLoader(true);
+    try {
+      const response = await axios.post(apiUrl("api/auth/send-email"), {
+        email,
+      });
+      if (response.status === 201 || response?.data?.success === true) {
+        showSuccessToast(response?.data?.message || "Email sent successfully!");
+      } else {
+        showErrorToast(response?.data?.message || "Failed to send email.");
+      }
+    } catch (error) {
+      showErrorToast(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
+    } finally {
+      setResendBtnLoader(false);
+    }
+  };
 
   const handleChange = (e, index) => {
     const { value } = e.target;
@@ -53,42 +102,6 @@ const RecoveryCode = () => {
     }
   };
 
-  const handleClickResendPassword = async (e) => {
-    e.preventDefault();
-    setBtnLoader(true);
-    setResendDisabled(true);
-    setResendCountdown(20);
-    try {
-      const response = await axios.post(apiUrl("api/auth/resend-otp"), {
-        email,
-      });
-      console.log(response, "abinash");
-      if (response.status === 200) {
-        showSuccessToast("New OTP has been sent to your email!");
-        setValues(["", "", "", ""]);
-      } else {
-        showErrorToast("Failed to resend OTP. Please try again.");
-      }
-    } catch (error) {
-      showErrorToast(error?.response?.data?.message);
-    } finally {
-      setBtnLoader(false);
-      setTimeout(() => setResendDisabled(false), 15000);
-    }
-  };
-
-  useEffect(() => {
-    if (resendCountdown > 0) {
-      const timer = setTimeout(
-        () => setResendCountdown(resendCountdown - 1),
-        1000
-      );
-      return () => clearTimeout(timer);
-    } else {
-      setResendDisabled(false);
-    }
-  }, [resendCountdown]);
-
   return (
     <>
       <ToastContainer />
@@ -123,9 +136,10 @@ const RecoveryCode = () => {
                   />
                 ))}
               </div>
-              <div className="mt-4">
-                <p>Please enter your OTP to verify your account</p>
-              </div>
+              <p className="mt-2">
+                Please enter your OTP to verify your account. Time remaining:{" "}
+                {resendCountdown}s
+              </p>
               <button type="submit" className="submit-button fw-bold">
                 {btnLoader ? (
                   <span>
@@ -138,19 +152,18 @@ const RecoveryCode = () => {
               </button>
               <div className="reset_otp my-2">
                 <a
-                  onClick={handleClickResendPassword}
-                  className={`text-black ${resendDisabled ? "disabled" : ""}`}
-                  style={{ cursor: resendDisabled ? "not-allowed" : "pointer" }}
+                  className={`text-black ${
+                    resendDisabled ? "link-disabled" : ""
+                  }`}
+                  onClick={handleResendOtp}
                 >
-                  {btnLoader ? (
+                  {resendBtnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
-                      Sending...
+                      Submitting...
                     </span>
-                  ) : resendDisabled ? (
-                    `Resend OTP in ${resendCountdown}s`
                   ) : (
-                    "Resend OTP?"
+                    "Resend OTP"
                   )}
                 </a>
               </div>

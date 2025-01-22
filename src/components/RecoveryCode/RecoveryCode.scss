@@ -77,6 +77,13 @@ $font-family: 'Arial, sans-serif';
             background-color: darken($primary-color, 10%);
           }
         }
+        .link-disabled {
+          color: gray; 
+          pointer-events: none;
+          text-decoration: none;
+          opacity: 0.6;
+        }
+        
       }
     }
   }
