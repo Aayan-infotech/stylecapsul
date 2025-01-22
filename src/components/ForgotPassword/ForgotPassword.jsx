@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./ForgotPassword.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
@@ -24,8 +24,8 @@ const ForgotPassword = () => {
         email,
       });
       if (response?.data?.success && response?.data?.status === 200) {
+        const timeRemaining = parseInt(response?.data?.time);
         showSuccessToast(response?.data?.message || "Email sent successfully!");
-        const timeRemaining = response?.data?.time || "1 minute remaining";
         navigate("/recovery-code", { state: { email, time: timeRemaining } });
       } else {
         showErrorToast(response?.data?.message || "Failed to send email.");

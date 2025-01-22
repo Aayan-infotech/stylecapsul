@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const Signup = () => {
   const [btnLoader, setBtnLoader] = useState(false);
@@ -17,6 +18,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -33,8 +35,36 @@ const Signup = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  // const validateForm = () => {
+  //   const newErrors = {};
+  //   if (!formData.firstName.trim()) newErrors.firstName = "Name is required.";
+  //   if (!formData.email.trim()) {
+  //     newErrors.email = "Email or phone number is required.";
+  //   } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+  //     newErrors.email = "Please enter a valid email address.";
+  //   }
+  //   if (!formData.username.trim()) newErrors.username = "Username is required.";
+  //   if (!formData.password.trim()) newErrors.password = "Password is required.";
+  //   if (formData.password.length < 6) {
+  //     newErrors.password = "Password must be at least 6 characters.";
+  //   }
+  //   if (formData.password !== formData.confirmPassword) {
+  //     newErrors.confirmPassword = "Passwords do not match.";
+  //   }
+  //   return newErrors;
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // const newErrors = validateForm();
+    // if(Object.keys(newErrors).length > 0){
+    //   setErrors(newErrors);
+    //   return;
+    // };
+    if(!formData.firstName && formData.email){
+      showSuccessToast('error')
+    }
+    
     setBtnLoader(true);
     try {
       const signUp = await axios.post(apiUrl("api/auth/signup"), {
@@ -52,25 +82,13 @@ const Signup = () => {
           password: "",
           confirmPassword: "",
         });
-        toast.success(signUp?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        showSuccessToast(signUp?.data?.message);
         setTimeout(() => {
           navigate("/login");
         }, 1000);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message, {
-        autoClose: 1000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(err.response?.data?.message);
     } finally {
       setBtnLoader(false);
     }

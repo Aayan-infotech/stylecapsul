@@ -12,27 +12,45 @@ const RecoveryCode = () => {
   const [btnLoader, setBtnLoader] = useState(false);
   const [resendBtnLoader, setResendBtnLoader] = useState(false);
   const [resendDisabled, setResendDisabled] = useState(true);
-  const [resendCountdown, setResendCountdown] = useState(60);
+  const [resendCountdown, setResendCountdown] = useState(0);
   const location = useLocation();
-  const { email, time } = location.state;
+  const { email, time } = location.state || {};
+  console.log(time);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (resendDisabled) {
+    const storedTime = localStorage.getItem("resendCountdown");
+    const remainingTime = storedTime ? parseInt(storedTime, 10) : time || 0;
+
+    if (remainingTime > 0) {
+      setResendCountdown(remainingTime);
+      setResendDisabled(true);
+    } else {
+      setResendDisabled(false);
+    }
+  }, [time]);
+
+  useEffect(() => {
+    if (resendCountdown > 0) {
       const timer = setInterval(() => {
         setResendCountdown((prev) => {
-          if (prev <= 1) {
+          const newTime = prev - 1;
+
+          if (newTime <= 0) {
             clearInterval(timer);
+            localStorage.removeItem("resendCountdown");
             setResendDisabled(false);
             return 0;
           }
-          return prev - 1;
+
+          localStorage.setItem("resendCountdown", newTime);
+          return newTime;
         });
       }, 1000);
 
       return () => clearInterval(timer);
     }
-  }, [resendDisabled]);
+  }, [resendCountdown]);
 
   const handleResendOtp = async (e) => {
     e.preventDefault();
@@ -40,17 +58,18 @@ const RecoveryCode = () => {
       showErrorToast("Please enter a valid email address.");
       return;
     }
-    if (!resendDisabled) {
-      setResendDisabled(true);
-      setResendCountdown(60);
-    }
+
     setResendBtnLoader(true);
+
     try {
-      const response = await axios.post(apiUrl("api/auth/send-email"), {
-        email,
-      });
+      const response = await axios.post(apiUrl("api/auth/send-email"), { email });
       if (response.status === 201 || response?.data?.success === true) {
         showSuccessToast(response?.data?.message || "Email sent successfully!");
+
+        const newTime = parseInt(response?.data?.time || "60", 10);
+        setResendCountdown(newTime);
+        setResendDisabled(true);
+        localStorage.setItem("resendCountdown", newTime); 
       } else {
         showErrorToast(response?.data?.message || "Failed to send email.");
       }
@@ -81,6 +100,11 @@ const RecoveryCode = () => {
     e.preventDefault();
     setBtnLoader(true);
     const otp = values.join("");
+    if (otp.length !== values.length || otp.includes("")) {
+      showErrorToast("Please fill in all OTP fields before submitting.");
+      setBtnLoader(false);
+      return;
+    }
     try {
       const response = await axios.post(apiUrl("api/auth/verify-otp"), {
         otp,
