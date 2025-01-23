@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ResetPassword.scss";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
+import { showErrorToast } from "../toastMessage/Toast";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,10 +38,7 @@ const ResetPassword = () => {
           },
         }
       );
-      toast.success(response.data.message, {
-        autoClose: 1000,
-        style: { backgroundColor: "#28a745", color: "#fff" },
-      });
+      showSuccessToast(response?.data?.message);
       navigate("/login");
     } catch (error) {
       if (
@@ -50,14 +46,9 @@ const ResetPassword = () => {
         error.response?.data?.message ===
           "Token has expired. Please request a new password reset."
       ) {
-        toast.error(
-          "Token has expired. Please request a new password reset link."
-        );
+        showErrorToast("Token has expired. Please request a new password reset link.");
       } else {
-        toast.error(error.response?.data?.message, {
-          autoClose: 1000,
-          style: { backgroundColor: "#dc3545", color: "#fff" },
-        });
+        showErrorToast(error.response?.data?.message);
       }
     } finally {
       setBtnLoader(false);
@@ -66,7 +57,6 @@ const ResetPassword = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="reset-container">
         <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
         <div className="reset-card">

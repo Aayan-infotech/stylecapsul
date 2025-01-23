@@ -7,8 +7,6 @@ import { getCookie } from "../../utils/cookieUtils";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/no_image.png";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { showSuccessToast, showErrorToast } from "../toastMessage/Toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -126,7 +124,6 @@ const StylistCategories = () => {
         <Loader />
       ) : (
         <div className="categories-type-container">
-          <ToastContainer />
           <div
             className="container w-75 mt-2 stylist-content"
             style={{ display: "block" }}

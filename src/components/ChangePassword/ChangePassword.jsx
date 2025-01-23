@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userChangePassword } from "../../reduxToolkit/changePasswordSlice";
 import "../../styles/ChangePassword.scss";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
@@ -76,7 +74,6 @@ const ChangePassword = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="change-password-container">
         <h1 className="text-center fw-bold fs-1">Change Password</h1>
         <div className="container pt-0" style={{ display: "block" }}>

@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../reduxToolkit/loginSlice";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "./Login.scss";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,16 +27,7 @@ const Login = () => {
     try {
       const resultAction = await dispatch(loginUser(formData)).unwrap();
       if (resultAction?.status === 200) {
-        toast.success(resultAction?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        showSuccessToast(resultAction?.message);
         if (resultAction?.success === true && resultAction?.status === 200) {
           setTimeout(() => {
             navigate("/");
@@ -46,10 +36,7 @@ const Login = () => {
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage);
     } finally {
       setBtnLoader(false);
     }
@@ -57,7 +44,6 @@ const Login = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="custom-container">
         <div className="w-100">
           <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>

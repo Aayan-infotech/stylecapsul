@@ -4,10 +4,9 @@ import { FaCheck } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const QuestionnaireUpdate = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
@@ -91,28 +90,15 @@ const QuestionnaireUpdate = () => {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response?.data, "response");
       if (response?.data?.success) {
-        toast.success(response?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        showSuccessToast(response?.data?.message);
         setTimeout(() => {
           navigate("/profile");
         }, 1000);
       }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage)
     }
   };
 
@@ -160,7 +146,6 @@ const QuestionnaireUpdate = () => {
 
   return (
     <div className="questionnaire-update d-flex justify-content-center align-items-center">
-      <ToastContainer />
       <div className="container w-75">
         {/* -------------------------Do you like minimal style------------------------ */}
         <div className="mt-2">

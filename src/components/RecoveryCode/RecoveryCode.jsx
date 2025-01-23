@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./RecoveryCode.scss";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -128,7 +126,6 @@ const RecoveryCode = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="recovery-container">
         <h1 className="outside-heading fs-1 fw-bold">
           <Link to="/" className="text-decoration-none text-black">

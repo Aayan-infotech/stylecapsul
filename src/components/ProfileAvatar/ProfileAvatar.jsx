@@ -10,12 +10,11 @@ import Questionnaire from "../questionnaire/QuestionnaireUpdate.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { createBasic } from "../../reduxToolkit/basiceditprofile.js";
 import { fetchProfile } from "../../reduxToolkit/profileSlice.js";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import standing from "../../assets/standing-human-body.png";
 import { getCookie } from "../../utils/cookieUtils.js";
 import { ClossetDetails } from "../ClossetDetails/ClossetDetails.jsx";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
+
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -206,7 +205,6 @@ function ProfileAvatar() {
 
   return (
     <>
-      <ToastContainer />
       <div className="update-profile-container">
         <div className="container">
           {/* -------------------------profile section----------------------- */}

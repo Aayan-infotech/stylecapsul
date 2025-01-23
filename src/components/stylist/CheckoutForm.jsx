@@ -50,7 +50,7 @@ function CheckoutForm() {
     const cardNumber = elements.getElement(CardNumberElement);
 
     if (!cardNumber) {
-      toast.error("Please fill out all fields");
+      showErrorToast("Please fill out all fields")
       setLoading(false);
       return;
     }

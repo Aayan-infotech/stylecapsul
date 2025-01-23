@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Address.scss";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   addAddress,
   deleteAddress,
@@ -32,9 +30,23 @@ const Address = () => {
   const navigate = useNavigate();
   const { paymentDetails, allCartDetails } = location.state || {};
 
+  // useEffect(() => {
+  //   if (addressStatus === "idle") {
+  //     dispatch(fetchAddresses());
+  //   }
+  // }, [dispatch, addressStatus]);
   useEffect(() => {
     if (addressStatus === "idle") {
-      dispatch(fetchAddresses());
+      dispatch(fetchAddresses())
+        .unwrap()
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   }, [dispatch, addressStatus]);
 
@@ -45,27 +57,9 @@ const Address = () => {
   const handleDeleteAddress = async (id) => {
     try {
       await dispatch(deleteAddress(id)).unwrap();
-      toast.success("Address deleted successfully", {
-        autoClose: 1000,
-        hideProgressBar: true,
-        style: {
-          backgroundColor: "black",
-          color: "#C8B199",
-          borderRadius: "50px",
-          padding: "10px 20px",
-        },
-      });
+      showSuccessToast("Address deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete address", {
-        autoClose: 1000,
-        hideProgressBar: true,
-        style: {
-          backgroundColor: "red",
-          color: "#C8B199",
-          borderRadius: "50px",
-          padding: "10px 20px",
-        },
-      });
+      showErrorToast("Failed to delete address");
     }
   };
 
@@ -134,7 +128,6 @@ const Address = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="address-details-container">
         {addresses?.length === 0 ? (
           <div className="no-address-message">
@@ -302,9 +295,7 @@ const Address = () => {
                         Adding...
                       </span>
                     ) : (
-                      <>
-                        {isEditing ? "Update Address" : "Add Address"}
-                      </>
+                      <>{isEditing ? "Update Address" : "Add Address"}</>
                     )}
                   </button>
                 </div>

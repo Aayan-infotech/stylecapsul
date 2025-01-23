@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./ForgotPassword.scss";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -39,7 +37,6 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="forgot-custom-container mt-5">
         <div>
           <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>

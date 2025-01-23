@@ -4,14 +4,12 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { format } from "date-fns";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { getCookie } from "../../utils/cookieUtils";
 import { useDispatch } from "react-redux";
 import { allAddedClothList } from "../../reduxToolkit/addClothesSlice";
 import Loader from "../Loader/Loader.jsx";
-import { showErrorToast } from "../toastMessage/Toast.jsx";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
 
 function ClothesList() {
   const [loading, setLoading] = useState(true);
@@ -98,23 +96,11 @@ function ClothesList() {
         setCategoryCloth((prevClothes) =>
           prevClothes.filter((cloth) => cloth._id !== cloth_id)
         );
-        toast.success(response?.data?.message, {
-          autoClose: 1000,
-          hideProgressBar: true,
-          style: {
-            backgroundColor: "black",
-            color: "#C8B199",
-            borderRadius: "50px",
-            padding: "10px 20px",
-          },
-        });
+        showSuccessToast(response?.data?.message);
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage);
     }
   };
 
@@ -134,7 +120,6 @@ function ClothesList() {
         <Loader />
       ) : (
         <div className="clothes-list-main-container">
-          <ToastContainer />
           <div className="container w-75 clothes-list-container">
             <div className="row align-items-center">
               <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">

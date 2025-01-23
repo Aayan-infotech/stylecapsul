@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import '../../styles/ScheduleBooking.scss';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useSelector } from 'react-redux';
 import { apiUrl } from '../../../apiUtils';
 import axios from 'axios';
 import { getCookie } from '../../utils/cookieUtils';
+import { showErrorToast } from '../toastMessage/Toast';
 
 const ScheduleBooking = () => {
     const [selectedTimeRange, setSelectedTimeRange] = useState('');
@@ -66,16 +65,7 @@ const ScheduleBooking = () => {
             });
             console.log(schedueResponse?.data?.booking, 'schedueResponse')
             if (schedueResponse) {
-                toast.success(schedueResponse?.message || 'Schedule Booking is Successfully..!', {
-                    autoClose: 1000,
-                    hideProgressBar: true,
-                    style: {
-                        backgroundColor: 'black',
-                        color: '#C8B199',
-                        borderRadius: '50px',
-                        padding: '10px 20px',
-                    }
-                });
+                showSuccessToast(schedueResponse?.message);
                 setTimeout(() => {
                     // if (schedueResponse?.success === true && schedueResponse?.status === 200) {
                     navigate("/scheduled-appointment");
@@ -84,16 +74,12 @@ const ScheduleBooking = () => {
             }
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.message;
-            toast.error(errorMessage, {
-                autoClose: 2000,
-                style: { backgroundColor: '#dc3545', color: '#fff' }
-            });
+            showErrorToast(errorMessage);
         }
     };
 
     return (
         <>
-            <ToastContainer />
             <div className="schedule-booking-sections">
                 <div className="container">
                     <div className="row m-0 gx-2">

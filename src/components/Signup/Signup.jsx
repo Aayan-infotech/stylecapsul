@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Signup.scss";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -96,7 +94,6 @@ const Signup = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="container signup-main-container d-flex justify-content-center align-items-center">
         <div className="my-5 my-lg-0">
           <h1 className="text-center outside-heading fs-1 fw-bold">

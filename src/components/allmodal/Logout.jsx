@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../styles/Logout.scss";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { deleteCookie, getCookie } from "../../utils/cookieUtils";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../reduxToolkit/loginSlice";
@@ -47,7 +45,6 @@ export const Logout = ({ isModalVisible, onClose }) => {
 
   return (
     <>
-      <ToastContainer />
       <div
         className={`modal ${isModalVisible ? "fade-in" : "fade-out"}`}
         style={{ display: isModalVisible ? "block" : "none" }}

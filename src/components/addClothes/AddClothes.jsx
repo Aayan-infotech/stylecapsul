@@ -3,8 +3,6 @@ import imagepreview from "../../assets/addclothes/add-photo-style.png";
 import "../../styles/AddClothes.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { addClothes } from "../../reduxToolkit/addClothesSlice";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
@@ -177,10 +175,7 @@ const AddClothes = () => {
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage, {
-        autoClose: 2000,
-        style: { backgroundColor: "#dc3545", color: "#fff" },
-      });
+      showErrorToast(errorMessage);
     } finally {
       setBtnLoader(false);
     }
@@ -188,7 +183,6 @@ const AddClothes = () => {
 
   return (
     <>
-      <ToastContainer />
       <div className="add-clothes-card">
         <h1 className="text-center fw-bold fs-1">Add Clothes</h1>
         <div className="container">

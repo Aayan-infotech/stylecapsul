@@ -16,9 +16,9 @@ import { useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import axios from "axios";
 import { loginUser } from "../../reduxToolkit/loginSlice";
-import { ToastContainer, toast } from "react-toastify";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
+import { showErrorToast } from "../toastMessage/Toast";
 
 const LandingPage = () => {
   const [loading, setLoading] = useState(true);
@@ -41,16 +41,7 @@ const LandingPage = () => {
 
   const handleServiceClick = (route) => {
     if (!token) {
-      toast.error("You need to log in first!", {
-        autoClose: 1000,
-        hideProgressBar: true,
-        style: {
-          backgroundColor: "black",
-          color: "#C8B199",
-          borderRadius: "50px",
-          padding: "10px 20px",
-        },
-      });
+      showErrorToast("You need to log in first!")
     } else {
       navigate(route);
     }
@@ -81,7 +72,6 @@ const LandingPage = () => {
         <Loader />
       ) : (
         <>
-          <ToastContainer />
           <div className="main-landing-page-home">
             <div className="outer-navbar">
               <div className="navbar">
