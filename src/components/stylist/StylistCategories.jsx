@@ -61,8 +61,10 @@ const StylistCategories = () => {
   };
 
   useEffect(() => {
-    fetchAllCategoriesType(selectedCategory);
-  }, [selectedCategory]);
+    if (categoryId) {
+      fetchAllCategoriesType(selectedCategory);
+    }
+  }, [categoryId, selectedCategory]);
 
   const getFilteredProducts = () => {
     return marketPlaceCategoryType.filter(
@@ -80,9 +82,12 @@ const StylistCategories = () => {
   };
 
   const isProductInCart = (productId) => {
-    return cartItems?.some((cart) =>
-      cart.items.some((item) => item.productId === productId)
-    );
+    if (cartItems && Array.isArray(cartItems)) {
+      return cartItems.some((cart) =>
+        cart.items.some((item) => item.productId === productId)
+      );
+    }
+    return false;
   };
 
   const handleBuyClick = (prod) => {

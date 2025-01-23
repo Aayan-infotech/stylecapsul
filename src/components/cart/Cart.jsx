@@ -118,7 +118,9 @@ const Cart = () => {
         )
         .flat(),
     };
-    navigate("/address", { state: { paymentDetails, allCartDetails: cartItems } });
+    navigate("/address", {
+      state: { paymentDetails, allCartDetails: cartItems },
+    });
   };
 
   return (
@@ -148,9 +150,12 @@ const Cart = () => {
                               <p className="text-black text-muted">
                                 Order ID - {item?.productId || "N/A"}
                               </p>
-                              <h5 className="text-black fw-bold m-0">
-                                {item?.productDetails?.name || "N/A"}
-                              </h5>
+                              <h6 className="text-black fw-bold m-0">
+                                {item?.productDetails?.name.length > 30
+                                  ? item?.productDetails?.name.slice(3, 30) +
+                                    "...."
+                                  : item?.productDetails?.name || "N/A"}
+                              </h6>
                               <p className="m-0">{item.date}</p>
                               <div className="d-flex align-items-center justify-content-between">
                                 <p className="text-black fw-bold me-5">

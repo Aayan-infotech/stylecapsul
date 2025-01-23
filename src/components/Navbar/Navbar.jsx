@@ -11,7 +11,8 @@ function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
   const location = useLocation();
   // const isExplorePage = location.pathname === "/explore";
-  const isExplorePage = location.pathname === "/explore" || location.pathname === "/user-profile";
+  const isExplorePage =
+    location.pathname === "/explore" || location.pathname === "/user-profile";
 
   const handleShowModal = () => {
     setModalVisible(true);
@@ -100,6 +101,14 @@ function Navbar() {
                       <a className="dropdown-item" href="#">
                         Refer a friend
                       </a>
+                    </li>
+                    <li>
+                      <Link
+                        to="/orderhistory"
+                        className="text-decoration-none dropdown-item"
+                      >
+                        Order History
+                      </Link>
                     </li>
                     <li>
                       <Link

@@ -12,6 +12,7 @@ function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [orderHistory, setOrderHistory] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [errors, setErrors] = useState("");
 
   const token = getCookie("authToken");
 
@@ -26,10 +27,15 @@ function OrderHistory() {
       });
       if (response?.data?.success) {
         setOrderHistory(response?.data?.data);
+      } else {
+        setErrors(response?.data?.message);
       }
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      setErrors(
+        error?.response?.data?.message ||
+          "An error occurred while fetching the orders."
+      );
     } finally {
       setLoading(false);
     }
@@ -66,48 +72,66 @@ function OrderHistory() {
                 </div>
               </div>
             </div>
-            <div className="row gx-5">
-              {orderHistory?.map((product, index) => (
-                <div className="col-12">
-                  <div className="order-history-card d-flex justify-content-between align-items-center px-5 rounded-pill">
-                    <div className="product-img d-flex align-items-center">
-                      <img
-                        src={blank_img}
-                        alt=""
-                        height="50"
-                        className="me-3"
-                      />
-                      <div>
-                        <p className="mb-0 fw-bold">
-                          {product.name || "Product Name"}
-                        </p>
-                        <p className="mb-0 text-black">
-                          Order Date:
-                          {new Date(product?.createdAt).toLocaleDateString()}
-                        </p>
+            {errors ? (
+              <div className="error-message text-center text-danger">
+                <h4>{errors}</h4>
+              </div>
+            ) : (
+              <div className="row gx-5">
+                {orderHistory?.length > 0 ? (
+                  orderHistory.map((product, index) => (
+                    <div className="col-12" key={index}>
+                      <div className="order-history-card d-flex justify-content-between align-items-center px-5 rounded-pill">
+                        <div className="product-img d-flex align-items-center">
+                          <img
+                            src={blank_img}
+                            alt="Product"
+                            height="50"
+                            className="me-3"
+                          />
+                          <div>
+                            <p className="mb-0 fw-bold">
+                              {product.name || "Product Name"}
+                            </p>
+                            <p className="mb-0 text-black">
+                              Order Date:{" "}
+                              {new Date(
+                                product?.createdAt
+                              ).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="second-text">
+                          <button
+                            type="button"
+                            className="btn btn-dark rounded-pill fw-bold me-3"
+                            onClick={() => handleClickReOrder(product._id)} // Optional: Trigger reorder functionality
+                          >
+                            Reorder <i className="bx bx-rotate-right"></i>
+                          </button>
+                          <button
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#orderhistorydialogopenClick"
+                            className="btn btn-dark rounded-pill fw-bold"
+                            onClick={() => handleViewOrder(product)}
+                          >
+                            View <i className="bx bx-show"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <div className="second-text">
-                      <button
-                        type="button"
-                        className="btn btn-dark rounded-pill fw-bold me-3"
-                      >
-                        Reorder <i className="bx bx-rotate-right"></i>
-                      </button>
-                      <button
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#orderhistorydialogopenClick"
-                        className="btn btn-dark rounded-pill fw-bold"
-                        onClick={() => handleViewOrder(product)}
-                      >
-                        View <i className="bx bx-show"></i>
-                      </button>
+                  ))
+                ) : (
+                  <div className="col-12">
+                    <div className="no-orders text-center">
+                      <p>No orders found.</p>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            )}
+
             <div
               className="modal fade modal-lg"
               id="orderhistorydialogopenClick"
