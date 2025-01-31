@@ -4,9 +4,9 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import blank_image from "../../assets/stylist/blank_img.jpg";
-import { useSelector } from "react-redux";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
+import Pagination from "@mui/material/Pagination";
 
 const Stylist = () => {
   const [showStylists, setShowStylists] = useState([]);
@@ -81,69 +81,75 @@ const Stylist = () => {
         <Loader />
       ) : (
         <div className="styliset-search-container">
-          <div className="row gx-5">
-            <div className="col-12 col-md-6">
-              <h1 className="fw-bold fs-1">Stylist</h1>
-            </div>
-            <div className="col-12 col-md-6">
-              <div className="styliset-search">
-                <div className="search-box">
-                  <i className="fa fa-search"></i>
-                  <input
-                    type="text"
-                    className="rounded-pill text-white"
-                    placeholder="Search"
-                    value={searchQuery}
-                    onChange={handleSearchInputChange}
-                  />
-                  <i className="fa-solid fa-sliders"></i>
+          <div className="container w-75">
+            <div className="row gx-5">
+              <div className="col-12 col-md-6">
+                <h1 className="fw-bold fs-1">Stylist</h1>
+              </div>
+              <div className="col-12 col-md-6">
+                <div className="styliset-search">
+                  <div className="search-box">
+                    <i className="fa fa-search"></i>
+                    <input
+                      type="text"
+                      className="rounded-pill text-white"
+                      placeholder="Search"
+                      value={searchQuery}
+                      onChange={handleSearchInputChange}
+                    />
+                    <i className="fa-solid fa-sliders"></i>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="container">
-            <div className="row my-1">
-              {message ? (
-                <div className="text-center">
-                  <h2 className="fs-3">{message}</h2>
-                </div>
-              ) : (
-                showStylists.map((stylist, index) => (
-                  <Link
-                    to="/stylist-profile"
-                    className="text-decoration-none p-0"
-                    state={{ stylist }}
-                    key={index}
-                  >
-                    <div className="col-12 w-100 mt-3 p-0">
-                      <div
-                        className="d-flex rounded-pill"
-                        style={{ backgroundColor: "#4C4C4C", height:"120px" }}
-                      >
-                        <div className="me-2" style={{ width: "150px" }}>
-                          <img
-                            className="image-rounded"
-                            src={stylist?.profilePicture || blank_image}
-                            alt={stylist?.name}
-                            style={{
-                              width: "150px",
-                              height: "120px",
-                              objectFit: "cover",
-                            }}
-                          />
-                        </div>
-                        <div className="p-2 text-white">
-                          <h6>{stylist?.name}</h6>
-                          <h6>{stylist?.specialization.join(", ")}</h6>
-                          <h6>
-                            {stylist?.experience}+ Years of Experience
-                          </h6>
+            <div className=" d-block">
+              <div className="row my-1">
+                {message ? (
+                  <div className="text-center">
+                    <h2 className="fs-3">{message}</h2>
+                  </div>
+                ) : (
+                  showStylists.map((stylist, index) => (
+                    <Link
+                      to={`/stylist-profile/${stylist._id}`}
+                      className="text-decoration-none p-0"
+                      state={{ stylist }}
+                      key={index}
+                    >
+                      <div className="col-12 w-100 mt-3 p-0">
+                        <div
+                          className="d-flex rounded-pill"
+                          style={{
+                            backgroundColor: "#4C4C4C",
+                            height: "120px",
+                          }}
+                        >
+                          <div className="me-2" style={{ width: "150px" }}>
+                            <img
+                              className="image-rounded"
+                              src={stylist?.profilePicture || blank_image}
+                              alt={stylist?.name}
+                              style={{
+                                width: "150px",
+                                height: "120px",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </div>
+                          <div className="p-2 text-white">
+                            <h6>{stylist?.name}</h6>
+                            <h6>{stylist?.specialization.join(", ")}</h6>
+                            <h6>{stylist?.experience}+ Years of Experience</h6>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))
-              )}
+                    </Link>
+                  ))
+                )}
+              </div>
+            </div>
+            <div className="d-flex justify-content-center my-5">
+              <Pagination count={10} variant="outlined" color="secondary" />
             </div>
           </div>
         </div>
