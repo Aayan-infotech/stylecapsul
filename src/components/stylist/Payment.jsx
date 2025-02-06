@@ -13,7 +13,6 @@ const Payment = () => {
   const location = useLocation();
   const [btnLoader, setBtnLoader] = useState(false);
   const { paymentDetailsWithaddressId } = location.state || {};
-  console.log(paymentDetailsWithaddressId, 'paymentDetailsWithaddressId')
   const navigate = useNavigate();
   const token = getCookie("authToken");
 
@@ -24,43 +23,37 @@ const Payment = () => {
   };
 
   const makePayment = async (navigate) => {
-    const stripe = await loadStripe(
-      "pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj"
-    );
-  
+    const stripe = await loadStripe("pk_test_51PqTR903ec58RCFWng6UUUnIZ8R0PmQZL1xVE5Wv6jUIAiS9dxzWobfK6oysU86LJmkvd9I2Adcbbv0jYqLkNcAp00hFGx4UKj");
     const paymentDetails = {
       totalAmount: paymentDetailsWithaddressId?.paymentDetails?.totalAmount || 0,
       totalQuantity: paymentDetailsWithaddressId?.paymentDetails?.totalQuantity || 0,
       discount: paymentDetailsWithaddressId?.paymentDetails?.discount || 0,
       deliveryCharges: paymentDetailsWithaddressId?.paymentDetails?.deliveryCharges || 0,
-      allCartDetails: paymentDetailsWithaddressId?.allCartDetails || [], // Include allCartDetails to match backend structure
+      allCartDetails: paymentDetailsWithaddressId?.allCartDetails || [],
     };
-  
     try {
       const response = await axios.post(
         apiUrl("api/payment-method/createpaymenttestofredirectonstripe"),
-        { paymentDetails }, 
+        { paymentDetails },
         {
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
+          withCredentials: true,
         }
       );
-      const { id: sessionId } = response.data;
-      const result = await stripe.redirectToCheckout({
-        sessionId,
-      });
-      if (result.error) {
-        console.error(result.error.message);
+
+      if (response.data && response.data.session.url) {
+        window.location.href = response.data?.session.url; // Redirect to Stripe checkout
       } else {
-        navigate("/thanku", { state: { sessionId } });
+        throw new Error("Failed to get session URL");
       }
     } catch (error) {
       console.error("Error creating checkout session:", error);
+      alert("An error occurred, please try again.");
     }
   };
-  
 
   return (
     <div className="payment-container">

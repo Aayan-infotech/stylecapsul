@@ -5,7 +5,6 @@ import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import Loader from "../Loader/Loader";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { Divider } from "@mui/material";
 
 function OrderHistory() {
@@ -25,6 +24,7 @@ function OrderHistory() {
           "Content-Type": "application/json",
         },
       });
+      console.log(response?.data?.data, 'abinash')
       if (response?.data?.success) {
         setOrderHistory(response?.data?.data);
       } else {
@@ -34,7 +34,7 @@ function OrderHistory() {
     } catch (error) {
       setErrors(
         error?.response?.data?.message ||
-          "An error occurred while fetching the orders."
+        "An error occurred while fetching the orders."
       );
     } finally {
       setLoading(false);
@@ -91,7 +91,7 @@ function OrderHistory() {
                           />
                           <div>
                             <p className="mb-0 fw-bold">
-                              {product.name || "Product Name"}
+                              {product.items[0]?.name || "Product Name"}
                             </p>
                             <p className="mb-0 text-black">
                               Order Date:{" "}
@@ -157,49 +157,24 @@ function OrderHistory() {
                   <div className="modal-body text-start">
                     {selectedOrder ? (
                       <div>
-                        <div>
-                          {selectedOrder?.items?.map((item, index) => (
-                            <div key={index}>
-                              <p className="mb-0">
-                                Product ID: {item?.product}{" "}
-                              </p>
-                              <p className="mb-0">Quantity: {item?.quantity}</p>
-                              <p>Price: ${item?.price}</p>
-                            </div>
-                          ))}
-                        </div>
-                        <Divider />
-                        <p className="mb-0">
-                          <strong>Status:</strong>{" "}
-                          <span className="text-success fd-bold">
-                            {selectedOrder?.orderStatus
-                              ? selectedOrder.orderStatus
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                selectedOrder.orderStatus.slice(1)
-                              : ""}
-                          </span>
-                        </p>
-                        <p className="mb-0">
-                          <strong>Delivery Charges:</strong> $
-                          {selectedOrder?.deliveryCharges}
-                        </p>
-                        <p className="mb-0">
-                          <strong>Discount:</strong> ${selectedOrder?.discount}
-                        </p>
-                        <p className="mb-0">
-                          <strong>Total Price:</strong> $
-                          {selectedOrder?.totalPrice}
-                        </p>
-                        <p className="mb-0">
-                          <strong>Order Date:</strong>{" "}
-                          {new Date(
-                            selectedOrder?.createdAt
-                          ).toLocaleDateString()}
-                        </p>
+                        <h6>Payment Details</h6>
+                        <p className="mb-0">Payment Method: {selectedOrder?.paymentDetails?.paymentMethod}</p>
+                        <p className="mb-0 fw-bold text-success">Payment Status: {selectedOrder?.paymentDetails?.paymentStatus}</p>
+                        <Divider className="my-3" />
+                        <h6>Order Items</h6>
+                        {selectedOrder?.items?.map((item, index) => (
+                          <div key={index} className="mb-2">
+                            <p className="mb-0">Item ID: {item._id}</p>
+                            <p className="mb-0">Quantity: {item.quantity}</p>
+                          </div>
+                        ))}
+                        <Divider className="my-3" />
+                        <p className="mb-0">Total Price: ₹{selectedOrder?.totalPrice}</p>
+                        <p className="mb-0">Discount: ₹{selectedOrder?.discount}</p>
+                        <p className="mb-0">Delivery Charges: ₹{selectedOrder?.deliveryCharges}</p>
                       </div>
                     ) : (
-                      <p>No order selected.</p>
+                      <p>No order details available.</p>
                     )}
                   </div>
                   <div className="modal-footer">
