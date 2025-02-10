@@ -13,6 +13,7 @@ export const addClothes = createAsyncThunk(
     'clothes/addClothes',
     async (formData, { rejectWithValue }) => {
         try {
+            const token = getCookie('authToken');
             const response = await axios.post(apiUrl('api/cloths/add-cloths'), formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,

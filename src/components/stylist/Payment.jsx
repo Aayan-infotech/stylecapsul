@@ -43,9 +43,8 @@ const Payment = () => {
           withCredentials: true,
         }
       );
-
       if (response.data && response.data.session.url) {
-        window.location.href = response.data?.session.url; // Redirect to Stripe checkout
+        window.location.href = response.data.session.url;
       } else {
         throw new Error("Failed to get session URL");
       }
