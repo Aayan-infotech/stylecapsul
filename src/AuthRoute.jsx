@@ -18,6 +18,7 @@ import { updateUserDetails } from './reduxToolkit/loginSlice';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const token = useSelector((state) => state?.login?.token);
     const user = useSelector((state) => state?.login?.user);
@@ -30,7 +31,7 @@ const AuthRoute = ({ children }) => {
         try {
             const userId = getCookie('userId');
             if (userId) {
-                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`), );
+                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`),);
                 dispatch(updateUserDetails(userResponse?.data?.data))
             }
         } catch (error) {
@@ -40,14 +41,20 @@ const AuthRoute = ({ children }) => {
 
     useEffect(() => {
         const checkAuth = async () => {
+            setLoading(true);
             if (checkToken() && user) {
                 setIsAuth(true);
             } else {
                 setIsAuth(false);
             }
+            setLoading(false);
         };
         checkAuth();
     }, [token, user]);
+
+    if (loading) {
+        return <div>Loading...</div>
+    }
 
     if (isAuth) {
         return <>{children}</>;
