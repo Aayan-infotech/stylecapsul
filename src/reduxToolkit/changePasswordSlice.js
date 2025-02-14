@@ -11,7 +11,6 @@ export const userChangePassword = createAsyncThunk(
       if (!token) {
         return rejectWithValue('No authentication token found');
       }
-
       const response = await axios.put(
         apiUrl(`api/auth/change-password/${formData.userId}`),
         {

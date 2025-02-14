@@ -82,7 +82,6 @@ const Routing = () => {
             <Route path="/clothes-details/:clothid" element={<ShowClothesDetails />} />
             <Route path="/stylist" element={<Stylist />} />
             <Route path="/stylist-profile/:stylistId" element={<StylistDetails />} />
-           
             <Route path="/chat" element={<Chat />} />
             <Route path="/categories-type/:categoryId" element={<StylistCategories />}/>
             <Route path="/category-details/:subcatid" element={<CategoryDetails />} />
