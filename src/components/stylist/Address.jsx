@@ -22,6 +22,7 @@ const Address = () => {
     city: "",
     country: "",
     mobileNumber: "",
+    customerName: ""
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -30,11 +31,6 @@ const Address = () => {
   const navigate = useNavigate();
   const { paymentDetails, allCartDetails } = location.state || {};
 
-  // useEffect(() => {
-  //   if (addressStatus === "idle") {
-  //     dispatch(fetchAddresses());
-  //   }
-  // }, [dispatch, addressStatus]);
   useEffect(() => {
     if (addressStatus === "idle") {
       dispatch(fetchAddresses())
@@ -72,6 +68,7 @@ const Address = () => {
         city: addressToEdit.city,
         country: addressToEdit.country,
         mobileNumber: addressToEdit.mobileNumber,
+        customerName: addressToEdit.customerName
       });
     }
     setShowModal(true);
@@ -104,6 +101,7 @@ const Address = () => {
         city: "",
         country: "",
         mobileNumber: "",
+        customerName: ""
       });
       setShowModal(false);
     } catch (error) {
@@ -122,6 +120,19 @@ const Address = () => {
     navigate("/payment", { state: { paymentDetailsWithaddressId } });
   };
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setIsEditing(false);
+    setAddressForm({
+      streetName: "",
+      city: "",
+      country: "",
+      mobileNumber: "",
+      customerName: ""
+    });
+  };
+
+
   if (addressStatus === "loading") {
     return <Loader />;
   }
@@ -137,9 +148,8 @@ const Address = () => {
           addresses.map((address, index) => (
             <label
               key={index}
-              className={`address-card ${
-                selectedAddressId === address._id ? "selected" : ""
-              }`}
+              className={`address-card ${selectedAddressId === address._id ? "selected" : ""
+                }`}
               onClick={() => handleSelectAddress(address._id)}
             >
               <div className="address-header">
@@ -154,6 +164,7 @@ const Address = () => {
                 </div>
                 <div className="address-info">
                   <h5 className="m-1">{address.streetName}</h5>
+                  <h5 className="m-1">{address.customerName}</h5>
                   <p className="m-1 fw-bold text-black">{address.city}</p>
                   <p className="m-1 fw-bold text-body-tertiary">
                     {address.mobileNumber}
@@ -220,12 +231,26 @@ const Address = () => {
                 <button
                   type="button"
                   className="btn-close"
-                  onClick={() => setShowModal(false)}
+                  onClick={handleCloseModal}
                   aria-label="Close"
                 ></button>
               </div>
               <form onSubmit={handleFormSubmit}>
-                <div className="modal-body text-start">
+                <div className="modal-body text-start" style={{ maxHeight: "60vh", overflowY: "auto" }}>
+                  <div className="mb-3">
+                    <label htmlFor="customerName" className="form-label">
+                      Customer Name
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control rounded-pill p-4"
+                      id="customerName"
+                      name="customerName"
+                      value={addressForm.customerName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
                   <div className="mb-3">
                     <label htmlFor="streetName" className="form-label">
                       Street Name

@@ -14,7 +14,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound.jsx'
 
 import axios from 'axios';
 import { apiUrl } from '../apiUtils';
-import { updateUserDetails } from './reduxToolkit/loginSlice';
+import { logoutUser, updateUserDetails } from './reduxToolkit/loginSlice';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -52,9 +52,24 @@ const AuthRoute = ({ children }) => {
         checkAuth();
     }, [token, user]);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const isValid = checkToken();
+            if (!isValid) {
+                dispatch(logoutUser());
+                navigate("/login");
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     if (loading) {
-        return <div>Loading...</div>
-    }
+        return <div className="loading-screen">Loading...</div>; 
+      }
+    
+      if (isAuth === null) {
+        return <div className="loading-screen">Checking authentication...</div>;
+      }
 
     if (isAuth) {
         return <>{children}</>;

@@ -48,13 +48,13 @@ const ForgotPassword = () => {
               <form className="mt-3" onSubmit={handleForgetPassword}>
                 <div className="">
                   <label htmlFor="email" className="form-label fw-bold">
-                    Phone Number or Email
+                    Enter Email
                   </label>
                   <input
                     type="text"
                     id="email"
                     className="form-control rounded-pill"
-                    placeholder="Phone Number or Email"
+                    placeholder="Enter Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />

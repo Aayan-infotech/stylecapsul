@@ -53,7 +53,7 @@ const Login = () => {
               <form className="mt-4" onSubmit={handleSubmit}>
                 <div className="mb-2">
                   <label htmlFor="email" className="form-label fw-bold">
-                    Phone Number or Email
+                    Enter Email
                   </label>
                   <input
                     type="text"
@@ -61,7 +61,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className="form-control rounded-pill"
-                    placeholder="Phone Number or Email"
+                    placeholder="Enter Email"
                   />
                 </div>
                 <div className="mb-2 position-relative">

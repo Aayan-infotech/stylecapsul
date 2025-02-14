@@ -157,10 +157,10 @@ const Explore = ({ isAuth }) => {
         prevPosts.map((post, idx) =>
           idx === index
             ? {
-                ...post,
-                liked: !post.liked,
-                likes: post.likes + (post.liked ? -1 : 1),
-              }
+              ...post,
+              liked: !post.liked,
+              likes: post.likes + (post.liked ? -1 : 1),
+            }
             : post
         )
       );
@@ -513,10 +513,11 @@ const Explore = ({ isAuth }) => {
                       <hr />
                       <div className="d-flex justify-content-evenly align-items-center text-black">
                         <h5
-                          onClick={() => handleLike(index, post)}
-                          style={{ cursor: "pointer" }}
+                          onClick={() => handleLike(index, post._id)}
+                          style={{ cursor: "pointer", color: post.likes.includes(userId) ? "#1976d2" : "black" }}
                         >
-                          <i className="fa-regular fa-thumbs-up me-2"></i> Like
+                          <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
+                          {post.likes.includes(userId) ? "Liked" : "Like"}
                         </h5>
                         <h5
                           onClick={() => toggleCommentSection(index, post)}
@@ -586,7 +587,9 @@ const Explore = ({ isAuth }) => {
                               }}
                             />
                           </div>
-                          <div className="comments-list px-5 mt-3">
+                          <div className="comments-list px-5 mt-3"
+                            style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "10px" }}>
+
                             {post?.comments?.length > 0 ? (
                               post?.comments?.map((comment, commentIndex) => (
                                 <div key={commentIndex} className="mb-3">
@@ -605,9 +608,15 @@ const Explore = ({ isAuth }) => {
                                         }
                                       />
                                       <div
-                                        className="text-black p-2 rounded-3"
+                                        className="text-black p-1 rounded-2"
                                         style={{ backgroundColor: "#e0e0e0" }}
                                       >
+                                        <Typography
+                                          variant="body2"
+                                          gutterBottom
+                                        >
+                                          {comment?.user?.firstName}
+                                        </Typography>
                                         <Typography
                                           variant="body2"
                                           gutterBottom
@@ -624,8 +633,8 @@ const Explore = ({ isAuth }) => {
                                       }
                                     />
                                   </div>
-                                  {comment.replies &&
-                                    comment.replies.length > 0 && (
+                                  {comment?.replies &&
+                                    comment?.replies.length > 0 && (
                                       <div className="ms-5">
                                         {comment?.replies?.map(
                                           (reply, replyIndex) => (
@@ -645,21 +654,16 @@ const Explore = ({ isAuth }) => {
                                                   }
                                                 />
                                                 <div
-                                                  className="text-black p-2 rounded-3"
+                                                  className="text-black p-1 rounded-2"
                                                   style={{
                                                     backgroundColor: "#e0e0e0",
                                                   }}
                                                 >
                                                   <Typography
-                                                    variant="subtitle2"
+                                                    variant="caption"
                                                     className="fw-bold"
                                                   >
-                                                    {comment?.user?.firstName
-                                                      .charAt(0)
-                                                      .toUpperCase() +
-                                                      comment?.user?.firstName
-                                                        .slice(1)
-                                                        .toLowerCase()}
+                                                    {reply?.user?.firstName}
                                                   </Typography>
                                                   <Typography
                                                     variant="body2"
@@ -727,359 +731,6 @@ const Explore = ({ isAuth }) => {
                 <Typography variant="h6">No results found</Typography>
               </div>
             )}
-            {/* {displayPosts?.length > 0 ? (
-              displayPosts.map((post, index) => (
-                <div className="row g-2 m-0" key={index}>
-                  <div className="col-12">
-                    <div
-                      className="p-3 border-1 text-black"
-                      style={{ backgroundColor: "#f5f5f56e" }}
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <Link
-                          to={`/socialUserDetails/${post?.user?._id}`}
-                          className="text-decoration-none"
-                        >
-                          <div className="d-flex justify-content-between align-items-center">
-                            <img
-                              className="rounded-circle mb-2 me-2"
-                              src={post?.user?.profileImage || blank_img}
-                              alt={blank_img}
-                              style={{
-                                border: "2px solid black",
-                                padding: "5px",
-                                borderRadius: "50%",
-                                cursor: "pointer",
-                                padding: "5px",
-                                height: "60px",
-                                width: "60px",
-                              }}
-                            />
-                            <div className="text-black">
-                              <Typography variant="h6" className="fw-bold">
-                                {post?.user?.firstName.charAt(0).toUpperCase() +
-                                  post?.user?.firstName.slice(1).toLowerCase()}
-                              </Typography>
-                              <h6 style={{ fontSize: "13px" }}>
-                                {formatDate(post.updatedAt)} •{" "}
-                                <i className="fa-solid fa-earth-americas"></i>
-                              </h6>
-                            </div>
-                          </div>
-                        </Link>
-                        <div>
-                          <ul
-                            className="dropdown-menu dropdown-menu-start"
-                            aria-labelledby="dropdownIcon"
-                          >
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Another action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Something else here
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="text-black mt-2">
-                        <p className="fw-bold">{post?.description}</p>
-                      </div>
-                      <div className="d-flex mt-3">
-                        <Swiper
-                          modules={[Navigation, Pagination, Scrollbar, A11y]}
-                          spaceBetween={20}
-                          className="swiper-types-custom"
-                          autoplay={{
-                            delay: 2500,
-                            disableOnInteraction: false,
-                          }}
-                          navigation
-                          breakpoints={{
-                            640: {
-                              slidesPerView: 1,
-                            },
-                            768: {
-                              slidesPerView: 2,
-                            },
-                            1024: {
-                              slidesPerView: 3,
-                            },
-                          }}
-                        >
-                          {post?.image?.map((imageUrl, cardIndex) => (
-                            <SwiperSlide key={cardIndex}>
-                              <div
-                                className="card text-black"
-                                style={{
-                                  width: "18rem",
-                                  backgroundColor: "#e8e8e8",
-                                }}
-                              >
-                                <img
-                                  src={imageUrl}
-                                  className="card-img-top object-fit-cover"
-                                  height={300}
-                                  alt={`Image ${cardIndex + 1}`}
-                                />
-                                <div className="card-body">
-                                  <p className="card-text">
-                                    {post?.description}
-                                  </p>
-                                </div>
-                              </div>
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-                      </div>
-                      <hr />
-                      <div className="d-flex justify-content-between align-items-center">
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div className="d-flex align-items-center text-black">
-                            <ThumbUpIcon
-                              className="fs-5 me-3"
-                              color={post.likes ? "primary" : "inherit"}
-                            />
-                            <h6 className="mt-1 mb-0">
-                              {post.likes && post.likes.length}
-                            </h6>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center text-black gap-3 justify-content-center">
-                          <h6
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleCommentSection(index, post)}
-                          >
-                            {post.comments && post.comments.length} Comments
-                          </h6>
-                        </div>
-                      </div>
-
-                      <hr />
-                      <div className="d-flex justify-content-evenly align-items-center text-black">
-                        <h5
-                          onClick={() => handleLike(index, post)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i className="fa-regular fa-thumbs-up me-2"></i> Like
-                        </h5>
-                        <h5
-                          onClick={() => toggleCommentSection(index, post)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <i className="fa-regular fa-comment me-2"></i> Comment
-                        </h5>
-                        <h5 style={{ cursor: "pointer" }}>
-                          <a
-                            href="https://www.instagram.com/thestylecapsule/?hl=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                            }}
-                          >
-                            <i className="fa-solid fa-share me-2"></i> Share
-                          </a>
-                        </h5>
-                      </div>
-                      <hr />
-                      {post.showComments && (
-                        <div className="comment-section mt-3">
-                          <div className="comment-box d-flex align-items-center p-2">
-                            <Avatar
-                              alt={blank_img}
-                              sx={{ width: 40, height: 40, marginRight: 2 }}
-                              className="me-3"
-                              src={blank_img}
-                            />
-                            <TextField
-                              variant="outlined"
-                              placeholder="Write a comment..."
-                              fullWidth
-                              size="small"
-                              sx={{
-                                backgroundColor: "#f0f2f5",
-                                borderRadius: 25,
-                              }}
-                              value={post?.newComment}
-                              onChange={(e) => handleCommentChange(index, e)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" && post?.newComment) {
-                                  handleCommentSubmit(index, e);
-                                }
-                              }}
-                              InputProps={{
-                                sx: { borderRadius: "25px" },
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    {post?.newComment ? (
-                                      <SendIcon
-                                        onClick={(e) =>
-                                          handleCommentSubmit(index, e)
-                                        }
-                                      />
-                                    ) : (
-                                      <>
-                                        <CameraAltIcon className="me-2" />
-                                        <GifBoxIcon className="me-2" />
-                                        <InsertEmoticonIcon className="me-2" />
-                                      </>
-                                    )}
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                          </div>
-                          <div className="comments-list px-5 mt-3">
-                            {post?.comments?.length > 0 ? (
-                              post?.comments?.map((comment, commentIndex) => (
-                                <div key={commentIndex} className="mb-3">
-                                  <div
-                                    key={commentIndex}
-                                    className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                  >
-                                    <div className="d-flex">
-                                      <Avatar
-                                        alt="User Avatar"
-                                        sx={{ width: 30, height: 30 }}
-                                        className="me-2"
-                                        src={
-                                          comment?.user?.profileImage ||
-                                          blank_img
-                                        }
-                                      />
-                                      <div
-                                        className="text-black p-2 rounded-3"
-                                        style={{ backgroundColor: "#e0e0e0" }}
-                                      >
-                                        <Typography
-                                          variant="body2"
-                                          gutterBottom
-                                        >
-                                          {comment?.text}
-                                        </Typography>
-                                      </div>
-                                    </div>
-                                    <DeleteOutlineIcon
-                                      size="small"
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleDeleteComment(index, commentIndex)
-                                      }
-                                    />
-                                  </div>
-                                  {comment.replies &&
-                                    comment.replies.length > 0 && (
-                                      <div className="ms-5">
-                                        {comment?.replies?.map(
-                                          (reply, replyIndex) => (
-                                            <div
-                                              key={replyIndex}
-                                              className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                            >
-                                              <div className="d-flex">
-                                                <Avatar
-                                                  alt="User Avatar"
-                                                  sx={{ width: 30, height: 30 }}
-                                                  className="me-2"
-                                                  src={
-                                                    reply?.replies?.user
-                                                      ?.profileImage ||
-                                                    blank_img
-                                                  }
-                                                />
-                                                <div
-                                                  className="text-black p-2 rounded-3"
-                                                  style={{
-                                                    backgroundColor: "#e0e0e0",
-                                                  }}
-                                                >
-                                                  <Typography
-                                                    variant="subtitle2"
-                                                    className="fw-bold"
-                                                  >
-                                                    {comment?.user?.firstName
-                                                      .charAt(0)
-                                                      .toUpperCase() +
-                                                      comment?.user?.firstName
-                                                        .slice(1)
-                                                        .toLowerCase()}
-                                                  </Typography>
-                                                  <Typography
-                                                    variant="body2"
-                                                    gutterBottom
-                                                  >
-                                                    {reply?.text}
-                                                  </Typography>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          )
-                                        )}
-                                      </div>
-                                    )}
-                                  <div className="ms-5 mt-2">
-                                    <input
-                                      type="text"
-                                      className="form-control mb-2"
-                                      placeholder="Write a reply..."
-                                      value={comment?.newReply}
-                                      onChange={(e) =>
-                                        handleReplyChange(
-                                          index,
-                                          commentIndex,
-                                          e.target.value
-                                        )
-                                      }
-                                      onKeyDown={(e) => {
-                                        if (
-                                          e.key === "Enter" &&
-                                          comment.newReply?.trim()
-                                        ) {
-                                          handleReplySubmit(
-                                            index,
-                                            commentIndex
-                                          );
-                                          e.preventDefault();
-                                        }
-                                      }}
-                                    />
-
-                                    <button
-                                      className="btn btn-primary btn-sm"
-                                      onClick={() =>
-                                        handleReplySubmit(index, commentIndex)
-                                      }
-                                    >
-                                      Reply
-                                    </button>
-                                  </div>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="text-black">No comments yet!</p>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center mt-4">
-                <Typography variant="h6">No results found</Typography>
-              </div>
-            )} */}
             <div>
               <MuiPagination
                 count={totalPages}

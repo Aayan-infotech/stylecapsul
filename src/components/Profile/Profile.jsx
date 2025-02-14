@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Profile.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { Logout } from "../allmodal/Logout.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FaUserEdit,
   FaCalendarAlt,
@@ -25,9 +25,11 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [uploadProgress, setUploadProgress] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
+  console.log(singleUser, 'singleUser');
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -81,15 +83,17 @@ function Profile() {
             const percentCompleted = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
-            setUploadProgress(percentCompleted); 
+            setUploadProgress(percentCompleted);
           },
         }
       );
       if (response?.data?.profileImage) {
-        setLogedInUserData((prevData) => ({
-          ...prevData,
+        const updatedUser = {
+          ...logedInUserData,
           profileImage: response.data.profileImage,
-        }));
+        };
+        setLogedInUserData(updatedUser);
+        dispatch(updateUserDetails(updatedUser));
       }
       console.log("Upload success:", response.data);
     } catch (error) {
@@ -169,8 +173,8 @@ function Profile() {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-md-6">
-                    <div>
+                  <div className="col-12 col-md-6 d-flex align-items-center">
+                    <div className="w-100">
                       <button
                         className="action-button"
                         onClick={handleEditProfile}
@@ -178,8 +182,6 @@ function Profile() {
                         <FaUserEdit className="icon" /> Edit Profile
                         <IoIosArrowForward className="arrow-icon" />
                       </button>
-                    </div>
-                    <div>
                       <Link
                         to="/scheduled-appointment"
                         className="text-decoration-none"
@@ -190,8 +192,7 @@ function Profile() {
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                    </div>
-                    <div>
+                      {/* <div>
                       <Link
                         to="/change-password"
                         className="text-decoration-none"
@@ -201,8 +202,7 @@ function Profile() {
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                    </div>
-                    <div>
+                    </div> */}
                       <Link
                         to="/setting-and-security"
                         className="text-decoration-none"
@@ -212,8 +212,6 @@ function Profile() {
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                    </div>
-                    <div>
                       <button
                         className="action-button"
                         onClick={handleShowModal}
