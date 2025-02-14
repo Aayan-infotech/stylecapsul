@@ -63,6 +63,7 @@ const AddClothes = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const token = getCookie("authToken");
+  const loggedInUserId = getCookie("userId");
   const updateNewCloth = location?.state?.updateCloth;
   const currentCategory = location.state?.currentCategory;
 
@@ -135,17 +136,32 @@ const AddClothes = () => {
     }
     setBtnLoader(true);
     const data = new FormData();
+
+    // for (let key in formData) {
+    //   const value = formData[key];
+    //   if (key === "image" && value === null && updateNewCloth) {
+    //     data.append("picture", updateNewCloth.picture);
+    //   } else {
+    //     data.append(key === "image" ? "picture" : key, value);
+    //   }
+    // }
     for (let key in formData) {
-      const value = formData[key];
-      if (key === "image" && value === null && updateNewCloth) {
+      if (key === "image" && formData[key] === null && updateNewCloth) {
         data.append("picture", updateNewCloth.picture);
       } else {
-        data.append(key === "image" ? "picture" : key, value);
+        data.append(key === "image" ? "picture" : key, formData[key]);
       }
     }
+    if (!loggedInUserId) {
+      showErrorToast("User ID is missing. Please log in again.");
+      setBtnLoader(false);
+      return;
+    }
+    data.append("loggedInUserId", loggedInUserId);
+
     try {
       if (updateNewCloth) {
-        data.append("user_id", updateNewCloth.user_id);
+        data.append("loggedInUserId", updateNewCloth.loggedInUserId);
         const response = await axios.put(
           apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`),
           data,
@@ -161,9 +177,8 @@ const AddClothes = () => {
           navigate(`/all-clothes-list/${location.state?.currentCategory}`);
         }, 1000);
       } else {
-        const userId = user?.payload?._id;
-        if (userId) {
-          data.append("user_id", userId);
+        if (loggedInUserId) {
+          data.append("loggedInUserId", loggedInUserId);
         }
         const addclothesresponse = await dispatch(addClothes(data)).unwrap();
         showSuccessToast(addclothesresponse?.message);
@@ -353,6 +368,7 @@ const AddClothes = () => {
                       <label
                         htmlFor="purchaseDate"
                         className="form-label text-white fw-bold"
+                        onChange={handleChange}
                       >
                         Add Images
                       </label>
