@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { checkToken } from './utils/auth.util';
 import Login from './components/Login/Login';
 import LandingPage from './components/LandingPage/LandingPage';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import "./Routing.css";
 import Signup from './components/Signup/Signup';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
@@ -20,6 +20,7 @@ const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    // const navigate = useNavigate();
     const token = useSelector((state) => state?.login?.token);
     const user = useSelector((state) => state?.login?.user);
 
@@ -52,24 +53,24 @@ const AuthRoute = ({ children }) => {
         checkAuth();
     }, [token, user]);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const isValid = checkToken();
-            if (!isValid) {
-                dispatch(logoutUser());
-                navigate("/login");
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         const isValid = checkToken();
+    //         if (!isValid) {
+    //             dispatch(logoutUser());
+    //             navigate("/login");
+    //         }
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, []);
 
     if (loading) {
-        return <div className="loading-screen">Loading...</div>; 
-      }
-    
-      if (isAuth === null) {
+        return <div className="loading-screen">Loading...</div>;
+    }
+
+    if (isAuth === null) {
         return <div className="loading-screen">Checking authentication...</div>;
-      }
+    }
 
     if (isAuth) {
         return <>{children}</>;

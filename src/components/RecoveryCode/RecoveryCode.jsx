@@ -13,7 +13,6 @@ const RecoveryCode = () => {
   const [resendCountdown, setResendCountdown] = useState(0);
   const location = useLocation();
   const { email, time } = location.state || {};
-  console.log(time);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const RecoveryCode = () => {
     } else {
       setResendDisabled(false);
     }
-  }, [time]);
+  }, []);
 
   useEffect(() => {
     if (resendCountdown > 0) {
@@ -56,14 +55,11 @@ const RecoveryCode = () => {
       showErrorToast("Please enter a valid email address.");
       return;
     }
-
     setResendBtnLoader(true);
-
     try {
       const response = await axios.post(apiUrl("api/auth/send-email"), { email });
       if (response.status === 201 || response?.data?.success === true) {
         showSuccessToast(response?.data?.message || "Email sent successfully!");
-
         const newTime = parseInt(response?.data?.time || "60", 10);
         setResendCountdown(newTime);
         setResendDisabled(true);
@@ -98,7 +94,8 @@ const RecoveryCode = () => {
     e.preventDefault();
     setBtnLoader(true);
     const otp = values.join("");
-    if (otp.length !== values.length || otp.includes("")) {
+    console.log(otp.length, values.length, otp.includes(""), 'sdfsdfsf');
+    if (otp.length !== values.length) {
       showErrorToast("Please fill in all OTP fields before submitting.");
       setBtnLoader(false);
       return;

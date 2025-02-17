@@ -9,6 +9,7 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [btnLoader, setBtnLoader] = useState(false);
   const navigate = useNavigate();
+  
 
   const handleForgetPassword = async (e) => {
     e.preventDefault();
