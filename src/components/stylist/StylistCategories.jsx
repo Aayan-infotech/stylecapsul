@@ -137,9 +137,8 @@ const StylistCategories = () => {
                 >
                   <button
                     type="button"
-                    className={`btn ${
-                      selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
-                    } rounded-pill w-100 p-2`}
+                    className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
+                      } rounded-pill w-100 p-2`}
                     onClick={() => setSelectedCategory(cat)}
                   >
                     {cat}
@@ -168,6 +167,9 @@ const StylistCategories = () => {
                             alt={product.name}
                             className="img-fluid rounded-top"
                             style={{ objectFit: "contain" }}
+                            onError={(e) => {
+                              e.target.src = { blank_img };
+                            }}
                           />
                         </div>
                         <div className="product-details p-3">

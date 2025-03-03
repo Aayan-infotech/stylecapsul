@@ -11,6 +11,7 @@ import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import { showSuccessToast } from "../toastMessage/Toast";
+
 import Loader from "../Loader/Loader.jsx";
 
 export const SocialUserDetails = () => {
@@ -188,6 +189,9 @@ export const SocialUserDetails = () => {
                     alt="User Avatar"
                     className="rounded-circle mb-2"
                     src={userPostDetails?.user?.profileImage || blank_img}
+                    onError={(e) => {
+                      e.target.src = { blank_img };
+                    }}
                     style={{
                       display: "inline-block",
                       border: "2px solid black",
@@ -203,9 +207,9 @@ export const SocialUserDetails = () => {
                   <h4 className="fw-bold">
                     {userPostDetails?.user?.firstName
                       ? userPostDetails?.user?.firstName
-                          .charAt(0)
-                          .toUpperCase() +
-                        userPostDetails?.user?.firstName.slice(1).toLowerCase()
+                        .charAt(0)
+                        .toUpperCase() +
+                      userPostDetails?.user?.firstName.slice(1).toLowerCase()
                       : ""}
                   </h4>
                   <p className="m-0">{userPostDetails?.user?.bio}</p>
@@ -252,9 +256,8 @@ export const SocialUserDetails = () => {
             `}
                 </style>
                 {wardrow_categories.map((item, index) => (
-                  <Link to={item.url} className="text-decoration-none">
+                  <Link to={item.url} className="text-decoration-none" key={index}>
                     <div
-                      key={index}
                       className="rounded-pill mb-3 d-flex align-items-center"
                       style={{
                         backgroundColor: "#4C4C4C",
@@ -307,6 +310,9 @@ export const SocialUserDetails = () => {
                       }}
                       onMouseLeave={(e) => {
                         e.target.style.transform = "scale(1)";
+                      }}
+                      onError={(e) => {
+                        e.target.src = { blank_img };
                       }}
                     />
                   </div>

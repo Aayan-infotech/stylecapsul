@@ -3,11 +3,14 @@ import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
+import { useDispatch } from "react-redux";
+import { getAllCarts } from "../../reduxToolkit/addcartSlice";
 
 const ThankuPage = () => {
   const [searchParams] = useSearchParams();
   const session_id = searchParams.get("session_id");
   const token = getCookie("authToken");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPaymentDetails = async () => {
@@ -23,7 +26,7 @@ const ThankuPage = () => {
             withCredentials: true,
           }
         );
-        console.log("Payment Details:", response.data);
+        dispatch(getAllCarts());
       } catch (error) {
         console.error("Error fetching payment details:", error);
       }

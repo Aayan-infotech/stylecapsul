@@ -12,6 +12,7 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import moment from "moment";
 import Loader from "../Loader/Loader";
+import no_cart_found from "../../assets/not-cart_found.png"
 
 const Cart = () => {
   const [loading, setLoading] = useState(true);
@@ -153,7 +154,7 @@ const Cart = () => {
                               <h6 className="text-black fw-bold m-0">
                                 {item?.productDetails?.name.length > 30
                                   ? item?.productDetails?.name.slice(3, 30) +
-                                    "...."
+                                  "...."
                                   : item?.productDetails?.name || "N/A"}
                               </h6>
                               <p className="m-0">{item.date}</p>
@@ -258,7 +259,8 @@ const Cart = () => {
                 </>
               ) : (
                 <div className="text-center mt-5">
-                  <h3>No cart available</h3>
+                  {/* <h3>No cart available</h3> */}
+                  <img src={no_cart_found} height={200} />
                 </div>
               )}
             </div>
