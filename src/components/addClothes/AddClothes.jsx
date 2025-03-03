@@ -12,14 +12,15 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 const AddClothes = () => {
   const clothingTypes = [
     { value: "", label: "Select", disabled: true },
-    { value: "jeans", label: "Jeans" },
-    { value: "shirt", label: "Shirt" },
-    { value: "pant", label: "Pant" },
-    { value: "watch", label: "Watch" },
-    { value: "t-shirt", label: "T-shirt" },
-    { value: "dress", label: "Dress" },
-    { value: "skirt", label: "Skirt" },
-    { value: "shorts", label: "Shorts" },
+    { value: "Boots & Booties", label: "Boots & Booties" },
+    { value: "Pumps & Heels", label: "Pumps & Heels" },
+    { value: "Sandals", label: "Sandals" },
+    { value: "Sneakers", label: "Sneakers" },
+    { value: "Loafers", label: "Loafers" },
+    { value: "Flats", label: "Flats" },
+    { value: "Mules & Slides", label: "Mules & Slides" },
+    { value: "Slippers", label: "Slippers" },
+
     { value: "jacket", label: "Jacket" },
     { value: "sweater", label: "Sweater" },
     { value: "hoodie", label: "Hoodie" },
@@ -45,7 +46,34 @@ const AddClothes = () => {
     { value: "leggings", label: "Leggings" },
   ];
 
-  const { user, status, error } = useSelector((state) => state.login);
+  const categories = ["Clothing", "Handbags", "Shoes", "Jewelry & Accessories"];
+  const subCategories = {
+    Clothing: [
+      "Tops", "Bottoms", "Dresses", "Matching Sets", "Tailored Suiting",
+      "Sleepwear", "Activewear", "Lingerie & Shapewear", "Swimwear & Cover Ups",
+      "Jackets & Blazers", "Sweaters", "Skirts", "Coats", "Jeans",
+      "Pants & Shorts", "Belts", "Scarves", "Hats"
+    ],
+    Handbags: ["Handbags"],
+    Shoes: ["Shoes"],
+    "Jewelry & Accessories": ["Jewelry", "Accessories"]
+  };
+
+  const types = {
+    Shoes: {
+      Women: ["Boots & Booties", "Pumps & Heels", "Sandals", "Sneakers", "Loafers", "Flats", "Mules & Slides", "Slippers"],
+      Men: ["Sneakers", "Loafers & Slip-Ons", "Oxfords & Derby's", "Dress Shoes", "Sandals & Slides", "Boots", "Slippers"]
+    }
+  };
+
+  const eventSeasons = [
+    "Fall", "Winter", "Spring", "Summer", "Evening", "Daytime", "Casual", "Work", "Special Occasion"
+  ];
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [selectedTypeCategory, setSelectedTypeCategory] = useState("");
+
   const [imagePreview, setImagePreview] = useState(imagepreview);
   const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,7 +93,6 @@ const AddClothes = () => {
   const token = getCookie("authToken");
   const loggedInUserId = getCookie("userId");
   const updateNewCloth = location?.state?.updateCloth;
-  const currentCategory = location.state?.currentCategory;
 
   useEffect(() => {
     if (updateNewCloth) {
@@ -136,15 +163,6 @@ const AddClothes = () => {
     }
     setBtnLoader(true);
     const data = new FormData();
-
-    // for (let key in formData) {
-    //   const value = formData[key];
-    //   if (key === "image" && value === null && updateNewCloth) {
-    //     data.append("picture", updateNewCloth.picture);
-    //   } else {
-    //     data.append(key === "image" ? "picture" : key, value);
-    //   }
-    // }
     for (let key in formData) {
       if (key === "image" && formData[key] === null && updateNewCloth) {
         data.append("picture", updateNewCloth.picture);
@@ -158,7 +176,6 @@ const AddClothes = () => {
       return;
     }
     data.append("loggedInUserId", loggedInUserId);
-
     try {
       if (updateNewCloth) {
         data.append("loggedInUserId", updateNewCloth.loggedInUserId);
@@ -203,6 +220,72 @@ const AddClothes = () => {
         <div className="container">
           <div className="card card-btn">
             <div className="card-body">
+              <form className="row g-3" onSubmit={handleSubmit}>
+                <div className="col-md-4">
+                  <label className="form-label">Category</label>
+                  <select className="form-select rounded-pill"
+                    onChange={(e) => {
+                      setSelectedCategory(e.target.value);
+                      handleChange(e);
+                    }}
+                    name="category"
+                    value={formData.category}>
+                    <option value="">Select Category</option>
+                    {categories.map((cat, index) => (
+                      <option key={index} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {selectedCategory && subCategories[selectedCategory] && (
+                  <div className="col-md-4">
+                    <label className="form-label">SubCategory</label>
+                    <select className="form-select rounded-pill" onChange={(e) => setSelectedSubCategory(e.target.value)}>
+                      <option value="">Select SubCategory</option>
+                      {subCategories[selectedCategory].map((sub, index) => (
+                        <option key={index} value={sub}>{sub}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {selectedSubCategory === "Shoes" && (
+                  <div className="col-md-4">
+                    <label className="form-label">Type</label>
+                    <select className="form-select rounded-pill" onChange={(e) => setSelectedTypeCategory(e.target.value)}>
+                      <option value="">Select Type Category</option>
+                      <option value="Women">For Women</option>
+                      <option value="Men">For Men</option>
+                    </select>
+                  </div>
+                )}
+
+                {selectedTypeCategory && types.Shoes[selectedTypeCategory] && (
+                  <div className="col-md-4">
+                    <label className="form-label">Type</label>
+                    <select className="form-select rounded-pill">
+                      <option value="">Select Type</option>
+                      {types.Shoes[selectedTypeCategory].map((type, index) => (
+                        <option key={index} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <div className="col-md-4">
+                  <label className="form-label">Event & Season</label>
+                  <select className="form-select rounded-pill"
+                    name="season"
+                    value={formData.season}
+                    onChange={handleChange}>
+                    <option value="">Select Event & Season</option>
+                    {eventSeasons.map((event, index) => (
+                      <option key={index} value={event}>{event}</option>
+                    ))}
+                  </select>
+                </div>
+              </form>
+              {/* ------------------------------------------------------------------------------------------ */}
               <form onSubmit={handleSubmit} className="w-100">
                 <div className="row g-2 w-100 m-0">
                   <div className="col-md-4 col-sm-12">
@@ -220,13 +303,10 @@ const AddClothes = () => {
                         onChange={handleChange}
                         aria-label="category"
                       >
-                        <option value="" disabled>
-                          Select
-                        </option>
-                        <option value="clothes">Clothe</option>
-                        <option value="shoes">Shoes</option>
-                        <option value="accessories">Accessories</option>
-                        <option value="miscellaneous">Miscellaneous</option>
+                        <option value="" disabled>Select Category</option>
+                        {categories.map((cat, index) => (
+                          <option key={index} value={cat}>{cat}</option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -248,9 +328,6 @@ const AddClothes = () => {
                         <option value="outfitTop">Out Fit Top</option>
                         <option value="outfitBottom">Out Fit Bottom</option>
                         <option value="outfitFootwear">Out Fit Footwear</option>
-                        {/* <option value="yellow">Yellow</option>
-                        <option value="green">Green</option>
-                        <option value="orange">Orange</option> */}
                       </select>
                     </div>
                   </div>
@@ -282,7 +359,6 @@ const AddClothes = () => {
                       </select>
                     </div>
                   </div>
-
                   <div className="col-md-4 col-sm-12">
                     <div className="mb-3">
                       <label htmlFor="season" className="form-label text-white">
@@ -387,7 +463,6 @@ const AddClothes = () => {
                   type="submit"
                   className="rounded-pill fs-5 fw-bold btn btn-light add-btn"
                 >
-                  {/* {updateNewCloth ? "Update" : "Add"} */}
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
