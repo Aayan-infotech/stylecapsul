@@ -3,7 +3,7 @@ import "../../styles/ClothesList.scss";
 import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { format } from "date-fns";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { getCookie } from "../../utils/cookieUtils";
 import { useDispatch } from "react-redux";
@@ -19,6 +19,8 @@ function ClothesList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { category } = useParams();
+  const location = useLocation();
+  const { category_name } = location.state || {};
   const token = getCookie("authToken");
   if (!token) {
     showErrorToast("token not found");
@@ -40,7 +42,7 @@ function ClothesList() {
           },
         }
       );
-      setCategoryCloth(response.data);
+      setCategoryCloth(response.data.cloths || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching clothes by category:", error);
@@ -111,7 +113,7 @@ function ClothesList() {
   };
 
   const handleClothDetails = (cloth) => {
-    navigate(`/clothes-details/${cloth?._id}`);
+    navigate(`/clothes-details/${cloth?._id}`, { state: { category_name: category_name } });
   };
 
   return (
@@ -124,8 +126,7 @@ function ClothesList() {
             <div className="row align-items-center">
               <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h1 className="text-center fw-bold fs-1 mb-0">
-                  {category.charAt(0).toUpperCase() +
-                    category.slice(1).toLowerCase()}
+                  {category_name}
                 </h1>
                 <div className="search-box ">
                   <i className="fa fa-search"></i>
@@ -147,39 +148,29 @@ function ClothesList() {
                   </div>
                 </div>
               ) : categoryCloth.length > 0 ? (
-                categoryCloth.map((product, index) => (
+                categoryCloth.map((product, index) => ( // ✅ Iterate over categoryCloth directly
                   <div className="col-12" key={index}>
                     <div className="products-container">
                       <div
                         className="products-added rounded-pill"
-                        onClick={() => {
-                          handleClothDetails(product);
-                        }}
+                        onClick={() => handleClothDetails(product)}
                       >
                         <div className="product-img">
-                          <img
-                            src={product?.picture || blank_img}
-                            alt="cloth"
-                          />
+                          <img src={product?.picture || blank_img} alt="cloth" />
                         </div>
                         <div className="product-text">
                           <div className="first-text">
-                            <h3 className="fw-bold fs-3">
-                              {product?.category}
-                            </h3>
-                            <p className="m-0">{product?.typesOfCloths}</p>
+                            <h3 className="fw-bold fs-3">{product?.category?.name}</h3>
+                            <p className="m-0">{product?.typeOfFashion}</p>
                             <p className="mt-0 m-0 p-0">
-                              {format(
-                                new Date(product?.purchaseDate),
-                                "MM-dd-yyyy"
-                              )}
+                              {format(new Date(product?.purchaseDate), "MM-dd-yyyy")}
                             </p>
                           </div>
                           <button
                             type="button"
                             className="btn btn-outline-dark"
                             onClick={(e) => {
-                              e.stopPropagation(); 
+                              e.stopPropagation();
                               updateCloth(product);
                             }}
                           >

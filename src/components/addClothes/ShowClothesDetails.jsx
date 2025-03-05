@@ -7,6 +7,7 @@ import axios from 'axios';
 import { apiUrl } from '../../../apiUtils';
 import { getCookie } from '../../utils/cookieUtils';
 import Loader from "../Loader/Loader.jsx";
+import { showErrorToast } from '../toastMessage/Toast.jsx';
 
 const ShowClothesDetails = () => {
     const [showClothesDetails, setShowClothesDetails] = useState({});
@@ -14,6 +15,8 @@ const ShowClothesDetails = () => {
 
     const { clothid } = useParams();
     const token = getCookie("authToken");
+    const location = useLocation();
+    const { category_name } = location.state || {};
 
     const fetchClothDetails = async () => {
         setLoading(true);
@@ -25,13 +28,15 @@ const ShowClothesDetails = () => {
                 },
             })
             if (response?.data?.success) {
+                console.log(response.data.data, 'response.data.data')
                 setShowClothesDetails(response.data.data);
                 setLoading(false);
             } else {
-                console.error(response?.data?.message);
+                showErrorToast(response?.data?.message);
             }
         } catch (error) {
             if (error.response && error.response.status === 404) {
+                showErrorToast(error.response.data.message);
                 console.error(error.response.data.message);
             } else {
                 console.error(error.message);
@@ -98,39 +103,73 @@ const ShowClothesDetails = () => {
                                 </div>
                             </div>
 
-                            <div className="col-12 col-md-6 p-3 clothes-serviece-details">
+                            <div className="col-12 col-md-6 p-3 clothes-service-details">
                                 <div>
-                                    <h5>{showClothesDetails?.category || 'N/A'}</h5>
+                                    <h5 className='fw-bold'>{category_name || 'N/A'}</h5>
                                     <div className='border-line'></div>
+
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <p>Category</p>
-                                        <p className='fw-bold'>{showClothesDetails?.category || 'N/A'}</p>
+                                        <p className='fw-bold'>{category_name || 'N/A'}</p>
                                     </div>
-                                    <div className='d-flex justify-content-between align-items-center'>
-                                        <p>Color</p>
-                                        <p className='fw-bold'>{showClothesDetails?.color || 'N/A'}</p>
-                                    </div>
+
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <p>Type</p>
-                                        <p className='fw-bold'>{showClothesDetails?.typesOfCloths || 'N/A'}</p>
+                                        <p className='fw-bold'>{showClothesDetails?.typeOfFashion || 'N/A'}</p>
                                     </div>
+
                                     <div className='d-flex justify-content-between align-items-center'>
-                                        <p>Brand</p>
-                                        <p className='fw-bold'>{showClothesDetails?.brand || 'N/A'}</p>
+                                        <p>Season</p>
+                                        <p className='fw-bold'>{showClothesDetails?.season || 'N/A'}</p>
                                     </div>
+
                                     <div className='d-flex justify-content-between align-items-center'>
-                                        <p>Purchase date</p>
+                                        <p>Part</p>
+                                        <p className='fw-bold'>{showClothesDetails?.part || 'N/A'}</p>
+                                    </div>
+
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <p>Purchase Date</p>
                                         <p className='fw-bold'>
                                             {showClothesDetails?.purchaseDate
                                                 ? format(new Date(showClothesDetails.purchaseDate), 'dd MMM yyyy')
                                                 : 'N/A'}
                                         </p>
                                     </div>
-                                </div>
-                                <div align="center" className="">
-                                    <button type="button" className="btn clothes-custom-btn w-50 rounded-pill p-2">Share</button>
+
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <p>Dominant Color</p>
+                                        <div className='d-flex align-items-center gap-2'>
+                                            <span>{showClothesDetails?.dominantColor || 'N/A'}</span>
+                                            <div style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                backgroundColor: showClothesDetails?.dominantColor || '#ccc',
+                                                border: '1px solid #000'
+                                            }}></div>
+                                        </div>
+                                    </div>
+
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <p>Created At</p>
+                                        <p className='fw-bold'>
+                                            {showClothesDetails?.createdAt
+                                                ? format(new Date(showClothesDetails.createdAt), 'dd MMM yyyy HH:mm:ss')
+                                                : 'N/A'}
+                                        </p>
+                                    </div>
+
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <p>Updated At</p>
+                                        <p className='fw-bold'>
+                                            {showClothesDetails?.updatedAt
+                                                ? format(new Date(showClothesDetails.updatedAt), 'dd MMM yyyy HH:mm:ss')
+                                                : 'N/A'}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
