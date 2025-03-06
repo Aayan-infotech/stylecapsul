@@ -26,10 +26,8 @@ export const Logout = ({ isModalVisible, onClose }) => {
     try {
       const resultAction = await dispatch(logoutUser());
       if (resultAction?.payload?.status === 200) {
+        navigate("/");
         showSuccessToast(resultAction?.payload?.message);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
         onClose();
       } else {
         showErrorToast(

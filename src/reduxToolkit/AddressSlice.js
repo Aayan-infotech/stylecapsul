@@ -67,7 +67,6 @@ const addressSlice = createSlice({
             })
             .addCase(fetchAddresses.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                console.log(action.payload, 'action.payload')
                 state.addresses = action.payload.addresses;
             })
             .addCase(fetchAddresses.rejected, (state, action) => {

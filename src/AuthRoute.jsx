@@ -20,7 +20,6 @@ const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
-    // const navigate = useNavigate();
     const token = useSelector((state) => state?.login?.token);
     const user = useSelector((state) => state?.login?.user);
 
@@ -53,16 +52,16 @@ const AuthRoute = ({ children }) => {
         checkAuth();
     }, [token, user]);
 
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         const isValid = checkToken();
-    //         if (!isValid) {
-    //             dispatch(logoutUser());
-    //             navigate("/login");
-    //         }
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, []);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const isValid = checkToken();
+            if (!isValid) {
+                dispatch(logoutUser());
+                navigate("/login");
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     if (loading) {
         return <div className="loading-screen">Loading...</div>;

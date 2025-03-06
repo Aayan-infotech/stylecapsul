@@ -123,7 +123,7 @@ function ClothesList() {
       ) : (
         <div className="clothes-list-main-container">
           <div className="container w-75 clothes-list-container">
-            <div className="row align-items-center">
+            <div className="row align-items-center mt-4">
               <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h1 className="text-center fw-bold fs-1 mb-0">
                   {category_name}
@@ -148,7 +148,7 @@ function ClothesList() {
                   </div>
                 </div>
               ) : categoryCloth.length > 0 ? (
-                categoryCloth.map((product, index) => ( // ✅ Iterate over categoryCloth directly
+                categoryCloth.map((product, index) => ( 
                   <div className="col-12" key={index}>
                     <div className="products-container">
                       <div

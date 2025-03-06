@@ -62,7 +62,7 @@ const ClosetManagement = () => {
         <div className="closet-management-container">
           <div className="text-center">
             <h1 className="text-center fw-bold fs-1">Closet Management</h1>
-            <div className="container p-3 text-center w-50 pt-0">
+            <div className="container p-3 text-center w-75 pt-0">
               <div className="row g-3 m-0">
                 {cardData.map((item, index) => (
                   <div key={index} className="col-12 col-md-6 col-md-4">

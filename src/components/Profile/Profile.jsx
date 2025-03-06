@@ -11,12 +11,13 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
-import profile from "./img/profile.png";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 import Loader from "../Loader/Loader.jsx";
 import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import CircularProgress from "@mui/material/CircularProgress";
+import { showErrorToast } from "../toastMessage/Toast.jsx";
 
 function Profile() {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -29,7 +30,6 @@ function Profile() {
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
-  console.log(singleUser, 'singleUser');
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -95,9 +95,9 @@ function Profile() {
         setLogedInUserData(updatedUser);
         dispatch(updateUserDetails(updatedUser));
       }
-      console.log("Upload success:", response.data);
     } catch (error) {
-      console.error("Error uploading avatar image:", error);
+      showErrorToast(error?.response?.data?.message);
+      // console.error("Error uploading avatar image:", error);
       setUploadProgress(0);
     }
   };
@@ -123,16 +123,19 @@ function Profile() {
                             src={
                               previewImage ||
                               logedInUserData?.profileImage ||
-                              profile
+                              blank_img
                             }
                             alt="Profile"
                             className="rounded-pill"
                             height={200}
                             width={200}
                             style={{ objectFit: "cover" }}
+                            onError={(e) => {
+                              e.target.src = blank_img;
+                            }}
                           />
                           <div className="upload-overlay">
-                            <i className="fa fa-camera"></i> {/* Upload icon */}
+                            <i className="fa fa-camera"></i>
                           </div>
                         </div>
                         <input
@@ -192,17 +195,6 @@ function Profile() {
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                      {/* <div>
-                      <Link
-                        to="/change-password"
-                        className="text-decoration-none"
-                      >
-                        <button className="action-button">
-                          <FaLock className="icon" /> Change Password{" "}
-                          <IoIosArrowForward className="arrow-icon" />
-                        </button>
-                      </Link>
-                    </div> */}
                       <Link
                         to="/setting-and-security"
                         className="text-decoration-none"

@@ -64,7 +64,7 @@ const AddClothes = () => {
 
   const handleCategoryChange = (e) => {
     const categoryId = e.target.value;
-    const selectedCategoryObj = categories.find(cat => cat._id === categoryId);
+    // const selectedCategoryObj = categories.find(cat => cat._id === categoryId);
     setSelectedCategory(categoryId);
     fetchAllSubCategories(categoryId);
   };
@@ -188,7 +188,8 @@ const AddClothes = () => {
         }, 1000);
       } else {
         response = await dispatch(addClothes(data)).unwrap();
-        showSuccessToast(response?.message);
+        // showSuccessToast(response?.message);
+        showSuccessToast("Cloth added successfully..!");
         if (response.success && response.status === 200) {
           setTimeout(() => {
             navigate("/closet-categories");

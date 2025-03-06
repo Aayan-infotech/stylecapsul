@@ -66,7 +66,7 @@ const MarketPlace = () => {
           },
         }
       );
-      console.log(response?.data?.data, "abinash");
+      console.log(response?.data?.data, "setTrendySearch");
       if (response?.data?.success) {
         setTrendySearch(response?.data?.data);
       }
@@ -106,20 +106,6 @@ const MarketPlace = () => {
             <div className="outer-navbar">
               <div className="navbar d-flex justify-content-between align-items-center p-2">
                 <div className="navbar-left d-flex mb-0">
-                  {/* <Link to="/myaddedproducts">
-                <button
-                  type="button"
-                  className="rounded-pill btn bg-black text-white me-2"
-                >
-                  <span className="border-end border-white me-2 pe-2">
-                    <img
-                      src={imagefocus}
-                      alt="imagefocus"
-                      style={{ width: "20px", height: "20px" }} />
-                  </span>
-                  My Added Products
-                </button>
-              </Link> */}
                   <Link to="/orderhistory">
                     <button
                       type="button"
@@ -160,7 +146,8 @@ const MarketPlace = () => {
                   autoPlay
                   loop
                   muted
-                  className="w-100 h-75"
+                  className="w-100"
+                // h-100
                 ></video>
               </div>
             </div>
@@ -185,16 +172,23 @@ const MarketPlace = () => {
               <h3>Trending Searches</h3>
               <div className="row m-0">
                 <div className="col d-flex justify-content-start gap-3 overflow-control flex-wrap flex-row">
-                  {trendySearch?.map((item, index) => (
-                    <Stack direction="row" spacing={1} key={index}>
-                      <Chip
-                        avatar={<img src={item?.image} className="rounded-pill" alt="no image available" />}
-                        label={item?.name}
-                        variant="outlined"
-                        className="p-2"
-                      />
-                    </Stack>
-                  ))}
+                  {trendySearch?.length > 0 ? (
+                    trendySearch?.map((item, index) => (
+                      <Stack direction="row" spacing={1} key={index}>
+                        <Chip
+                          avatar={<img src={item?.image} className="rounded-pill" alt="no image available"
+                            onError={(e) => {
+                              e.target.src = blank_img;
+                            }} />}
+                          label={item?.name}
+                          variant="outlined"
+                          className="p-2"
+                        />
+                      </Stack>
+                    ))
+                  ) : (
+                    <div className="text-muted">Not trending available</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -215,9 +209,12 @@ const MarketPlace = () => {
                         <div className="style-item">
                           <div className="image-container rounded-top-pill">
                             <img
-                              src={item.images[0] || blank_img}
+                              src={item.images?.[0] || blank_img}
                               alt={item.name}
                               className="img-fluid"
+                              onError={(e) => {
+                                e.target.src = blank_img;
+                              }}
                             />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
@@ -252,6 +249,9 @@ const MarketPlace = () => {
                               src={item.images[0]}
                               alt={item.name}
                               className="img-fluid"
+                              onError={(e) => {
+                                e.target.src = blank_img;
+                              }}
                             />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
@@ -286,6 +286,9 @@ const MarketPlace = () => {
                               src={item.images[0]}
                               alt={item.name}
                               className="img-fluid"
+                              onError={(e) => {
+                                e.target.src = blank_img;
+                              }}
                             />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">

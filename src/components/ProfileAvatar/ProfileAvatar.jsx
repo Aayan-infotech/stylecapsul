@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ProfileAvatar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // -----------------------
-import girl from "./img/girl.png";
+import girl from "../../assets/stylist/blank_img.jpg";
 import changeAvtar from "./img/d3cd5a4cdfd2a1b9677a50a12e6c5818.png";
 import halfbtnavtar from "./img/fullbodyimage.png";
 import fullbtnavtar from "./img/arrow.png";
@@ -14,6 +14,7 @@ import standing from "../../assets/standing-human-body.png";
 import { getCookie } from "../../utils/cookieUtils.js";
 import { ClossetDetails } from "../ClossetDetails/ClossetDetails.jsx";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 
 
 function ProfileAvatar() {
@@ -207,7 +208,6 @@ function ProfileAvatar() {
     <>
       <div className="update-profile-container">
         <div className="container">
-          {/* -------------------------profile section----------------------- */}
           <div className="row gx-4">
             <div className="col-12 col-md-6">
               <div className="p-2 d-flex justify-content-end align-items-center">
@@ -219,9 +219,12 @@ function ProfileAvatar() {
                       height={300}
                       width={300}
                       alt="Avatar"
+                      onError={(e) => {
+                        e.target.src = { blank_img };
+                      }}
                     />
                   </div>
-                  <div className="change-avtar-btn">
+                  {/* <div className="change-avtar-btn">
                     {currentImageAvtar === girl && (
                       <button
                         type="button"
@@ -240,7 +243,7 @@ function ProfileAvatar() {
                         <img src={fullbtnavtar} height={30} alt="" />
                       </button>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -285,9 +288,8 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
-                      activeTab === "basic" ? "btn-active" : ""
-                    }`}
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "basic" ? "btn-active" : ""
+                      }`}
                     onClick={() => setActiveTab("basic")}
                   >
                     Basic
@@ -296,9 +298,8 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start">
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
-                      activeTab === "questionnaire" ? "btn-active" : ""
-                    }`}
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "questionnaire" ? "btn-active" : ""
+                      }`}
                     onClick={() => setActiveTab("questionnaire")}
                   >
                     Questionnaire
@@ -650,9 +651,8 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeGenderType === gender_type ? "selected" : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeGenderType === gender_type ? "selected" : ""
+                              }`}
                             onClick={() => handleClickGenderType(gender_type)}
                           >
                             {gender_type}
@@ -670,9 +670,8 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeBodySize === body_size ? "selected" : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeBodySize === body_size ? "selected" : ""
+                              }`}
                             onClick={() => handleClickBodySize(body_size)}
                           >
                             {body_size}
@@ -690,9 +689,8 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeEyeColor === eye_color ? "selected" : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeEyeColor === eye_color ? "selected" : ""
+                              }`}
                             onClick={() => handleClickEyeColor(eye_color)}
                           >
                             {eye_color}
@@ -711,9 +709,8 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeHairColor === hair_color ? "selected" : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeHairColor === hair_color ? "selected" : ""
+                              }`}
                             onClick={() => handleClickHairColor(hair_color)}
                           >
                             {hair_color}
@@ -733,9 +730,8 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeAgeRange === age_range ? "selected" : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeAgeRange === age_range ? "selected" : ""
+                              }`}
                             onClick={() => handleClickAgeRange(age_range)}
                           >
                             {age_range}
@@ -753,11 +749,10 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
-                              activeMaterialStatus === material_status
-                                ? "selected"
-                                : ""
-                            }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeMaterialStatus === material_status
+                              ? "selected"
+                              : ""
+                              }`}
                             onClick={() =>
                               handleClickMaterialStatus(material_status)
                             }

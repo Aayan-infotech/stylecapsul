@@ -4,6 +4,7 @@ import { userChangePassword } from "../../reduxToolkit/changePasswordSlice";
 import "../../styles/ChangePassword.scss";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import { logoutUser } from "../../reduxToolkit/loginSlice";
 
 const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -61,6 +62,8 @@ const ChangePassword = () => {
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
+        await dispatch(logoutUser());
+        navigate("/");
       } else {
         throw new Error(changepassresult.payload?.message || "Unknown error");
       }
@@ -99,9 +102,8 @@ const ChangePassword = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showOldPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showOldPassword ? "fa-eye" : "fa-eye-slash"
+                        }`}
                     ></i>
                   </button>
                 </div>
@@ -124,9 +126,8 @@ const ChangePassword = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showNewPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showNewPassword ? "fa-eye" : "fa-eye-slash"
+                        }`}
                     ></i>
                   </button>
                 </div>
@@ -154,9 +155,8 @@ const ChangePassword = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showConfirmPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                        }`}
                     ></i>
                   </button>
                 </div>

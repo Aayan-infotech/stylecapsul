@@ -10,7 +10,6 @@ import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
   const location = useLocation();
-  // const isExplorePage = location.pathname === "/explore";
   const isExplorePage =
     location.pathname === "/explore" || location.pathname === "/user-profile";
 

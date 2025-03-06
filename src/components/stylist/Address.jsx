@@ -190,7 +190,6 @@ const Address = () => {
             </label>
           ))
         )}
-
         <div className="text-center my-3">
           <a
             href="#"
@@ -213,7 +212,6 @@ const Address = () => {
           Submit
         </button>
       </div>
-      {/* Address Modal */}
       {showModal && (
         <div
           className="modal fade show"

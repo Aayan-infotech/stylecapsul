@@ -33,36 +33,12 @@ const Signup = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  // const validateForm = () => {
-  //   const newErrors = {};
-  //   if (!formData.firstName.trim()) newErrors.firstName = "Name is required.";
-  //   if (!formData.email.trim()) {
-  //     newErrors.email = "Email or phone number is required.";
-  //   } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-  //     newErrors.email = "Please enter a valid email address.";
-  //   }
-  //   if (!formData.username.trim()) newErrors.username = "Username is required.";
-  //   if (!formData.password.trim()) newErrors.password = "Password is required.";
-  //   if (formData.password.length < 6) {
-  //     newErrors.password = "Password must be at least 6 characters.";
-  //   }
-  //   if (formData.password !== formData.confirmPassword) {
-  //     newErrors.confirmPassword = "Passwords do not match.";
-  //   }
-  //   return newErrors;
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const newErrors = validateForm();
-    // if(Object.keys(newErrors).length > 0){
-    //   setErrors(newErrors);
-    //   return;
-    // };
-    if(!formData.firstName && formData.email){
+    if (!formData.firstName && formData.email) {
       showSuccessToast('error')
     }
-    
+
     setBtnLoader(true);
     try {
       const signUp = await axios.post(apiUrl("api/auth/signup"), {
@@ -126,7 +102,8 @@ const Signup = () => {
                     htmlFor="email"
                     className="form-label text-black fw-bold"
                   >
-                    Enter Email or Phone Number
+                    Enter Email
+                    {/* Enter Email or Phone Number */}
                   </label>
                   <input
                     type="text"
@@ -176,9 +153,8 @@ const Signup = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"
+                        }`}
                     ></i>
                   </button>
                 </div>
@@ -206,9 +182,8 @@ const Signup = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showConfirmPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"
+                        }`}
                     ></i>
                   </button>
                 </div>

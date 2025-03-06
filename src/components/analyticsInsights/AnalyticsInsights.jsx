@@ -125,7 +125,7 @@ const AnalyticsInsights = () => {
     },
   };
   return (
-    <div className="d-flex justify-content-center align-items-center analytics-insights">
+    <div className=" analytics-insights">
       <div className="container w-75">
         <div className="row gy-3">
           <div className="col-12 col-md-6">
@@ -170,6 +170,8 @@ const AnalyticsInsights = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="container">
         {/* -------------------------------------Most Wore Items----------------------chart */}
         <div className="row mt-5">
           <h1 className="fw-bold fs-1">Most Wore Items</h1>
@@ -195,20 +197,14 @@ const AnalyticsInsights = () => {
           </div>
         </div>
 
-        {/* -------------------------------------Types of Clothes----------------------chart */}
-        <div className="row mt-5">
+        <div class="row gx-5 mt-4">
           <h1 className="fw-bold fs-1">Types of Clothes</h1>
-          <div className="col-12">
+          <div class="col">
             <div className="chart-container d-flex justify-content-center align-items-center">
               <Pie data={data} options={pieChartoptions} />
             </div>
           </div>
-        </div>
-
-        {/* -------------------------------------Types of Item in Wardrobe----------------------chart */}
-        <div className="row mt-5">
-          <h1 className="fw-bold fs-1">Types of Item in Wardrobe</h1>
-          <div className="col-12">
+          <div class="col">
             <div className="chart-container d-flex justify-content-center align-items-center">
               <Pie data={data} options={pieChartoptions} />
             </div>

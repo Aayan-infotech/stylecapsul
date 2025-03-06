@@ -190,7 +190,7 @@ export const SocialUserDetails = () => {
                     className="rounded-circle mb-2"
                     src={userPostDetails?.user?.profileImage || blank_img}
                     onError={(e) => {
-                      e.target.src = { blank_img };
+                      e.target.src = blank_img;
                     }}
                     style={{
                       display: "inline-block",
@@ -312,7 +312,7 @@ export const SocialUserDetails = () => {
                         e.target.style.transform = "scale(1)";
                       }}
                       onError={(e) => {
-                        e.target.src = { blank_img };
+                        e.target.src = blank_img;
                       }}
                     />
                   </div>
