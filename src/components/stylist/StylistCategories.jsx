@@ -26,7 +26,6 @@ const StylistCategories = () => {
   const token = getCookie("authToken");
   const { categoryId } = useParams();
   const cartItems = useSelector((state) => state.cart.cart);
-  console.log(cartItems, "cartItems");
 
   const fetchAllCategoriesType = async () => {
     setLoading(true);
@@ -43,7 +42,6 @@ const StylistCategories = () => {
           },
         }
       );
-      console.log(response?.data?.data, "response?.data?.data");
       if (response?.data?.data) {
         setMarketPlaceCategoryType(response?.data?.data);
       } else {
