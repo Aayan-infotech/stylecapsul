@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./LandingPage.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import one from "./img/one.mp4";
 import two from "./img/two.png";
@@ -24,6 +24,7 @@ const LandingPage = () => {
   const [loading, setLoading] = useState(true);
   const [popularsProducts, setPopularsProducts] = useState([]);
   const token = useSelector((state) => state?.login?.token);
+  const navigate = useNavigate();
 
   const services = [
     { id: 1, imgSrc: three, alt: "Closet Icon", text: "Closet Management" },

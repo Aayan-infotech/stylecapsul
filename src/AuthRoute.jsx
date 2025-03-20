@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { checkToken } from './utils/auth.util';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Login from './components/Login/Login';
 import LandingPage from './components/LandingPage/LandingPage';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-import "./Routing.css";
 import Signup from './components/Signup/Signup';
+import "./Routing.css";
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import RecoveryCode from './components/RecoveryCode/RecoveryCode';
 import ResetPassword from './components/ResetPassword/ResetPassword';
@@ -22,6 +22,7 @@ const AuthRoute = ({ children }) => {
     const dispatch = useDispatch();
     const token = useSelector((state) => state?.login?.token);
     const user = useSelector((state) => state?.login?.user);
+    // const navigate = useNavigate();
 
     useEffect(() => {
         fetchData();
@@ -57,7 +58,7 @@ const AuthRoute = ({ children }) => {
             const isValid = checkToken();
             if (!isValid) {
                 dispatch(logoutUser());
-                navigate("/login");
+                // navigate("/login");
             }
         }, 1000);
         return () => clearInterval(interval);
