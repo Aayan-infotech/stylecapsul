@@ -72,7 +72,7 @@ const Routing = () => {
             <Route path="/setting-and-security" element={<SettingAndSecurity />}/>
             <Route path="/closet-management" element={<ClosetManagement />} />
             <Route path="/closet-categories" element={<ClosetCategories />} />
-            <Route path="/close-management_style_scan" element={<StyleScan />}/>
+            <Route path="/stylescan" element={<StyleScan />}/>
             <Route path="/upload-image-scan" element={<UploadScanImage />} />
             <Route path="/scanned-image-wardrobe" element={<ScannedImageWardrobe />}/>
             <Route path="/market-place" element={<MarketPlace />} />

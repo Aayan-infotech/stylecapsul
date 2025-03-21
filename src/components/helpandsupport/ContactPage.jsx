@@ -48,7 +48,6 @@ const ContactPage = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (response.status === 200) {
         showSuccessToast(response.data.message || "Message sent successfully!");
         setFormData({

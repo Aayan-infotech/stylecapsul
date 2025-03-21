@@ -40,7 +40,7 @@ const cardData = [
     title: "StyleScan",
     imageAlt: "imagefocus",
     imageStyle: { width: "50px", height: "45px" },
-    url: "/close-management_style_scan",
+    url: "/stylescan",
   },
 ];
 
