@@ -136,16 +136,17 @@ const AddClothes = () => {
     const { name, value, files } = e.target;
     if (name === "image" && files) {
       const imageFiles = Array.from(files);
+      if (formData?.image?.length + imageFiles?.length > 3) {
+        showErrorToast("You can upload a maximum of 3 images.");
+        return;
+      }
       const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
       setFormData((prevData) => ({
         ...prevData,
         image: prevData.image ? [...prevData.image, ...imageFiles] : imageFiles,
       }));
-  
-      setImagePreview((prevPreviews) => [
-        ...prevPreviews,
-        ...previewUrls,
-      ]);
+
+      setImagePreview((prevPreviews) => [...prevPreviews, ...previewUrls]);
     } else {
       setFormData((prevData) => ({
         ...prevData,
