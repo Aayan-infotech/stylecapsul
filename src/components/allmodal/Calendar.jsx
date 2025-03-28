@@ -326,87 +326,104 @@ const ClothesCalendar = ({ onSave }) => {
                   </Box>
                   <TabPanel value="outfitTop">
                     <div className="row gx-3 ma-0">
-                      {allAddedClothesByUser?.outfitTop?.map((item) => (
-                        <div className="col-3" key={item?._id}>
-                          <div
-                            className="p-2 text-center"
-                            onClick={() => handleSelectImage("outfitTop", item)}
-                            style={{
-                              border:
-                                selectedImages.outfitTop === item._id
-                                  ? "2px solid green"
-                                  : "1px solid #d9d6d6",
-                              borderRadius: "8px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              src={item?.picture || blank_img}
-                              alt={item?.description}
-                              className="w-100 mb-2 rounded"
-                              height="100"
-                            />
+                      {allAddedClothesByUser?.length > 0 ? (
+                        allAddedClothesByUser?.outfitTop?.map((item) => (
+                          <div className="col-3" key={item?._id}>
+                            <div
+                              className="p-2 text-center"
+                              onClick={() =>
+                                handleSelectImage("outfitTop", item)
+                              }
+                              style={{
+                                border:
+                                  selectedImages.outfitTop === item._id
+                                    ? "2px solid green"
+                                    : "1px solid #d9d6d6",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <img
+                                src={item?.picture[0] || blank_img}
+                                alt={item?.description}
+                                className="w-100 mb-2 rounded"
+                                height="100"
+                                onError={(e) => (e.target.src = blank_img)}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p>No Outfit Top found</p>
+                      )}
                     </div>
                   </TabPanel>
                   <TabPanel value="outfitBottom">
                     <div className="row gy-4 gx-3 ma-0">
-                      {allAddedClothesByUser?.outfitBottom?.map((item) => (
-                        <div className="col-3" key={item?._id}>
-                          <div
-                            className="p-2 text-center"
-                            onClick={() =>
-                              handleSelectImage("outfitBottom", item)
-                            }
-                            style={{
-                              border:
-                                selectedImages.outfitBottom === item._id
-                                  ? "2px solid green"
-                                  : "1px solid #d9d6d6",
-                              borderRadius: "8px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              src={item?.picture}
-                              alt={item?.description}
-                              className="w-100 mb-2 rounded"
-                              height="100"
-                            />
+                      {allAddedClothesByUser?.length > 0 ? (
+                        allAddedClothesByUser?.outfitBottom?.map((item) => (
+                          <div className="col-3" key={item?._id}>
+                            <div
+                              className="p-2 text-center"
+                              onClick={() =>
+                                handleSelectImage("outfitBottom", item)
+                              }
+                              style={{
+                                border:
+                                  selectedImages.outfitBottom === item._id
+                                    ? "2px solid green"
+                                    : "1px solid #d9d6d6",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <img
+                                src={item?.picture[0] || blank_img}
+                                alt={item?.description}
+                                className="w-100 mb-2 rounded"
+                                height="100"
+                                onError={(e) => (e.target.src = blank_img)}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p>No Outfit Bottom found</p>
+                      )}
                     </div>
                   </TabPanel>
                   <TabPanel value="outfitFootwear">
                     <div className="row gy-4 gx-3 ma-0">
-                      {allAddedClothesByUser?.outfitFootwear?.map((item) => (
-                        <div className="col-3" key={item?._id}>
-                          <div
-                            className="p-2 text-center"
-                            onClick={() =>
-                              handleSelectImage("outfitFootwear", item)
-                            }
-                            style={{
-                              border:
-                                selectedImages.outfitFootwear === item._id
-                                  ? "2px solid green"
-                                  : "1px solid #d9d6d6",
-                              borderRadius: "8px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <img
-                              src={item?.picture}
-                              alt={item?.description}
-                              className="w-100 mb-2 rounded"
-                              height="100"
-                            />
+                      {allAddedClothesByUser?.length > 0 ? (
+                        allAddedClothesByUser?.outfitFootwear?.map((item) => (
+                          <div className="col-3" key={item?._id}>
+                            <div
+                              className="p-2 text-center"
+                              onClick={() =>
+                                handleSelectImage("outfitFootwear", item)
+                              }
+                              style={{
+                                border:
+                                  selectedImages.outfitFootwear === item._id
+                                    ? "2px solid green"
+                                    : "1px solid #d9d6d6",
+                                borderRadius: "8px",
+                                cursor: "pointer",
+                              }}
+                            >
+                              <img
+                                src={item?.picture[0] || blank_img}
+                                alt={item?.description}
+                                className="w-100 mb-2 rounded"
+                                height="100"
+                                onError={(e) => (e.target.src = blank_img)}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p>No Outfit Footwear found</p>
+                      )}
                     </div>
                   </TabPanel>
                 </TabContext>

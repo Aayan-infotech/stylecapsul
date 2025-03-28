@@ -42,8 +42,10 @@ function ClothesList() {
           },
         }
       );
-      setCategoryCloth(response.data.cloths || []);
-      setLoading(false);
+      if (response.data.status === 200 && response.data.success === true) {
+        setCategoryCloth(response.data.cloths || []);
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching clothes by category:", error);
       setLoading(false);
@@ -113,7 +115,9 @@ function ClothesList() {
   };
 
   const handleClothDetails = (cloth) => {
-    navigate(`/clothes-details/${cloth?._id}`, { state: { category_name: category_name } });
+    navigate(`/clothes-details/${cloth?._id}`, {
+      state: { category_name: category_name },
+    });
   };
 
   return (
@@ -126,7 +130,7 @@ function ClothesList() {
             <div className="row align-items-center mt-4">
               <div className="col-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h1 className="text-center fw-bold fs-1 mb-0">
-                  {category_name}
+                  {category_name || "N/A"}
                 </h1>
                 <div className="search-box ">
                   <i className="fa fa-search"></i>
@@ -148,7 +152,7 @@ function ClothesList() {
                   </div>
                 </div>
               ) : categoryCloth.length > 0 ? (
-                categoryCloth.map((product, index) => ( 
+                categoryCloth.map((product, index) => (
                   <div className="col-12" key={index}>
                     <div className="products-container">
                       <div
@@ -156,14 +160,24 @@ function ClothesList() {
                         onClick={() => handleClothDetails(product)}
                       >
                         <div className="product-img">
-                          <img src={product?.picture || blank_img} alt="cloth" />
+                          <img
+                            src={product?.pictures?.[0] || blank_img}
+                            alt="cloth"
+                            className="product-image"
+                            onError={(e) => (e.target.src = blank_img)}
+                          />
                         </div>
                         <div className="product-text">
                           <div className="first-text">
-                            <h3 className="fw-bold fs-3">{product?.category?.name}</h3>
+                            <h3 className="fw-bold fs-3">
+                              {product?.category?.name}
+                            </h3>
                             <p className="m-0">{product?.typeOfFashion}</p>
                             <p className="mt-0 m-0 p-0">
-                              {format(new Date(product?.purchaseDate), "MM-dd-yyyy")}
+                              {format(
+                                new Date(product?.purchaseDate),
+                                "MM-dd-yyyy"
+                              )}
                             </p>
                           </div>
                           <button

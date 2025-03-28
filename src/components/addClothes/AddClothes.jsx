@@ -19,7 +19,7 @@ const AddClothes = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedTypeCategory, setSelectedTypeCategory] = useState("");
 
-  const [imagePreview, setImagePreview] = useState(imagepreview);
+  const [imagePreview, setImagePreview] = useState([]);
   const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({
     category: "",
@@ -28,7 +28,7 @@ const AddClothes = () => {
     season: "",
     purchaseDate: "",
     description: "",
-    image: null,
+    image: [],
   });
 
   const dispatch = useDispatch();
@@ -38,13 +38,11 @@ const AddClothes = () => {
   const loggedInUserId = getCookie("userId");
   const updateNewCloth = location?.state?.updateCloth;
 
-
   const fetchAllCategories = async () => {
     try {
       const response = await axios.get(apiUrl("api/closet/get-closet"));
-      if (response?.data?.status === 200 &&
-        response?.data?.success === true) {
-        setCategories(response?.data?.data)
+      if (response?.data?.status === 200 && response?.data?.success === true) {
+        setCategories(response?.data?.data);
       }
     } catch (error) {
       console.log(error);
@@ -53,7 +51,9 @@ const AddClothes = () => {
 
   const fetchAllSubCategories = async (categoryId) => {
     try {
-      const response = await axios.get(apiUrl(`api/closet/closet-subcategory/get?categoryId=${categoryId}`));
+      const response = await axios.get(
+        apiUrl(`api/closet/closet-subcategory/get?categoryId=${categoryId}`)
+      );
       if (response?.data?.status === 200 && response?.data?.success === true) {
         setSubCategories(response?.data?.data[0]?.subcategory);
       }
@@ -64,22 +64,28 @@ const AddClothes = () => {
 
   const handleCategoryChange = (e) => {
     const categoryId = e.target.value;
-    // const selectedCategoryObj = categories.find(cat => cat._id === categoryId);
     setSelectedCategory(categoryId);
     fetchAllSubCategories(categoryId);
   };
 
-
   const handleSubCategoryChange = (e) => {
     const subCategoryType = e.target.value;
-    const selectedSubCategoryObj = subCategories.find(sub => sub.name === subCategoryType);
-    setSelectedSubCategory(selectedSubCategoryObj ? selectedSubCategoryObj.name : "");
+    const selectedSubCategoryObj = subCategories.find(
+      (sub) => sub.name === subCategoryType
+    );
+    setSelectedSubCategory(
+      selectedSubCategoryObj ? selectedSubCategoryObj.name : ""
+    );
     fetchAllTypeFromSubCategory(subCategoryType);
   };
 
   const fetchAllTypeFromSubCategory = async (subCategoryType) => {
     try {
-      const response = await axios.get(apiUrl(`api/closet/closet-subcategory/type/get?subcategoryName=${subCategoryType}`));
+      const response = await axios.get(
+        apiUrl(
+          `api/closet/closet-subcategory/type/get?subcategoryName=${subCategoryType}`
+        )
+      );
       if (response?.data?.status === 200 && response?.data?.success === true) {
         setAllTypeFromSubCategory(response?.data?.data);
       }
@@ -90,7 +96,9 @@ const AddClothes = () => {
 
   const fetchAllSeasons = async (categoryId) => {
     try {
-      const response = await axios.get(apiUrl("api/entity/getEntity?type=season"));
+      const response = await axios.get(
+        apiUrl("api/entity/getEntity?type=season")
+      );
       if (response?.data?.status === 200 && response?.data?.success === true) {
         setEventSeasons(response?.data?.data);
       }
@@ -103,7 +111,6 @@ const AddClothes = () => {
     fetchAllCategories();
     fetchAllSeasons();
   }, []);
-
 
   useEffect(() => {
     if (updateNewCloth) {
@@ -119,31 +126,42 @@ const AddClothes = () => {
       setImagePreview(updateNewCloth.picture || "");
       setSelectedCategory(updateNewCloth.category?._id || "");
       const categoryId = updateNewCloth.category?._id;
-      fetchAllSubCategories(categoryId)
+      fetchAllSubCategories(categoryId);
       setSelectedSubCategory(updateNewCloth.subcategory || "");
       fetchAllTypeFromSubCategory(updateNewCloth.subcategory);
     }
   }, [updateNewCloth]);
 
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image" && files && files[0]) {
-      setFormData({
-        ...formData,
-        image: files[0],
-      });
-      setImagePreview(URL.createObjectURL(files[0]));
+    if (name === "image" && files) {
+      const imageFiles = Array.from(files);
+      const previewUrls = imageFiles.map((file) => URL.createObjectURL(file));
+      setFormData((prevData) => ({
+        ...prevData,
+        image: prevData.image ? [...prevData.image, ...imageFiles] : imageFiles,
+      }));
+  
+      setImagePreview((prevPreviews) => [
+        ...prevPreviews,
+        ...previewUrls,
+      ]);
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prevData) => ({
+        ...prevData,
         [name]: value,
-      });
+      }));
     }
   };
 
-  const handleImageClick = () => {
-    document.getElementById("imageUpload").click();
+  const handleRemoveImage = (index) => {
+    setImagePreview((prevPreviews) =>
+      prevPreviews.filter((_, i) => i !== index)
+    );
+    setFormData((prevData) => ({
+      ...prevData,
+      image: prevData.image.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -164,9 +182,11 @@ const AddClothes = () => {
     }
     data.append("loggedInUserId", loggedInUserId);
     if (formData.image) {
-      data.append("picture", formData.image);
+      formData.image.forEach((image, index) => {
+        data.append("pictures", image);
+      });
     } else if (updateNewCloth?.picture) {
-      data.append("picture", updateNewCloth.picture);
+      data.append("pictures", updateNewCloth.picture);
     }
 
     try {
@@ -188,7 +208,6 @@ const AddClothes = () => {
         }, 1000);
       } else {
         response = await dispatch(addClothes(data)).unwrap();
-        // showSuccessToast(response?.message);
         showSuccessToast("Cloth added successfully..!");
         if (response.success && response.status === 200) {
           setTimeout(() => {
@@ -204,6 +223,7 @@ const AddClothes = () => {
     }
   };
 
+  const todayDate = new Date().toISOString().split("T")[0];
 
   return (
     <>
@@ -215,15 +235,19 @@ const AddClothes = () => {
               <form className="row g-3" onSubmit={handleSubmit}>
                 <div className="col-md-4">
                   <label className="form-label">Category</label>
-                  <select className="form-select rounded-pill p-2"
+                  <select
+                    className="form-select rounded-pill p-2"
                     onChange={handleCategoryChange}
                     name="category"
-                    value={selectedCategory || updateNewCloth?.category?._id || ""}
-                  // value={categories.find(cat => cat.name === selectedCategory)?._id || ""}
+                    value={
+                      selectedCategory || updateNewCloth?.category?._id || ""
+                    }
                   >
                     <option value="">Select Category</option>
                     {categories?.map((cat) => (
-                      <option key={cat?._id} value={cat?._id}>{cat?.name}</option>
+                      <option key={cat?._id} value={cat?._id}>
+                        {cat?.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -235,12 +259,17 @@ const AddClothes = () => {
                       className="form-select rounded-pill p-2"
                       onChange={handleSubCategoryChange}
                       name="subcategory"
-                      value={selectedSubCategory || updateNewCloth?.subCategories?.name || ""}
-                    // value={subCategories.find(sub => sub.name === selectedSubCategory)?._id || ""}
+                      value={
+                        selectedSubCategory ||
+                        updateNewCloth?.subCategories?.name ||
+                        ""
+                      }
                     >
                       <option value="">Select SubCategory</option>
                       {subCategories?.map((sub) => (
-                        <option key={sub?._id} value={sub?._id}>{sub?.name}</option>
+                        <option key={sub?._id} value={sub?._id}>
+                          {sub?.name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -251,7 +280,11 @@ const AddClothes = () => {
                     <label className="form-label">Type</label>
                     <select
                       className="form-select rounded-pill p-2"
-                      value={selectedTypeCategory || updateNewCloth?.typeOfFashion || ""}
+                      value={
+                        selectedTypeCategory ||
+                        updateNewCloth?.typeOfFashion ||
+                        ""
+                      }
                       onChange={(e) => setSelectedTypeCategory(e.target.value)}
                     >
                       <option value="">Select Type Category</option>
@@ -266,14 +299,17 @@ const AddClothes = () => {
 
                 <div className="col-md-4">
                   <label className="form-label">Event & Season</label>
-                  <select className="form-select rounded-pill p-2"
+                  <select
+                    className="form-select rounded-pill p-2"
                     name="season"
                     onChange={handleChange}
                     value={formData.season || updateNewCloth?.season || ""}
                   >
                     <option value="">Select Event & Season</option>
                     {eventSeasons.map((event, index) => (
-                      <option key={index} value={event?.name}>{event?.name}</option>
+                      <option key={index} value={event?.name}>
+                        {event?.name}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -315,6 +351,7 @@ const AddClothes = () => {
                       name="purchaseDate"
                       onChange={handleChange}
                       value={formData.purchaseDate}
+                      min={todayDate}
                       aria-describedby="purchaseDate"
                     />
                   </div>
@@ -342,32 +379,55 @@ const AddClothes = () => {
 
                 <div className="col-12 col-md-2 d-flex justify-content-center align-items-center">
                   <div className="text-center mb-4 mb-lg-0">
-                    <div className="mt-lg-4 ">
-                      <img
-                        src={imagePreview}
-                        height={100}
-                        alt="Preview"
-                        onClick={handleImageClick}
+                    <div className="mt-lg-4">
+                      <label
+                        htmlFor="imageUpload"
+                        className="form-label text-white fw-bold"
                         style={{ cursor: "pointer" }}
+                      >
+                        <i className="fa-solid fa-upload fa-2x"></i>
+                      </label>
+                      <input
+                        type="file"
+                        id="imageUpload"
+                        name="image"
+                        accept="image/*"
+                        multiple
+                        onChange={handleChange}
+                        style={{ display: "none" }}
                       />
                     </div>
-                    <label
-                      htmlFor="purchaseDate"
-                      className="form-label text-white fw-bold"
-                      onChange={handleChange}
-                    >
-                      Add Images
-                    </label>
-                    <input
-                      type="file"
-                      id="imageUpload"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleChange}
-                      style={{ display: "none" }}
-                    />
                   </div>
                 </div>
+
+                {Array.isArray(imagePreview) && imagePreview.length > 0 && (
+                  <div className="col-12 mt-3">
+                    <h5 className="text-white">Uploaded Images</h5>
+                    <div className="d-flex flex-wrap gap-2">
+                      {imagePreview.map((src, index) => (
+                        <div
+                          key={index}
+                          className="position-relative"
+                          style={{ display: "inline-block" }}
+                        >
+                          <img
+                            src={src}
+                            height={100}
+                            alt={`Preview ${index + 1}`}
+                            style={{ margin: "5px", borderRadius: "8px" }}
+                          />
+                          <button
+                            onClick={() => handleRemoveImage(index)}
+                            className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                            style={{ borderRadius: "50%", padding: "2px 6px" }}
+                          >
+                            &times;
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <button
                   type="submit"

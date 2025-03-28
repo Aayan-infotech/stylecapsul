@@ -59,7 +59,6 @@ const StylistDetails = () => {
           withCredentials: true,
         }
       );
-      console.log(response?.data, "Response:ssss");
       // if (response?.data?.status === true) {
       setVendorDetails(response?.data);
       // }
