@@ -41,9 +41,10 @@ const ClothesCalendar = ({ onSave }) => {
       const data = response?.data?.data?.styleOfTheDay || [];
       const formattedData = data.map((item) => ({
         date: item?.date,
-        thumbnail: item.picture.map((picture) => apiUrl(`uploads/${picture}`)),
+        thumbnail: item.picture.map((picture) => picture.replace('http://localhost:3555/uploads', '')),
         id: response?.data?.data?._id || null,
       }));
+      console.log(formattedData, 'formattedData');
       setClothesOnDates(formattedData);
     } catch (error) {
       console.error("Error fetching clothes data:", error);
@@ -88,43 +89,24 @@ const ClothesCalendar = ({ onSave }) => {
   const handleImageSave = async () => {
     const formattedDate = formatDate(selectedDate);
     const clothes = Object.values(selectedImages).filter((id) => id);
-    // if (clothes.length === 0) {
-    //   showErrorToast("Please select at least one item.");
-    //   return;
-    // }
-    if (
-      !selectedImages.outfitTop ||
-      !selectedImages.outfitBottom ||
-      !selectedImages.outfitFootwear
-    ) {
+    if (!selectedImages.outfitTop || !selectedImages.outfitBottom || !selectedImages.outfitFootwear) {
       showErrorToast("Please select an outfit for Top, Bottom, and Footwear.");
       return;
     }
-    const requestBody = {
-      userId,
-      clothes,
-      date: `${formattedDate}T00:00:00.000Z`,
-    };
+    const requestBody = { userId, clothes, date: `${formattedDate}T00:00:00.000Z`, };
     setIsSaving(true);
     try {
-      const response = await axios.post(
-        apiUrl("api/myStyleCapsule/create"),
-        requestBody,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.post(apiUrl("api/myStyleCapsule/create"), requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
       );
-      console.log(response?.data?.data);
       setOpenImageDialog(false);
       fetchDayByCloths();
     } catch (error) {
-      showErrorToast(
-        error?.response?.data?.message ||
-          "Failed to save images. Please try again."
-      );
+      showErrorToast(error?.response?.data?.message || "Failed to save images. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -142,7 +124,6 @@ const ClothesCalendar = ({ onSave }) => {
   };
 
   const handleDeleteImage = async (dateEntryId) => {
-    console.log(dateEntryId);
     try {
       const response = await axios.delete(
         apiUrl(`api/myStyleCapsule/delete/${dateEntryId?.id}`),
@@ -153,13 +134,9 @@ const ClothesCalendar = ({ onSave }) => {
           },
         }
       );
-      console.log(response?.data, "abinsh");
-      showSuccessToast(
-        response?.data?.message || "Image deleted successfully."
-      );
+      showSuccessToast(response?.data?.message || "Image deleted successfully.");
       fetchDayByCloths();
     } catch (error) {
-      console.error("Error deleting image:", error);
       showErrorToast("An error occurred while deleting the image.");
     }
   };
@@ -246,6 +223,8 @@ const ClothesCalendar = ({ onSave }) => {
     fetchAllAddedClothesByUser();
   }, []);
 
+
+
   return (
     <div>
       <div
@@ -305,20 +284,14 @@ const ClothesCalendar = ({ onSave }) => {
             <div className="modal-content">
               <div className="modal-header">
                 <h1 className="modal-title fs-5">{formatDate(selectedDate)}</h1>
-                <button
-                  type="button"
-                  className="btn-close"
-                  aria-label="Close"
-                  onClick={handleImageDialogToggle}
-                ></button>
+                <button type="button" className="btn-close" aria-label="Close" onClick={handleImageDialogToggle}></button>
               </div>
               <Box sx={{ width: "100%", typography: "body1" }}>
                 <TabContext value={value}>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <TabList
                       onChange={handleChange}
-                      aria-label="Clothing categories tabs"
-                    >
+                      aria-label="Clothing categories tabs">
                       <Tab label="Outfit Top" value="outfitTop" />
                       <Tab label="Outfit Bottom" value="outfitBottom" />
                       <Tab label="Outfit Footwear" value="outfitFootwear" />
@@ -326,7 +299,7 @@ const ClothesCalendar = ({ onSave }) => {
                   </Box>
                   <TabPanel value="outfitTop">
                     <div className="row gx-3 ma-0">
-                      {allAddedClothesByUser?.length > 0 ? (
+                      {allAddedClothesByUser?.outfitTop?.length > 0 ? (
                         allAddedClothesByUser?.outfitTop?.map((item) => (
                           <div className="col-3" key={item?._id}>
                             <div
@@ -335,16 +308,13 @@ const ClothesCalendar = ({ onSave }) => {
                                 handleSelectImage("outfitTop", item)
                               }
                               style={{
-                                border:
-                                  selectedImages.outfitTop === item._id
-                                    ? "2px solid green"
-                                    : "1px solid #d9d6d6",
+                                border: selectedImages.outfitTop === item._id ? "2px solid green" : "1px solid #d9d6d6",
                                 borderRadius: "8px",
                                 cursor: "pointer",
                               }}
                             >
                               <img
-                                src={item?.picture[0] || blank_img}
+                                src={item?.pictures[0] || blank_img}
                                 alt={item?.description}
                                 className="w-100 mb-2 rounded"
                                 height="100"
@@ -360,25 +330,15 @@ const ClothesCalendar = ({ onSave }) => {
                   </TabPanel>
                   <TabPanel value="outfitBottom">
                     <div className="row gy-4 gx-3 ma-0">
-                      {allAddedClothesByUser?.length > 0 ? (
+                      {allAddedClothesByUser?.outfitBottom?.length > 0 ? (
                         allAddedClothesByUser?.outfitBottom?.map((item) => (
                           <div className="col-3" key={item?._id}>
                             <div
                               className="p-2 text-center"
-                              onClick={() =>
-                                handleSelectImage("outfitBottom", item)
-                              }
-                              style={{
-                                border:
-                                  selectedImages.outfitBottom === item._id
-                                    ? "2px solid green"
-                                    : "1px solid #d9d6d6",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                              }}
-                            >
+                              onClick={() => handleSelectImage("outfitBottom", item)}
+                              style={{ border: selectedImages.outfitBottom === item._id ? "2px solid green" : "1px solid #d9d6d6", borderRadius: "8px", cursor: "pointer", }}>
                               <img
-                                src={item?.picture[0] || blank_img}
+                                src={item?.pictures[0] || blank_img}
                                 alt={item?.description}
                                 className="w-100 mb-2 rounded"
                                 height="100"
@@ -394,7 +354,7 @@ const ClothesCalendar = ({ onSave }) => {
                   </TabPanel>
                   <TabPanel value="outfitFootwear">
                     <div className="row gy-4 gx-3 ma-0">
-                      {allAddedClothesByUser?.length > 0 ? (
+                      {allAddedClothesByUser?.outfitFootwear?.length > 0 ? (
                         allAddedClothesByUser?.outfitFootwear?.map((item) => (
                           <div className="col-3" key={item?._id}>
                             <div
@@ -412,7 +372,7 @@ const ClothesCalendar = ({ onSave }) => {
                               }}
                             >
                               <img
-                                src={item?.picture[0] || blank_img}
+                                src={item?.pictures[0] || blank_img}
                                 alt={item?.description}
                                 className="w-100 mb-2 rounded"
                                 height="100"
@@ -445,6 +405,7 @@ const ClothesCalendar = ({ onSave }) => {
                   sx={{
                     backgroundColor: "black",
                     color: "white",
+                    textTransform: "none",
                   }}
                   className="rounded-pill"
                 >
