@@ -55,6 +55,8 @@ import { CapsuleRangeCalendarDetails } from "./components/explore/CapsuleRangeCa
 import ExploreUserProfileDetails from "./components/explore/ExploreUserProfileDetails.jsx";
 import CheckoutForm from "./components/stylist/CheckoutForm.jsx";
 import ContactPage from "./components/helpandsupport/ContactPage.jsx";
+import PrivacyPolicy from "./components/helpandsupport/PrivacyPolicy.jsx";
+import TermsConditions from "./components/helpandsupport/TermsConditions.jsx";
 
 const Routing = () => {
   return (
@@ -93,6 +95,8 @@ const Routing = () => {
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
             <Route path="/help-support" element={<HelpAndSupport />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/termsConditions" element={<TermsConditions />} />
+            <Route path="/policy" element={<PrivacyPolicy />} />
             <Route path="/closet-overview" element={<ClosetOverview />} />
             <Route path="/myCapsuleAddAvtart" element={<MyCapsuleAddAvtart />}/>
             <Route path="/try-avtar" element={<TryAvtar />} />

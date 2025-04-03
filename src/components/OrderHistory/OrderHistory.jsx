@@ -24,7 +24,6 @@ function OrderHistory() {
           "Content-Type": "application/json",
         },
       });
-      console.log(response?.data?.data, 'abinash')
       if (response?.data?.success) {
         setOrderHistory(response?.data?.data);
       } else {
@@ -45,9 +44,6 @@ function OrderHistory() {
     fetchOrderHistory();
   }, []);
 
-  const handleClickReOrder = (reorderid) => {
-    console.log(reorderid, "reorderid");
-  };
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order);
@@ -59,7 +55,7 @@ function OrderHistory() {
         <Loader />
       ) : (
         <div className="container">
-          <div className="order-history w-100">
+          <div className="order-history">
             <div className="row gx-5 align-items-center my-4">
               <div className="col-12 col-md-6">
                 <h5 className="fw-bold fs-1">Order History</h5>
@@ -77,18 +73,12 @@ function OrderHistory() {
                 <h4>{errors}</h4>
               </div>
             ) : (
-              <div className="row gx-5">
+              <div className="row justify-content-center">
                 {orderHistory?.length > 0 ? (
                   orderHistory.map((product, index) => (
                     <div className="col-12" key={index}>
-                      <div className="order-history-card d-flex justify-content-between align-items-center px-5 rounded-pill">
+                      <div className="order-history-card d-flex justify-content-between align-items-center px-5 mb-2 rounded-pill">
                         <div className="product-img d-flex align-items-center">
-                          <img
-                            src={blank_img}
-                            alt="Product"
-                            height="50"
-                            className="me-3"
-                          />
                           <div>
                             <p className="mb-0 fw-bold">
                               {product.items[0]?.name || "Product Name"}
@@ -102,13 +92,6 @@ function OrderHistory() {
                           </div>
                         </div>
                         <div className="second-text">
-                          <button
-                            type="button"
-                            className="btn btn-dark rounded-pill fw-bold me-3"
-                            onClick={() => handleClickReOrder(product._id)} // Optional: Trigger reorder functionality
-                          >
-                            Reorder <i className="bx bx-rotate-right"></i>
-                          </button>
                           <button
                             type="button"
                             data-bs-toggle="modal"

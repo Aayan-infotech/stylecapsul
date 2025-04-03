@@ -10,6 +10,7 @@ import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 function Navbar() {
   const [isModalVisible, setModalVisible] = useState(false);
   const location = useLocation();
+  const [isSticky, setIsSticky] = useState(false);
   const isExplorePage =
     location.pathname === "/explore" || location.pathname === "/user-profile";
 
@@ -37,9 +38,24 @@ function Navbar() {
       : 0;
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <div className="top">
+      <div className={`top ${isSticky ? "sticky-navbar" : ""}`}>
         <div className="top1">
           <div className="left">
             <Link to={checkToken() ? "/" : "/"}>
@@ -96,11 +112,11 @@ function Navbar() {
                         Scheduled
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <a className="dropdown-item" href="#">
                         Refer a friend
                       </a>
-                    </li>
+                    </li> */}
                     <li>
                       <Link
                         to="/orderhistory"

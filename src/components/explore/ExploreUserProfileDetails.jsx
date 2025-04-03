@@ -19,77 +19,65 @@ const ExploreUserProfileDetails = () => {
   const [userPostDetails, setUserPostDetails] = useState({});
   const [loading, setLoading] = useState(true);
   const [clothesOnDates, setClothesOnDates] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const navigate = useNavigate();
   const token = getCookie("authToken");
 
-  const wardrow_categories = [
-    {
-      id: 1,
-      image: notification,
-      title: "Clothes",
-      imageAlt: "Notification",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "/all-clothes-list/clothes",
-    },
-    {
-      id: 2,
-      image: closet,
-      title: "Shoes",
-      imageAlt: "closet",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "/all-clothes-list/shoes",
-    },
-    {
-      id: 3,
-      image: coinhand,
-      title: "Accessories",
-      imageAlt: "coinhand",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "/all-clothes-list/accessories",
-    },
-    {
-      id: 4,
-      image: imagefocus,
-      title: "Miscellaneous",
-      imageAlt: "imagefocus",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "/all-clothes-list/miscellaneous",
-    },
-  ];
+  const fetchAllCategories = async () => {
+    try {
+      const response = await axios.get(apiUrl("api/closet/get-closet"));
+      if (response?.data?.status === 200 &&
+        response?.data?.success === true) {
+        setCategories(response?.data?.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
 
   const fetchPostDetailsByUs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        apiUrl("api/explore/user-profile-data"),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      const response = await axios.get(apiUrl("api/explore/user-profile-data"), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
       );
-      console.log(response?.data, "response?.data");
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
-        const formattedData = data
-          .map((item) => {
-            const styleOfTheDay = item?.styleOfTheDay || {};
-            const date = styleOfTheDay.date
-              ? styleOfTheDay.date.split("T")[0]
-              : null;
-            const pictures = styleOfTheDay.clothes
-              ?.filter((cloth) => cloth?.picture)
-              .map((cloth) => cloth.picture);
-            return {
-              date,
-              thumbnail: pictures || [],
-              id: item._id || null,
-            };
-          })
-          .filter((item) => item.date);
+        const formattedData = data?.styleOfTheDay?.map((item) => ({
+          date: item.date.split("T")[0],
+          thumbnail: item.picture || [],
+          id: item._id || null,
+        }));
+        // if (response?.data?.success) {
+        //   setUserPostDetails(response?.data);
+        //   const data = response?.data?.styleOfTheDay || [];
+
+        //   const formattedData = data?.styleOfTheDay?.map((item) => {
+        //     const styleOfTheDay = item?.styleOfTheDay || {};
+        //     const date = styleOfTheDay.date
+        //       ? styleOfTheDay.date.split("T")[0]
+        //       : null;
+        //     const pictures = styleOfTheDay.clothes?.filter((cloth) => cloth?.picture).map((cloth) => cloth.picture);
+        //     return {
+        //       date,
+        //       thumbnail: pictures || [],
+        //       id: item._id || null,
+        //     };
+        //   }).filter((item) => item.date);
+        //   console.log(pictures, 'pictures')
+        //   setClothesOnDates(formattedData);
+        // }
+
         setClothesOnDates(formattedData);
       }
     } catch (error) {
@@ -113,9 +101,7 @@ const ExploreUserProfileDetails = () => {
   const tileContent = ({ date, view }) => {
     const formattedDate = formatDate(date);
     if (view === "month") {
-      const dateEntry = clothesOnDates.find(
-        (item) => item.date === formattedDate
-      );
+      const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
       if (dateEntry && dateEntry.thumbnail.length > 0) {
         return (
           <div
@@ -126,17 +112,8 @@ const ExploreUserProfileDetails = () => {
               gap: "4px",
             }}
           >
-            {dateEntry.thumbnail.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                style={{
-                  width: "15px",
-                  height: "auto",
-                  objectFit: "cover",
-                  borderRadius: "4px",
-                }}
-              />
+            {dateEntry?.thumbnail?.map((image, index) => (
+              <img key={index} src={image} style={{ width: "15px", height: "auto", objectFit: "cover", borderRadius: "4px", }} />
             ))}
           </div>
         );
@@ -168,10 +145,7 @@ const ExploreUserProfileDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div
-          className="container d-block userprofiledetails"
-          style={{ paddingTop: "6rem" }}
-        >
+        <div className="container d-block userprofiledetails" style={{ paddingTop: "6rem" }}>
           <div className="container d-block px-4">
             <div className="row gy-4 m-0 mb-4">
               <div className="col-12 d-flex justify-content-center align-items-center text-center">
@@ -189,15 +163,16 @@ const ExploreUserProfileDetails = () => {
                       padding: "5px",
                       height: "200px",
                     }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                   />
                   <h4 className="fw-bold">
                     {userPostDetails?.user?.user?.firstName
                       ? userPostDetails?.user?.user?.firstName
-                          .charAt(0)
-                          .toUpperCase() +
-                        userPostDetails?.user?.user?.firstName
-                          .slice(1)
-                          .toLowerCase()
+                        .charAt(0)
+                        .toUpperCase() +
+                      userPostDetails?.user?.user?.firstName
+                        .slice(1)
+                        .toLowerCase()
                       : "N/A"}
                   </h4>
                   <p className="m-0">{userPostDetails?.user?.user?.bio}</p>
@@ -243,34 +218,26 @@ const ExploreUserProfileDetails = () => {
               }
             `}
                 </style>
-                {wardrow_categories.map((item, index) => (
-                  <Link to={item?.url} className="text-decoration-none">
-                    <div
-                      key={index}
-                      className="rounded-pill mb-3 d-flex align-items-center"
-                      style={{
-                        backgroundColor: "#4C4C4C",
-                        height: "70px",
-                        padding: "10px",
-                      }}
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="profile-image"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          marginRight: "10px",
-                        }}
-                      />
-                      <div className="text-start text-white">
-                        <h4 className="fw-bold mb-1">{item.title}</h4>
-                        <h6 className="mb-0">{item.date}</h6>
+                {categories?.length > 0 ? (
+                  categories.map((item, index) => (
+                    <Link to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
+                      <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
+                        <img
+                          src={coinhand || blank_img}
+                          alt={coinhand || blank_img}
+                          height="30"
+                          onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
+                          className="me-2"
+                        />
+                        <h4 className="text-white fw-bold">{item?.name}</h4>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))
+                ) : (
+                  <div className="col-12 text-center">
+                    <p className="text-muted fw-bold">No categories found</p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="row gy-1 g-1 m-0">

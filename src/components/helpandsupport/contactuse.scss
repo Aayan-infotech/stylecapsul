@@ -9,6 +9,7 @@
 
     .form-responsive {
       width: 100%; // Default for mobile views
+
       input,
       textarea {
         width: 100%;
@@ -66,6 +67,7 @@
 
     .container {
       .form-responsive {
+
         input,
         textarea {
           font-size: 0.9rem;
@@ -79,4 +81,17 @@
       }
     }
   }
+}
+
+.privacy-policy {
+  padding-top: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.termsconditoins{
+  padding-top: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

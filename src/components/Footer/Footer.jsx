@@ -18,10 +18,15 @@ const Footer = () => {
             </div>
             <div className="col-md-4 footer-column">
               <div>
-                <h6>Legal</h6>
-                <h6>Terms & Condition</h6>
-                <h6>Privacy Policy</h6>
-                <h6>Contact</h6>
+                <Link to="/termsConditions" className="text-black">
+                  <h6>Terms & Condition</h6>
+                </Link>
+                <Link to="/policy" className="text-black">
+                  <h6>Privacy Policy</h6>
+                </Link>
+                <Link to="/contact" className="text-black">
+                  <h6>Contact</h6>
+                </Link>
               </div>
             </div>
             <div className="col-md-4 footer-column">
@@ -33,19 +38,30 @@ const Footer = () => {
                 </h5>
                 <div>
                   <h6>
-                    <i className="fa-brands fa-facebook"></i>
-                    Facebook
+                    <a
+                      href="https://www.facebook.com/thestylecapsuleonlineboutique/"
+                      target="_blank"
+                      rel="noopener noreferrer" className="text-black">
+                      <i className="fa-brands fa-facebook"></i>
+                      Facebook
+                    </a>
                   </h6>
                   <h6>
-                    <i className="fa-brands fa-x-twitter"></i>(Twitter)
+                    <a
+                      href="https://www.tiktok.com"
+                      target="_blank"
+                      rel="noopener noreferrer" className="text-black">
+                      <i className="fa-brands fa-x-twitter"></i>(Twitter)
+                    </a>
                   </h6>
                   <h6>
-                    <i className="fa-brands fa-linkedin"></i>
-                    LinkedIn
-                  </h6>
-                  <h6>
-                    <i className="fa-brands fa-instagram"></i>
-                    Instagram
+                    <a
+                      href="https://www.instagram.com/thestylecapsule/?hl=en"
+                      target="_blank"
+                      rel="noopener noreferrer" className="text-black">
+                      <i className="fa-brands fa-instagram"></i>
+                      Instagram
+                    </a>
                   </h6>
                   <Link
                     to="/contact"

@@ -59,18 +59,37 @@ export const ClossetDetails = () => {
   const [showFavourite, setShowFavourite] = useState([]);
   const [selectedDesigner, setSelectedDesigner] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [cardDetails, setCardDetails] = useState([]);
 
   const token = getCookie("authToken");
+
+
+  const fetchAllCategories = async () => {
+    try {
+      const response = await axios.get(apiUrl("api/closet/get-closet"));
+      if (response?.data?.status === 200 &&
+        response?.data?.success === true) {
+        setCategories(response?.data?.data)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
 
   const fetchFavouriteDesiner = async () => {
     setLoading(true);
     try {
       const response = await axios.get(apiUrl('api/stylist/getFav'), {
         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-    })
+      })
       if (response?.data?.success) {
         setShowFavourite(response?.data?.data);
       }
@@ -81,9 +100,28 @@ export const ClossetDetails = () => {
     }
   };
 
+  const fetchCardDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(apiUrl('api/order/payment-cards'), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+      if (response?.data?.success) {
+        setCardDetails(response?.data?.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching favorite designers:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchFavouriteDesiner();
+    fetchCardDetails();
   }, []);
 
   const allProfileImages1 = showFavourite.reduce((acc, curr, index) => {
@@ -103,26 +141,33 @@ export const ClossetDetails = () => {
         <Loader />
       ) : (
         <div className="d-flex justify-content-center align-items-center close-management-details-container">
-          <div className="container w-50">
+          <div className="container w-75">
             <div className="row g-4">
               <h1 className="text-center fw-bold fs-1">Details</h1>
-              {cardData.map((item, index) => (
-                <div className="col-md-6" key={index}>
-                  <Link to={item.url} className="text-decoration-none">
-                    <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "#4C4C4C" }}>
-                      {item.image && (
+              {categories?.length > 0 ? (
+                categories.map((item, index) => (
+                  <div className="col-md-6" key={index}>
+                    <Link
+                      to={`/all-clothes-list/${item?._id}`}
+                      state={{ category_name: item?.name }}
+                      className="text-decoration-none"
+                    >
+                      <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "rgb(76, 76, 76)" }}>
                         <img
-                          src={item.image}
-                          alt={item.imageAlt}
+                          src={coinhand || blank_img}
+                          alt="Category Icon"
                           className="mb-4"
-                          style={item.imageStyle}
                         />
-                      )}
-                      <h4 className="card-title fw-bold">{item.title}</h4>
-                    </div>
-                  </Link>
+                        <h4 className="card-title fw-bold">{item?.name}</h4>
+                      </div>
+                    </Link>
+                  </div>
+                ))
+              ) : (
+                <div className="col-12 text-center">
+                  <p className="text-muted fw-bold">No categories found</p>
                 </div>
-              ))}
+              )}
               {/* -------------------------------Favorite Designer--------------- */}
               <div className="mt-4">
                 <h1 className="fw-bold fs-1 mt-2">Favorite Designer</h1>
@@ -177,16 +222,17 @@ export const ClossetDetails = () => {
                 <div className="row">
                   <div className="col-12">
                     <div className="card-section p-3 d-flex flex-column">
-                      {["xxx7676x77897", "xxx7676x77897", "xxx7676x77897"].map(
-                        (card, index) => (
-                          <div
-                            key={index}
-                            className="card-item d-flex justify-content-between align-items-center mb-2"
-                          >
-                            <div>{card}</div>
-                            <div>Used on 22/08/21</div>
+                      {cardDetails?.length > 0 ? (
+                        cardDetails.map((card, index) => (
+                          <div key={index} className="card-item d-flex justify-content-between align-items-center mb-2 text-muted">
+                            <div>XXXX&nbsp;XXXX&nbsp;XXXX&nbsp;{card?.paymentDetails?.transactionDetails?.payment_method?.card?.last4}</div>
+                            <div>Used on {new Date(card?.paymentDetails?.transactionDetails?.payment_method?.created * 1000).toLocaleDateString()}</div>
                           </div>
-                        )
+                        ))
+                      ) : (
+                        <div className="col-12 text-center">
+                          <p className="text-muted fw-bold">no details available</p>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -194,42 +240,43 @@ export const ClossetDetails = () => {
 
                 {/* Social Media Section */}
                 <h4 className="mt-4">Social Media associated</h4>
-                <div className="row social-icons">
-                  <div className="col text-center">
-                    <a
-                      href="https://www.facebook.com/discountDoor/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img src={facebook} alt="Facebook" className="icon-img" />
-                    </a>
-                  </div>
-                  <div className="col text-center">
-                    <a
-                      href="https://www.instagram.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img src={instagram} alt="Instagram" className="icon-img" />
-                    </a>
-                  </div>
-                  <div className="col text-center">
-                    <a
-                      href="https://www.tiktok.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img src={tiktok} alt="TikTok" className="icon-img" />
-                    </a>
-                  </div>
-                  <div className="col text-center">
-                    <a
-                      href="https://www.twitter.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img src={twitter} alt="Twitter" className="icon-img" />
-                    </a>
+                <div className="container">
+                  <div className="row social-icons">
+                    <div className="col text-center">
+                      <a
+                        href="https://www.facebook.com/thestylecapsuleonlineboutique/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={facebook} alt="Facebook" className="icon-img" />
+                      </a>
+                    </div>
+                    <div className="col text-center">
+                      <a
+                        href="https://www.instagram.com/thestylecapsule/?hl=en"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <img src={instagram} alt="Instagram" className="icon-img" />
+                      </a>
+                    </div>
+                    <div className="col text-center">
+                      <a
+                        href="https://www.tiktok.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={tiktok} alt="TikTok" className="icon-img" />
+                      </a>
+                    </div>
+                    <div className="col text-center">
+                      <a
+                        href="https://www.twitter.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={twitter} alt="Twitter" className="icon-img" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>

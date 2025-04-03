@@ -35,20 +35,30 @@ const ClosetCategories = () => {
       <div className="container d-block w-75">
         <h1 className="text-center fw-bold fs-1">Details</h1>
         <div className="row g-3 m-0">
-          {categories?.map((item, index) => (
-            <div className="col-md-6" key={index}>
-              <Link to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
-                <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "rgb(76, 76, 76)" }}>
-                  <img
-                    src={coinhand || blank_img}
-                    alt={coinhand || blank_img}
-                    className="mb-4"
-                  />
-                  <h4 className="card-title fw-bold">{item?.name}</h4>
-                </div>
-              </Link>
+          {categories?.length > 0 ? (
+            categories.map((item, index) => (
+              <div className="col-md-6" key={index}>
+                <Link
+                  to={`/all-clothes-list/${item?._id}`}
+                  state={{ category_name: item?.name }}
+                  className="text-decoration-none"
+                >
+                  <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "rgb(76, 76, 76)" }}>
+                    <img
+                      src={coinhand || blank_img}
+                      alt="Category Icon"
+                      className="mb-4"
+                    />
+                    <h4 className="card-title fw-bold">{item?.name}</h4>
+                  </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="col-12 text-center">
+              <p className="text-muted fw-bold">No categories found</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

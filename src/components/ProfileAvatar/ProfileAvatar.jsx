@@ -247,8 +247,8 @@ function ProfileAvatar() {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start align-items-center">
-              <div className="p-2">
+            <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
+              {/* <div className="p-2">
                 <Link
                   to="/full-avatar"
                   className="text-decoration-none text-black w-100"
@@ -270,7 +270,14 @@ function ProfileAvatar() {
                 >
                   Details
                 </button>
-              </div>
+              </div> */}
+              <button
+                type="button"
+                className="btn rounded-pill w-50 p-3 mt-4 border-black text-black fw-bold"
+                onClick={handleToggleDetails}
+              >
+                Details
+              </button>
             </div>
           </div>
 

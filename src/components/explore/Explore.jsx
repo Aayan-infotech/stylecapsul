@@ -356,7 +356,11 @@ const Explore = ({ isAuth }) => {
                   <Avatar
                     alt="Remy Sharp"
                     className="rounded-circle"
-                    src={singleUser?.profileImage}
+                    src={singleUser?.profileImage || blank_img}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = blank_img
+                    }}
                   />
                 </Link>
               </div>
@@ -378,65 +382,54 @@ const Explore = ({ isAuth }) => {
               displayPosts.map((post, index) => (
                 <div className="row g-2 m-0" key={index}>
                   <div className="col-12">
-                    <div
-                      className="p-3 border-1 text-black"
-                      style={{ backgroundColor: "#f5f5f56e" }}
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <Link
-                          to={`/socialUserDetails/${post?.user?._id}`}
-                          className="text-decoration-none"
-                        >
-                          <div className="d-flex justify-content-between align-items-center">
-                            <img
-                              className="rounded-circle mb-2 me-2"
-                              src={post?.user?.profileImage || blank_img}
-                              alt={blank_img}
-                              style={{
-                                border: "2px solid black",
-                                padding: "5px",
-                                borderRadius: "50%",
-                                cursor: "pointer",
-                                padding: "5px",
-                                height: "60px",
-                                width: "60px",
-                              }}
-                            />
-                            <div className="text-black">
-                              <Typography variant="h6" className="fw-bold">
-                                {post?.user?.firstName.charAt(0).toUpperCase() +
-                                  post?.user?.firstName.slice(1).toLowerCase()}
-                              </Typography>
-                              <h6 style={{ fontSize: "13px" }}>
-                                {formatDate(post.updatedAt)} •{" "}
-                                <i className="fa-solid fa-earth-americas"></i>
-                              </h6>
-                            </div>
+                    <div className="p-3 border-1 text-black" style={{ backgroundColor: "#f5f5f56e" }}>  <div className="d-flex justify-content-between align-items-center">
+                      <Link
+                        to={`/socialUserDetails/${post?.user?._id}`}
+                        className="text-decoration-none"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <img
+                            className="rounded-circle mb-2 me-2"
+                            src={post?.user?.profileImage || blank_img}
+                            alt={blank_img}
+                            style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", cursor: "pointer", padding: "5px", height: "60px", width: "60px", }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
+                          />
+                          <div className="text-black">
+                            <Typography variant="h6" className="fw-bold">
+                              {post?.user?.firstName.charAt(0).toUpperCase() +
+                                post?.user?.firstName.slice(1).toLowerCase()}
+                            </Typography>
+                            <h6 style={{ fontSize: "13px" }}>
+                              {formatDate(post.updatedAt)} •{" "}
+                              <i className="fa-solid fa-earth-americas"></i>
+                            </h6>
                           </div>
-                        </Link>
-                        <div>
-                          <ul
-                            className="dropdown-menu dropdown-menu-start"
-                            aria-labelledby="dropdownIcon"
-                          >
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Another action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Something else here
-                              </a>
-                            </li>
-                          </ul>
                         </div>
+                      </Link>
+                      <div>
+                        <ul
+                          className="dropdown-menu dropdown-menu-start"
+                          aria-labelledby="dropdownIcon"
+                        >
+                          <li>
+                            <a className="dropdown-item" href="#">
+                              Action
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="#">
+                              Another action
+                            </a>
+                          </li>
+                          <li>
+                            <a className="dropdown-item" href="#">
+                              Something else here
+                            </a>
+                          </li>
+                        </ul>
                       </div>
+                    </div>
                       <div className="text-black mt-2">
                         <p className="fw-bold">{post?.description}</p>
                       </div>
@@ -472,10 +465,11 @@ const Explore = ({ isAuth }) => {
                                 }}
                               >
                                 <img
-                                  src={imageUrl}
+                                  src={imageUrl || blank_img}
                                   className="card-img-top object-fit-cover"
                                   height={300}
                                   alt={`Image ${cardIndex + 1}`}
+                                  onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                                 />
                                 <div className="card-body">
                                   <p className="card-text">

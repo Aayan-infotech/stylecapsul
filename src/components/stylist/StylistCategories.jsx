@@ -19,6 +19,7 @@ const StylistCategories = () => {
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [loadingProductId, setLoadingProductId] = useState(null);
+  const [viewsAll, setViewsAll] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,10 +32,7 @@ const StylistCategories = () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      const response = await axios.get(
-        apiUrl(
-          `api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`
-        ),
+      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,10 +61,10 @@ const StylistCategories = () => {
   }, [categoryId, selectedCategory]);
 
   const getFilteredProducts = () => {
-    return marketPlaceCategoryType.filter(
-      (product) =>
-        product?.sellType.toLowerCase() === selectedCategory.toLowerCase()
+    const filteredProducts = marketPlaceCategoryType.filter(
+      (product) => product?.sellType.toLowerCase() === selectedCategory.toLowerCase()
     );
+    return viewsAll ? filteredProducts : filteredProducts.slice(0, 1);
   };
 
   const truncateText = (text, wordLimit) => {
@@ -246,6 +244,7 @@ const StylistCategories = () => {
                   type="button"
                   className="btn btn-primary rounded-pill w-25 p-2"
                   style={{ backgroundColor: "black" }}
+                  onClick={() => setViewsAll(true)}
                 >
                   View All
                 </button>
