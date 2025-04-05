@@ -1,7 +1,8 @@
 .main-landing-page-home {
-  .navbar-right i:hover{
+  .navbar-right i:hover {
     cursor: pointer;
   }
+
   .container {
     display: flex;
     justify-content: center;
@@ -13,6 +14,7 @@
       margin: 1rem 0;
       width: 100%;
       height: 100px;
+      cursor: pointer;
 
       .image {
         background-color: #4A4A4A;
@@ -373,6 +375,7 @@
         width: 100%;
         max-width: 100%;
         height: auto;
+        cursor: pointer;
       }
     }
   }
@@ -432,7 +435,7 @@
       img {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
         min-height: 180px;
       }
     }
@@ -495,6 +498,11 @@
           background-color: #fff;
           border: 1px solid #ccc;
           color: #333;
+        }
+
+        .add-to-cart:hover {
+          background-color: black;
+          color: white;
         }
 
         .buy {

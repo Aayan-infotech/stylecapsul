@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import showimg4 from "../../assets/marketplace/showimg4.jpg";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { Avatar } from "@mui/material";
 import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
-import notification from "../../assets/closetmanagement/Group 1806.png";
-import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
-import imagefocus from "../../assets/closetmanagement/image-focus.png";
 import Loader from "../Loader/Loader.jsx";
 
 const ExploreUserProfileDetails = () => {
@@ -48,8 +43,7 @@ const ExploreUserProfileDetails = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      }
-      );
+      });
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
@@ -58,26 +52,6 @@ const ExploreUserProfileDetails = () => {
           thumbnail: item.picture || [],
           id: item._id || null,
         }));
-        // if (response?.data?.success) {
-        //   setUserPostDetails(response?.data);
-        //   const data = response?.data?.styleOfTheDay || [];
-
-        //   const formattedData = data?.styleOfTheDay?.map((item) => {
-        //     const styleOfTheDay = item?.styleOfTheDay || {};
-        //     const date = styleOfTheDay.date
-        //       ? styleOfTheDay.date.split("T")[0]
-        //       : null;
-        //     const pictures = styleOfTheDay.clothes?.filter((cloth) => cloth?.picture).map((cloth) => cloth.picture);
-        //     return {
-        //       date,
-        //       thumbnail: pictures || [],
-        //       id: item._id || null,
-        //     };
-        //   }).filter((item) => item.date);
-        //   console.log(pictures, 'pictures')
-        //   setClothesOnDates(formattedData);
-        // }
-
         setClothesOnDates(formattedData);
       }
     } catch (error) {
@@ -154,15 +128,7 @@ const ExploreUserProfileDetails = () => {
                     alt="User Avatar"
                     className="rounded-circle mb-2"
                     src={userPostDetails?.user?.user?.profileImage || blank_img}
-                    style={{
-                      border: "2px solid black",
-                      padding: "5px",
-                      borderRadius: "50%",
-                      boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
-                      cursor: "pointer",
-                      padding: "5px",
-                      height: "200px",
-                    }}
+                    style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", }}
                     onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                   />
                   <h4 className="fw-bold">
@@ -203,24 +169,24 @@ const ExploreUserProfileDetails = () => {
               >
                 <style>
                   {`.col-12.col-md-6::-webkit-scrollbar {
-                width: 7px; 
-              }
-              .col-12.col-md-6::-webkit-scrollbar-track {
-                box-shadow: inset 0 0 5px grey;
-                border-radius: 10px;
-              }
-              .col-12.col-md-6::-webkit-scrollbar-thumb {
-                background: gray; 
-                border-radius: 10px; 
-              }
-              .col-12.col-md-6::-webkit-scrollbar-thumb:hover {
-                background: rgb(61, 61, 61);  
-              }
-            `}
+                    width: 7px; 
+                  }
+                  .col-12.col-md-6::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 5px grey;
+                    border-radius: 10px;
+                  }
+                  .col-12.col-md-6::-webkit-scrollbar-thumb {
+                    background: gray; 
+                    border-radius: 10px; 
+                  }
+                  .col-12.col-md-6::-webkit-scrollbar-thumb:hover {
+                    background: rgb(61, 61, 61);  
+                  }
+                `}
                 </style>
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
-                    <Link to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
+                    <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
                       <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
                         <img
                           src={coinhand || blank_img}
@@ -242,19 +208,19 @@ const ExploreUserProfileDetails = () => {
             </div>
             <div className="row gy-1 g-1 m-0">
               {userPostDetails?.user?.image &&
-                userPostDetails.user.image.map((image, index) => (
+                userPostDetails?.user?.image?.map((image, index) => (
                   <div
                     key={index}
-                    className="col-12 col-md-4 d-flex justify-content-center align-items-center rounded-4"
-                    style={{
-                      height: "300px",
-                      overflow: "hidden",
-                      position: "relative",
-                      backgroundColor: "#f0f0f0",
-                    }}
+                    className="col-12 col-md-3 d-flex justify-content-center align-items-center rounded-4"
+                    // style={{
+                    //   height: "300px",
+                    //   overflow: "hidden",
+                    //   position: "relative",
+                    //   backgroundColor: "#f0f0f0",
+                    // }}
                   >
                     <img
-                      className="w-100 h-100 object-fit-cover rounded-4"
+                      className="w-75 h-75 object-fit-cover rounded-4"
                       src={image}
                       alt={`User Image ${index + 1}`}
                       style={{

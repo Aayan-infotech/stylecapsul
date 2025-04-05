@@ -13,7 +13,6 @@ const SettingAndSecurity = () => {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
-  const [btnLoader, setBtnLoader] = useState(false);
   const [activeTab, setActiveTab] = useState("addresslist");
   const [addressForm, setAddressForm] = useState({
     streetName: "",
@@ -46,14 +45,14 @@ const SettingAndSecurity = () => {
   }, [showModal, dispatch]);
 
   const securityData = [
-    {
-      id: 1,
-      image: notification,
-      title: "Notification",
-      imageAlt: "Notification",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "#",
-    },
+    // {
+    //   id: 1,
+    //   image: notification,
+    //   title: "Notification",
+    //   imageAlt: "Notification",
+    //   imageStyle: { width: "50px", height: "45px" },
+    //   url: "#",
+    // },
     {
       id: 2,
       icon: null,
@@ -64,14 +63,14 @@ const SettingAndSecurity = () => {
       url: "#",
       onClick: handleAddressClick,
     },
-    {
-      id: 3,
-      image: global,
-      title: "Language",
-      imageAlt: "global",
-      imageStyle: { width: "50px", height: "45px" },
-      url: "#",
-    },
+    // {
+    //   id: 3,
+    //   image: global,
+    //   title: "Language",
+    //   imageAlt: "global",
+    //   imageStyle: { width: "50px", height: "45px" },
+    //   url: "#",
+    // },
     {
       id: 4,
       image: password,

@@ -1,24 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import imagefocus from "../../assets/marketplace/Group1806.png";
 import ellipse from "../../assets/marketplace/Ellipse1.png";
 import one from "../../assets/marketplace/one.mp4";
 import blank_img from "../../assets/stylist/blank_img.jpg";
-import leatherjacket from "../../assets/marketplace/leatherjacket.png";
 import "../../styles/MarketPlace.scss";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import Loader from "../Loader/Loader.jsx";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
-
-import { Swiper, SwiperSlide } from "swiper/react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 // Import Swiper styles
@@ -29,7 +18,6 @@ import "swiper/css/scrollbar";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 import { getCookie } from "../../utils/cookieUtils.js";
-import { Avatar } from "@mui/material";
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);

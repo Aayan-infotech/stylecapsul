@@ -22,12 +22,10 @@ const CategoryDetails = () => {
   const location = useLocation();
   const { subcatid } = useParams();
   const initialQuantity = location?.state?.quantity;
-  console.log(initialQuantity, 'initialQuantity');
   const [quantity, setQuantity] = useState(initialQuantity);
   const [quantities, setQuantities] = useState({});
   const [loadingProductId, setLoadingProductId] = useState(null);
   const dispatch = useDispatch();
-
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 

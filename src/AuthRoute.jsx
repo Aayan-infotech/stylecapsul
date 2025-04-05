@@ -15,6 +15,10 @@ import PageNotFound from './components/PageNotFound/PageNotFound.jsx'
 import axios from 'axios';
 import { apiUrl } from '../apiUtils';
 import { logoutUser, updateUserDetails } from './reduxToolkit/loginSlice';
+import MyAddedProducts from './components/MyAddedProducts/MyAddedProducts.jsx';
+import Stylist from './components/stylist/stylist.jsx';
+import StylistDetails from './components/stylist/StylistDetails.jsx';
+import Chat from './components/stylist/Chat.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -76,6 +80,10 @@ const AuthRoute = ({ children }) => {
         return <>{children}</>;
     } else return <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/myaddedproducts" element={<MyAddedProducts />} />
+        <Route path="/stylist" element={<Stylist />} />
+        <Route path="/stylist-profile/:stylistId" element={<StylistDetails />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../reduxToolkit/loginSlice";
 import "./Login.scss";
@@ -11,6 +11,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -21,19 +22,33 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setBtnLoader(true);
     try {
-      const resultAction = await dispatch(loginUser(formData)).unwrap();
-      if (resultAction?.status === 200) {
-        showSuccessToast(resultAction?.message);
-        if (resultAction?.success === true && resultAction?.status === 200) {
-          setTimeout(() => {
-            navigate("/");
+      const addedProducts = JSON.parse(localStorage.getItem("cart")) || [];
+      const products = addedProducts.map((item) => ({ productId: item._id, quantity: item.quantity, }));
+      const payload = { ...formData, products: products, };
+      const resultAction = await dispatch(loginUser(payload)).unwrap();
+      showSuccessToast(resultAction?.message);
+      // if (resultAction?.success === true && resultAction?.status === 200) {
+      //   const redirectPath = location.state?.fromCheckout ? "/cart" : "/";
+      //   navigate(redirectPath);
+      // }
+      if (resultAction?.success === true && resultAction?.status === 200) {
+        if (!location?.state?.fromChat) {
+          localStorage.clear();
+        }
+        if (location?.state?.fromChat) {
+          navigate("/chat", {
+            state: { profile_details: location?.state?.profile_details },
           });
+        } else {
+          const redirectPath = location.state?.fromCheckout ? "/cart" : "/";
+          navigate(redirectPath);
         }
       }
+      
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       showErrorToast(errorMessage);
@@ -41,6 +56,42 @@ const Login = () => {
       setBtnLoader(false);
     }
   };
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setBtnLoader(true);
+  //   try {
+  //     const resultAction = await dispatch(loginUser(formData)).unwrap();
+  //     if (resultAction?.status === 200) {
+  //       showSuccessToast(resultAction?.message);
+  //       if (resultAction?.success === true && resultAction?.status === 200) {
+  //         setTimeout(() => {
+  //           const redirectTo = localStorage.getItem("redirectTo");
+  //           const productData = JSON.parse(localStorage.getItem("cart"));
+  //           if (redirectTo === "/cart" && productData) {
+  //             const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  //             const productIndex = existingCart.findIndex((item) => item.id === productData.id);
+  //             if (productIndex !== -1) {
+  //               existingCart[productIndex].quantity += productData.quantity;
+  //             } else {
+  //               existingCart.push({ ...productData });
+  //             }
+  //             localStorage.setItem("cart", JSON.stringify(existingCart));
+  //             localStorage.removeItem("cart");
+  //           }
+  //           navigate(redirectTo || "/");
+  //           localStorage.removeItem("redirectTo");
+  //         });
+  //       }
+  //     }
+  //   } catch (err) {
+  //     const errorMessage = err.response?.data?.message || err.message;
+  //     showErrorToast(errorMessage);
+  //   } finally {
+  //     setBtnLoader(false);
+  //   }
+  // };
+
 
   return (
     <>
@@ -50,7 +101,7 @@ const Login = () => {
           <div className="card custom-card border-0 p-2">
             <div className="card-body p-4 text-black">
               <h2 className="card-title fs-4 text-center fw-bold">Login</h2>
-              <form className="mt-4" onSubmit={handleSubmit}>
+              <form className="mt-4" onSubmit={handleLogin}>
                 <div className="mb-2">
                   <label htmlFor="email" className="form-label fw-bold">
                     Enter Email
@@ -83,9 +134,8 @@ const Login = () => {
                     style={{ background: "none", border: "none" }}
                   >
                     <i
-                      className={`fa-solid ${
-                        showPassword ? "fa-eye" : "fa-eye-slash"
-                      }`}
+                      className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
+                        }`}
                     ></i>
                   </button>
                 </div>

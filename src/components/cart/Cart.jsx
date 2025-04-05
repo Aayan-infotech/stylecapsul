@@ -135,8 +135,8 @@ const Cart = () => {
               {cartItems.length > 0 ? (
                 <>
                   <div className="col-md-6 buy-cart-list mt-2">
-                    {cartItems.map((cart, cartIndex) =>
-                      cart.items.map((item, itemIndex) => (
+                    {cartItems?.map((cart, cartIndex) =>
+                      cart.items?.map((item, itemIndex) => (
                         <div
                           key={`${cartIndex}-${itemIndex}`}
                           className=" d-flex align-items-center justify-content-center"

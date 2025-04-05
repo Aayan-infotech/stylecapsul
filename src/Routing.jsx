@@ -23,7 +23,7 @@ import FullAvatar from "./components/FullAvatar/FullAvatar";
 import Body from "./components/Body/Body";
 import Appointment from "./components/Appointment/Appointment";
 import ChangePassword from "./components/ChangePassword/ChangePassword";
-import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts";
+import MyAddedProducts from "./components/MyAddedProducts/MyAddedProducts.jsx";
 import OrderHistory from "./components/OrderHistory/OrderHistory";
 import EmojiStyleCapsule from "./components/EmojiStyleCapsule/EmojiStyleCapsule";
 import MainLayout from "./MainLayout";
@@ -102,7 +102,7 @@ const Routing = () => {
             <Route path="/try-avtar" element={<TryAvtar />} />
             <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
             <Route path="/change-password" element={<ChangePassword />} />
-            <Route path="/myaddedproducts" element={<MyAddedProducts />} />
+            {/* <Route path="/myaddedproducts" element={<MyAddedProducts />} /> */}
             <Route path="/orderhistory" element={<OrderHistory />} />
             <Route path="/closet-details" element={<ClossetDetails />} />
             <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />

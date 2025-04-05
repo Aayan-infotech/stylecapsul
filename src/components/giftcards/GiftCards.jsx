@@ -114,7 +114,6 @@ const GiftCards = () => {
                   className="rounded-pill"
                   placeholder="Search"
                 />
-                <i className="fa-solid fa-sliders"></i>
               </div>
             </div>
           </div>

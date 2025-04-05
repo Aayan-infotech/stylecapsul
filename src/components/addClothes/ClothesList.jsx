@@ -140,7 +140,6 @@ function ClothesList() {
                     value={searchTerm}
                     onChange={handleSearch}
                   />
-                  <i className="fa-solid fa-sliders"></i>
                 </div>
               </div>
               {loading ? (

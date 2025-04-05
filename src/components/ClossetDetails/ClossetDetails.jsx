@@ -3,10 +3,7 @@ import notification from "../../assets/closetmanagement/Group 1806.png";
 import closet from "../../assets/closetmanagement/closet.png";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import imagefocus from "../../assets/closetmanagement/image-focus.png";
-import fav1 from "../../assets/closetmanagement/fav1.png";
-import fav2 from "../../assets/closetmanagement/fav2.png";
-import fav3 from "../../assets/closetmanagement/fav3.png";
-import fav4 from "../../assets/closetmanagement/fav4.png";
+import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
 import facebook from "../../assets/closetmanagement/facebook.png";
 import instagram from "../../assets/closetmanagement/instagram.png";
 import tiktok from "../../assets/closetmanagement/tiktok.png";
@@ -18,42 +15,6 @@ import { getCookie } from "../../utils/cookieUtils";
 import { FaCheckCircle } from "react-icons/fa";
 import Loader from "../Loader/Loader";
 import { apiUrl } from "../../../apiUtils";
-
-const cardData = [
-  {
-    id: 1,
-    image: notification,
-    title: "Clothes",
-    imageAlt: "Notification",
-    imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/clothes",
-  },
-  {
-    id: 2,
-    image: closet,
-    title: "Shoes",
-    imageAlt: "closet",
-    imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/shoes",
-  },
-  {
-    id: 3,
-    image: coinhand,
-    title: "Accessories",
-    imageAlt: "coinhand",
-    imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/accessories",
-  },
-  {
-    id: 4,
-    image: imagefocus,
-    title: "Miscellaneous",
-    imageAlt: "imagefocus",
-    imageStyle: { width: "50px", height: "45px" },
-    url: "/all-clothes-list/miscellaneous",
-  },
-];
-
 
 export const ClossetDetails = () => {
   const [showFavourite, setShowFavourite] = useState([]);
@@ -172,51 +133,78 @@ export const ClossetDetails = () => {
               <div className="mt-4">
                 <h1 className="fw-bold fs-1 mt-2">Favorite Designer</h1>
                 <div className="row g-2 mt-2">
-                  {allProfileImages1.map((imageSet, index) => (
-                    <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
-                      {imageSet.map((designer, imgIndex) => (
-                        <div
-                          key={designer._id}
-                          className={`position-relative ${imgIndex > 0 ? "mt-2" : ""}`}
-                          onClick={() => handleSelectDesigner(designer._id)}
-                          style={{ cursor: "pointer" }}
-                        >
-                          <img
-                            src={designer.profilePicture}
-                            alt={`Closet ${imgIndex}`}
-                            className="img-fluid"
-                          />
-                          {selectedDesigner === designer._id && (
-                            <FaCheckCircle
-                              className="position-absolute top-0 end-0 text-success"
-                              size={24}
-                              style={{ margin: "5px" }}
+                  {allProfileImages1.length > 0 ? (
+                    allProfileImages1.map((imageSet, index) => (
+                      <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
+                        {imageSet.map((designer, imgIndex) => (
+                          <div
+                            key={designer._id}
+                            className={`position-relative ${imgIndex > 0 ? "mt-2" : ""}`}
+                            onClick={() => handleSelectDesigner(designer._id)}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <img
+                              src={designer.profilePicture}
+                              alt={`Closet ${imgIndex}`}
+                              className="img-fluid"
                             />
-                          )}
-                        </div>
-                      ))}
+                            {selectedDesigner === designer._id && (
+                              <FaCheckCircle
+                                className="position-absolute top-0 end-0 text-success"
+                                size={24}
+                                style={{ margin: "5px" }}
+                              />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="mt-2">
+                      <h4>Your Style Journey Awaits!</h4>
+                      <p className="text-muted">
+                        You haven't marked any designer as your favorite yet. Discover a world of creative styles and unique fashion statements curated just for you.
+                        Dive in, explore, and select the designers who inspire your fashion sense!
+                      </p>
+                      <Link to="/stylist" className="text-black text-decoration-none">
+                        <p className="fw-bold">
+                          Let your style story begin by choosing your favorite designers!
+                          stylist{" "}<SwipeRightAltIcon />
+                        </p>
+                      </Link>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
               {/* -------------------------------Favorite Searches--------------- */}
               <div className="mt-4">
                 <h1 className="fw-bold fs-1 mt-2">Favorite Searches</h1>
-                <div className="row g-2 mt-2">
-                  {allProfileImages1.map((imageSet, index) => (
-                    <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
-                      {imageSet.map((src, imgIndex) => (
-                        <img
-                          key={imgIndex}
-                          src={src}
-                          alt={`Closet ${imgIndex}`}
-                          className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
+                {allProfileImages1 && allProfileImages1.length > 0 ? (
+                  <div className="row g-2 mt-2">
+                    {allProfileImages1.map((imageSet, index) => (
+                      <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
+                        {imageSet.map((src, imgIndex) => (
+                          <img
+                            key={imgIndex}
+                            src={src}
+                            alt={`Closet ${imgIndex}`}
+                            className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mt-3">
+                    <h3 className="fw-bold">Your Style Exploration Awaits!</h3>
+                    <p className="text-muted">
+                      You haven't marked any search as your favorite yet. Unlock a world of trendy fashion insights and personalized search results crafted just for you. Start exploring, experimenting, and saving the searches that shape your unique style!
+                    </p>
+                    <p className="fw-bold">Let your fashion quest begin by selecting your favorite searches!</p>
+                  </div>
+                )}
               </div>
+
               <div className="mt-4">
                 <h4>Credit Cards & Debit Cards</h4>
                 <div className="row">
@@ -282,7 +270,7 @@ export const ClossetDetails = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div >
       )}
     </>
   );

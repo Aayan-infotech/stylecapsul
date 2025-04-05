@@ -109,7 +109,6 @@ const GarmentsCare = () => {
                   placeholder="Search"
                   onChange={handleSearchInputChange}
                 />
-                <i className="fa-solid fa-sliders"></i>
               </div>
             </div>
           </div>

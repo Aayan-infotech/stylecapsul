@@ -64,7 +64,6 @@ function OrderHistory() {
                 <div className="search-box d-flex">
                   <i className="fa fa-search"></i>
                   <input type="text" placeholder="Search" />
-                  <i className="fa-solid fa-sliders"></i>
                 </div>
               </div>
             </div>

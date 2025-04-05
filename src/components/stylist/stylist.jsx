@@ -13,7 +13,6 @@ const Stylist = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
   const token = getCookie("authToken");
 
   const fetchStylists = async () => {
@@ -25,7 +24,6 @@ const Stylist = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (response?.data?.stylists?.length > 0) {
         setShowStylists(response.data.stylists);
         setMessage("");
@@ -97,7 +95,6 @@ const Stylist = () => {
                       value={searchQuery}
                       onChange={handleSearchInputChange}
                     />
-                    <i className="fa-solid fa-sliders"></i>
                   </div>
                 </div>
               </div>
@@ -148,9 +145,9 @@ const Stylist = () => {
                 )}
               </div>
             </div>
-            <div className="d-flex justify-content-center my-5">
+            {/* <div className="d-flex justify-content-center my-5">
               <Pagination count={10} variant="outlined" color="secondary" />
-            </div>
+            </div> */}
           </div>
         </div>
       )}

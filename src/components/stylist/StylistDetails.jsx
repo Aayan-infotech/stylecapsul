@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import "../../styles/StylistDetails.scss";
 import blank_image from "../../assets/stylist/blank_img.jpg";
 import axios from "axios";
@@ -19,18 +19,10 @@ const StylistDetails = () => {
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
   const { stylistId } = useParams();
-  const textAreaRef = useRef(null);
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
-
-  const ratingsData = [
-    { stars: 5, percentage: 70, count: 488 },
-    { stars: 4, percentage: 62, count: 74 },
-    { stars: 3, percentage: 53, count: 14 },
-    { stars: 2, percentage: 30, count: 10 },
-    { stars: 1, percentage: 16, count: 5 },
-  ];
+  const navigate = useNavigate();
 
   const location = useLocation();
   const profile_details = location.state?.stylist;
@@ -111,6 +103,14 @@ const StylistDetails = () => {
 
   const averageRating = vendorDetails?.averageRating?.[0]?.averageRating;
 
+  const handleClickToChat = () => {
+    if (token) {
+      navigate("/chat", { state: { profile_details } });
+    } else {
+      navigate("/login", { state: { fromChat: true, profile_details: profile_details, }, });
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -140,25 +140,16 @@ const StylistDetails = () => {
                     {[...Array(totalStars)].map((_, index) => {
                       if (index < fullStars) {
                         return (
-                          <i
-                            key={index}
-                            className="fa fa-star text-warning"
-                          ></i>
+                          <i key={index} className="fa fa-star text-warning"></i>
                         );
                       }
                       if (index === fullStars && hasHalfStar) {
                         return (
-                          <i
-                            key={index}
-                            className="fa fa-star-half-alt text-warning"
-                          ></i>
+                          <i key={index} className="fa fa-star-half-alt text-warning"></i>
                         );
                       }
                       return (
-                        <i
-                          key={index}
-                          className="fa fa-star text-secondary"
-                        ></i>
+                        <i key={index} className="fa fa-star text-secondary"></i>
                       );
                     })}
                   </div>
@@ -166,43 +157,18 @@ const StylistDetails = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <h5>Outfit Planning</h5>
                   <div>
-                    <button
-                      type="button"
-                      className="btn btn-outline-dark me-2 rounded-pill"
-                      style={{
-                        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                        width: "60px",
-                      }}
-                    >
+                    <button type="button" className="btn btn-outline-dark me-2 rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
                       <i className="fa-solid fa-user-plus"></i>
                     </button>
-                    <Link
-                      to={{ pathname: `/chat` }}
-                      state={{ profile_details }}
-                      className="text-decoration-none w-100"
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-outline-dark rounded-pill"
-                        style={{
-                          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-                          width: "60px",
-                        }}
-                      >
-                        <i className="fa-solid fa-message"></i>
-                      </button>
-                    </Link>
+                    <button type="button" onClick={handleClickToChat} className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
+                      <i className="fa-solid fa-message"></i>
+                    </button>
                   </div>
                 </div>
                 <div align="center" className="mt-5">
-                  <Link to="/categories-type" className="text-decoration-none">
-                    <button
-                      type="button"
-                      className="btn hire-custom-btn rounded-pill p-2"
-                    >
-                      Hire
-                    </button>
-                  </Link>
+                  <button type="button" className="btn hire-custom-btn rounded-pill p-2">
+                    Hire
+                  </button>
                 </div>
               </div>
             </div>
@@ -214,11 +180,7 @@ const StylistDetails = () => {
                 <p>
                   {vendorDetails?.stylist?.specialization?.map(
                     (item, index) => (
-                      <span key={index}>
-                        {item}
-                        {index !==
-                          vendorDetails.stylist.specialization.length - 1 &&
-                          ", "}
+                      <span key={index}>  {item}  {index !== vendorDetails.stylist.specialization.length - 1 && ", "}
                       </span>
                     )
                   )}
@@ -246,23 +208,6 @@ const StylistDetails = () => {
                 </div>
               </div>
               <div className="row gx-4 my-4">
-                {/* <div className="col-12 col-md-4">
-                  <h6 className="fw-bold">Employee Reviews</h6>
-                  <div className="display-4 fw-bold">4.7</div>
-                  <div className="d-flex my-2">
-                    {[...Array(5)].map((_, index) => (
-                      <i
-                        key={index}
-                        className={`fa fa-star ${
-                          index < 4
-                            ? "text-warning"
-                            : "fa-star-half-alt text-warning"
-                        }`}
-                      ></i>
-                    ))}
-                  </div>
-                  <p className="text-h6 text-muted mt-2">(578 Reviews)</p>
-                </div> */}
                 <div className="col-12 col-md-4">
                   <h6 className="fw-bold">Employee Reviews</h6>
                   <div className="display-4 fw-bold">
@@ -270,52 +215,22 @@ const StylistDetails = () => {
                   </div>
                   <div className="d-flex my-2">
                     {[...Array(5)].map((_, index) => (
-                      <i
-                        key={index}
-                        className={`fa fa-star ${
-                          index < Math.floor(averageRating)
-                            ? "text-warning"
-                            : index < averageRating
-                            ? "fa-star-half-alt text-warning"
-                            : "text-muted"
-                        }`}
-                      ></i>
+                      <i key={index} className={`fa fa-star ${index < Math.floor(averageRating) ? "text-warning" : index < averageRating ? "fa-star-half-alt text-warning" : "text-muted"}`}></i>
                     ))}
                   </div>
-                  <p className="text-h6 text-muted mt-2">
-                    (
-                    {vendorDetails?.reviewsCount?.reduce(
-                      (acc, review) => acc + review.count,
-                      0
-                    )}{" "}
-                    Reviews)
-                  </p>
+                  <p className="text-h6 text-muted mt-2">  (  {vendorDetails?.reviewsCount?.reduce((acc, review) => acc + review.count, 0)}{" "}  Reviews)</p>
                 </div>
                 <div className="col-12 col-md-8">
                   {vendorDetails?.reviewsCount?.length ? (
                     vendorDetails.reviewsCount.map((rating, index) => (
-                      <div
-                        className="row align-items-center gx-1 mb-2"
-                        key={index}
-                      >
+                      <div className="row align-items-center gx-1 mb-2" key={index}>
                         <div className="col-12 col-md-2 d-flex justify-content-md-end justify-content-start">
                           <h6 className="mb-0 fw-normal">
                             {rating?.star} stars
                           </h6>
                         </div>
                         <div className="col-12 col-md-8">
-                          <div className="progress" style={{ height: "6px" }}>
-                            <div
-                              className="progress-bar"
-                              role="progressbar"
-                              style={{
-                                width: `${rating?.percentage}%`,
-                                backgroundColor: "#E7B66B",
-                              }}
-                              aria-valuenow={rating?.percentage}
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
+                          <div className="progress" style={{ height: "6px" }}><div className="progress-bar" role="progressbar" style={{ width: `${rating?.percentage}%`, backgroundColor: "#E7B66B", }} aria-valuenow={rating?.percentage} aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
                         </div>
                         <div className="col-12 col-md-2 d-flex justify-content-md-start justify-content-end">
@@ -342,9 +257,8 @@ const StylistDetails = () => {
                       {[...Array(5)].map((_, i) => (
                         <i
                           key={i}
-                          className={`fa fa-star ${
-                            i < review?.ratings ? "text-warning" : ""
-                          }`}
+                          className={`fa fa-star ${i < review?.ratings ? "text-warning" : ""
+                            }`}
                         ></i>
                       ))}
                     </div>
