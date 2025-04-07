@@ -34,7 +34,7 @@ const LandingPage = () => {
   ];
 
   const handleServiceClick = (route, text) => {
-    if (text === "Stylist") {
+    if (text === "Stylist" || text === "Market Place") {
       navigate(route);
       return;
     }
@@ -89,8 +89,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalQuantity = existingCart.reduce((acc, item) => acc + item.quantity, 0);
-    setCartQuantity(totalQuantity);
+    setCartQuantity(existingCart.length);
   }, []);
 
 
@@ -226,11 +225,11 @@ const LandingPage = () => {
                               "Add to cart"
                             )}
                           </button>
-                          <button
+                          {/* <button
                             className="buy"
                             onClick={() => handleServiceClick(product?.route)}>
                             Buy
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>

@@ -11,15 +11,14 @@ import { showSuccessToast, showErrorToast } from "../toastMessage/Toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Loader from "../Loader/Loader";
+import no_cart_found from "../../assets/not-cart_found.png"
 
 const StylistCategories = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Buy");
   const [marketPlaceCategoryType, setMarketPlaceCategoryType] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [loadingProductId, setLoadingProductId] = useState(null);
-  const [viewsAll, setViewsAll] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,18 +31,16 @@ const StylistCategories = () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}?sellType=${selectedCategory.toLocaleLowerCase()}`),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response?.data?.data) {
-        setMarketPlaceCategoryType(response?.data?.data);
-      } else {
+      const response = await axios.get(apiUrl(`api/marketplaces/subcategory/get/${categoryId}`), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (response?.data?.success === false) {
         setErrorMessage("No subcategories found for the selected category.");
+      } else {
+        setMarketPlaceCategoryType(response?.data?.data);
       }
     } catch (error) {
       setErrorMessage(
@@ -55,17 +52,8 @@ const StylistCategories = () => {
   };
 
   useEffect(() => {
-    if (categoryId) {
-      fetchAllCategoriesType(selectedCategory);
-    }
-  }, [categoryId, selectedCategory]);
-
-  const getFilteredProducts = () => {
-    const filteredProducts = marketPlaceCategoryType.filter(
-      (product) => product?.sellType.toLowerCase() === selectedCategory.toLowerCase()
-    );
-    return viewsAll ? filteredProducts : filteredProducts.slice(0, 1);
-  };
+    fetchAllCategoriesType();
+  }, [categoryId]);
 
   const truncateText = (text, wordLimit) => {
     const wordsArray = text.split(" ");
@@ -85,34 +73,75 @@ const StylistCategories = () => {
   };
 
   const handleBuyClick = (prod) => {
-    navigate(`/category-details/${prod._id}`, {
-      state: {
-        product: prod,
-        quantity: quantity,
-      },
-    });
+    if (token) {
+      navigate(`/category-details/${prod._id}`, {
+        state: {
+          product: prod,
+          quantity: quantity,
+        },
+      });
+    } else {
+      showErrorToast("Please log in to view product details.");
+    }
   };
+
+  // const handleAddToCart = async (product) => {
+  //   setLoadingProductId(product._id);
+  //   setTimeout(async () => {
+  //     try {
+  //       const response = await dispatch(
+  //         addToCart({
+  //           userId,
+  //           productId: product?._id,
+  //           quantity: quantity,
+  //         })
+  //       );
+  //       showSuccessToast(response.message);
+  //       await dispatch(getAllCarts());
+  //     } catch (error) {
+  //       showErrorToast(error?.message);
+  //     } finally {
+  //       setLoadingProductId(null);
+  //     }
+  //   }, 2000);
+  // };
 
   const handleAddToCart = async (product) => {
     setLoadingProductId(product._id);
-    setTimeout(async () => {
+    if (!userId || !token) {
       try {
-        const response = await dispatch(
-          addToCart({
-            userId,
-            productId: product?._id,
-            quantity: quantity,
-          })
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const productIndex = existingCart.findIndex(
+          (item) => item._id === product._id && item.name === product.name
         );
-        showSuccessToast(response.message);
-        await dispatch(getAllCarts());
+        if (productIndex !== -1) {
+          existingCart[productIndex].quantity += quantity;
+        } else {
+          existingCart.push({ ...product, quantity });
+        }
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+        navigate("/myaddedproducts")
+        showSuccessToast("Product added to cart!");
       } catch (error) {
-        showErrorToast(error?.message);
+        console.error("Local cart error:", error);
       } finally {
         setLoadingProductId(null);
       }
-    }, 2000);
+    } else {
+      setTimeout(async () => {
+        try {
+          const response = await dispatch(addToCart({ userId, productId: product?._id, quantity: quantity, }));
+          showSuccessToast(response.message);
+          await dispatch(getAllCarts());
+        } catch (error) {
+          showErrorToast(error?.message);
+        } finally {
+          setLoadingProductId(null);
+        }
+      }, 2000);
+    }
   };
+
 
   return (
     <>
@@ -120,29 +149,7 @@ const StylistCategories = () => {
         <Loader />
       ) : (
         <div className="categories-type-container">
-          <div
-            className="container w-75 mt-2 stylist-content"
-            style={{ display: "block" }}
-          >
-            <div className="row gap-0 gx-2 flex-row flex-wrap m-auto">
-              {["Buy", "Rent", "Swap"].map((cat) => (
-                <div
-                  key={cat}
-                  className="col-4 mt-3"
-                  style={{ textAlign: "center" }}
-                >
-                  <button
-                    type="button"
-                    className={`btn ${selectedCategory === cat ? "btn-dark" : "btn-outline-dark"
-                      } rounded-pill w-100 p-2`}
-                    onClick={() => setSelectedCategory(cat)}
-                  >
-                    {cat}
-                  </button>
-                </div>
-              ))}
-            </div>
-
+          <div className="container w-75 mt-2 stylist-content d-block">
             <div className="container-fluid">
               <div className="row gx-2">
                 {loading ? (
@@ -151,10 +158,13 @@ const StylistCategories = () => {
                   </div>
                 ) : errorMessage ? (
                   <div className="text-center text-danger w-100">
-                    <p>{errorMessage}</p>
+                    <div>
+                      <img src={no_cart_found} height="200" alt="not product" />
+                      <p> {errorMessage}</p>
+                    </div>
                   </div>
-                ) : getFilteredProducts()?.length > 0 ? (
-                  getFilteredProducts().map((product, index) => (
+                ) : marketPlaceCategoryType?.length > 0 ? (
+                  marketPlaceCategoryType?.map((product, index) => (
                     <div key={index} className="col-12 col-md-4 p-3">
                       <div className="product-card rounded-pill text-center">
                         <div className="image-container">
@@ -169,10 +179,7 @@ const StylistCategories = () => {
                           />
                         </div>
                         <div className="product-details p-3">
-                          <div
-                            onClick={() => handleBuyClick(product)}
-                            style={{ cursor: "pointer" }}
-                          >
+                          <div onClick={() => handleBuyClick(product)} style={{ cursor: "pointer" }}>
                             <h3 className="product-name fw-bold">
                               {product.name}
                             </h3>
@@ -210,16 +217,7 @@ const StylistCategories = () => {
                             >
                               {isProductInCart(product._id) ? (
                                 <span style={{ textTransform: "none" }}>
-                                  <AddTaskIcon
-                                    color="success"
-                                    style={{
-                                      position: "absolute",
-                                      bottom: "5px",
-                                      left: "5px",
-                                      fontSize: "20px",
-                                      fontWeight: "bold",
-                                    }}
-                                  />
+                                  <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
                                   Added
                                 </span>
                               ) : (
@@ -238,18 +236,13 @@ const StylistCategories = () => {
                 )}
               </div>
             </div>
-            {!loading && !errorMessage && getFilteredProducts()?.length > 0 && (
+            {/* {!loading && !errorMessage && marketPlaceCategoryType?.length > 0 && (
               <div className="text-center">
-                <button
-                  type="button"
-                  className="btn btn-primary rounded-pill w-25 p-2"
-                  style={{ backgroundColor: "black" }}
-                  onClick={() => setViewsAll(true)}
-                >
+                <button type="button" className="btn btn-primary rounded-pill w-25 p-2" style={{ backgroundColor: "black" }}>
                   View All
                 </button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       )}

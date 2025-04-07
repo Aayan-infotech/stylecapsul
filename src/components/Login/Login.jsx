@@ -36,9 +36,9 @@ const Login = () => {
       //   navigate(redirectPath);
       // }
       if (resultAction?.success === true && resultAction?.status === 200) {
-        if (!location?.state?.fromChat) {
-          localStorage.clear();
-        }
+        // if (!location?.state?.fromChat) {
+        //   localStorage.clear();
+        // }
         if (location?.state?.fromChat) {
           navigate("/chat", {
             state: { profile_details: location?.state?.profile_details },
@@ -48,7 +48,6 @@ const Login = () => {
           navigate(redirectPath);
         }
       }
-      
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       showErrorToast(errorMessage);

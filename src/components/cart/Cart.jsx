@@ -152,7 +152,7 @@ const Cart = () => {
                                 Order ID - {item?.productId || "N/A"}
                               </p>
                               <h6 className="text-black fw-bold m-0">
-                                {item?.productDetails?.name.length > 30
+                                {item?.productDetails?.name?.length > 30
                                   ? item?.productDetails?.name.slice(3, 30) +
                                   "...."
                                   : item?.productDetails?.name || "N/A"}

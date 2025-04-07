@@ -19,6 +19,8 @@ import MyAddedProducts from './components/MyAddedProducts/MyAddedProducts.jsx';
 import Stylist from './components/stylist/stylist.jsx';
 import StylistDetails from './components/stylist/StylistDetails.jsx';
 import Chat from './components/stylist/Chat.jsx';
+import MarketPlace from './components/marketPlace/MarketPlace.jsx';
+import StylistCategories from './components/stylist/StylistCategories.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -60,13 +62,13 @@ const AuthRoute = ({ children }) => {
     useEffect(() => {
         const interval = setInterval(() => {
             const isValid = checkToken();
-            if (!isValid) {
+            if (!isValid && token) {
                 dispatch(logoutUser());
                 // navigate("/login");
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [dispatch, token]);
 
     if (loading) {
         return <div className="loading-screen">Loading...</div>;
@@ -83,6 +85,8 @@ const AuthRoute = ({ children }) => {
         <Route path="/myaddedproducts" element={<MyAddedProducts />} />
         <Route path="/stylist" element={<Stylist />} />
         <Route path="/stylist-profile/:stylistId" element={<StylistDetails />} />
+        <Route path="/market-place" element={<MarketPlace />} />
+        <Route path="/categories-type/:categoryId" element={<StylistCategories />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

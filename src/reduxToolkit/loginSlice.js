@@ -17,10 +17,6 @@ export const loginUser = createAsyncThunk(
 );
 
 export const logoutUser = createAsyncThunk("logout/user", async (thunkAPI) => {
-  // const state = thunkAPI.getState().login;
-  // if (!state.user) {
-  //   return thunkAPI.rejectWithValue("User not logged in");
-  // }
   try {
     const response = await axios.post(apiUrl("api/auth/logout-user"), {}, {
       withCredentials: true,

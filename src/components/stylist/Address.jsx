@@ -30,6 +30,7 @@ const Address = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { paymentDetails, allCartDetails } = location.state || {};
+  const { subcategoryDetails } = location.state || {};
 
   useEffect(() => {
     if (addressStatus === "idle") {
@@ -112,12 +113,14 @@ const Address = () => {
   };
 
   const handleClickPayment = () => {
+    const buyNowDetails = { subcategoryDetails, selectedAddressId };
+    console.log(buyNowDetails, 'buyNowDetails');
     const paymentDetailsWithaddressId = {
       paymentDetails,
       selectedAddressId,
       allCartDetails,
     };
-    navigate("/payment", { state: { paymentDetailsWithaddressId } });
+    navigate("/payment", { state: { paymentDetailsWithaddressId, buyNowDetails } });
   };
 
   const handleCloseModal = () => {
@@ -131,7 +134,6 @@ const Address = () => {
       customerName: ""
     });
   };
-
 
   if (addressStatus === "loading") {
     return <Loader />;

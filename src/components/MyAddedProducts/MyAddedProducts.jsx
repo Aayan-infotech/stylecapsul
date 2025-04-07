@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Cart.scss";
 import blank_img from "../../assets/stylist/blank_img.jpg";
-import moment from "moment";
-import Loader from "../Loader/Loader";
 import no_cart_found from "../../assets/not-cart_found.png"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { showErrorToast } from "../toastMessage/Toast";
 
 const MyAddedProducts = () => {
   const [quantities, setQuantities] = useState({});
@@ -53,8 +50,7 @@ const MyAddedProducts = () => {
       return item;
     });
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    setQuantities((prev) => ({ ...prev, [product._id]: product.quantity }));
-    calculateSummary();
+    setAddedProducts(updatedCart);
   };
 
   const handleRemove = (productId) => {
@@ -71,6 +67,13 @@ const MyAddedProducts = () => {
   return (
     <div className="cart-container">
       <div className="container" style={{ display: "block" }}>
+        <div className="row">
+          <div className="col-12">
+            <Link to="/">
+              <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
+            </Link>
+          </div>
+        </div>
         <div className="row">
           {addedProducts?.length > 0 ? (
             <>

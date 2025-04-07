@@ -21,6 +21,7 @@ import { getCookie } from "../../utils/cookieUtils.js";
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
+  const [cartQuantity, setCartQuantity] = useState(0)
   const [trendySearch, setTrendySearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -54,7 +55,6 @@ const MarketPlace = () => {
           },
         }
       );
-      console.log(response?.data?.data, "setTrendySearch");
       if (response?.data?.success) {
         setTrendySearch(response?.data?.data);
       }
@@ -78,10 +78,22 @@ const MarketPlace = () => {
     fetchItem();
   }, [dispatch]);
 
+  useEffect(() => {
+    if (!token) {
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartQuantity(existingCart.length);
+    }
+  }, [token]);
+
   const getTotalProductCount = () => {
-    return Array.isArray(cart)
-      ? cart.reduce((total, item) => total + item.items.length, 0)
-      : 0;
+    if (token) {
+      return Array.isArray(cart)
+        ? cart.reduce((total, item) => total + item.items.length, 0)
+        : 0;
+    } else {
+      return cartQuantity;
+    }
+
   };
 
   return (
@@ -115,7 +127,7 @@ const MarketPlace = () => {
                 </div>
                 <div className="navbar-right d-flex">
                   <i className="fa-regular fa-bell me-2"></i>
-                  <Link to="/cart" className="text-decoration-none text-white">
+                  <Link to={token ? "/cart" : "/myaddedproducts"} className="text-decoration-none text-white">
                     <div className="cart-icon position-relative">
                       <i className="fa-solid fa-cart-shopping"></i>
                       <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
@@ -201,6 +213,7 @@ const MarketPlace = () => {
                               alt={item.name}
                               className="img-fluid"
                               onError={(e) => {
+                                e.target.onerror = null;
                                 e.target.src = blank_img;
                               }}
                             />
@@ -238,6 +251,7 @@ const MarketPlace = () => {
                               alt={item.name}
                               className="img-fluid"
                               onError={(e) => {
+                                e.target.onerror = null;
                                 e.target.src = blank_img;
                               }}
                             />
@@ -275,6 +289,7 @@ const MarketPlace = () => {
                               alt={item.name}
                               className="img-fluid"
                               onError={(e) => {
+                                e.target.onerror = null;
                                 e.target.src = blank_img;
                               }}
                             />

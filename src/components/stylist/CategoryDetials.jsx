@@ -7,7 +7,7 @@ import {
   getAllCarts,
 } from "../../reduxToolkit/addcartSlice";
 import "../../styles/CategoryDetails.scss";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import blank_image from "../../assets/stylist/blank_img.jpg";
 import { getCookie } from "../../utils/cookieUtils";
 import axios from "axios";
@@ -28,6 +28,7 @@ const CategoryDetails = () => {
   const dispatch = useDispatch();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
+  const navigate = useNavigate();
 
   const fetchSubCategoryDetails = async () => {
     setLoading(true);
@@ -125,6 +126,10 @@ const CategoryDetails = () => {
     }
   };
 
+  const handleClickBuynow = () => {
+    navigate("/address", { state: { subcategoryDetails: subcategoryDetails } });
+  }
+
   return (
     <>
       {loading ? (
@@ -160,7 +165,7 @@ const CategoryDetails = () => {
                   <span className="fw-bold">
                     {subcategoryDetails?.sellType
                       ? subcategoryDetails.sellType.charAt(0).toUpperCase() +
-                        subcategoryDetails.sellType.slice(1)
+                      subcategoryDetails.sellType.slice(1)
                       : "No type available."}
                   </span>
                 </p>
@@ -191,9 +196,7 @@ const CategoryDetails = () => {
                   >
                     Add to Cart
                   </LoadingButton>
-                  <Link to="/payment">
-                    <button className="btn buy-now">Buy</button>
-                  </Link>
+                  <button className="btn buy-now" onClick={handleClickBuynow}>Buy</button>
                 </div>
               </div>
             </div>
