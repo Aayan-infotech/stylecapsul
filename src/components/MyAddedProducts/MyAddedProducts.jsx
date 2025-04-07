@@ -3,7 +3,7 @@ import "../../styles/Cart.scss";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import no_cart_found from "../../assets/not-cart_found.png"
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyAddedProducts = () => {
   const [quantities, setQuantities] = useState({});
