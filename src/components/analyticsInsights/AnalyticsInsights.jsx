@@ -1,108 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/Analyticsinsights.scss";
-import ReactApexChart from "react-apexcharts";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from "chart.js";
-import logo from "../../assets/analytics/Group 26948.png";
-import { Link } from "react-router-dom";
+import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
+import axios from "axios";
+import { showErrorToast, showSuccessToast } from '../toastMessage/Toast';
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const AnalyticsInsights = () => {
-  const [options, setOptions] = React.useState({
-    chart: {
-      type: "bar",
-      height: 400,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "55%",
-        endingShape: "rounded",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    },
-    yaxis: {
-      min: 0,
-      max: 1000,
-      tickAmount: 10,
-      labels: {
-        formatter: function (value) {
-          return value.toString();
-        },
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    tooltip: {
-      y: {
-        formatter: function (val) {
-          return "$ " + val + " thousands";
-        },
-      },
-    },
-    colors: ["#B1916FB5", "#997AB2BA"],
-    legend: {
-      position: "top",
-      horizontalAlign: "center",
-      floating: true,
-      offsetY: 0,
-      offsetX: 0,
-      markers: {
-        width: 12,
-        height: 12,
-      },
-    },
-  });
+  const auth_token = getCookie('authToken');
+  const [chartData, setChartData] = useState(null);
+  const [closetChartData, setClosetChartData] = useState(null);
 
-  const [series, setSeries] = React.useState([
-    {
-      name: "Dataset 1",
-      data: [444, 455, 857, 456, 461, 558, 363],
-    },
-    {
-      name: "Dataset 2",
-      data: [676, 285, 301, 298, 487, 505, 391],
-    },
-  ]);
-  // -----------------------------------------------------
-  const data = {
-    labels: ["Red", "Orange", "Yellow", "Green", "Blue"],
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: [10, 20, 30, 40, 50],
-        backgroundColor: [
-          "#A9F4D0B2",
-          "#DBAEFF",
-          "#FDD09F",
-          "#FED0EE",
-          "#D0E8FF",
-          "#FBE38E",
-        ],
-        borderColor: [
-          "#A9F4D0B2",
-          "#DBAEFF",
-          "#FDD09F",
-          "#FED0EE",
-          "#D0E8FF",
-          "#FBE38E",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const colors = [
+    "#A9F4D0B2",
+    "#DBAEFF",
+    "#FDD09F",
+    "#FED0EE",
+    "#D0E8FF",
+    "#FBE38E",
+  ];
 
   const pieChartoptions = {
     responsive: true,
@@ -114,9 +33,8 @@ const AnalyticsInsights = () => {
         callbacks: {
           label: function (context) {
             let label = context.label || "";
-
             if (context.parsed !== null) {
-              label += ": " + context.parsed + "%";
+              label += ": " + context.parsed;
             }
             return label;
           },
@@ -124,93 +42,103 @@ const AnalyticsInsights = () => {
       },
     },
   };
+
+  const fetchChart = async () => {
+    try {
+      const response = await axios.get(apiUrl('api/cloths/graph'), {
+        headers: {
+          'Authorization': `Bearer ${auth_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response?.data.success === false) {
+        showErrorToast(response?.data?.message);
+      } else {
+        const responseData = response?.data?.data;
+        const labels = responseData.map(item => item._id);
+        const data = responseData.map(item => item.count);
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: "Clothing Types",
+              data,
+              backgroundColor: colors.slice(0, labels.length),
+              borderColor: colors.slice(0, labels.length),
+              borderWidth: 1,
+            },
+          ],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchClosetChart = async () => {
+    try {
+      const response = await axios.get(apiUrl('api/closet/closet-graph'), {
+        headers: {
+          'Authorization': `Bearer ${auth_token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response?.data.success === false) {
+        showErrorToast(response?.data?.message);
+      } else {
+        const responseData = response?.data?.data;
+        const labels = responseData.map(item => item.name);
+        const data = responseData.map(item => item.count);
+        setClosetChartData({
+          labels,
+          datasets: [
+            {
+              label: "Clothing Types",
+              data,
+              backgroundColor: colors.slice(0, labels.length),
+              borderColor: colors.slice(0, labels.length),
+              borderWidth: 1,
+            },
+          ],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChart();
+    fetchClosetChart();
+  }, []);
+
   return (
-    <div className=" analytics-insights">
-      <div className="container w-75">
-        <div className="row gy-3">
-          <div className="col-12 col-md-6">
-            <div className="p-3">
-              <h2 className="fw-bold fs-2 fs-md-1">Analytics Insights</h2>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6">
-            <div className="p-3">
-              <Link to="/closet-overview" className="text-decoration-none">
-                <button
-                  type="button"
-                  className="btn btn-secondary d-flex justify-content-center align-items-center fs-6 fs-md-5 fw-bold p-3 rounded-pill w-100 w-md-75"
-                >
-                  <img src={logo} height={25} className="me-1" alt="Logo" />
-                  <span>Closet Overview</span>
-                </button>
-              </Link>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6">
-            <div className="p-3">
-              <button
-                type="button"
-                className="btn btn-secondary fs-6 fs-md-5 fw-bold p-3 rounded-pill w-100 w-md-75"
-              >
-                Wardrobe Analytics
-              </button>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-6">
-            <div className="p-3">
-              <button
-                type="button"
-                className="btn btn-outline-secondary fs-6 fs-md-5 fw-bold p-3 rounded-pill w-100 w-md-75"
-              >
-                My Style Capsule
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="analytics-insights">
       <div className="container">
-        {/* -------------------------------------Most Wore Items----------------------chart */}
-        <div className="row mt-5">
-          <h1 className="fw-bold fs-1">Most Wore Items</h1>
-          <div className="col-12">
-            <ReactApexChart
-              options={options}
-              series={series}
-              type="bar"
-              height={400}
-            />
-          </div>
-        </div>
-        {/* -------------------------------------Least Wore Items----------------------chart */}
-        <div className="row mt-5">
-          <h1 className="fw-bold fs-1">Least Wore Items</h1>
-          <div className="col-12">
-            <ReactApexChart
-              options={options}
-              series={series}
-              type="bar"
-              height={400}
-            />
-          </div>
-        </div>
-
-        <div class="row gx-5 mt-4">
-          <h1 className="fw-bold fs-1">Types of Clothes</h1>
-          <div class="col">
-            <div className="chart-container d-flex justify-content-center align-items-center">
-              <Pie data={data} options={pieChartoptions} />
+        <div className="row gx-5 mt-4 justify-content-center">
+          <div className="col-12 col-md-6 d-flex flex-column align-items-center">
+            <h1 className="fw-bold fs-3 mb-4">Clothes Chart</h1>
+            <div className="chart-container">
+              {chartData ? (
+                <Pie data={chartData} options={pieChartoptions} />
+              ) : (
+                <p>Loading chart...</p>
+              )}
             </div>
           </div>
-          <div class="col">
-            <div className="chart-container d-flex justify-content-center align-items-center">
-              <Pie data={data} options={pieChartoptions} />
+          <div className="col-12 col-md-6 d-flex flex-column align-items-center">
+            <h1 className="fw-bold fs-3 mb-4">Closet Wardrobe Chart</h1>
+            <div className="closet-chart-container">
+              {closetChartData ? (
+                <Pie data={closetChartData} options={pieChartoptions} />
+              ) : (
+                <p>Loading chart...</p>
+              )}
             </div>
           </div>
         </div>
       </div>
+
     </div>
   );
 };

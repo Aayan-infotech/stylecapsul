@@ -2,39 +2,18 @@
   padding-top: 6rem;
 
   .container {
-    display: block;
-    /* -----------------------apexchart css--------------------------------------- */
-    .custom-apex-chart .apexcharts-legend-series {
+    .row {
+      justify-content: center; 
+    }
+
+    .chart-container,
+    .closet-chart-container {
+      width: 400px;
+      height: 400px;
       display: flex;
+      justify-content: center;
       align-items: center;
-    }
-
-    .custom-apex-chart .apexcharts-legend-marker {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-    }
-
-    /* ------------------------------piechart--------------------------- */
-    .chart-container {
-      width: 100%;
-      height: 700px;
-    }
-
-    @media (max-width: 576px) {
-      .fs-6 {
-        font-size: 1rem;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .fs-md-5 {
-        font-size: 1.25rem;
-      }
-    }
-
-    .no-hover-background:hover {
-      background-color: transparent;
+      margin: auto; 
     }
   }
 }
