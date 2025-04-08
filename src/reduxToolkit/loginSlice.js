@@ -77,7 +77,7 @@ const loginSlice = createSlice({
       })
       .addCase(updateUserDetails.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action;
+        state.user = action.payload;
       })
       .addCase(updateUserDetails.rejected, (state, action) => {
         state.status = "failed";
