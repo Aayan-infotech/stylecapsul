@@ -22,8 +22,29 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      showErrorToast("Email is required");
+      return false;
+    } else if (!emailRegex.test(formData.email)) {
+      showErrorToast("Invalid email format");
+      return false;
+    }
+    if (!formData.password) {
+      showErrorToast("Password is required");
+      return false;
+    } else if (formData.password.length < 6) {
+      showErrorToast("Password must be at least 6 characters");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setBtnLoader(true);
     try {
       const addedProducts = JSON.parse(localStorage.getItem("cart")) || [];
@@ -31,14 +52,7 @@ const Login = () => {
       const payload = { ...formData, products: products, };
       const resultAction = await dispatch(loginUser(payload)).unwrap();
       showSuccessToast(resultAction?.message);
-      // if (resultAction?.success === true && resultAction?.status === 200) {
-      //   const redirectPath = location.state?.fromCheckout ? "/cart" : "/";
-      //   navigate(redirectPath);
-      // }
       if (resultAction?.success === true && resultAction?.status === 200) {
-        // if (!location?.state?.fromChat) {
-        //   localStorage.clear();
-        // }
         if (location?.state?.fromChat) {
           navigate("/chat", {
             state: { profile_details: location?.state?.profile_details },
@@ -56,42 +70,6 @@ const Login = () => {
     }
   };
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
-  //   setBtnLoader(true);
-  //   try {
-  //     const resultAction = await dispatch(loginUser(formData)).unwrap();
-  //     if (resultAction?.status === 200) {
-  //       showSuccessToast(resultAction?.message);
-  //       if (resultAction?.success === true && resultAction?.status === 200) {
-  //         setTimeout(() => {
-  //           const redirectTo = localStorage.getItem("redirectTo");
-  //           const productData = JSON.parse(localStorage.getItem("cart"));
-  //           if (redirectTo === "/cart" && productData) {
-  //             const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-  //             const productIndex = existingCart.findIndex((item) => item.id === productData.id);
-  //             if (productIndex !== -1) {
-  //               existingCart[productIndex].quantity += productData.quantity;
-  //             } else {
-  //               existingCart.push({ ...productData });
-  //             }
-  //             localStorage.setItem("cart", JSON.stringify(existingCart));
-  //             localStorage.removeItem("cart");
-  //           }
-  //           navigate(redirectTo || "/");
-  //           localStorage.removeItem("redirectTo");
-  //         });
-  //       }
-  //     }
-  //   } catch (err) {
-  //     const errorMessage = err.response?.data?.message || err.message;
-  //     showErrorToast(errorMessage);
-  //   } finally {
-  //     setBtnLoader(false);
-  //   }
-  // };
-
-
   return (
     <>
       <div className="custom-container">
@@ -102,71 +80,31 @@ const Login = () => {
               <h2 className="card-title fs-4 text-center fw-bold">Login</h2>
               <form className="mt-4" onSubmit={handleLogin}>
                 <div className="mb-2">
-                  <label htmlFor="email" className="form-label fw-bold">
-                    Enter Email
-                  </label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="form-control rounded-pill"
-                    placeholder="Enter Email"
-                  />
+                  <label htmlFor="email" className="form-label fw-bold">  Enter Email</label>
+                  <input type="text" name="email" value={formData.email} onChange={handleChange} className="form-control rounded-pill" placeholder="Enter Email" />
                 </div>
                 <div className="mb-2 position-relative">
-                  <label htmlFor="password" className="form-label fw-bold">
-                    Password
-                  </label>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="form-control rounded-pill"
-                    placeholder="Password"
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y"
-                    onClick={togglePasswordVisibility}
-                    style={{ background: "none", border: "none" }}
-                  >
-                    <i
-                      className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
-                        }`}
-                    ></i>
+                  <label htmlFor="password" className="form-label fw-bold">  Password</label>
+                  <input type={showPassword ? "text" : "password"} name="password" value={formData.password} onChange={handleChange} className="form-control rounded-pill" placeholder="Password" />
+                  <button type="button" className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y" onClick={togglePasswordVisibility} style={{ background: "none", border: "none" }}>
+                    <i className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
                   </button>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="">
-                    <Link
-                      to="/forgot-password"
-                      className="text-decoration-none text-black"
-                    >
+                    <Link to="/forgot-password" className="text-decoration-none text-black">
                       Forgot Password?
                     </Link>
                   </div>
                   <div className="form-check">
-                    <input
-                      className="text-black me-1"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
+                    <input className="text-black me-1" type="checkbox" value="" id="flexCheckDefault" />
+                    <label className="form-check-label" htmlFor="flexCheckDefault">
                       Remember Me
                     </label>
                   </div>
                 </div>
                 <div className="text-center mt-4">
-                  <button
-                    type="submit"
-                    className="btn custom-button text-white fw-bold rounded-pill w-75 p-2"
-                  >
+                  <button type="submit" className="btn custom-button text-white fw-bold rounded-pill w-75 p-2">
                     {btnLoader ? (
                       <span>
                         <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
@@ -191,4 +129,5 @@ const Login = () => {
     </>
   );
 };
+
 export default Login;

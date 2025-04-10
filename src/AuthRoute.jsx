@@ -73,9 +73,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    if (loading || loginStatus === 'loading') {
-        return <div className="loading-screen">Loading...</div>;
-    }    
+    // if (loading || loginStatus === 'loading') {
+    //     return <div className="loading-screen">Loading...</div>;
+    // }    
 
     if (isAuth) {
         return <>{children}</>;
@@ -92,6 +92,7 @@ const AuthRoute = ({ children }) => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+
         <Route path="*" element={<PageNotFound />} />
     </Routes>;
 }

@@ -32,7 +32,7 @@ const cardData = [
     image: coinhand,
     imageAlt: "coinhand",
     imageStyle: { width: "50px", height: "45px" },
-    // url: "/garment-care",
+    url: "/garment-care",
   },
   {
     id: 4,

@@ -32,6 +32,7 @@ const ServiceProvider = () => {
         }
       });
       const data = response.data?.data;
+      console.log(data, 'service provider')
       if (data?.ServiceProvider) {
         setServiceProviderData(data);
         setMessage("");
@@ -67,17 +68,15 @@ const ServiceProvider = () => {
         <div className="container w-75 align-items-center justify-content-center">
           <div className="row w-100 m-auto">
             <div className="col-12">
-              <h1 className="fw-bold fs-2 text-center text-md-start">Service Provider</h1>
+              <h1 className="fw-bold fs-1 my-3">Service Provider</h1>
             </div>
             <div className="col-12 col-md-3 d-flex">
               <div id="serviceProviderCarousel" className="carousel slide" data-bs-ride="carousel">
-                {/* Carousel Indicators */}
                 <div className="carousel-indicators">
                   <button type="button" data-bs-target="#serviceProviderCarousel" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
                   <button type="button" data-bs-target="#serviceProviderCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                   <button type="button" data-bs-target="#serviceProviderCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
                 </div>
-
                 <div className="carousel-inner">
                   <div className="carousel-item active">
                     <img src="https://media.istockphoto.com/id/155288041/photo/indian-girl-in-the-university.jpg?s=612x612&w=0&k=20&c=OPg_GzXdIMZ3btYu61HX79KxSBe7A6BYPSYYknNBafQ="
@@ -94,45 +93,61 @@ const ServiceProvider = () => {
                 </div>
               </div>
             </div>
-            <div className="col-12 col-md-8">
-              <div className="d-flex justify-content-between align-items-center">
-                <h3>{serviceProviderData?.ServiceProvider?.name || "Service Provider Name"}</h3>
-                <h5>Laundry</h5>
-              </div>
-              <p>
-                <i className="fa-solid fa-location-dot me-2"></i>
-                {serviceProviderData?.ServiceProvider?.address || "No Location available"}
-              </p>
-              <div className="d-flex justify-content-between align-items-center">
-                <p>Category</p>
-                <p className="fw-bold">{serviceProviderData?.service || "No Service available"}</p>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p>Timing</p>
-                <p className="fw-bold"> {serviceProviderData?.startTime && serviceProviderData?.endTime
-                  ? `${new Date(serviceProviderData.startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })} to ${new Date(serviceProviderData.endTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}`
-                  : "Timing not available"}</p>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p>Rating</p>
+            <div className="col-12 col-md-8 d-flex align-items-center">
+              <div className="w-100">
+                <div className="d-flex justify-content-between align-items-center">
+                  <h3>{serviceProviderData?.ServiceProvider?.name || "Service Provider Name"}</h3>
+                  <h5>Laundry</h5>
+                </div>
                 <p>
-                  {[...Array(5)].map((_, index) => (
-                    <i key={index} className={`fa fa-star ${index < 4 ? 'text-warning' : 'fa-star-half-alt text-warning'}`}></i>
-                  ))}
+                  <i className="fa-solid fa-location-dot me-2"></i>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(serviceProviderData?.ServiceProvider?.address || '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {serviceProviderData?.ServiceProvider?.address || "No Location available"}
+                  </a>
                 </p>
-              </div>
-              <div align="center" className="mt-5">
+                <div className="d-flex justify-content-between align-items-center">
+                  <p>Phone Numer</p>
+                  <p className="fw-bold">{serviceProviderData?.ServiceProvider?.mobile || "No Service available"}</p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <p>Email</p>
+                  <p className="fw-bold">{serviceProviderData?.ServiceProvider?.email || "No Service available"}</p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <p>Category</p>
+                  <p className="fw-bold">{serviceProviderData?.service || "No Service available"}</p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <p>Timing</p>
+                  <p className="fw-bold"> {serviceProviderData?.startTime && serviceProviderData?.endTime
+                    ? `${new Date(serviceProviderData.startTime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })} to ${new Date(serviceProviderData.endTime).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}`
+                    : "Timing not available"}</p>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <p>Rating</p>
+                  <p>
+                    {[...Array(5)].map((_, index) => (
+                      <i key={index} className={`fa fa-star ${index < 4 ? 'text-warning' : 'fa-star-half-alt text-warning'}`}></i>
+                    ))}
+                  </p>
+                </div>
+                {/* <div align="center" className="mt-5">
                 <button type="button" className="btn hire-custom-btn rounded-pill p-2" onClick={handleClick}>Book</button>
+              </div> */}
               </div>
             </div>
           </div>
-          <div className="row mt-4">
+          {/* <div className="row mt-4">
             <div className="col-12">
               <h4 className="fw-bold fs-4">Description</h4>
               <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, et cumque vitae possimus voluptate excepturi nostrum quis minima! Laboriosam, sint.</p>
@@ -219,116 +234,9 @@ const ServiceProvider = () => {
               </div>
               <hr className="text-muted mt-4" />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
-      {/* <div className="d-flex justify-content-center align-items-center service-provider-sections">
-        <div className="container p-4">
-          <div className="row m-0 gx-2">
-            <h1 className="fw-bold fs-1">Service Provider</h1>
-            <div className="col-12 col-md-6 mb-2 mb-md-0 p-3">
-              <div
-                id="carouselExampleIndicators"
-                className="carousel slide"
-                data-bs-ride="carousel"
-              >
-                <div className="carousel-inner">
-                  <div className="carousel-item active">
-                    <img
-                      src="https://plus.unsplash.com/premium_photo-1724411829738-2841c0f47977?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMnx8fGVufDB8fHx8fA%3D%3D"
-                      className="d-block w-100 carousel-image"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="carousel-item">
-                    <img
-                      src="https://images.unsplash.com/photo-1719937206642-ca0cd57198cc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D"
-                      className="d-block w-100 carousel-image"
-                      alt="..."
-                    />
-                  </div>
-                  <div className="carousel-item">
-                    <img
-                      src="https://images.unsplash.com/photo-1724217552369-22b256e395d9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNXx8fGVufDB8fHx8fA%3D%3D"
-                      className="d-block w-100 carousel-image"
-                      alt="..."
-                    />
-                  </div>
-                </div>
-                <div className="carousel-indicators custom-indicators">
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="0"
-                    className="active"
-                    aria-current="true"
-                    aria-label="Slide 1"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="1"
-                    aria-label="Slide 2"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#carouselExampleIndicators"
-                    data-bs-slide-to="2"
-                    aria-label="Slide 3"
-                  ></button>
-                </div>
-              </div>
-            </div>
-            <div className="col-12 col-md-6 p-3 bookservice-details">
-              <div>
-                <h5>{serviceProviderData.name || "Service Provider Name"}</h5>
-                <div className="border-line"></div>
-                <div className="mt-3">
-                  <p>
-                    <i className="fa-solid fa-location-dot me-2"></i>
-                    {serviceProviderData.address || "Location"}
-                  </p>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Category</p>
-                    <p className="fw-bold">{garment?.service || "Service"}</p>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Timing</p>
-                    <p className="fw-bold">{`${new Date(
-                      garment?.startTime
-                    ).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })} to ${new Date(garment?.endTime).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}`}</p>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Rating</p>
-                    <p>
-                      <i className="fa-regular fa-star me-2 fs-5"></i>
-                      <i className="fa-regular fa-star me-2 fs-5"></i>
-                      <i className="fa-regular fa-star me-2 fs-5"></i>
-                      <i className="fa-regular fa-star me-2 fs-5"></i>
-                      <i className="fa-regular fa-star fs-5"></i>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div align="center" className="mt-4">
-                <button
-                  type="button"
-                  className="btn book-custom-btn w-50 rounded-pill p-2"
-                  onClick={handleClick}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

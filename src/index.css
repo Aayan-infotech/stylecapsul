@@ -2,9 +2,26 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none;
 }
 .form-control:focus {
  
   border-color: #000;
   box-shadow: none;
+}
+/* index.css */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  color: white;
+  background-color: #333;
+  padding: 4px 14px;              /* more padding for capsule look */
+  border-radius: 999px;           /* capsule shape */
+  font-size: 10px;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

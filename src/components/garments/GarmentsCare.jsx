@@ -33,7 +33,6 @@ const GarmentsCare = () => {
         setMessage("No services found.");
       }
     } catch (error) {
-      console.log(error.response?.data?.message);
       setShowGarments([]);
       setMessage(error?.response?.data?.message || "An error occurred.");
     } finally {
@@ -42,7 +41,6 @@ const GarmentsCare = () => {
   };
 
   const fetchGarmentCareServicesByQuery = async (query) => {
-    setLoading(true);
     try {
       const response = await axios.get(apiUrl(`api/garment/garment-care/services/${query}`), {
         headers: {
@@ -58,11 +56,8 @@ const GarmentsCare = () => {
         setMessage("No services found.");
       }
     } catch (error) {
-      console.log(error.response?.data?.message);
       setShowGarments([]);
       setMessage(error?.response?.data?.message || "An error occurred.");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -86,9 +81,7 @@ const GarmentsCare = () => {
   };
 
   const handleShowServiceProvider = (garment) => {
-    // console.log(garment, 'garment')
-    // navigate("/service-provider", { state: { garment } });
-    const id = garment._id; // Extract the ID
+    const id = garment._id;
     navigate(`/service-provider/${id}`);
   };
 
@@ -103,12 +96,7 @@ const GarmentsCare = () => {
             <div className="garment-search-input">
               <div className="search-box">
                 <i className="fa fa-search"></i>
-                <input
-                  type="text"
-                  className="rounded-pill text-white"
-                  placeholder="Search"
-                  onChange={handleSearchInputChange}
-                />
+                <input type="text" className="rounded-pill text-white" placeholder="Search" onChange={handleSearchInputChange} />
               </div>
             </div>
           </div>
@@ -125,22 +113,10 @@ const GarmentsCare = () => {
             </div>
           ) : (
             showGarments.map((garment) => (
-              <div
-                className="col-12 mt-3"
-                style={{ cursor: "pointer" }}
-                key={garment._id}
-                onClick={() => handleShowServiceProvider(garment)}
-              >
-                <div
-                  className="d-flex rounded-pill"
-                  style={{ backgroundColor: "#4C4C4C" }}
-                >
+              <div className="col-12 mt-3" style={{ cursor: "pointer" }} key={garment._id} onClick={() => handleShowServiceProvider(garment)}>
+                <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
                   <div className="me-2">
-                    <img
-                      className="image-rounded"
-                      src={garment?.ServiceProvider?.profilePicture || blank_image}
-                      alt={garment.ServiceProvider.name}
-                    />
+                    <img className="image-rounded" src={garment?.ServiceProvider?.profilePicture || blank_image} onError={(e) => { e.target.onerror = null; e.target.src = blank_image }} alt={garment.ServiceProvider.name} />
                   </div>
                   <div className="p-2 text-white">
                     <h6>{garment.ServiceProvider.name}</h6>
