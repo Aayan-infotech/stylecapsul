@@ -1,82 +1,102 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Chat.scss";
 import blank_image from "../../assets/stylist/blank_img.jpg";
-import { useLocation } from "react-router-dom";
-
-import { db } from "../../firebase";
-import { getCookie } from '../../utils/cookieUtils';
 import {
   collection,
+  doc,
+  onSnapshot,
+  setDoc,
   addDoc,
   query,
   orderBy,
-  onSnapshot,
-  serverTimestamp,
+  getFirestore
 } from "firebase/firestore";
+import { useLocation } from "react-router-dom";
+import { db } from "../../firebase";
+import { getCookie } from "../../utils/cookieUtils";
 
 const Chat = () => {
+  const db = getFirestore();
   const location = useLocation();
-  const stylistList = location?.state?.profile_details;
-  const st_chat = location?.state?.stylistList;
+  const st_chat = location?.state?.profile_details;
 
   const userId = getCookie("userId");
-
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [selectedStylist, setSelectedStylist] = useState(st_chat);
+  const [chatList, setChatList] = useState([]);
+
+  const getChatId = (uid1, uid2) => {
+    return uid1 < uid2 ? `${uid1}_chat_${uid2}` : `${uid2}_chat_${uid1}`;
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    const chatListRef = collection(db, `chat_list`, userId, `messages`);
+    const unsubscribe = onSnapshot(chatListRef, (snapshot) => {
+      const chats = snapshot.docs.map(doc => ({
+        stylistId: doc.id,
+        ...doc.data(),
+      }));
+      setChatList(chats);
+    });
+    return () => unsubscribe();
+  }, [userId]);
 
   useEffect(() => {
     if (!selectedStylist || !selectedStylist._id) return;
-    const stylistId = selectedStylist._id;
-    const chatId = userId < stylistId ? `${userId}_${stylistId}` : `${stylistId}_${userId}`;
-    console.log("Fetching messages for chatId:", chatId);
-
-    const messagesRef = collection(db, "chats", chatId, "messages");
-    const q = query(messagesRef, orderBy("timestamp", "asc"));
+    const chatId = getChatId(userId, selectedStylist._id);
+    const messagesRef = collection(db, `chats`, chatId, `messages`);
+    console.log(messagesRef, 'messagesRef')
+    const q = query(messagesRef, orderBy("timeStamp"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedMessages = snapshot.docs.map((doc) => ({
+      const msgs = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Messages fetched:", fetchedMessages); 
-      setMessages(fetchedMessages);
+      setMessages(msgs);
     });
-  
     return () => unsubscribe();
-  }, [selectedStylist]);
-  
+  }, [selectedStylist, userId]);
 
   const handleSendMessage = async () => {
-    console.log(selectedStylist, 'selectedStylist')
     if (!message.trim() || !selectedStylist || !selectedStylist._id) return;
-
-    const stylistId = selectedStylist._id;
-    const chatId = userId < stylistId ? `${userId}_${stylistId}` : `${stylistId}_${userId}`;
-
+    const senderId = userId;
+    const receiverId = selectedStylist._id;
+    const chatId = getChatId(senderId, receiverId);
+    const time = Date.now();
+    const chat = {
+      msg: message,
+      timeStamp: time,
+      type: "text",
+      receiverId: receiverId,
+      receiverName: selectedStylist.name,
+      senderId: senderId,
+      senderName: "dev",
+    };
+    const users = {
+      receiverId: receiverId,
+      senderId: senderId,
+      receiverName: selectedStylist.name,
+      senderName: "dev",
+      lastMessage: message,
+      lastMessageTime: time,
+    };
+    setMessage("");
     try {
-      const docRef = await addDoc(
-        collection(db, "chats", selectedStylist._id, "messages"),
-        {
-          text: message,
-          sender: userId,
-          timestamp: serverTimestamp(),
-        }
+      const messageRef = collection(db, "chats", chatId, "messages");
+      await addDoc(messageRef, chat);
+      await setDoc(
+        doc(db, "chat_list", senderId, "messages", receiverId),
+        users
       );
-      console.log("Message Sent Successfully:", docRef._id);
-      setMessage("");
+      await setDoc(
+        doc(db, "chat_list", receiverId, "messages", senderId),
+        users
+      );
     } catch (error) {
       console.error("Error sending message:", error);
     }
-  };
-  
-
-  const handleInputChange = (e) => {
-    setMessage(e.target.value);
-  };
-
-  const handleStylistClick = (stylist) => {
-    if (!stylist) return;
-    setSelectedStylist(stylist);
   };
 
   return (
@@ -86,54 +106,46 @@ const Chat = () => {
           <div className="col-12 col-md-4 chat-list">
             <div className="search-bar mb-3">
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              <input
-                type="text"
-                className="search-input"
-                placeholder="Search Message"
-              />
+              <input type="text" className="search-input" placeholder="Search Message" />
             </div>
             <div className="overflow-list">
-              <div
-                className={`mt-2 show-list ${
-                  stylistList?.id === stylistList?.id ? "active" : ""
-                }`}
-                onClick={() => handleStylistClick(stylistList)}
-              >
-                <div className="d-flex align-items-center">
-                  <img
-                    src={stylistList?.profilePicture || blank_image}
-                    alt={stylistList?.name || "Stylist"}
-                    className="profile-image rounded-circle"
-                  />
-                  <div className="message-content ms-3">
-                    <h4 className="name fs-5 mb-1">{stylistList?.name}</h4>
-                    <p className="message mb-0 text-muted">
-                      {stylistList?.description}
-                    </p>
+              {chatList.map((stylist) => (
+                <div
+                  key={stylist.stylistId}
+                  className={`mt-2 show-list ${selectedStylist?._id === stylist.stylistId ? "active" : ""}`}
+                  onClick={() => setSelectedStylist({ _id: stylist.stylistId, ...stylist })}
+                >
+                  <div className="d-flex align-items-center">
+                    <img
+                      src={stylist.profilePicture || blank_image}
+                      alt={stylist.name}
+                      className="profile-image rounded-circle"
+                      onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
+                    />
+                    <div className="message-content ms-3">
+                      <h4 className="name fs-5 mb-1">{stylist.name}</h4>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
+
           {selectedStylist && (
             <div className="col-12 col-md-8 chat-page">
               <div className="d-flex align-items-center justify-content-between p-3">
                 <h2 className="fs-4 m-0">{selectedStylist.name}</h2>
               </div>
               <div className="chat-body p-3">
-                {messages.map((msg) => (
+                {messages?.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`message-bubble ${
-                      msg.sender === "user" ? "right-bubble" : "left-bubble"
-                    }`}
+                    className={`message-bubble ${msg.sender === userId ? "right-bubble" : "left-bubble"}`}
                   >
-                    {msg.text}
+                    {msg.msg}
                   </div>
                 ))}
               </div>
-
-              {/* 🔹 Message Input */}
               <div className="chat-footer d-flex align-items-center p-3">
                 <div className="search-bar rounded-pill me-3">
                   <i className="fa-solid fa-paperclip search-icon"></i>
@@ -142,19 +154,17 @@ const Chat = () => {
                     className="search-input"
                     placeholder="Type a message..."
                     value={message}
-                    onChange={handleInputChange}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                   />
                   <i className="fa-regular fa-face-smile search-icon"></i>
                 </div>
-                <div className="send-button d-flex justify-content-center align-items-center">
-                  <button
-                    onClick={handleSendMessage}
-                    type="button"
-                    className="btn btn-dark rounded-pill"
-                  >
-                    <i className="fa-solid fa-paper-plane send-icon"></i>
-                  </button>
-                </div>
+                <button
+                  onClick={handleSendMessage}
+                  className="btn btn-dark rounded-pill"
+                >
+                  <i className="fa-solid fa-paper-plane send-icon"></i>
+                </button>
               </div>
             </div>
           )}

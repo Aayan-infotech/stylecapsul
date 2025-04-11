@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       <Toast />
-      <CursorTooltip text="Style Capsule" />
+      {/* <CursorTooltip text="Style Capsule" /> */}
       <Routing />
     </div>
   )

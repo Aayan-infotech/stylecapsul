@@ -105,7 +105,7 @@ const StylistDetails = () => {
 
   const handleClickToChat = () => {
     if (token) {
-      navigate("/chat", { state: { profile_details } });
+      navigate("/chat", { state: { profile_details: profile_details } });
     } else {
       navigate("/login", { state: { fromChat: true, profile_details: profile_details, }, });
     }
