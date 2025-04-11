@@ -12,7 +12,7 @@ import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import moment from "moment";
 import Loader from "../Loader/Loader";
-import no_cart_found from "../../assets/not-cart_found.png"
+import no_cart_found from "../../assets/blankcart.gif"
 
 const Cart = () => {
   const [loading, setLoading] = useState(true);
@@ -258,9 +258,8 @@ const Cart = () => {
                   </div>
                 </>
               ) : (
-                <div className="text-center mt-5">
-                  {/* <h3>No cart available</h3> */}
-                  <img src={no_cart_found} height={200} />
+                <div className="text-center">
+                  <img src={no_cart_found} height={400} />
                 </div>
               )}
             </div>

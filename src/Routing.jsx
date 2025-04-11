@@ -102,7 +102,6 @@ const Routing = () => {
             <Route path="/try-avtar" element={<TryAvtar />} />
             <Route path="/avtarlookingcool" element={<AvtarLookingCool />} />
             <Route path="/change-password" element={<ChangePassword />} />
-            {/* <Route path="/myaddedproducts" element={<MyAddedProducts />} /> */}
             <Route path="/orderhistory" element={<OrderHistory />} />
             <Route path="/closet-details" element={<ClossetDetails />} />
             <Route path="/emojistylecapsule" element={<EmojiStyleCapsule />} />
