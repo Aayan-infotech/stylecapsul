@@ -14,6 +14,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { db } from "../../firebase";
 import { getCookie } from "../../utils/cookieUtils";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
   const db = getFirestore();
@@ -28,6 +29,21 @@ const Chat = () => {
     name: st_chat.name || st_chat.receiverName,
     ...st_chat
   } : null);
+
+  const { user, status } = useSelector((state) => state.login);
+  const singleUser = user?.payload || user;
+  console.log(singleUser?.firstName, 'singleUser');
+
+  useEffect(() => {
+    if (status === "succeeded") {
+      const timeoutId = setTimeout(() => {
+        setLogedInUserData(singleUser);
+        setLoading(false);
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [status, singleUser]);
+
   const [chatList, setChatList] = useState([]);
   const chatBodyRef = useRef(null);
 
@@ -52,7 +68,6 @@ const Chat = () => {
     if (!selectedStylist || !selectedStylist._id) return;
     const chatId = getChatId(userId, selectedStylist._id);
     const messagesRef = collection(db, `chats`, chatId, `messages`);
-    console.log(messagesRef, 'messagesRef')
     const q = query(messagesRef, orderBy("timeStamp"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => ({
@@ -78,7 +93,6 @@ const Chat = () => {
     const time = Date.now();
 
     const receiverName = selectedStylist.name || selectedStylist.receiverName || "Unknown";
-    const senderName = "dev";
 
     const chat = {
       msg: message,
@@ -87,13 +101,13 @@ const Chat = () => {
       receiverId: receiverId,
       receiverName: receiverName,
       senderId: senderId,
-      senderName: "dev",
+      senderName: singleUser?.firstName,
     };
     const users = {
       receiverId: receiverId,
       senderId: senderId,
       receiverName: receiverName,
-      senderName: "dev",
+      senderName: singleUser?.firstName,
       lastMessage: message,
       lastMessageTime: time,
     };
