@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styles/Chat.scss";
 import blank_image from "../../assets/stylist/blank_img.jpg";
 import {
@@ -23,8 +23,13 @@ const Chat = () => {
   const userId = getCookie("userId");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [selectedStylist, setSelectedStylist] = useState(st_chat);
+  const [selectedStylist, setSelectedStylist] = useState(st_chat ? {
+    _id: st_chat._id,
+    name: st_chat.name || st_chat.receiverName,
+    ...st_chat
+  } : null);
   const [chatList, setChatList] = useState([]);
+  const chatBodyRef = useRef(null);
 
   const getChatId = (uid1, uid2) => {
     return uid1 < uid2 ? `${uid1}_chat_${uid2}` : `${uid2}_chat_${uid1}`;
@@ -59,25 +64,35 @@ const Chat = () => {
     return () => unsubscribe();
   }, [selectedStylist, userId]);
 
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const handleSendMessage = async () => {
     if (!message.trim() || !selectedStylist || !selectedStylist._id) return;
     const senderId = userId;
     const receiverId = selectedStylist._id;
     const chatId = getChatId(senderId, receiverId);
     const time = Date.now();
+
+    const receiverName = selectedStylist.name || selectedStylist.receiverName || "Unknown";
+    const senderName = "dev";
+
     const chat = {
       msg: message,
       timeStamp: time,
       type: "text",
       receiverId: receiverId,
-      receiverName: selectedStylist.name,
+      receiverName: receiverName,
       senderId: senderId,
       senderName: "dev",
     };
     const users = {
       receiverId: receiverId,
       senderId: senderId,
-      receiverName: selectedStylist.name,
+      receiverName: receiverName,
       senderName: "dev",
       lastMessage: message,
       lastMessageTime: time,
@@ -123,7 +138,8 @@ const Chat = () => {
                       onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
                     />
                     <div className="message-content ms-3">
-                      <h4 className="name fs-5 mb-1">{stylist.name}</h4>
+                      <h4 className="name fs-5 mb-1">{stylist?.receiverName}</h4>
+                      <p className="mb-0">{new Date(stylist?.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                     </div>
                   </div>
                 </div>
@@ -136,11 +152,20 @@ const Chat = () => {
               <div className="d-flex align-items-center justify-content-between p-3">
                 <h2 className="fs-4 m-0">{selectedStylist.name}</h2>
               </div>
-              <div className="chat-body p-3">
+              <div className="chat-body p-3" ref={chatBodyRef} style={{ overflowY: 'auto', maxHeight: '60vh' }}>
                 {messages?.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`message-bubble ${msg.sender === userId ? "right-bubble" : "left-bubble"}`}
+                    style={{
+                      maxWidth: '70%',
+                      marginBottom: '10px',
+                      alignSelf: msg.senderId === userId ? 'flex-end' : 'flex-start',
+                      backgroundColor: msg.senderId === userId ? '#DCF8C6' : '#F1F0F0',
+                      padding: '10px 15px',
+                      borderRadius: '20px',
+                      borderTopRightRadius: msg.senderId === userId ? '0' : '20px',
+                      borderTopLeftRadius: msg.senderId === userId ? '20px' : '0',
+                    }}
                   >
                     {msg.msg}
                   </div>
@@ -148,7 +173,7 @@ const Chat = () => {
               </div>
               <div className="chat-footer d-flex align-items-center p-3">
                 <div className="search-bar rounded-pill me-3">
-                  <i className="fa-solid fa-paperclip search-icon"></i>
+                  {/* <i className="fa-solid fa-paperclip search-icon"></i> */}
                   <input
                     type="text"
                     className="search-input"
