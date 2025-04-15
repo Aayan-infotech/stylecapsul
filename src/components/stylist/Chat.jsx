@@ -20,7 +20,6 @@ const Chat = () => {
   const db = getFirestore();
   const location = useLocation();
   const st_chat = location?.state?.profile_details;
-  console.log(st_chat, 'st_chat');
 
   const userId = getCookie("userId");
   const [message, setMessage] = useState("");
@@ -45,14 +44,27 @@ const Chat = () => {
     if (!userId) return;
     const chatListRef = collection(db, `chat_list`, userId, `messages`);
     const unsubscribe = onSnapshot(chatListRef, (snapshot) => {
-      const chats = snapshot.docs.map(doc => ({
+      let chats = snapshot.docs.map(doc => ({
         stylistId: doc.id,
         ...doc.data(),
       }));
+      if (selectedStylist && selectedStylist._id && !chats.find(c => c.stylistId === selectedStylist._id)) {
+        chats = [
+          {
+            stylistId: selectedStylist._id,
+            receiverName: selectedStylist.name || selectedStylist.receiverName || "Unknown",
+            stylistProfileImage: selectedStylist.profileImage || "",
+            lastMessage: "",
+            lastMessageTime: Date.now(),
+          },
+          ...chats
+        ];
+      }
       setChatList(chats);
     });
     return () => unsubscribe();
-  }, [userId]);
+  }, [userId, selectedStylist]);
+
 
   useEffect(() => {
     if (!selectedStylist || !selectedStylist._id) return;
@@ -109,50 +121,77 @@ const Chat = () => {
       await addDoc(messageRef, chat);
       await setDoc(
         doc(db, "chat_list", senderId, "messages", receiverId),
-        users
+        {
+          receiverId: receiverId,
+          senderId: senderId,
+          receiverName: receiverName,
+          senderName: singleUser?.firstName,
+          lastMessage: message,
+          lastMessageTime: time,
+          profileImage: singleUser?.profileImage
+        }
       );
       await setDoc(
         doc(db, "chat_list", receiverId, "messages", senderId),
-        users
+        {
+          receiverId: senderId,
+          senderId: receiverId,
+          receiverName: singleUser?.firstName,
+          senderName: receiverName,
+          lastMessage: message,
+          lastMessageTime: time,
+          profileImage: selectedStylist?.profileImage
+        }
       );
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
-  console.log(messages, 'messages')
+
   return (
     <div className="stylist-message-container">
       <div className="container d-flex justify-content-center align-items-center">
         <div className="row gx-0">
           <div className="col-12 col-md-4 chat-list">
-            <div className="search-bar mb-3">
-              <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" className="search-input" placeholder="Search Message" />
-            </div>
             <div className="overflow-list">
-              {chatList.map((stylist) => (
-                <div
-                  key={stylist.stylistId}
-                  className={`mt-2 show-list ${selectedStylist?._id === stylist.stylistId ? "active" : ""}`}
-                  onClick={() => setSelectedStylist({ _id: stylist.stylistId, ...stylist })}
-                >
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={stylist?.stylistProfileImage || blank_image}
-                      alt={stylist.name}
-                      className="profile-image rounded-circle"
-                      onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
-                    />
-                    <div className="message-content ms-3">
-                      <h4 className="name fs-5 mb-1">{stylist?.receiverName}</h4>
-                      <p className="mb-0">{new Date(stylist?.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+              {chatList.map((stylist) => {
+                const isSender = stylist.senderId === userId;
+                const displayName = isSender ? stylist.receiverName : stylist.senderName;
+                const displayImage = isSender
+                  ? stylist.profileImage
+                  : stylist.profileImage;
+
+                return (
+                  <div
+                    key={stylist.stylistId}
+                    className={`mt-2 show-list ${selectedStylist?._id === stylist.stylistId ? "active" : ""}`}
+                    onClick={() => setSelectedStylist({ _id: stylist.stylistId, ...stylist })}
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={displayImage || blank_image}
+                        alt={displayName}
+                        className="profile-image rounded-circle"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = blank_image;
+                        }}
+                      />
+                      <div className="message-content ms-3">
+                        <h4 className="name fs-5 mb-1">{displayName}</h4>
+                        <p className="mb-0">
+                          {new Date(stylist?.lastMessageTime).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
-
           {selectedStylist && (
             <div className="col-12 col-md-8 chat-page">
               <div className="d-flex align-items-center justify-content-between p-3">
