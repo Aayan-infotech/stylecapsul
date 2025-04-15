@@ -20,6 +20,7 @@ const Chat = () => {
   const db = getFirestore();
   const location = useLocation();
   const st_chat = location?.state?.profile_details;
+  console.log(st_chat, 'st_chat');
 
   const userId = getCookie("userId");
   const [message, setMessage] = useState("");
@@ -32,17 +33,6 @@ const Chat = () => {
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
-  console.log(singleUser?.firstName, 'singleUser');
-
-  useEffect(() => {
-    if (status === "succeeded") {
-      const timeoutId = setTimeout(() => {
-        setLogedInUserData(singleUser);
-        setLoading(false);
-      }, 1000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [status, singleUser]);
 
   const [chatList, setChatList] = useState([]);
   const chatBodyRef = useRef(null);
@@ -84,7 +74,7 @@ const Chat = () => {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
-
+  console.log(singleUser, 'singleUser')
   const handleSendMessage = async () => {
     if (!message.trim() || !selectedStylist || !selectedStylist._id) return;
     const senderId = userId;
@@ -102,6 +92,7 @@ const Chat = () => {
       receiverName: receiverName,
       senderId: senderId,
       senderName: singleUser?.firstName,
+      profileImage: singleUser?.profileImage
     };
     const users = {
       receiverId: receiverId,
@@ -110,6 +101,7 @@ const Chat = () => {
       senderName: singleUser?.firstName,
       lastMessage: message,
       lastMessageTime: time,
+      profileImage: singleUser?.profileImage
     };
     setMessage("");
     try {
@@ -127,7 +119,7 @@ const Chat = () => {
       console.error("Error sending message:", error);
     }
   };
-
+  console.log(messages, 'messages')
   return (
     <div className="stylist-message-container">
       <div className="container d-flex justify-content-center align-items-center">
@@ -146,7 +138,7 @@ const Chat = () => {
                 >
                   <div className="d-flex align-items-center">
                     <img
-                      src={stylist.profilePicture || blank_image}
+                      src={stylist?.stylistProfileImage || blank_image}
                       alt={stylist.name}
                       className="profile-image rounded-circle"
                       onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
@@ -166,7 +158,7 @@ const Chat = () => {
               <div className="d-flex align-items-center justify-content-between p-3">
                 <h2 className="fs-4 m-0">{selectedStylist.name}</h2>
               </div>
-              <div className="chat-body p-3" ref={chatBodyRef} style={{ overflowY: 'auto', maxHeight: '60vh' }}>
+              <div className="chat-body p-3" ref={chatBodyRef} style={{ overflowY: 'auto', maxHeight: '60vh', display: 'flex', flexDirection: 'column' }}>
                 {messages?.map((msg) => (
                   <div
                     key={msg.id}
@@ -181,21 +173,17 @@ const Chat = () => {
                       borderTopLeftRadius: msg.senderId === userId ? '20px' : '0',
                     }}
                   >
-                    {msg.msg}
+                    <div>{msg.msg}</div>
+                    <p className="mb-0 mt-1" style={{ fontSize: '0.75rem', color: '#888' }}>
+                      {new Date(msg?.timeStamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
                 ))}
               </div>
+
               <div className="chat-footer d-flex align-items-center p-3">
                 <div className="search-bar rounded-pill me-3">
-                  {/* <i className="fa-solid fa-paperclip search-icon"></i> */}
-                  <input
-                    type="text"
-                    className="search-input"
-                    placeholder="Type a message..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  />
+                  <input type="text" className="search-input" placeholder="Type a message..." value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} />
                   <i className="fa-regular fa-face-smile search-icon"></i>
                 </div>
                 <button
