@@ -21,9 +21,6 @@ function ClothesList() {
   const { category } = useParams();
   const location = useLocation();
   const { category_name, userPostDetails } = location.state || {};
-  const existingUser = userPostDetails.user?._id;
-  console.log(existingUser,'userPostDetails')
-
   const token = getCookie("authToken");
   if (!token) {
     showErrorToast("token not found");
@@ -36,7 +33,9 @@ function ClothesList() {
   const fetchClothesByCategory = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl(`api/cloths/get-by-category/${category}`), {
+      const response = await axios.get(
+        apiUrl(`api/cloths/get-by-category/${category}`),
+        {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",

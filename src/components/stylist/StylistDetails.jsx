@@ -67,33 +67,31 @@ const StylistDetails = () => {
     }
     setError("");
     try {
-      const response = await axios.get(
-        apiUrl(`api/review/create/${stylistId}`),
-        {
-          stylistId: stylistId,
-          comment: comment,
-          ratings: rating,
+      const response = await axios.post(apiUrl("api/review/create"), {
+        stylistId: stylistId,
+        comment: comment,
+        ratings: rating,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+      }
       );
       if (response?.data?.success === true && response?.data?.status === 200) {
-        showSuccessToast(
-          response?.data?.message || "Review submitted successfully!"
-        );
+        showSuccessToast(response?.data?.message || "Review submitted successfully!");
         setComment("");
         setRating(0);
       } else {
         showErrorToast(response?.data?.message || "Failed to submit review.");
       }
+      fetchVendorDetails();
     } catch (error) {
       console.error("Error submitting review:", error);
+      showErrorToast("Something went wrong while submitting review.");
     }
   };
+
 
   useEffect(() => {
     if (stylistId && token) {
@@ -297,6 +295,12 @@ const StylistDetails = () => {
                       style={{ height: "100px" }}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSubmit(e);
+                        }
+                      }}
                     ></textarea>
                   </div>
                   {error && <p className="text-danger mb-0">{error}</p>}
@@ -317,7 +321,6 @@ const StylistDetails = () => {
                     </Button>
                   </div>
                 </form>
-
                 <hr className="text-muted mt-4" />
               </div>
             </div>

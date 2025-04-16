@@ -123,8 +123,6 @@ export const SocialUserDetails = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-  // console.log(userPostDetails, 'userPostDetails')
   
   return (
     <>
@@ -192,12 +190,12 @@ export const SocialUserDetails = () => {
                 </style>
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
-                    <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
+                    // <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
                       <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
                         <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
                         <h4 className="text-white fw-bold">{item?.name}</h4>
                       </div>
-                    </Link>
+                    // </Link>
                   ))
                 ) : (
                   <div className="col-12 text-center">
