@@ -46,8 +46,8 @@ export const SocialUserDetails = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-      }
-      );
+      });
+
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
@@ -81,7 +81,7 @@ export const SocialUserDetails = () => {
   const tileContent = ({ date, view }) => {
     const formattedDate = formatDate(date);
     if (view === "month") {
-      const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
+      const dateEntry = clothesOnDates?.find((item) => item.date === formattedDate);
       if (dateEntry && dateEntry.thumbnail.length > 0) {
         return (
           <div
@@ -124,6 +124,8 @@ export const SocialUserDetails = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // console.log(userPostDetails, 'userPostDetails')
+  
   return (
     <>
       {loading ? (
@@ -144,17 +146,7 @@ export const SocialUserDetails = () => {
                     onError={(e) => {
                       e.target.src = blank_img;
                     }}
-                    style={{
-                      display: "inline-block",
-                      border: "2px solid black",
-                      padding: "5px",
-                      borderRadius: "50%",
-                      boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
-                      cursor: "pointer",
-                      padding: "5px",
-                      height: "200px",
-                      width: "200px",
-                    }}
+                    style={{ display: "inline-block", border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", width: "200px", }}
                   />
                   <h4 className="fw-bold">
                     {userPostDetails?.user?.firstName
@@ -180,16 +172,7 @@ export const SocialUserDetails = () => {
                   minDate={new Date()}
                 />
               </div>
-              <div
-                className="col-12 col-md-6"
-                style={{
-                  height: "350px",
-                  overflowY: "auto",
-                  borderRadius: "10px",
-                  backgroundColor: "#f0f0f0",
-                  padding: "10px",
-                }}
-              >
+              <div className="col-12 col-md-6" style={{ height: "350px", overflowY: "auto", borderRadius: "10px", backgroundColor: "#f0f0f0", padding: "10px", }}>
                 <style>
                   {`.col-12.col-md-6::-webkit-scrollbar {
                     width: 7px; 
@@ -207,44 +190,11 @@ export const SocialUserDetails = () => {
                   }
                 `}
                 </style>
-                {/* {wardrow_categories.map((item, index) => (
-                  <Link to={item.url} className="text-decoration-none" key={index}>
-                    <div
-                      className="rounded-pill mb-3 d-flex align-items-center"
-                      style={{
-                        backgroundColor: "#4C4C4C",
-                        height: "70px",
-                        padding: "10px",
-                      }}
-                    >
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="profile-image me-3"
-                        style={{
-                          width: "50px",
-                          height: "50px",
-                          marginLeft: "15px",
-                        }}
-                      />
-                      <div className="text-start text-white">
-                        <h4 className="fw-bold mb-1">{item.title}</h4>
-                        <h6 className="mb-0">{item.date}</h6>
-                      </div>
-                    </div>
-                  </Link>
-                ))} */}
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
-                    <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
+                    <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
                       <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
-                        <img
-                          src={coinhand || blank_img}
-                          alt={coinhand || blank_img}
-                          height="30"
-                          onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
-                          className="me-2"
-                        />
+                        <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
                         <h4 className="text-white fw-bold">{item?.name}</h4>
                       </div>
                     </Link>

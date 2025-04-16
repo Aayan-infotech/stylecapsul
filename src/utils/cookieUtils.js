@@ -14,17 +14,10 @@ export const getCookie = (name) => {
     }
     return decodeURIComponent(dc.substring(begin + prefix.length, end));
 };
-// export const getCookie = (name) => {
-//     const value = `; ${document.cookie}`;
-//     const parts = value.split(`; ${name}=`);
-//     if (parts.length === 2) return parts.pop().split(';').shift();
-//     return null;
-// };
 
-
-export const setCookie = (name, value, hoursToExpire) => {
+export const setCookie = (name, value, daysToExpire) => {
     const expirationDate = new Date();
-    expirationDate.setTime(expirationDate.getTime() + (hoursToExpire * 60 * 60 * 1000));
+    expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
     const cookieString = `${name}=${encodeURIComponent(value)}; expires=${expirationDate.toUTCString()}; path=/`;
     document.cookie = cookieString;
 };
