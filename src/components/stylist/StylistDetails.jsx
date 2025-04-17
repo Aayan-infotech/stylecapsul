@@ -6,9 +6,11 @@ import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
-import SendIcon from "@mui/icons-material/Send";
-import { Button, Rating } from "@mui/material";
+import { format, addDays, isAfter, isSameMonth } from "date-fns";
+import { Button, Chip, Rating } from "@mui/material";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const StylistDetails = () => {
   const [showStylistProfileDetails, setSshowStylistProfileDetails] =
@@ -18,6 +20,12 @@ const StylistDetails = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+
+
   const { stylistId } = useParams();
 
   const token = getCookie("authToken");
@@ -92,7 +100,6 @@ const StylistDetails = () => {
     }
   };
 
-
   useEffect(() => {
     if (stylistId && token) {
       fetchVendorDetails();
@@ -106,6 +113,64 @@ const StylistDetails = () => {
       navigate("/chat", { state: { profile_details: profile_details } });
     } else {
       navigate("/login", { state: { fromChat: true, profile_details: profile_details, }, });
+    }
+  };
+
+  const getNextDateForDay = (dayName) => {
+    const dayIndexMap = {
+      Sunday: 0,
+      Monday: 1,
+      Tuesday: 2,
+      Wednesday: 3,
+      Thursday: 4,
+      Friday: 5,
+      Saturday: 6,
+    };
+    const today = new Date();
+    const todayDay = today.getDay();
+    const targetDay = dayIndexMap[dayName];
+
+    let daysToAdd = (targetDay - todayDay + 7) % 7;
+    if (daysToAdd === 0) {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const isExpired = vendorDetails?.stylist?.availability?.slots?.every(
+        (slot) => parseInt(slot.start.split(":")[0]) <= currentHour
+      );
+      if (isExpired) daysToAdd = 7;
+    }
+
+    const nextDate = addDays(today, daysToAdd);
+    return nextDate;
+  };
+
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
+
+  const bookAppointment = async (time) => {
+    if (!selectedDate || !time) return;
+    try {
+      const res = await axios.post('http://3.223.253.106:3555/api/appointment/create-appointment', {
+        stylistId: vendorDetails?.stylist?._id,
+        userId: userId,
+        date: selectedDate,
+        time: time,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      });
+      if (res.status === 201 && res.data?.success) {
+        showSuccessToast(res.data.message || "Appointment booked successfully!");
+        setOpenModal(false);
+      } else {
+        showErrorToast(res?.data?.message || "Booking failed.");
+      }
+    } catch (error) {
+      showErrorToast(error.response?.data?.message || "An error occurred while booking.");
     }
   };
 
@@ -164,7 +229,7 @@ const StylistDetails = () => {
                   </div>
                 </div>
                 <div align="center" className="mt-5">
-                  <button type="button" className="btn hire-custom-btn rounded-pill p-2">
+                  <button type="button" onClick={handleOpenModal} className="btn hire-custom-btn rounded-pill p-2">
                     Hire
                   </button>
                 </div>
@@ -172,6 +237,28 @@ const StylistDetails = () => {
             </div>
             <div className="row mt-4">
               <div className="col-12">
+                <div className="my-3">
+                  <h5>Appointment Booking Time Slots</h5>
+                  {vendorDetails?.stylist?.availability?.days && vendorDetails?.stylist?.availability?.slots ? (
+                    <div className="d-flex gap-2 mt-2 flex-wrap">
+                      {vendorDetails?.stylist?.availability?.days.map((day) => {
+                        const date = getNextDateForDay(day);
+                        const today = new Date();
+                        if (!isSameMonth(today, date)) return null;
+                        if (!isAfter(date, today) && !format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) return null;
+                        return (
+                          <Chip
+                            key={day}
+                            label={`${day} - ${format(date, "dd MMM yyyy")}`}
+                            sx={{ backgroundColor: "#17a2b8", color: "#fff" }}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-muted mt-2">No available booking slots at the moment.</div>
+                  )}
+                </div>
                 <h4 className="fw-bold fs-4">Description</h4>
                 <p>{vendorDetails?.stylist?.description}</p>
                 <h4 className="fw-bold fs-4">Skills</h4>
@@ -253,11 +340,7 @@ const StylistDetails = () => {
                     </span>
                     <div className="d-flex align-items-center mb-2">
                       {[...Array(5)].map((_, i) => (
-                        <i
-                          key={i}
-                          className={`fa fa-star ${i < review?.ratings ? "text-warning" : ""
-                            }`}
-                        ></i>
+                        <i key={i} className={`fa fa-star ${i < review?.ratings ? "text-warning" : ""}`}></i>
                       ))}
                     </div>
                     <div className="d-flex align-items-center">
@@ -325,6 +408,71 @@ const StylistDetails = () => {
               </div>
             </div>
           </div>
+          <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+            <DialogTitle className="d-flex justify-content-between align-items-center">
+              Appointment Slots
+              <IconButton onClick={handleCloseModal}>
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent>
+              {vendorDetails?.stylist?.availability?.days &&
+                vendorDetails?.stylist?.availability?.slots ? (
+                <>
+                  <div className="d-flex gap-2 mt-2 flex-wrap mb-4">
+                    {vendorDetails.stylist.availability.days.map((day) => {
+                      const date = getNextDateForDay(day);
+                      const today = new Date();
+                      if (!isSameMonth(today, date)) return null;
+                      if (!isAfter(date, today) && !isToday(date)) return null;
+
+                      return (
+                        <Chip
+                          key={day}
+                          label={`${day} - ${format(date, "dd MMM yyyy")}`}
+                          sx={{
+                            backgroundColor:
+                              selectedDay === day ? "#0d6efd" : "#17a2b8",
+                            color: "#fff",
+                          }}
+                          onClick={() => {
+                            setSelectedDay(day);
+                            setSelectedDate(format(date, "yyyy-MM-dd"));
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                  {selectedDay && (
+                    <div className="d-flex gap-2 flex-wrap">
+                      {vendorDetails.stylist.availability.slots.map((slot) => (
+                        <Chip
+                          key={slot._id}
+                          label={`${slot.start} - ${slot.end}`}
+                          clickable
+                          onClick={() => { const timeRange = `${slot.start} - ${slot.end}`; setSelectedTime(timeRange); bookAppointment(timeRange); }}
+
+                          sx={{
+                            backgroundColor: slot.available ? "#28a745" : "#6c757d",
+                            color: "#fff",
+                            '&:hover': {
+                              backgroundColor: slot.available
+                                ? "#218838"
+                                : "#5a6268",
+                            },
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-muted mt-2">
+                  No available booking slots at the moment.
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </div>
       )}
     </>

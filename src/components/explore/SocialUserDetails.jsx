@@ -8,8 +8,11 @@ import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import { showSuccessToast } from "../toastMessage/Toast";
-
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import ShareIcon from "@mui/icons-material/Share";
 import Loader from "../Loader/Loader.jsx";
+import { Typography } from "@mui/material";
 
 export const SocialUserDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -111,7 +114,7 @@ export const SocialUserDetails = () => {
         images: details.thumbnail,
         userPostDetails: userPostDetails,
       };
-      navigate("/capsulerangecalendardetails", { state: { selectedData } });
+      // navigate("/capsulerangecalendardetails", { state: { selectedData } });
     } else {
       console.log("No data found for this date.");
     }
@@ -123,7 +126,7 @@ export const SocialUserDetails = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-  
+
   return (
     <>
       {loading ? (
@@ -191,10 +194,10 @@ export const SocialUserDetails = () => {
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
                     // <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
-                      <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
-                        <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
-                        <h4 className="text-white fw-bold">{item?.name}</h4>
-                      </div>
+                    <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
+                      <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
+                      <h4 className="text-white fw-bold">{item?.name}</h4>
+                    </div>
                     // </Link>
                   ))
                 ) : (
@@ -204,7 +207,7 @@ export const SocialUserDetails = () => {
                 )}
               </div>
             </div>
-            <div className="row gy-1 g-1 m-0">
+            {/* <div className="row gy-1 g-1 m-0">
               {userPostDetails.images &&
                 userPostDetails.images.map((image, index) => (
                   <div
@@ -230,6 +233,66 @@ export const SocialUserDetails = () => {
                     />
                   </div>
                 ))}
+            </div> */}
+            <div className="row justify-content-center">
+              {userPostDetails?.groupedPosts?.map((post, index) => (
+                <div key={index} className="col-md-12 mx-2 mb-4 card shadow-sm" style={{ backgroundColor: '#ededed', color: 'black', height: '500px' }}>
+                  <div id={`carouselExampleControls-${index}`} className="carousel slide" data-bs-ride="carousel" style={{ height: '200px' }}>
+                    <div className="carousel-inner" style={{ height: '100%' }}>
+                      {post?.image?.map((img, imgIndex) => (
+                        <div key={imgIndex} className={`carousel-item ${imgIndex === 0 ? 'active' : ''}`} style={{ height: '100%' }}>
+                          <img src={img || blank_img} className="d-block w-100" alt="Fashion item" style={{ height: '200px', objectFit: 'cover' }} onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
+                        </div>
+                      ))}
+                    </div>
+                    {/* Carousel Controls */}
+                    {post?.image?.length > 1 && (
+                      <>
+                        <button className="carousel-control-prev" type="button" data-bs-target={`#carouselExampleControls-${index}`} data-bs-slide="prev">
+                          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span className="visually-hidden">Previous</span>
+                        </button>
+                        <button className="carousel-control-next" type="button" data-bs-target={`#carouselExampleControls-${index}`} data-bs-slide="next">
+                          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span className="visually-hidden">Next</span>
+                        </button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Post Description */}
+                  <div className="card-body text-start" style={{ height: '150px', overflow: 'hidden' }}>
+                    <p className="card-text">{post?.description || 'No caption'}</p>
+                  </div>
+
+                  {/* Like, Comment, and Share Section */}
+                  <div className="d-flex justify-content-between align-items-center px-3 py-2 border-top">
+                    <div>
+                      <FavoriteIcon sx={{ color: "#1e88e5", cursor: "pointer" }} />
+                      <span className="ms-2">{post?.likes?.length || 0}</span>
+                    </div>
+                    <div className="text-end text-muted">
+                      {post?.comments?.length || 0} Comments
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="d-flex justify-content-between align-items-center py-3 border-top">
+                    <div className="d-flex text-primary" style={{ cursor: "pointer" }}>
+                      <FavoriteIcon sx={{ fontSize: 20 }} />
+                      <Typography variant="caption" gutterBottom sx={{ display: 'block' }}>Liked</Typography>
+                    </div>
+                    <div className="d-flex" style={{ cursor: "pointer" }}>
+                      <ChatBubbleOutlineIcon sx={{ fontSize: 20 }} />
+                      <Typography variant="caption" gutterBottom sx={{ display: 'block' }}>Comment</Typography>
+                    </div>
+                    <div className="d-flex" style={{ cursor: "pointer" }}>
+                      <ShareIcon sx={{ fontSize: 20 }} />
+                      <Typography variant="caption" gutterBottom sx={{ display: 'block' }}>Share</Typography>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

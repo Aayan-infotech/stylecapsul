@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { allAddedClothList } from "../../reduxToolkit/addClothesSlice";
 import Loader from "../Loader/Loader.jsx";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
+import blank_cart from "../../assets/blankcart.gif";
 
 function ClothesList() {
   const [loading, setLoading] = useState(true);
@@ -159,12 +160,7 @@ function ClothesList() {
                         onClick={() => handleClothDetails(product)}
                       >
                         <div className="product-img">
-                          <img
-                            src={product?.pictures?.[0] || blank_img}
-                            alt="cloth"
-                            className="product-image"
-                            onError={(e) => (e.target.src = blank_img)}
-                          />
+                          <img src={product?.pictures?.[0] || blank_img} alt="cloth" className="product-image" onError={(e) => (e.target.src = blank_img)} />
                         </div>
                         <div className="product-text">
                           <div className="first-text">
@@ -172,12 +168,7 @@ function ClothesList() {
                               {product?.category?.name}
                             </h3>
                             <p className="m-0">{product?.typeOfFashion}</p>
-                            <p className="mt-0 m-0 p-0">
-                              {format(
-                                new Date(product?.purchaseDate),
-                                "MM-dd-yyyy"
-                              )}
-                            </p>
+                            <p className="mt-0 m-0 p-0">  {format(new Date(product?.purchaseDate), "MM-dd-yyyy")}</p>
                           </div>
                           <button
                             type="button"
@@ -200,7 +191,13 @@ function ClothesList() {
                 ))
               ) : (
                 <div className="col-12 text-center">
-                  <h3 className="text-dark">No clothes found</h3>
+                  <div className="no-clothes-message text-center mt-4">
+                    <p>
+                      <strong>Looks like your {category_name} wardrobe is waiting for its first masterpiece!</strong><br />
+                      Start adding your favorite formal outfits to complete your collection. Whether it's a sharp suit, a classy dress, or your go-to business casual look, your perfect formal wardrobe is just a few clicks away.
+                    </p>
+                    <img src={blank_cart} alt="blank cart" height={300} />
+                  </div>
                 </div>
               )}
             </div>

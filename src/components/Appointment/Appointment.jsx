@@ -98,15 +98,15 @@ function Appointment() {
 
         <Modal open={openModal} onClose={handleCloseModal}>
           <Box sx={modalStyle}>
-            <Typography variant="h6" component="h2" gutterBottom>
+            <Typography variant="h5" className='fw-bold' component="h2" gutterBottom>
               Appointment Details
             </Typography>
             {selectedAppointment && (
               <>
-                <Typography><strong>Stylist:</strong> {selectedAppointment?.stylist?.name}</Typography>
-                <Typography><strong>User:</strong> {selectedAppointment?.user?.firstName}</Typography>
-                <Typography><strong>Date:</strong> {new Date(selectedAppointment.date).toDateString()}</Typography>
-                <Typography><strong>Time:</strong> {selectedAppointment.time}</Typography>
+                <Typography gutterBottom><strong>Stylist Name:</strong> {selectedAppointment?.stylist?.name}</Typography>
+                <Typography gutterBottom><strong>User:</strong> {selectedAppointment?.user?.firstName}</Typography>
+                <Typography gutterBottom><strong>Booking Date:</strong> {new Date(selectedAppointment.date).toDateString()}</Typography>
+                <Typography gutterBottom><strong>Booking Time:</strong> {selectedAppointment.time}</Typography>
                 <Typography>
                   <strong>Status:</strong>{" "}
                   <span
