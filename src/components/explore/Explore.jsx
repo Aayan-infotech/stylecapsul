@@ -407,28 +407,6 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </div>
                       </Link>
-                      <div>
-                        <ul
-                          className="dropdown-menu dropdown-menu-start"
-                          aria-labelledby="dropdownIcon"
-                        >
-                          <li>
-                            <a className="dropdown-item" href="#">
-                              Action
-                            </a>
-                          </li>
-                          <li>
-                            <a className="dropdown-item" href="#">
-                              Another action
-                            </a>
-                          </li>
-                          <li>
-                            <a className="dropdown-item" href="#">
-                              Something else here
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
                     </div>
                       <div className="text-black mt-2">
                         <p className="fw-bold">{post?.description}</p>
