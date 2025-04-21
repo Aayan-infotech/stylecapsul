@@ -33,30 +33,6 @@ function Profile() {
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
 
-  const fetchUserData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(apiUrl(`api/user/get/${userId}`), {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-      console.log(response?.data?.data, "response");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (token) {
-      fetchUserData();
-    }
-  }, [token]);
-
   useEffect(() => {
     if (status === "succeeded") {
       const timeoutId = setTimeout(() => {
@@ -114,17 +90,19 @@ function Profile() {
         }
       );
       if (response?.data?.profileImage) {
-        const updatedUser = {
-          ...logedInUserData,
-          profileImage: response.data.profileImage,
-        };
-        setLogedInUserData(updatedUser);
-        dispatch(updateUserDetails(updatedUser));
+        window.location.reload();
       }
-      if (response?.data?.profileImage) {
-        console.log("Profile image uploaded successfully, reloading the page...");
-        window.location.href = window.location.href;  
-      }
+      // if (response?.data?.profileImage) {
+      //   const updatedUser = {
+      //     ...logedInUserData,
+      //     profileImage: response.data.profileImage,
+      //   };
+      //   setLogedInUserData(updatedUser);
+      //   dispatch(updateUserDetails(updatedUser));
+      // }
+      // if (response?.data?.profileImage) {
+      //   window.location.href = window.location.href;  
+      // }
     } catch (error) {
       showErrorToast(error?.response?.data?.message);
       setUploadProgress(0);
@@ -159,14 +137,14 @@ function Profile() {
                             height={200}
                             width={200}
                             style={{ objectFit: "contain" }}
-                            // onError={(e) => {
-                            //   e.target.onerror = null;
-                            //   if (!e.target.src || e.target.src.includes('undefined') || e.target.src.includes('null')) {
-                            //     e.target.src = '';
-                            //   } else {
-                            //     e.target.src = blank_img;
-                            //   }
-                            // }}
+                          // onError={(e) => {
+                          //   e.target.onerror = null;
+                          //   if (!e.target.src || e.target.src.includes('undefined') || e.target.src.includes('null')) {
+                          //     e.target.src = '';
+                          //   } else {
+                          //     e.target.src = blank_img;
+                          //   }
+                          // }}
                           />
                           <div className="upload-overlay">
                             <i className="fa fa-camera"></i>

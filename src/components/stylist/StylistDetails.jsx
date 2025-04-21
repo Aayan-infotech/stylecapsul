@@ -25,6 +25,7 @@ const StylistDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const [booking, setBooking] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   const { stylistId } = useParams();
 
@@ -332,7 +333,8 @@ const StylistDetails = () => {
                 </div>
               </div>
               <div className="row mt-4">
-                {vendorDetails?.reviews?.map((review, index) => (
+                {/* {vendorDetails?.reviews?.map((review, index) => ( */}
+                {(showAllReviews ? vendorDetails?.reviews : vendorDetails?.reviews?.slice(0, 2))?.map((review, index) => (
                   <div key={index} className="col-12 mt-3">
                     <span className="text-muted">
                       {new Date(review.createdAt).toLocaleDateString("en-US", {
@@ -369,6 +371,18 @@ const StylistDetails = () => {
                     </div>
                   </div>
                 ))}
+                {vendorDetails?.reviews?.length > 2 && (
+                  <div className="mt-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-dark rounded-pill"
+                      onClick={() => setShowAllReviews(!showAllReviews)}
+                    >
+                      {showAllReviews ? "See Less" : "See More"}
+                    </button>
+                  </div>
+                )}
+
 
                 {/* Review Submission Form */}
                 <form onSubmit={handleSubmit} className="mt-4">
