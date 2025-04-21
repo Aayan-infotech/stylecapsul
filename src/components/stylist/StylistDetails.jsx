@@ -6,7 +6,7 @@ import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
-import { format, addDays, isAfter, isSameMonth } from "date-fns";
+import { format, addDays, isAfter, isToday, isSameMonth } from "date-fns";
 import { Button, Chip, Rating } from "@mui/material";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
@@ -408,7 +408,8 @@ const StylistDetails = () => {
               </div>
             </div>
           </div>
-          <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md">
+
+          <Dialog open={openModal} onClose={handleCloseModal} fullWidth maxWidth="md" disableEnforceFocus disableAutoFocus disableRestoreFocus>
             <DialogTitle className="d-flex justify-content-between align-items-center">
               Appointment Slots
               <IconButton onClick={handleCloseModal}>
@@ -425,7 +426,6 @@ const StylistDetails = () => {
                       const today = new Date();
                       if (!isSameMonth(today, date)) return null;
                       if (!isAfter(date, today) && !isToday(date)) return null;
-
                       return (
                         <Chip
                           key={day}
