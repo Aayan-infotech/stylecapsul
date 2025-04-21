@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   FaUserEdit,
   FaCalendarAlt,
-  FaLock,
   FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -25,11 +24,38 @@ function Profile() {
   const [logedInUserData, setLogedInUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [uploadProgress, setUploadProgress] = useState(0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = getCookie("authToken");
+  const userId = getCookie("userId");
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
+
+  const fetchUserData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(apiUrl(`api/user/get/${userId}`), {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      console.log(response?.data?.data, "response");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      fetchUserData();
+    }
+  }, [token]);
 
   useEffect(() => {
     if (status === "succeeded") {
@@ -95,9 +121,12 @@ function Profile() {
         setLogedInUserData(updatedUser);
         dispatch(updateUserDetails(updatedUser));
       }
+      if (response?.data?.profileImage) {
+        console.log("Profile image uploaded successfully, reloading the page...");
+        window.location.href = window.location.href;  
+      }
     } catch (error) {
       showErrorToast(error?.response?.data?.message);
-      // console.error("Error uploading avatar image:", error);
       setUploadProgress(0);
     }
   };
@@ -129,22 +158,21 @@ function Profile() {
                             className="rounded-pill"
                             height={200}
                             width={200}
-                            style={{ objectFit: "cover" }}
-                            onError={(e) => {
-                              e.target.src = blank_img;
-                            }}
+                            style={{ objectFit: "contain" }}
+                            // onError={(e) => {
+                            //   e.target.onerror = null;
+                            //   if (!e.target.src || e.target.src.includes('undefined') || e.target.src.includes('null')) {
+                            //     e.target.src = '';
+                            //   } else {
+                            //     e.target.src = blank_img;
+                            //   }
+                            // }}
                           />
                           <div className="upload-overlay">
                             <i className="fa fa-camera"></i>
                           </div>
                         </div>
-                        <input
-                          type="file"
-                          id="fileInput"
-                          style={{ display: "none" }}
-                          accept="image/*"
-                          onChange={handleFileChange}
-                        />
+                        <input type="file" id="fileInput" style={{ display: "none" }} accept="image/*" onChange={handleFileChange} />
                         {uploadProgress > 0 && uploadProgress < 100 && (
                           <div className="progress-container">
                             <CircularProgress
@@ -178,36 +206,24 @@ function Profile() {
                   </div>
                   <div className="col-12 col-md-6 d-flex align-items-center">
                     <div className="w-100">
-                      <button
-                        className="action-button"
-                        onClick={handleEditProfile}
-                      >
+                      <button className="action-button" onClick={handleEditProfile}>
                         <FaUserEdit className="icon" /> Edit Profile
                         <IoIosArrowForward className="arrow-icon" />
                       </button>
-                      <Link
-                        to="/scheduled-appointment"
-                        className="text-decoration-none"
-                      >
+                      <Link to="/scheduled-appointment" className="text-decoration-none">
                         <button className="action-button">
                           <FaCalendarAlt className="icon" />
                           <span>Scheduled Appointment</span>
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                      <Link
-                        to="/setting-and-security"
-                        className="text-decoration-none"
-                      >
+                      <Link to="/setting-and-security" className="text-decoration-none">
                         <button className="action-button">
                           <FaCog className="icon" /> Settings{" "}
                           <IoIosArrowForward className="arrow-icon" />
                         </button>
                       </Link>
-                      <button
-                        className="action-button"
-                        onClick={handleShowModal}
-                      >
+                      <button className="action-button" onClick={handleShowModal}>
                         <FaSignOutAlt className="icon" /> Log Out{" "}
                         <IoIosArrowForward className="arrow-icon" />
                       </button>

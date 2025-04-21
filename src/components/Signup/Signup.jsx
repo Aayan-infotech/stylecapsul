@@ -10,7 +10,6 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isNameValid, setIsNameValid] = useState(true);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [formData, setFormData] = useState({
     firstName: "",
     email: "",
@@ -18,10 +17,7 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState({});
-  const handleMouseMove = (e) => {
-    setCursorPos({ x: e.clientX, y: e.clientY });
-  };
+
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -58,8 +54,8 @@ const Signup = () => {
     if (!formData.password) {
       showErrorToast("Password is required");
       return false;
-    } else if (formData.password.length < 6) {
-      showErrorToast("Password must be at least 6 characters");
+    } else if (formData.password.length < 8) {
+      showErrorToast("Password must be at least 8 characters");
       return false;
     }
     if (!formData.confirmPassword) {
@@ -76,9 +72,6 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!formData.firstName && formData.email) {
-    //   showSuccessToast('error')
-    // }
     if (!validateForm()) return;
     setBtnLoader(true);
     try {

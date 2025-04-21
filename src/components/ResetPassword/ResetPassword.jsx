@@ -11,11 +11,11 @@ const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [btnLoader, setBtnLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = location.state || {};
-
-  console.log(token, "token");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -28,6 +28,15 @@ const ResetPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setBtnLoader(true);
+    setErrorMessage("");
+    if (!newPassword || !confirmPassword) {
+      setErrorMessage("Both fields are required.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setErrorMessage("Passwords do not match.");
+      return;
+    }
     try {
       const response = await axios.post(
         apiUrl("api/auth/resetPassword"),
@@ -38,13 +47,14 @@ const ResetPassword = () => {
           },
         }
       );
+      console.log(response, "response frget");
       showSuccessToast(response?.data?.message);
       navigate("/login");
     } catch (error) {
       if (
         error.response?.status === 401 &&
         error.response?.data?.message ===
-          "Token has expired. Please request a new password reset."
+        "Token has expired. Please request a new password reset."
       ) {
         showErrorToast("Token has expired. Please request a new password reset link.");
       } else {
@@ -54,6 +64,8 @@ const ResetPassword = () => {
       setBtnLoader(false);
     }
   };
+
+  const isFormValid = newPassword && confirmPassword && newPassword === confirmPassword;
 
   return (
     <>
@@ -83,9 +95,8 @@ const ResetPassword = () => {
                   style={{ background: "none", border: "none" }}
                 >
                   <i
-                    className={`fa-solid ${
-                      showPassword ? "fa-eye" : "fa-eye-slash"
-                    }`}
+                    className={`fa-solid ${showPassword ? "fa-eye" : "fa-eye-slash"
+                      }`}
                   ></i>
                 </button>
               </div>
@@ -107,18 +118,28 @@ const ResetPassword = () => {
                   style={{ background: "none", border: "none" }}
                 >
                   <i
-                    className={`fa-solid ${
-                      showConfirmPassword ? "fa-eye" : "fa-eye-slash"
-                    }`}
+                    className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"
+                      }`}
                   ></i>
                 </button>
               </div>
+              {errorMessage}
               <div className="mt-4 text-center">
-                <button type="submit" className="submit-button fw-bold">
+                <button
+                  type="submit"
+                  className="submit-button fw-bold"
+                  disabled={!isFormValid} // Disable if the form is invalid
+                  style={{
+                    backgroundColor: !isFormValid ? "#ddd" : "#007bff", // Light gray when disabled, blue when active
+                    color: !isFormValid ? "#888" : "white", // Dimmed text when disabled, white when active
+                    border: !isFormValid ? "1px solid #ccc" : "1px solid black", // Lighter border when disabled, blue when active
+                    cursor: !isFormValid ? "not-allowed" : "pointer", // Not-allowed cursor when disabled, pointer when active
+                    pointerEvents: !isFormValid ? "none" : "auto" // Disable pointer events when disabled
+                  }}
+                >
                   {btnLoader ? (
                     <span>
-                      <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
-                      Submitting...
+                      <i className="fa-solid fa-spinner fa-spin me-2"></i> Submitting...
                     </span>
                   ) : (
                     "Submit"

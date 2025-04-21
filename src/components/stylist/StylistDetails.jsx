@@ -24,7 +24,7 @@ const StylistDetails = () => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-
+  const [booking, setBooking] = useState(false);
 
   const { stylistId } = useParams();
 
@@ -150,6 +150,7 @@ const StylistDetails = () => {
 
   const bookAppointment = async (time) => {
     if (!selectedDate || !time) return;
+    setBooking(true);
     try {
       const res = await axios.post('http://3.223.253.106:3555/api/appointment/create-appointment', {
         stylistId: vendorDetails?.stylist?._id,
@@ -171,6 +172,8 @@ const StylistDetails = () => {
       }
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
+    } finally {
+      setBooking(false);
     }
   };
 
@@ -448,17 +451,28 @@ const StylistDetails = () => {
                       {vendorDetails.stylist.availability.slots.map((slot) => (
                         <Chip
                           key={slot._id}
-                          label={`${slot.start} - ${slot.end}`}
-                          clickable
-                          onClick={() => { const timeRange = `${slot.start} - ${slot.end}`; setSelectedTime(timeRange); bookAppointment(timeRange); }}
-
+                          label={
+                            booking ? (
+                              <span style={{ display: 'flex', alignItems: 'center' }}>
+                                <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                Booking...
+                              </span>
+                            ) : `${slot.start} - ${slot.end}`
+                          }
+                          clickable={!booking}
+                          disabled={booking || !slot.available}
+                          onClick={() => {
+                            if (!booking && slot.available) {
+                              const timeRange = `${slot.start} - ${slot.end}`;
+                              setSelectedTime(timeRange);
+                              bookAppointment(timeRange);
+                            }
+                          }}
                           sx={{
                             backgroundColor: slot.available ? "#28a745" : "#6c757d",
                             color: "#fff",
                             '&:hover': {
-                              backgroundColor: slot.available
-                                ? "#218838"
-                                : "#5a6268",
+                              backgroundColor: slot.available ? "#218838" : "#5a6268",
                             },
                           }}
                         />

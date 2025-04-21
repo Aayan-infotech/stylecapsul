@@ -57,6 +57,7 @@ import CheckoutForm from "./components/stylist/CheckoutForm.jsx";
 import ContactPage from "./components/helpandsupport/ContactPage.jsx";
 import PrivacyPolicy from "./components/helpandsupport/PrivacyPolicy.jsx";
 import TermsConditions from "./components/helpandsupport/TermsConditions.jsx";
+import OtherPostUserDetails from "./components/explore/OtherPostUserDetails.jsx";
 
 const Routing = () => {
   return (
@@ -116,6 +117,7 @@ const Routing = () => {
             <Route path="/cloths" element={<Cloths />} />
             <Route path="/cloths-details/:id" element={<ClothsDetails />} />
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>
+            <Route path="/public-profile/:userId/:categoryId" element={<OtherPostUserDetails />}/>
             <Route path="user-profile" element={<ExploreUserProfileDetails />}/>
             <Route path="*" element={<PageNotFound />} />
           </Route>

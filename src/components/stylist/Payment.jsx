@@ -9,20 +9,26 @@ const Payment = () => {
   const location = useLocation();
   const [btnLoader, setBtnLoader] = useState(false);
   const { paymentDetailsWithaddressId, buyNowDetails } = location.state || {};
+  console.log(buyNowDetails, "buyNowDetails");
+
   const navigate = useNavigate();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
   const handleButtonClick = async (setBtnLoader, navigate) => {
     setBtnLoader(true);
-    if (buyNowDetails) {
-      await handleBuyNowPayment();
-    } else if (paymentDetailsWithaddressId) {
+    const hasCartData = paymentDetailsWithaddressId?.paymentDetails?.totalAmount;
+    const hasBuyNowData = buyNowDetails?.subcategoryDetails;  
+    if (hasCartData) {
       await makePayment(navigate);
+    } else if (hasBuyNowData) {
+      await handleBuyNowPayment();
+    } else {
+      alert("Invalid payment state. Please try again.");
     }
     setBtnLoader(false);
   };
-
+  
   const handleBuyNowPayment = async () => {
     const product = buyNowDetails?.subcategoryDetails;
     const payload = {
@@ -32,7 +38,7 @@ const Payment = () => {
         productId: product?.id,
         name: product?.name,
         price: Number(product?.price),
-        quantity: Number(product?.quantity),
+        quantity: Number(product?.quantity) || 1,
       },
     };
     try {
@@ -62,6 +68,7 @@ const Payment = () => {
       deliveryCharges: paymentDetailsWithaddressId?.paymentDetails?.deliveryCharges || 0,
       allCartDetails: paymentDetailsWithaddressId?.allCartDetails || [],
     };
+    console.log(paymentDetails, "paymentDetailsWithaddressId--")
     try {
       const response = await axios.post(
         apiUrl("api/payment-method/createpaymenttestofredirectonstripe"),

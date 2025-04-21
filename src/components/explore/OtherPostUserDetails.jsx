@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { allAddedClothList } from "../../reduxToolkit/addClothesSlice";
 import Loader from "../Loader/Loader.jsx";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
+import blank_cart from "../../assets/blankcart.gif";
 
 function OtherPostUserDetails() {
   const [loading, setLoading] = useState(true);
@@ -18,11 +19,12 @@ function OtherPostUserDetails() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { category } = useParams();
+  const { userId, categoryId } = useParams();
   const location = useLocation();
-  const { category_name } = location.state || {};
+  const { category_name, userPostDetails } = location.state || {};
+
   const token = getCookie("authToken");
-  
+
   if (!token) {
     showErrorToast("token not found");
   }
@@ -31,11 +33,11 @@ function OtherPostUserDetails() {
     dispatch(allAddedClothList());
   }, [dispatch]);
 
-  const fetchClothesByCategory = async () => {
-    setLoading(true);
+  const fetchClothesByCategory = async (showLoader = true) => {
+    if (showLoader) setLoading(true);
     try {
       const response = await axios.get(
-        apiUrl(`api/cloths/get-by-category/${category}`),
+        apiUrl(`api/cloths/get-by-category/${categoryId}?id=${userId}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,18 +47,18 @@ function OtherPostUserDetails() {
       );
       if (response.data.status === 200 && response.data.success === true) {
         setCategoryCloth(response.data.cloths || []);
-        setLoading(false);
       }
     } catch (error) {
       console.error("Error fetching clothes by category:", error);
-      setLoading(false);
+    } finally {
+      if (showLoader) setLoading(false);
     }
   };
 
   const fetchClothesByCategoryAndSearch = async () => {
     try {
       const response = await axios.get(
-        apiUrl(`api/cloths/${category}/search/${searchTerm}`),
+        apiUrl(`api/cloths/${categoryId}/search/${searchTerm}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,10 +69,8 @@ function OtherPostUserDetails() {
       setCategoryCloth(
         Array.isArray(response.data.cloths) ? response.data.cloths : []
       );
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching clothes with search term:", error);
-      setLoading(false);
     }
   };
 
@@ -80,49 +80,15 @@ function OtherPostUserDetails() {
     } else {
       fetchClothesByCategory();
     }
-  }, [searchTerm, category]);
+  }, [searchTerm, categoryId]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
-
-  const deleteCloth = async (cloth_id) => {
-    try {
-      const response = await axios.delete(
-        apiUrl(`api/cloths/delete-cloth-item/${cloth_id}`),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        setCategoryCloth((prevClothes) =>
-          prevClothes.filter((cloth) => cloth._id !== cloth_id)
-        );
-        showSuccessToast(response?.data?.message);
-      }
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message;
-      showErrorToast(errorMessage);
-    }
-  };
-
-  const updateCloth = (cloth) => {
-    navigate("/add-clothes", {
-      state: { updateCloth: cloth, currentCategory: category },
-    });
-  };
-
-  const handleClothDetails = (cloth) => {
-    navigate(`/clothes-details/${cloth?._id}`, {
-      state: { category_name: category_name },
-    });
-  };
+  
 
   return (
-    <>
+    <div>
       {loading ? (
         <Loader />
       ) : (
@@ -133,15 +99,10 @@ function OtherPostUserDetails() {
                 <h1 className="text-center fw-bold fs-1 mb-0">
                   {category_name || "N/A"}
                 </h1>
-                <div className="search-box ">
+                {/* <div className="search-box ">
                   <i className="fa fa-search"></i>
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
-                </div>
+                  <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
+                </div> */}
               </div>
               {loading ? (
                 <div className="col-12 text-center">
@@ -151,64 +112,55 @@ function OtherPostUserDetails() {
                     </span>
                   </div>
                 </div>
-              ) : categoryCloth.length > 0 ? (
-                categoryCloth.map((product, index) => (
+              ) : categoryCloth?.length > 0 ? (
+                categoryCloth?.map((product, index) => (
                   <div className="col-12" key={index}>
                     <div className="products-container">
-                      <div
-                        className="products-added rounded-pill"
-                        onClick={() => handleClothDetails(product)}
-                      >
-                        <div className="product-img">
-                          <img
-                            src={product?.pictures?.[0] || blank_img}
-                            alt="cloth"
-                            className="product-image"
-                            onError={(e) => (e.target.src = blank_img)}
-                          />
-                        </div>
-                        <div className="product-text">
-                          <div className="first-text">
-                            <h3 className="fw-bold fs-3">
-                              {product?.category?.name}
-                            </h3>
-                            <p className="m-0">{product?.typeOfFashion}</p>
-                            <p className="mt-0 m-0 p-0">
-                              {format(
-                                new Date(product?.purchaseDate),
-                                "MM-dd-yyyy"
-                              )}
-                            </p>
+                      <Link to={`/clothes-details/${product?._id}`} state={{ category_name: category_name }} className="text-decoration-none text-black">
+                        <div className="products-added rounded-pill">
+                          <div className="product-img">
+                            <img
+                              src={product?.pictures?.[0] || blank_img}
+                              alt="cloth"
+                              className="product-image"
+                              onError={(e) => (e.target.src = blank_img)}
+                            />
                           </div>
-                          <button
-                            type="button"
-                            className="btn btn-outline-dark"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              updateCloth(product);
-                            }}
-                          >
-                            <i className="fa-regular fa-pen-to-square"></i>
-                          </button>
+                          <div className="product-text">
+                            <div className="first-text">
+                              <h3 className="fw-bold fs-3">
+                                {product?.category?.name}
+                              </h3>
+                              <p className="m-0">{product?.typeOfFashion}</p>
+                              <p className="mt-0 m-0 p-0">
+                                {format(
+                                  new Date(product?.purchaseDate),
+                                  "MM-dd-yyyy"
+                                )}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <i
-                        className="fa-solid fa-circle-xmark close-icon"
-                        onClick={() => deleteCloth(product._id)}
-                      ></i>
+                      </Link>
                     </div>
                   </div>
                 ))
               ) : (
                 <div className="col-12 text-center">
-                  <h3 className="text-dark">No clothes found</h3>
+                  <div className="no-clothes-message text-center mt-4">
+                    <p>
+                      <strong>Looks like your {category_name} wardrobe is waiting for its first masterpiece!</strong><br />
+                      Start adding your favorite formal outfits to complete your collection. Whether it's a sharp suit, a classy dress, or your go-to business casual look, your perfect formal wardrobe is just a few clicks away.
+                    </p>
+                    <img src={blank_cart} alt="blank cart" height={300} />
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

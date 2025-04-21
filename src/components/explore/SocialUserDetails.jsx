@@ -9,13 +9,13 @@ import blank_img from "../../assets/stylist/blank_img.jpg";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import { showSuccessToast } from "../toastMessage/Toast";
 import Loader from "../Loader/Loader.jsx";
-import { TextField, Typography, Avatar, InputAdornment, CircularProgress  } from "@mui/material";
+import { TextField, Typography, Avatar, InputAdornment, CircularProgress, IconButton } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import GifBoxIcon from "@mui/icons-material/GifBox";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -30,15 +30,13 @@ export const SocialUserDetails = () => {
   const [loading, setLoading] = useState(true);
   const [clothesOnDates, setClothesOnDates] = useState([]);
   const [categories, setCategories] = useState([]);
-    const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
-    const [commentLoadingIndex, setCommentLoadingIndex] = useState(null);
-    const [replyLoadingIndex, setReplyLoadingIndex] = useState({ postIndex: null, commentIndex: null });
+  const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
+  const [commentLoadingIndex, setCommentLoadingIndex] = useState(null);
+  const [replyLoadingIndex, setReplyLoadingIndex] = useState({ postIndex: null, commentIndex: null });
 
-  const navigate = useNavigate();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
   const { postId } = useParams();
-
   const fetchAllCategories = async () => {
     try {
       const response = await axios.get(apiUrl("api/closet/get-closet"));
@@ -141,175 +139,193 @@ export const SocialUserDetails = () => {
     return () => clearTimeout(timer);
   }, []);
 
-    const likePost = async (postId, index) => {
-      setLikeLoadingIndex(index);
-      try {
-        const response = await axios.post(apiUrl("api/explore/like"), { userId, postId }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true
-        });
-        showSuccessToast(response.data.message);
-        await fetchPostDetailsByUs(false);
-        return response.data;
-      } catch (error) {
-        console.error('Error liking post:', error.response?.data || error.message);
-        return null;
-      } finally {
-        setLikeLoadingIndex(null);
+  const likePost = async (postId, index) => {
+    setLikeLoadingIndex(index);
+    try {
+      const response = await axios.post(apiUrl("api/explore/like"), { userId, postId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true
+      });
+      showSuccessToast(response.data.message);
+      await fetchPostDetailsByUs(false);
+      return response.data;
+    } catch (error) {
+      console.error('Error liking post:', error.response?.data || error.message);
+      return null;
+    } finally {
+      setLikeLoadingIndex(null);
+    }
+  };
+
+  const toggleCommentSection = (index) => {
+    const updatedPosts = { ...userPostDetails };
+    const updatedGroupedPosts = [...updatedPosts.groupedPosts];
+    updatedGroupedPosts[index].showComments = !updatedGroupedPosts[index].showComments;
+    updatedPosts.groupedPosts = updatedGroupedPosts;
+    setUserPostDetails(updatedPosts);
+  };
+
+  const handleCommentChange = (index, e) => {
+    const updatedPosts = { ...userPostDetails };
+    updatedPosts.groupedPosts[index].newComment = e.target.value;
+    setUserPostDetails(updatedPosts);
+  };
+
+  const handleCommentSubmit = async (index, event) => {
+    event?.preventDefault();
+
+    const post = userPostDetails.groupedPosts[index];
+    if (!post?.newComment?.trim()) return;
+    setCommentLoadingIndex(index);
+    try {
+      await axios.post(apiUrl("api/explore/comment"), {
+        postId: post._id,
+        userId,
+        text: post.newComment
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true
+      });
+      const updatedPosts = { ...userPostDetails };
+      updatedPosts.groupedPosts[index].newComment = '';
+      setUserPostDetails(updatedPosts);
+      await fetchPostDetailsByUs(false);
+    } catch (error) {
+      console.error('Error posting comment:', error.response?.data || error.message);
+    } finally {
+      setCommentLoadingIndex(null);
+    }
+  };
+
+  const handleReplyChange = (postIndex, commentIndex, value) => {
+    const updatedPosts = { ...userPostDetails };
+    const updatedGroupedPosts = [...updatedPosts.groupedPosts];
+
+    const updatedComments = updatedGroupedPosts[postIndex].comments.map((comment, cIdx) => {
+      if (cIdx === commentIndex) {
+        return {
+          ...comment,
+          newReply: value,
+        };
       }
-    };
-  
-    const toggleCommentSection = (index) => {
-      const updatedPosts = { ...userPostDetails };
-      const updatedGroupedPosts = [...updatedPosts.groupedPosts];
-      updatedGroupedPosts[index].showComments = !updatedGroupedPosts[index].showComments;
-      updatedPosts.groupedPosts = updatedGroupedPosts;
-      setUserPostDetails(updatedPosts);
-    };
-  
-    const handleCommentChange = (index, e) => {
-      const updatedPosts = { ...userPostDetails };
-      updatedPosts.groupedPosts[index].newComment = e.target.value;
-      setUserPostDetails(updatedPosts);
-    };
-  
-    const handleCommentSubmit = async (index, event) => {
-      event?.preventDefault();
-  
-      const post = userPostDetails.groupedPosts[index];
-      if (!post?.newComment?.trim()) return;
-      setCommentLoadingIndex(index);
+      return comment;
+    });
+
+    updatedGroupedPosts[postIndex].comments = updatedComments;
+    updatedPosts.groupedPosts = updatedGroupedPosts;
+
+    setUserPostDetails(updatedPosts);
+  };
+
+
+  const handleReplySubmit = async (postIndex, commentIndex) => {
+    const post = userPostDetails.groupedPosts[postIndex];
+    const comment = post.comments[commentIndex];
+    const newReply = comment.newReply;
+    if (newReply) {
+      setReplyLoadingIndex({ postIndex, commentIndex });
       try {
-        await axios.post(apiUrl("api/explore/comment"), {
+        const response = await axios.post(apiUrl("api/explore/reply"), {
           postId: post._id,
           userId,
-          text: post.newComment
+          commentId: comment._id,
+          text: newReply,
         }, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          withCredentials: true
         });
-        const updatedPosts = { ...userPostDetails };
-        updatedPosts.groupedPosts[index].newComment = '';
-        setUserPostDetails(updatedPosts);
-        await fetchPostDetailsByUs(false);
-      } catch (error) {
-        console.error('Error posting comment:', error.response?.data || error.message);
-      } finally {
-        setCommentLoadingIndex(null);
-      }
-    };
-  
-    const handleReplyChange = (postIndex, commentIndex, value) => {
-      const updatedPosts = { ...userPostDetails };
-      const updatedGroupedPosts = [...updatedPosts.groupedPosts];
-  
-      const updatedComments = updatedGroupedPosts[postIndex].comments.map((comment, cIdx) => {
-        if (cIdx === commentIndex) {
-          return {
-            ...comment,
-            newReply: value,
-          };
-        }
-        return comment;
-      });
-  
-      updatedGroupedPosts[postIndex].comments = updatedComments;
-      updatedPosts.groupedPosts = updatedGroupedPosts;
-  
-      setUserPostDetails(updatedPosts);
-    };
-  
-  
-    const handleReplySubmit = async (postIndex, commentIndex) => {
-      const post = userPostDetails.groupedPosts[postIndex];
-      const comment = post.comments[commentIndex];
-      const newReply = comment.newReply;
-  
-      if (newReply) {
-        setReplyLoadingIndex({ postIndex, commentIndex });
-  
-        try {
-          const response = await axios.post(apiUrl("api/explore/reply"), {
-            postId: post._id,
-            userId,
-            commentId: comment._id,
+        if (response?.data?.success) {
+          showSuccessToast("Reply added successfully!");
+          const updatedPosts = { ...userPostDetails };
+          const updatedGroupedPosts = [...updatedPosts.groupedPosts];
+          const updatedComments = [...updatedGroupedPosts[postIndex].comments];
+          updatedComments[commentIndex].replies = updatedComments[commentIndex].replies || [];
+          updatedComments[commentIndex].replies.push({
             text: newReply,
-          }, {
+            user: { _id: userId },
+          });
+          updatedComments[commentIndex].newReply = "";
+          updatedGroupedPosts[postIndex].comments = updatedComments;
+          updatedPosts.groupedPosts = updatedGroupedPosts;
+          setUserPostDetails(updatedPosts);
+          fetchAllPostsByExplore();
+        } else {
+          showErrorToast("Failed to add reply");
+        }
+      } catch (error) {
+        console.error("Error adding reply:", error);
+      } finally {
+        setReplyLoadingIndex({ postIndex: null, commentIndex: null });
+      }
+    }
+  };
+
+  const handleDeleteComment = async (postIndex, commentIndex) => {
+    const post = userPostDetails.groupedPosts[postIndex];
+    const comment = post.comments[commentIndex];
+    if (comment?.user?._id === userId) {
+      try {
+        const response = await axios.delete(
+          apiUrl(`api/explore/delete-comment/${userId}`),
+          {
+            data: {
+              commentId: comment._id,
+              postId: post._id,
+            },
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-          });
-  
-          if (response?.data?.success) {
-            showSuccessToast("Reply added successfully!");
-  
-            const updatedPosts = { ...userPostDetails };
-            const updatedGroupedPosts = [...updatedPosts.groupedPosts];
-  
-            const updatedComments = [...updatedGroupedPosts[postIndex].comments];
-            updatedComments[commentIndex].replies = updatedComments[commentIndex].replies || [];
-            updatedComments[commentIndex].replies.push({
-              text: newReply,
-              user: { _id: userId },
-            });
-            updatedComments[commentIndex].newReply = "";
-  
-            updatedGroupedPosts[postIndex].comments = updatedComments;
-            updatedPosts.groupedPosts = updatedGroupedPosts;
-  
-            setUserPostDetails(updatedPosts);
-            fetchAllPostsByExplore();
-          } else {
-            showErrorToast("Failed to add reply");
           }
-        } catch (error) {
-          console.error("Error adding reply:", error);
-        } finally {
-          setReplyLoadingIndex({ postIndex: null, commentIndex: null });
+        );
+        if (response?.data?.success) {
+          showSuccessToast("Comment deleted successfully!");
+          const updatedPosts = { ...userPostDetails };
+          updatedPosts.groupedPosts[postIndex].comments.splice(commentIndex, 1);
+          setUserPostDetails(updatedPosts); // Update state
+        } else {
+          showErrorToast("Failed to delete comment");
         }
+      } catch (error) {
+        console.error("Error deleting comment:", error);
       }
-    };
-  
-    const handleDeleteComment = async (postIndex, commentIndex) => {
-      const post = userPostDetails.groupedPosts[postIndex];
-      const comment = post.comments[commentIndex];
-      if (comment?.user?._id === userId) {
-        try {
-          const response = await axios.delete(
-            apiUrl(`api/explore/delete-comment/${userId}`),
-            {
-              data: {
-                commentId: comment._id,
-                postId: post._id,
-              },
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response?.data?.success) {
-            showSuccessToast("Comment deleted successfully!");
-            const updatedPosts = { ...userPostDetails };
-            updatedPosts.groupedPosts[postIndex].comments.splice(commentIndex, 1);
-            setUserPostDetails(updatedPosts); // Update state
-          } else {
-            showErrorToast("Failed to delete comment");
-          }
-        } catch (error) {
-          console.error("Error deleting comment:", error);
+    } else {
+      showErrorToast("You can only delete your own comments");
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(
+        `http://localhost:3555/api/explore/delete-post/${userId}/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
         }
+      );
+      if (response?.data?.success) {
+        showSuccessToast(response?.data?.message || "Post deleted successfully!");
+        await fetchPostDetailsByUs(false);
       } else {
-        showErrorToast("You can only delete your own comments");
+        showErrorToast("Failed to delete post");
       }
-    };
+    } catch (error) {
+      showErrorToast(error || "Failed to delete the post. Please try again.");
+    }
+  };
 
   return (
     <>
@@ -376,14 +392,42 @@ export const SocialUserDetails = () => {
                 `}
                 </style>
                 {categories?.length > 0 ? (
-                  categories.map((item, index) => (
-                    // <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
-                    <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
-                      <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
-                      <h4 className="text-white fw-bold">{item?.name}</h4>
-                    </div>
-                    // </Link>
-                  ))
+                  categories.map((item, index) => {
+                    const isOwner = userId === userPostDetails?.user?._id;
+                    const route = isOwner
+                      ? `/all-clothes-list/${item?._id}`
+                      : `/public-profile/${userPostDetails?.user?._id}/${item?._id}`;
+
+                    return (
+                      <Link
+                        key={index}
+                        to={route}
+                        state={{ category_name: item?.name, userPostDetails }}
+                        className="text-decoration-none"
+                      >
+                        <div
+                          className="rounded-pill mb-3 d-flex align-items-center"
+                          style={{
+                            backgroundColor: "#4C4C4C",
+                            height: "70px",
+                            padding: "10px",
+                          }}
+                        >
+                          <img
+                            src={coinhand || blank_img}
+                            alt={coinhand || blank_img}
+                            height="30"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = blank_img;
+                            }}
+                            className="me-2"
+                          />
+                          <h4 className="text-white fw-bold">{item?.name}</h4>
+                        </div>
+                      </Link>
+                    );
+                  })
                 ) : (
                   <div className="col-12 text-center">
                     <p className="text-muted fw-bold">No categories found</p>
@@ -391,37 +435,31 @@ export const SocialUserDetails = () => {
                 )}
               </div>
             </div>
-            {/* <div className="row gy-1 g-1 m-0">
-              {userPostDetails.images &&
-                userPostDetails.images.map((image, index) => (
-                  <div
-                    key={index}
-                    className="col-12 col-md-3 d-flex justify-content-center align-items-center rounded-4" >
-                    <img
-                      className="w-75 h-75 object-fit-cover rounded-4"
-                      src={image}
-                      alt={`posts ${index + 1}`}
-                      style={{
-                        objectFit: "cover",
-                        transition: "transform 0.3s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.transform = "scale(0.9)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.transform = "scale(1)";
-                      }}
-                      onError={(e) => {
-                        e.target.src = blank_img;
-                      }}
-                    />
-                  </div>
-                ))}
-            </div> */}
-             <div className="row g-2 m-0">
+
+            <div className="row g-2 m-0">
               {userPostDetails?.groupedPosts?.map((post, index) => (
                 <div className="col-12" key={index}>
                   <div className="p-3 border-1 text-black" style={{ backgroundColor: "#f5f5f56e" }}>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div></div>
+                      <div className="dropdown">
+                        <i
+                          className="fa-solid fa-ellipsis-vertical"
+                          role="button"
+                          id={`dropdownMenuButton-${post._id}`}
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          style={{ cursor: "pointer", fontSize: "20px" }}
+                        ></i>
+                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
+                          <li>
+                            <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
+                              <i className="fa-solid fa-trash me-2"></i>Delete
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                     <div className="text-black mt-2">
                       <p className="fw-bold">{post?.description}</p>
                     </div>

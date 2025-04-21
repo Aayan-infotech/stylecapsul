@@ -224,53 +224,10 @@ function ProfileAvatar() {
                       }}
                     />
                   </div>
-                  {/* <div className="change-avtar-btn">
-                    {currentImageAvtar === girl && (
-                      <button
-                        type="button"
-                        onClick={() => handleImageChange(changeAvtar)}
-                        className="btn rounded-circle"
-                      >
-                        <img src={halfbtnavtar} height={30} alt="" />
-                      </button>
-                    )}
-                    {currentImageAvtar === changeAvtar && (
-                      <button
-                        type="button"
-                        onClick={() => handleImageChange(girl)}
-                        className="btn rounded-circle"
-                      >
-                        <img src={fullbtnavtar} height={30} alt="" />
-                      </button>
-                    )}
-                  </div> */}
                 </div>
               </div>
             </div>
             <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
-              {/* <div className="p-2">
-                <Link
-                  to="/full-avatar"
-                  className="text-decoration-none text-black w-100"
-                >
-                  <button
-                    type="button"
-                    className="w-100 h-25 fw-bold fs-4 rounded-pill btn"
-                    style={{ backgroundColor: "#e9e9e9" }}
-                  >
-                    <img src={standing} height={50} alt="" />
-                    Full Avatar
-                  </button>
-                </Link>
-                <br />
-                <button
-                  type="button"
-                  className="btn rounded-pill w-100 p-3 mt-4 border-black text-black fw-bold"
-                  onClick={handleToggleDetails}
-                >
-                  Details
-                </button>
-              </div> */}
               <button
                 type="button"
                 className="btn rounded-pill w-50 p-3 mt-4 border-black text-black fw-bold"
@@ -327,10 +284,7 @@ function ProfileAvatar() {
                       <div className="p-2">
                         <form>
                           <div className="mb-3">
-                            <label
-                              htmlFor="name"
-                              className="form-label fw-bold fs-5"
-                            >
+                            <label htmlFor="name" className="form-label fw-bold fs-5">
                               Name
                             </label>
                             <input
@@ -339,66 +293,45 @@ function ProfileAvatar() {
                               placeholder="Enter Your Name"
                               name="name"
                               value={formData.name}
-                              onChange={handleInputChange}
-                              // readOnly
-                              // style={{ color: "#6c757d" }}
+                              onChange={(e) => {
+                                const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                                handleInputChange({ target: { name: "name", value: onlyLetters } });
+                              }}
                               data-bs-toggle="tooltip"
                               data-bs-placement="bottom"
                               title="Not editable"
+                              readOnly style={{ color: "#6c757d" }}
                             />
                           </div>
                           <div className="mb-3">
-                            <label
-                              htmlFor="bio"
-                              className="form-label fw-bold fs-5"
-                            >
+                            <label htmlFor="bio" className="form-label fw-bold fs-5">
                               Bio
                             </label>
-                            <textarea
-                              type="text"
-                              className="form-control rounded-pill p-3"
-                              placeholder="Enter Bio"
-                              rows="1"
-                              name="bio"
-                              value={formData.bio}
-                              onChange={handleInputChange}
-                            />
+                            <textarea type="text" className="form-control rounded-pill p-3" placeholder="Enter Bio" rows="1" name="bio" value={formData.bio} onChange={handleInputChange} />
                           </div>
                           <div className="mb-3">
-                            <label
-                              htmlFor="email"
-                              className="form-label fw-bold fs-5"
-                            >
+                            <label htmlFor="email" className="form-label fw-bold fs-5">
                               Email
                             </label>
-                            <input
-                              type="email"
-                              className="form-control rounded-pill p-3"
-                              placeholder="Enter Email"
-                              readOnly
-                              style={{ color: "#6c757d" }}
-                              name="email"
-                              value={formData.email}
-                              onChange={handleInputChange}
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="bottom"
-                              title="Not editable"
-                            />
+                            <input type="email" className="form-control rounded-pill p-3" placeholder="Enter Email" readOnly style={{ color: "#6c757d" }} name="email" value={formData.email} onChange={handleInputChange} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Not editable" />
                           </div>
                           <div className="mb-3">
-                            <label
-                              htmlFor="mobileNumber"
-                              className="form-label fw-bold fs-5"
-                            >
-                              Mobile Number
+                            <label htmlFor="mobileNumber" className="form-label fw-bold fs-5">
+                              Mobile Number (Optional)
                             </label>
                             <input
-                              type="number"
+                              type="text"
                               className="form-control rounded-pill p-3"
                               placeholder="Enter Mobile Number"
                               name="mobileNumber"
                               value={formData.mobileNumber}
-                              onChange={handleInputChange}
+                              onChange={(e) => {
+                                const onlyNums = e.target.value.replace(/\D/g, '');
+                                handleInputChange({ target: { name: "mobileNumber", value: onlyNums } });
+                              }}
+                              inputMode="numeric"
+                              pattern="[0-9]*"
+                              maxLength={10}
                             />
                           </div>
                         </form>

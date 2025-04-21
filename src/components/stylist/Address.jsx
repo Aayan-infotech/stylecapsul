@@ -215,25 +215,14 @@ const Address = () => {
         </button>
       </div>
       {showModal && (
-        <div
-          className="modal fade show"
-          style={{ display: "block" }}
-          tabIndex="-1"
-          aria-labelledby="addressModalLabel"
-          aria-hidden="true"
-        >
+        <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title" id="addressModalLabel">
                   {isEditing ? "Update Address" : "Add Address"}
                 </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleCloseModal}
-                  aria-label="Close"
-                ></button>
+                <button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></button>
               </div>
               <form onSubmit={handleFormSubmit}>
                 <div className="modal-body text-start" style={{ maxHeight: "60vh", overflowY: "auto" }}>

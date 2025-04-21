@@ -33,13 +33,14 @@ import { useSelector } from "react-redux";
 const Explore = ({ isAuth }) => {
   const [loading, setLoading] = useState(true);
   const [allSocialPosts, setAllSocialPosts] = useState([]);
-  const token = getCookie("authToken");
-  const userId = getCookie("userId");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [displayPosts, setDisplayPosts] = useState([]);
   const [error, setError] = useState("");
+
+  const token = getCookie("authToken");
+  const userId = getCookie("userId");
 
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
@@ -316,6 +317,31 @@ const Explore = ({ isAuth }) => {
     fetchAllPostsByExplore();
   }, []);
 
+  const handleDelete = async (postId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(
+        `http://localhost:3555/api/explore/delete-post/${userId}/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response?.data?.success) {
+        showSuccessToast(response?.data?.message || "Post deleted successfully!");
+        fetchAllPostsByExplore();
+      } else {
+        showErrorToast("Failed to delete post");
+      }
+    } catch (error) {
+      showErrorToast(error || "Failed to delete the post. Please try again.");
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -342,16 +368,7 @@ const Explore = ({ isAuth }) => {
                   },
                 }}
               />
-              <div
-                style={{
-                  border: "2px solid black",
-                  padding: "5px",
-                  borderRadius: "50%",
-                  boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)",
-                  cursor: "pointer",
-                }}
-                className="rounded-circle"
-              >
+              <div style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", }} className="rounded-circle">
                 <Link to="/user-profile">
                   <Avatar
                     alt="Remy Sharp"
@@ -366,10 +383,7 @@ const Explore = ({ isAuth }) => {
               </div>
             </div>
             {loading ? (
-              <div
-                className="d-flex justify-content-center align-items-center"
-                style={{ minHeight: "50vh" }}
-              >
+              <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
                 <CircularProgress size={50} />
               </div>
             ) : error ? (
@@ -379,14 +393,11 @@ const Explore = ({ isAuth }) => {
                 </Typography>
               </div>
             ) : displayPosts?.length > 0 ? (
-              displayPosts.map((post, index) => (
+              displayPosts?.map((post, index) => (
                 <div className="row g-2 m-0" key={index}>
                   <div className="col-12">
                     <div className="p-3 border-1 text-black" style={{ backgroundColor: "#f5f5f56e" }}>  <div className="d-flex justify-content-between align-items-center">
-                      <Link
-                        to={`/socialUserDetails/${post?.user?._id}`}
-                        className="text-decoration-none"
-                      >
+                      <Link to={`/socialUserDetails/${post?.user?._id}`} className="text-decoration-none">
                         <div className="d-flex justify-content-between align-items-center">
                           <img
                             className="rounded-circle mb-2 me-2"
@@ -397,8 +408,8 @@ const Explore = ({ isAuth }) => {
                           />
                           <div className="text-black">
                             <Typography variant="h6" className="fw-bold">
-                              {post?.user?.firstName.charAt(0).toUpperCase() +
-                                post?.user?.firstName.slice(1).toLowerCase()}
+                              {post?.user?.firstName?.charAt(0).toUpperCase() +
+                                post?.user?.firstName?.slice(1).toLowerCase()}
                             </Typography>
                             <h6 style={{ fontSize: "13px" }}>
                               {formatDate(post.updatedAt)} •{" "}
@@ -407,6 +418,25 @@ const Explore = ({ isAuth }) => {
                           </div>
                         </div>
                       </Link>
+                      {userId === post?.user?._id && (
+                        <div className="dropdown">
+                          <i
+                            className="fa-solid fa-ellipsis-vertical"
+                            role="button"
+                            id={`dropdownMenuButton-${post._id}`}
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            style={{ cursor: "pointer", fontSize: "20px" }}
+                          ></i>
+                          <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
+                            <li>
+                              <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
+                                <i className="fa-solid fa-trash me-2"></i>Delete
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
                       <div className="text-black mt-2">
                         <p className="fw-bold">{post?.description}</p>
@@ -435,13 +465,7 @@ const Explore = ({ isAuth }) => {
                         >
                           {post?.image?.map((imageUrl, cardIndex) => (
                             <SwiperSlide key={cardIndex}>
-                              <div
-                                className="card text-black"
-                                style={{
-                                  width: "18rem",
-                                  backgroundColor: "#e8e8e8",
-                                }}
-                              >
+                              <div className="card text-black" style={{ width: "18rem", backgroundColor: "#e8e8e8", }}>
                                 <img
                                   src={imageUrl || blank_img}
                                   className="card-img-top object-fit-cover"

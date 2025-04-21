@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../reduxToolkit/loginSlice";
@@ -9,6 +9,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [rememberMe, setRememberMe] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,6 +72,15 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+    if (rememberedEmail) {
+      setFormData((prev) => ({ ...prev, email: rememberedEmail }));
+      setRememberMe(true);
+    }
+  }, []);
+
+
   return (
     <>
       <div className="custom-container">
@@ -97,7 +108,7 @@ const Login = () => {
                     </Link>
                   </div>
                   <div className="form-check">
-                    <input className="text-black me-1" type="checkbox" value="" id="flexCheckDefault" />
+                    <input className="text-black me-1" type="checkbox" value="" id="flexCheckDefault" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
                     <label className="form-check-label" htmlFor="flexCheckDefault">
                       Remember Me
                     </label>
