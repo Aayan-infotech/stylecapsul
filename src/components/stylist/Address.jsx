@@ -51,6 +51,12 @@ const Address = () => {
     }
   }, [dispatch, addressStatus]);
 
+  useEffect(() => {
+    if (addresses?.length > 0 && !selectedAddressId) {
+      setSelectedAddressId(addresses[0]._id);
+    }
+  }, [addresses, selectedAddressId]);
+
   const handleSelectAddress = (id) => {
     setSelectedAddressId(id);
   };
@@ -149,13 +155,6 @@ const Address = () => {
   const handleToggleShowAll = () => {
     setShowAll((prev) => !prev);
   };
-
-  useEffect(() => {
-    if (addresses?.length > 0 && !selectedAddressId) {
-      setSelectedAddressId(addresses[0]._id);
-    }
-  }, [addresses, selectedAddressId]);
-
 
   return (
     <>
