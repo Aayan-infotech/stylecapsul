@@ -173,9 +173,7 @@ const StylistCategories = () => {
                             alt={product.name}
                             className="img-fluid rounded-top"
                             style={{ objectFit: "contain" }}
-                            onError={(e) => {
-                              e.target.src = { blank_img };
-                            }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
                           />
                         </div>
                         <div className="product-details p-3">
@@ -236,13 +234,6 @@ const StylistCategories = () => {
                 )}
               </div>
             </div>
-            {/* {!loading && !errorMessage && marketPlaceCategoryType?.length > 0 && (
-              <div className="text-center">
-                <button type="button" className="btn btn-primary rounded-pill w-25 p-2" style={{ backgroundColor: "black" }}>
-                  View All
-                </button>
-              </div>
-            )} */}
           </div>
         </div>
       )}

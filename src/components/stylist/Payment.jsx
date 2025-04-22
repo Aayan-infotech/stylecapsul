@@ -42,7 +42,7 @@ const Payment = () => {
       },
     };
     try {
-      const response = await axios.post("http://localhost:3555/api/payment-method/create-buynow-payment", payload, {
+      const response = await axios.post(apiUrl("api/payment-method/create-buynow-payment"), payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -62,6 +62,7 @@ const Payment = () => {
 
   const makePayment = async (navigate) => {
     const paymentDetails = {
+      selectedAddressId: paymentDetailsWithaddressId?.selectedAddressId,
       totalAmount: paymentDetailsWithaddressId?.paymentDetails?.totalAmount || 0,
       totalQuantity: paymentDetailsWithaddressId?.paymentDetails?.totalQuantity || 0,
       discount: paymentDetailsWithaddressId?.paymentDetails?.discount || 0,

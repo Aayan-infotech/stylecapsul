@@ -5,6 +5,7 @@ import "../../styles/ChangePassword.scss";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { logoutUser } from "../../reduxToolkit/loginSlice";
+import { useNavigate } from "react-router-dom";
 
 const ChangePassword = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -17,7 +18,10 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [btnLoader, setBtnLoader] = useState(false);
-  const userId = user?.payload?._id;
+  // const userId = user?.payload?._id;
+
+  const userId = getCookie("userId");
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = (setter) => {
     setter((prev) => !prev);

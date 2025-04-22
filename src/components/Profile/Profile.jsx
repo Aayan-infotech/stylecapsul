@@ -122,10 +122,7 @@ function Profile() {
                   <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                     <div className="text-center">
                       <div className="hover-upload-profile">
-                        <div
-                          className="profile-image-container"
-                          onClick={handleImageClick}
-                        >
+                        <div  className="profile-image-container"  onClick={handleImageClick}>
                           <img
                             src={previewImage || logedInUserData?.profileImage || blank_img}
                             alt="Profile"

@@ -219,9 +219,7 @@ function ProfileAvatar() {
                       height={300}
                       width={300}
                       alt="Avatar"
-                      onError={(e) => {
-                        e.target.src = { blank_img };
-                      }}
+                      onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                     />
                   </div>
                 </div>
@@ -237,8 +235,6 @@ function ProfileAvatar() {
               </button>
             </div>
           </div>
-
-          {/* -------------------------tab section----------------------- */}
         </div>
 
         {showDetails ? (

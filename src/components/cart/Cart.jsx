@@ -259,7 +259,9 @@ const Cart = () => {
                 </>
               ) : (
                 <div className="text-center">
-                  <img src={no_cart_found} height={400} />
+                  <h3>Your cart is empty</h3>
+                  <img src={no_cart_found} height={400} alt="No cart found" />
+                  <p>It seems like you haven't added any items to your cart yet. Explore our products and start shopping!</p>
                 </div>
               )}
             </div>

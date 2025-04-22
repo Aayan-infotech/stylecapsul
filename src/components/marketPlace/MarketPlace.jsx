@@ -157,10 +157,7 @@ const MarketPlace = () => {
               </div>
             </div>
           </>
-          <div
-            className="container w-75 mt-4 trending-searches-section "
-            style={{ display: "block" }}
-          >
+          <div  className="container w-75 mt-4 trending-searches-section "  style={{ display: "block" }}>
             {/* Trending Searches */}
             <div className="trending-searches pt-4">
               <h3>Trending Searches</h3>

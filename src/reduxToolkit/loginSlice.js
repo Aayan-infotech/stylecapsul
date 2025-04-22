@@ -18,14 +18,23 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk("logout/user", async (thunkAPI) => {
   try {
-    const response = await axios.post(apiUrl("api/auth/logout-user"), {}, {
-      withCredentials: true,
-    });
+     const auth_token = getCookie('authToken');
+    const response = await axios.post(apiUrl("api/auth/logout-user"),
+      {},
+      {
+        withCredentials: true,
+        headers: {
+          'Authorization': `Bearer ${auth_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
+
 
 export const updateUserDetails = createAsyncThunk(
   "update/user",

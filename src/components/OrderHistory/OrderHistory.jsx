@@ -54,7 +54,7 @@ function OrderHistory() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container">
+        <div className="container d-block">
           <div className="order-history">
             <div className="row gx-5 align-items-center my-4">
               <div className="col-12 col-md-6">
@@ -86,9 +86,7 @@ function OrderHistory() {
                             </p>
                             <p className="mb-0 text-black">
                               Order Date:{" "}
-                              {new Date(
-                                product?.createdAt
-                              ).toLocaleDateString()}
+                              {new Date(product?.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
@@ -162,11 +160,7 @@ function OrderHistory() {
                     )}
                   </div>
                   <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  >
                       Close
                     </button>
                   </div>
