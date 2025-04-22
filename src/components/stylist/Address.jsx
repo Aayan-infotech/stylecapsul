@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import { Container, Typography } from "@mui/material";
 
 const Address = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,9 @@ const Address = () => {
   const addressStatus = useSelector((state) => state.addresses.status);
   const [isLoadingExplore, setIsLoadingExplore] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [showAll, setShowAll] = useState(false);
+  const maxVisibleAddresses = 3;
+
   const [addressForm, setAddressForm] = useState({
     streetName: "",
     city: "",
@@ -113,8 +117,11 @@ const Address = () => {
   };
 
   const handleClickPayment = () => {
+    if (!selectedAddressId) {
+      showErrorToast("Please select an address");
+      return;
+    }
     const buyNowDetails = { subcategoryDetails, selectedAddressId };
-    console.log(buyNowDetails, 'buyNowDetails');
     const paymentDetailsWithaddressId = {
       paymentDetails,
       selectedAddressId,
@@ -139,70 +146,87 @@ const Address = () => {
     return <Loader />;
   }
 
+  const handleToggleShowAll = () => {
+    setShowAll((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (addresses?.length > 0 && !selectedAddressId) {
+      setSelectedAddressId(addresses[0]._id);
+    }
+  }, [addresses, selectedAddressId]);
+
+
   return (
     <>
       <div className="address-details-container">
-        {addresses?.length === 0 ? (
-          <div className="no-address-message">
-            <h4 className="fw-bold text-center mb-4">No addresses available</h4>
-          </div>
-        ) : (
-          addresses.map((address, index) => (
-            <label
-              key={index}
-              className={`address-card ${selectedAddressId === address._id ? "selected" : ""
-                }`}
-              onClick={() => handleSelectAddress(address._id)}
-            >
-              <div className="address-header">
-                <div className="radio-btn">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="address"
-                    checked={selectedAddressId === address._id}
-                    onChange={() => handleSelectAddress(address._id)}
-                  />
-                </div>
-                <div className="address-info">
-                  <h5 className="m-1">{address.streetName}</h5>
-                  <h5 className="m-1">{address.customerName}</h5>
-                  <p className="m-1 fw-bold text-black">{address.city}</p>
-                  <p className="m-1 fw-bold text-body-tertiary">
-                    {address.mobileNumber}
-                  </p>
-                </div>
-                <div className="delete-icon">
-                  <i
-                    className="fa-solid fa-trash-can fs-5 fw-bold me-3"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteAddress(address._id);
-                    }}
-                  ></i>
-                  <i
-                    className="fa-solid fa-pen fs-5 fw-bold"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditAddress(address._id);
-                    }}
-                  ></i>
-                </div>
+        <Container>
+          {addresses?.length === 0 ? (
+            <div className="no-address-message">
+              <h4 className="fw-bold text-center mb-4">No addresses available</h4>
+            </div>
+          ) : (
+            <div>
+              <div className="row">
+                {(showAll ? addresses : addresses.slice(0, maxVisibleAddresses)).map((address, index) => (
+                  <div className="col-12 col-md-4 mb-4" key={index}>
+                    <label
+                      key={index}
+                      className={`address-card ${selectedAddressId === address._id ? "selected" : ""}`}
+                      onClick={() => handleSelectAddress(address._id)}
+                    >
+                      <div className="address-header">
+                        <div className="radio-btn">
+                          <input className="form-check-input" type="radio" name="address" checked={selectedAddressId === address._id} onChange={() => handleSelectAddress(address._id)} />
+                        </div>
+                        <div className="address-info">
+                          <h5 className="m-1">{address.streetName}</h5>
+                          <h5 className="m-1">{address.customerName}</h5>
+                          <p className="m-1 fw-bold text-black">{address.city}</p>
+                          <p className="m-1 fw-bold text-body-tertiary">
+                            {address.mobileNumber}
+                          </p>
+                        </div>
+                        <div className="delete-icon">
+                          <i
+                            className="fa-solid fa-trash-can fs-5 fw-bold me-3"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteAddress(address._id);
+                            }}
+                          ></i>
+                          <i
+                            className="fa-solid fa-pen fs-5 fw-bold"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditAddress(address._id);
+                            }}
+                          ></i>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                ))}
               </div>
-            </label>
-          ))
-        )}
-        <div className="text-center my-3">
-          <a
-            href="#"
-            className="text-black fw-bold text-decoration-none"
-            onClick={() => setShowModal(true)}
-          >
-            <i className="fa-solid fa-plus me-2"></i>
-            Add Address
-          </a>
-        </div>
+              {addresses.length > maxVisibleAddresses && (
+                <Typography variant="h6" className="fw-bold" onClick={handleToggleShowAll} sx={{ cursor: "pointer" }}> {showAll ? "See Less" : "See More"}</Typography>)}
+            </div>
+          )}
+
+          <div className="text-center my-3">
+            <a
+              href="#"
+              className="text-black fw-bold text-decoration-none"
+              onClick={() => setShowModal(true)}
+            >
+              <i className="fa-solid fa-plus me-2"></i>
+              Add Address
+            </a>
+          </div>
+        </Container>
       </div>
+
+
       <div className="text-center mt-2">
         <button
           onClick={handleClickPayment}
@@ -214,6 +238,7 @@ const Address = () => {
           Submit
         </button>
       </div>
+
       {showModal && (
         <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
