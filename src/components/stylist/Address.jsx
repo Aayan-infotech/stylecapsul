@@ -34,7 +34,6 @@ const Address = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { paymentDetails, allCartDetails } = location.state || {};
-  console.log(paymentDetails, 'paymentDetails')
   const { subcategoryDetails } = location.state || {};
 
   useEffect(() => {

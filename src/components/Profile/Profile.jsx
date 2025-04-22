@@ -127,24 +127,13 @@ function Profile() {
                           onClick={handleImageClick}
                         >
                           <img
-                            src={
-                              previewImage ||
-                              logedInUserData?.profileImage ||
-                              blank_img
-                            }
+                            src={previewImage || logedInUserData?.profileImage || blank_img}
                             alt="Profile"
                             className="rounded-pill"
                             height={200}
                             width={200}
                             style={{ objectFit: "contain" }}
-                          // onError={(e) => {
-                          //   e.target.onerror = null;
-                          //   if (!e.target.src || e.target.src.includes('undefined') || e.target.src.includes('null')) {
-                          //     e.target.src = '';
-                          //   } else {
-                          //     e.target.src = blank_img;
-                          //   }
-                          // }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                           />
                           <div className="upload-overlay">
                             <i className="fa fa-camera"></i>
