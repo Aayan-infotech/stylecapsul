@@ -123,8 +123,21 @@ const Signup = () => {
               <h2 className="card-title text-center fs-4 fw-bold">Sign Up</h2>
               <div className="col-12 col-md-4 mt-4">
                 <div>
-                  <label htmlFor="firstName" className="form-label text-black fw-bold">  Name</label>
+                  <label htmlFor="firstName" className="form-label text-black fw-bold">Name</label>
                   <input type="text" className="form-control rounded-pill" placeholder="Enter Your Name" pattern="[A-Za-z\s]*" name="firstName" value={formData.firstName} onChange={handleInputChange} />
+                  {/* <input
+                    type="text"
+                    className="form-control rounded-pill"
+                    placeholder="Enter Your Name"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    onKeyPress={(e) => {
+                      if (!/^[a-zA-Z\s]*$/.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                  /> */}
                 </div>
               </div>
               <div className="col-12 col-md-4 mt-4">

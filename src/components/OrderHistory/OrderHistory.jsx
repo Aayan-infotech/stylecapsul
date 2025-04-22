@@ -68,8 +68,10 @@ function OrderHistory() {
               </div>
             </div>
             {errors ? (
-              <div className="error-message text-center text-danger">
+              <div className="error-message text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/5089/5089733.png" alt="No Order" className="mb-3" style={{ height: 200 }} />
                 <h4>{errors}</h4>
+                <p>Looks like you haven't made any purchases yet. Start shopping now!</p>
               </div>
             ) : (
               <div className="row justify-content-center">
@@ -107,7 +109,7 @@ function OrderHistory() {
                 ) : (
                   <div className="col-12">
                     <div className="no-orders text-center">
-                      <p>No orders found.</p>
+                      <p>Looks like you haven't made any purchases yet. Start shopping now!</p>
                     </div>
                   </div>
                 )}

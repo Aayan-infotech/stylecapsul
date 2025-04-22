@@ -89,6 +89,7 @@ const Cart = () => {
   const discount = 4;
   const deliveryCharges = 2;
   const total = subtotal - discount + deliveryCharges;
+  console.log(total, 'total')
 
   const handleRemove = async (productId) => {
     try {
@@ -119,9 +120,8 @@ const Cart = () => {
         )
         .flat(),
     };
-    navigate("/address", {
-      state: { paymentDetails, allCartDetails: cartItems },
-    });
+    console.log(paymentDetails, 'paymentDetails')
+    // navigate("/address", { state: { paymentDetails, allCartDetails: cartItems }, });
   };
 
   return (

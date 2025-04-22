@@ -331,7 +331,7 @@ function ProfileAvatar() {
                               }}
                               inputMode="numeric"
                               pattern="[0-9]*"
-                              maxLength={10}
+                              maxLength={12}
                             />
                           </div>
                         </form>

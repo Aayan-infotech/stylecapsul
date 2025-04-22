@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../../styles/StylistDetails.scss";
 import blank_image from "../../assets/stylist/blank_img.jpg";
 import axios from "axios";
@@ -27,6 +27,7 @@ const StylistDetails = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [booking, setBooking] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [bookingSlotId, setBookingSlotId] = useState(null);
 
   const { stylistId } = useParams();
 
@@ -50,6 +51,7 @@ const StylistDetails = () => {
   const totalStars = 5;
 
   const fetchVendorDetails = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         apiUrl(`api/stylist/stylist-profile/${stylistId}`),
@@ -66,6 +68,8 @@ const StylistDetails = () => {
       // }
     } catch (error) {
       console.error("Error fetching vendor details:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,24 +152,33 @@ const StylistDetails = () => {
 
 
   const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedDay(null);
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setBookingSlotId(null);
+  };
 
-  const bookAppointment = async (time) => {
+  const bookAppointment = async (time, slotId) => {
     if (!selectedDate || !time) return;
-    setBooking(true);
+    setBookingSlotId(slotId);
     try {
-      const res = await axios.post('http://3.223.253.106:3555/api/appointment/create-appointment', {
-        stylistId: vendorDetails?.stylist?._id,
-        userId: userId,
-        date: selectedDate,
-        time: time,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      const res = await axios.post(apiUrl("api/appointment/create-appointment"),
+        {
+          stylistId: vendorDetails?.stylist?._id,
+          userId: userId,
+          date: selectedDate,
+          time: time,
         },
-        withCredentials: true,
-      });
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        }
+      );
       if (res.status === 201 && res.data?.success) {
         showSuccessToast(res.data.message || "Appointment booked successfully!");
         setOpenModal(false);
@@ -175,9 +188,10 @@ const StylistDetails = () => {
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
     } finally {
-      setBooking(false);
+      setBookingSlotId(null);
     }
   };
+
 
   const handleDeleteReview = async (reviewId) => {
     try {
@@ -243,14 +257,6 @@ const StylistDetails = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <h5>Outfit Planning</h5>
-                  {/* <div>
-                    <button type="button" className="btn btn-outline-dark me-2 rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
-                      <i className="fa-solid fa-user-plus"></i>
-                    </button>
-                    <button type="button" onClick={handleClickToChat} className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
-                      <i className="fa-solid fa-message"></i>
-                    </button>
-                  </div> */}
                   <button type="button" onClick={handleClickToChat} className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
                     <i className="fa-solid fa-message"></i>
                   </button>
@@ -491,20 +497,20 @@ const StylistDetails = () => {
                         <Chip
                           key={slot._id}
                           label={
-                            booking ? (
+                            bookingSlotId === slot._id ? (
                               <span style={{ display: 'flex', alignItems: 'center' }}>
                                 <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
                                 Booking...
                               </span>
                             ) : `${slot.start} - ${slot.end}`
                           }
-                          clickable={!booking}
-                          disabled={booking || !slot.available}
+                          clickable={slot.available && bookingSlotId === null}
+                          disabled={!slot.available || bookingSlotId !== null}
                           onClick={() => {
-                            if (!booking && slot.available) {
+                            if (slot.available && bookingSlotId === null) {
                               const timeRange = `${slot.start} - ${slot.end}`;
                               setSelectedTime(timeRange);
-                              bookAppointment(timeRange);
+                              bookAppointment(timeRange, slot._id);
                             }
                           }}
                           sx={{

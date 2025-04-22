@@ -88,13 +88,7 @@ const Stylist = () => {
                 <div className="styliset-search">
                   <div className="search-box">
                     <i className="fa fa-search"></i>
-                    <input
-                      type="text"
-                      className="rounded-pill text-white"
-                      placeholder="Search"
-                      value={searchQuery}
-                      onChange={handleSearchInputChange}
-                    />
+                    <input type="text" className="rounded-pill text-white" placeholder="Search" value={searchQuery} onChange={handleSearchInputChange} />
                   </div>
                 </div>
               </div>
@@ -107,31 +101,11 @@ const Stylist = () => {
                   </div>
                 ) : (
                   showStylists.map((stylist, index) => (
-                    <Link
-                      to={`/stylist-profile/${stylist._id}`}
-                      className="text-decoration-none p-0"
-                      state={{ stylist }}
-                      key={index}
-                    >
+                    <Link to={`/stylist-profile/${stylist._id}`} className="text-decoration-none p-0" state={{ stylist }} key={index}>
                       <div className="col-12 w-100 mt-3 p-0">
-                        <div
-                          className="d-flex rounded-pill"
-                          style={{
-                            backgroundColor: "#4C4C4C",
-                            height: "120px",
-                          }}
-                        >
+                        <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C", height: "120px", }}>
                           <div className="me-2" style={{ width: "150px" }}>
-                            <img
-                              className="image-rounded"
-                              src={stylist?.profilePicture || blank_image}
-                              alt={stylist?.name}
-                              style={{
-                                width: "150px",
-                                height: "120px",
-                                objectFit: "cover",
-                              }}
-                            />
+                            <img className="image-rounded" src={stylist?.profilePicture || blank_image} alt={stylist?.name} style={{ width: "150px", height: "120px", objectFit: "cover", }} />
                           </div>
                           <div className="p-2 text-white">
                             <h6>{stylist?.name}</h6>
@@ -145,9 +119,6 @@ const Stylist = () => {
                 )}
               </div>
             </div>
-            {/* <div className="d-flex justify-content-center my-5">
-              <Pagination count={10} variant="outlined" color="secondary" />
-            </div> */}
           </div>
         </div>
       )}

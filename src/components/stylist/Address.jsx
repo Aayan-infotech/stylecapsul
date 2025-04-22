@@ -34,6 +34,7 @@ const Address = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { paymentDetails, allCartDetails } = location.state || {};
+  console.log(paymentDetails, 'paymentDetails')
   const { subcategoryDetails } = location.state || {};
 
   useEffect(() => {
@@ -50,12 +51,6 @@ const Address = () => {
       setLoading(false);
     }
   }, [dispatch, addressStatus]);
-
-  useEffect(() => {
-    if (addresses?.length > 0 && !selectedAddressId) {
-      setSelectedAddressId(addresses[0]._id);
-    }
-  }, [addresses, selectedAddressId]);
 
   const handleSelectAddress = (id) => {
     setSelectedAddressId(id);
@@ -123,10 +118,6 @@ const Address = () => {
   };
 
   const handleClickPayment = () => {
-    if (!selectedAddressId) {
-      showErrorToast("Please select an address");
-      return;
-    }
     const buyNowDetails = { subcategoryDetails, selectedAddressId };
     const paymentDetailsWithaddressId = {
       paymentDetails,
@@ -171,7 +162,8 @@ const Address = () => {
                   <div className="col-12 col-md-4 mb-4" key={index}>
                     <label
                       key={index}
-                      className={`address-card ${selectedAddressId === address._id ? "selected" : ""}`}
+                      className={`address-card ${selectedAddressId === address._id ? "selected" : ""
+                        }`}
                       onClick={() => handleSelectAddress(address._id)}
                     >
                       <div className="address-header">

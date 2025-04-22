@@ -4,12 +4,13 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
+import { showErrorToast } from "../toastMessage/Toast";
 
 const Payment = () => {
   const location = useLocation();
   const [btnLoader, setBtnLoader] = useState(false);
   const { paymentDetailsWithaddressId, buyNowDetails } = location.state || {};
-  console.log(buyNowDetails, "buyNowDetails");
+  console.log(paymentDetailsWithaddressId, 'paymentDetailsWithaddressId')
 
   const navigate = useNavigate();
   const token = getCookie("authToken");
@@ -68,7 +69,7 @@ const Payment = () => {
       deliveryCharges: paymentDetailsWithaddressId?.paymentDetails?.deliveryCharges || 0,
       allCartDetails: paymentDetailsWithaddressId?.allCartDetails || [],
     };
-    console.log(paymentDetails, "paymentDetailsWithaddressId--")
+    console.log(paymentDetails, 'paymentDetails')
     try {
       const response = await axios.post(
         apiUrl("api/payment-method/createpaymenttestofredirectonstripe"),
@@ -87,8 +88,7 @@ const Payment = () => {
         throw new Error("Failed to get session URL");
       }
     } catch (error) {
-      console.error("Error creating checkout session:", error);
-      alert("An error occurred, please try again.");
+      showErrorToast("An error occurred, please try again.");
     }
   };
 
