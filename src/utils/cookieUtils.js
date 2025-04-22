@@ -15,7 +15,8 @@ export const getCookie = (name) => {
     return decodeURIComponent(dc.substring(begin + prefix.length, end));
 };
 
-export const setCookie = (name, value, daysToExpire) => {
+export const setCookie = (name, value) => {
+    const daysToExpire = 7;
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
     const cookieString = `${name}=${encodeURIComponent(value)}; expires=${expirationDate.toUTCString()}; path=/`;

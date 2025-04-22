@@ -11,6 +11,7 @@ import { Button, Chip, Rating } from "@mui/material";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const StylistDetails = () => {
   const [showStylistProfileDetails, setSshowStylistProfileDetails] =
@@ -178,6 +179,25 @@ const StylistDetails = () => {
     }
   };
 
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const response = await axios.delete(apiUrl(`api/review/delete/${reviewId}`), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+      );
+      if (response?.data?.success === true && response?.data?.status === 200) {
+        showSuccessToast(response?.data?.message || "Review deleted successfully!");
+        fetchVendorDetails();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {loading ? (
@@ -300,7 +320,7 @@ const StylistDetails = () => {
                 <div className="col-12 col-md-4">
                   <h6 className="fw-bold">Employee Reviews</h6>
                   <div className="display-4 fw-bold">
-                    {averageRating || "N/A"}
+                    {averageRating ? averageRating.toFixed(1) : "N/A"}
                   </div>
                   <div className="d-flex my-2">
                     {[...Array(5)].map((_, index) => (
@@ -336,38 +356,45 @@ const StylistDetails = () => {
                 {/* {vendorDetails?.reviews?.map((review, index) => ( */}
                 {(showAllReviews ? vendorDetails?.reviews : vendorDetails?.reviews?.slice(0, 2))?.map((review, index) => (
                   <div key={index} className="col-12 mt-3">
-                    <span className="text-muted">
-                      {new Date(review.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                    <div className="d-flex align-items-center mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <i key={i} className={`fa fa-star ${i < review?.ratings ? "text-warning" : ""}`}></i>
-                      ))}
-                    </div>
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={
-                          review?.reviewerId?.profileImage ||
-                          "https://via.placeholder.com/30"
-                        }
-                        alt="Reviewer"
-                        className="rounded-circle me-2"
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <h5 className="mb-0">
-                        {review?.reviewerId?.firstName || "Anonymous"}
-                      </h5>
-                    </div>
-                    <div>
-                      <p className="text-muted mt-2">{review?.comment}</p>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <span className="text-muted">
+                          {new Date(review.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                        <div className="d-flex align-items-center mb-2">
+                          {[...Array(5)].map((_, i) => (
+                            <i key={i} className={`fa fa-star ${i < review?.ratings ? "text-warning" : ""}`}></i>
+                          ))}
+                        </div>
+                        <div className="d-flex align-items-center">
+                          <img
+                            src={
+                              review?.reviewerId?.profileImage ||
+                              "https://via.placeholder.com/30"
+                            }
+                            alt="Reviewer"
+                            className="rounded-circle me-2"
+                            style={{
+                              width: "30px",
+                              height: "30px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <h5 className="mb-0">
+                            {review?.reviewerId?.firstName || "Anonymous"}
+                          </h5>
+                        </div>
+                        <div>
+                          <p className="text-muted mt-2">{review?.comment}</p>
+                        </div>
+                      </div>
+                      <IconButton aria-label="delete" onClick={() => handleDeleteReview(review?._id)}>
+                        <DeleteIcon />
+                      </IconButton>
                     </div>
                   </div>
                 ))}
