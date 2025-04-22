@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import { useDispatch } from "react-redux";
@@ -37,19 +37,16 @@ const ThankuPage = () => {
 
   return (
     <div className="thanku-container-page mb-5">
-      <div
-        className="container text-center"
-        style={{ paddingTop: "6rem", display: "block" }}
-      >
+      <div className="container text-center" style={{ paddingTop: "6rem", display: "block" }}>
         <h1 className="display-4 fw-bold mt-2">Successful</h1>
         <div className="my-5">
-          <i
-            className="fa-solid fa-circle-check"
-            style={{ fontSize: "6rem", color: "green" }}
-          ></i>
+          <i className="fa-solid fa-circle-check" style={{ fontSize: "6rem", color: "green" }}></i>
         </div>
         <h2 className="fw-bold">Order Placed successfully!</h2>
         <p className="text-muted">You can track your order anytime.</p>
+        <Link to="/orderhistory">
+          <button type="button" class="btn btn-dark rounded-pill p-2 btn-sm"> View Order History Details</button>
+        </Link>
       </div>
     </div>
   );

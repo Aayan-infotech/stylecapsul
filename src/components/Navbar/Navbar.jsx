@@ -93,51 +93,26 @@ function Navbar() {
                 </Link>
               </div>
               <div className="hamburger">
-                <div className="dropdown">
-                  <i
-                    className="fa-solid fa-bars"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  ></i>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
+                <div className="dropdown-center">
+                  <i className="fa-solid fa-bars" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <li>
-                      <Link
-                        to="/scheduled-appointment"
-                        className="text-decoration-none dropdown-item"
-                      >
+                      <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
                         Scheduled
                       </Link>
                     </li>
-                    {/* <li>
-                      <a className="dropdown-item" href="#">
-                        Refer a friend
-                      </a>
-                    </li> */}
                     <li>
-                      <Link
-                        to="/orderhistory"
-                        className="text-decoration-none dropdown-item"
-                      >
+                      <Link to="/orderhistory" className="text-decoration-none dropdown-item">
                         Order History
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        to="/gift-cards"
-                        className="text-decoration-none dropdown-item"
-                      >
+                      <Link to="/gift-cards" className="text-decoration-none dropdown-item">
                         Gift Card
                       </Link>
                     </li>
                     <li>
-                      <Link
-                        to="/help-support"
-                        className="text-decoration-none dropdown-item"
-                      >
+                      <Link to="/help-support" className="text-decoration-none dropdown-item">
                         Help & Support
                       </Link>
                     </li>
