@@ -140,26 +140,20 @@ const MarketPlace = () => {
             </div>
             <div className="landing1" style={{ position: "relative" }}>
               <div className="vid">
-                <video
-                  src={one}
-                  alt="Video"
-                  autoPlay
-                  loop
-                  muted
-                  className="w-100"
-                // h-100
-                ></video>
+                <video src={one} alt="Video" autoPlay loop muted className="w-100"></video>
               </div>
             </div>
-            <div
-              className="landing2"
-              style={{ position: "absolute", color: "white" }}
-            >
-              <div className="marquee">
-                <p>REVOLUTIONIZE YOUR CLOSET</p>
-                <p>REVOLUTIONIZE YOUR CLOSET</p>
-                <p>REVOLUTIONIZE YOUR CLOSET</p>
-                <p>REVOLUTIONIZE YOUR CLOSET</p>
+            <div className="landing2" style={{ position: "absolute", color: "white" }}>
+              <div class="marquee-wrapper">
+                <div class="marquee">
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                  <p>REVOLUTIONIZE YOUR CLOSET</p>
+                </div>
               </div>
             </div>
           </>
@@ -198,25 +192,11 @@ const MarketPlace = () => {
               <div className="row">
                 {marketPlaceCategory?.shop_by_style?.length ? (
                   marketPlaceCategory?.shop_by_style.map((item, index) => (
-                    <div
-                      className="col-6 col-md-3 d-flex justify-content-center"
-                      key={index}
-                    >
-                      <Link
-                        to={`/categories-type/${item?._id}`}
-                        className="text-decoration-none w-100"
-                      >
+                    <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                      <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
                         <div className="style-item">
                           <div className="image-container rounded-top-pill">
-                            <img
-                              src={item.images?.[0] || blank_img}
-                              alt={item.name}
-                              className="img-fluid"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = blank_img;
-                              }}
-                            />
+                            <img src={item.images?.[0] || blank_img} alt={item.name} className="img-fluid" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -226,7 +206,9 @@ const MarketPlace = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No styles available</p>
+                  <p className="text-muted text-center">
+                    Styles are currently being curated. Please check back soon for the latest fashion inspirations!
+                  </p>
                 )}
               </div>
             </div>
@@ -236,25 +218,11 @@ const MarketPlace = () => {
               <div className="row">
                 {marketPlaceCategory?.shop_menswear?.length ? (
                   marketPlaceCategory?.shop_menswear.map((item, index) => (
-                    <div
-                      className="col-6 col-md-3 d-flex justify-content-center"
-                      key={index}
-                    >
-                      <Link
-                        to={`/categories-type/${item?._id}`}
-                        className="text-decoration-none w-100"
-                      >
+                    <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                      <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
                         <div className="style-item">
                           <div className="image-container rounded-top-pill">
-                            <img
-                              src={item.images[0]}
-                              alt={item.name}
-                              className="img-fluid"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = blank_img;
-                              }}
-                            />
+                            <img src={item.images[0]} alt={item.name} className="img-fluid" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -264,7 +232,9 @@ const MarketPlace = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No menswear available</p>
+                  <p className="text-muted text-center w-100 py-4">
+                    We're currently curating the best menswear styles for you. Check back soon for a fresh collection!
+                  </p>
                 )}
               </div>
             </div>
@@ -274,25 +244,11 @@ const MarketPlace = () => {
               <div className="row">
                 {marketPlaceCategory?.shop_womenswear?.length ? (
                   marketPlaceCategory?.shop_womenswear.map((item, index) => (
-                    <div
-                      className="col-6 col-md-3 d-flex justify-content-center"
-                      key={index}
-                    >
-                      <Link
-                        to={`/categories-type/${item?._id}`}
-                        className="text-decoration-none w-100"
-                      >
+                    <div className="col-6 col-md-3 d-flex justify-content-center" key={index}>
+                      <Link to={`/categories-type/${item?._id}`} className="text-decoration-none w-100">
                         <div className="style-item">
                           <div className="image-container rounded-top-pill">
-                            <img
-                              src={item.images[0]}
-                              alt={item.name}
-                              className="img-fluid"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = blank_img;
-                              }}
-                            />
+                            <img src={item.images[0]} alt={item.name} className="img-fluid" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                           </div>
                           <p className="style-text rounded-bottom-pill fw-bold">
                             {item?.name}
@@ -302,7 +258,9 @@ const MarketPlace = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No womenswear available</p>
+                  <p className="text-muted fst-italic text-center w-100 mt-3">
+                    Our womenswear collection is getting a stylish update. Check back soon to discover the latest trends!
+                  </p>
                 )}
               </div>
             </div>

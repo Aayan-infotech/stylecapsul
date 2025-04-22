@@ -60,10 +60,20 @@ const RecoveryCode = () => {
       const response = await axios.post(apiUrl("api/auth/send-email"), { email });
       if (response.status === 201 || response?.data?.success === true) {
         showSuccessToast(response?.data?.message || "Email sent successfully!");
-        const newTime = parseInt(response?.data?.time || "60", 10);
+        // const newTime = parseInt(response?.data?.time || "60", 10);
+        const extractSeconds = (timeStr) => {
+          const match = timeStr.match(/(\d+)\s*minute[s]?\s*and\s*(\d+)\s*second[s]?/);
+          if (match) {
+            const minutes = parseInt(match[1]);
+            const seconds = parseInt(match[2]);
+            return minutes * 60 + seconds;
+          }
+          return 60;
+        };
+        const newTime = extractSeconds(response?.data?.time);
+        localStorage.setItem("resendCountdown", newTime);
         setResendCountdown(newTime);
         setResendDisabled(true);
-        localStorage.setItem("resendCountdown", newTime); 
       } else {
         showErrorToast(response?.data?.message || "Failed to send email.");
       }
@@ -143,15 +153,7 @@ const RecoveryCode = () => {
               </div>
               <div className="box-container">
                 {values.map((value, index) => (
-                  <input
-                    key={index}
-                    id={`box-${index}`}
-                    className="box me-2"
-                    type="text"
-                    maxLength="1"
-                    value={value}
-                    onChange={(e) => handleChange(e, index)}
-                  />
+                  <input key={index} id={`box-${index}`} className="box me-2" type="text" maxLength="1" value={value} onChange={(e) => handleChange(e, index)} />
                 ))}
               </div>
               <p className="mt-2">
@@ -169,12 +171,7 @@ const RecoveryCode = () => {
                 )}
               </button>
               <div className="reset_otp my-2">
-                <a
-                  className={`text-black ${
-                    resendDisabled ? "link-disabled" : ""
-                  }`}
-                  onClick={handleResendOtp}
-                >
+                <a className={`text-black ${resendDisabled ? "link-disabled" : ""}`} onClick={handleResendOtp} style={{ cursor: "pointer" }}>
                   {resendBtnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}

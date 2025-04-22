@@ -167,18 +167,33 @@
   display: block;
 }
 
-.marquee {
-  display: flex;
-  justify-content: space-between;
+.marquee-wrapper {
   overflow: hidden;
   white-space: nowrap;
+  width: 100%;
+}
+
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
 }
 
 .marquee p {
   display: inline-block;
-  padding-right: 2rem;
-  animation: marquee 15s linear infinite;
+  margin-right: 3rem;
+  font-weight: bold;
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 .container {
   display: block;
 }

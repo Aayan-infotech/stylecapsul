@@ -19,11 +19,19 @@ const ForgotPassword = () => {
     }
     setBtnLoader(true);
     try {
-      const response = await axios.post(apiUrl("api/auth/send-email"), {
-        email,
-      });
+      const response = await axios.post(apiUrl("api/auth/send-email"), { email, });
       if (response?.data?.success && response?.data?.status === 200) {
-        const timeRemaining = parseInt(response?.data?.time);
+        const extractSeconds = (timeStr) => {
+          const match = timeStr.match(/(\d+)\s*minute[s]?\s*and\s*(\d+)\s*second[s]?/);
+          if (match) {
+            const minutes = parseInt(match[1]);
+            const seconds = parseInt(match[2]);
+            return minutes * 60 + seconds;  
+          }
+          return 60;
+        };
+        const timeRemaining = extractSeconds(response?.data?.time);
+        localStorage.setItem("resendCountdown", timeRemaining);
         showSuccessToast(response?.data?.message || "Email sent successfully!");
         navigate("/recovery-code", { state: { email, time: timeRemaining } });
       } else {
@@ -55,20 +63,10 @@ const ForgotPassword = () => {
                   <label htmlFor="email" className="form-label fw-bold">
                     Enter Email
                   </label>
-                  <input
-                    type="text"
-                    id="email"
-                    className="form-control rounded-pill"
-                    placeholder="Enter Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <input type="text" id="email" className="form-control rounded-pill" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="text-center mt-4">
-                  <button
-                    type="submit"
-                    className="btn custom-button text-white fw-bold rounded-pill w-50 p-2"
-                  >
+                  <button type="submit" className="btn custom-button text-white fw-bold rounded-pill w-50 p-2">
                     {btnLoader ? (
                       <span>
                         <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}

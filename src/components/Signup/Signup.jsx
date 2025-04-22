@@ -10,6 +10,7 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isNameValid, setIsNameValid] = useState(true);
+  const [usernameValid, setUsernameValid] = useState(true);
   const [formData, setFormData] = useState({
     firstName: "",
     email: "",
@@ -26,6 +27,13 @@ const Signup = () => {
     if (name === "firstName") {
       const nameRegex = /^[A-Za-z\s]*$/;
       setIsNameValid(nameRegex.test(value));
+    }
+    if (name === "username") {
+      if (value.length > 25) {
+        setUsernameValid(false);
+      } else {
+        setUsernameValid(true);
+      }
     }
   };
 
@@ -47,8 +55,8 @@ const Signup = () => {
       showErrorToast("Invalid email format");
       return false;
     }
-    if (!formData.username.trim()) {
-      showErrorToast("Username is required");
+    if (!formData.username.trim() || !usernameValid) {
+      showErrorToast("Username is required and cannot exceed 25 characters");
       return false;
     }
     if (!formData.password) {
@@ -67,7 +75,6 @@ const Signup = () => {
     }
     return true;
   };
-
 
 
   const handleSubmit = async (e) => {
@@ -130,6 +137,7 @@ const Signup = () => {
                 <div>
                   <label htmlFor="username" className="form-label text-black fw-bold">  Username</label>
                   <input type="text" className="form-control rounded-pill" placeholder="Enter Username" name="username" value={formData.username} onChange={handleInputChange} />
+                  {!usernameValid && (<small className="text-danger">Username cannot be more than 25 characters</small>)}
                 </div>
               </div>
               <div className="col-12 col-md-6 d-flex justify-content-end align-items-center">
@@ -151,18 +159,7 @@ const Signup = () => {
                 </div>
               </div>
               <div className="text-center mt-4">
-                <button
-                  type="submit"
-                  className="login-button fw-bold"
-                  disabled={!isNameValid || btnLoader}
-                  style={{
-                    display: isNameValid ? 'inline-block' : 'none',
-                    opacity: isNameValid ? 1 : 0,
-                    transform: isNameValid ? 'translateY(0)' : 'translateY(20px)',
-                    transition: 'all 0.3s ease',
-                    pointerEvents: isNameValid ? 'auto' : 'none'
-                  }}
-                >
+                <button type="submit" className="login-button fw-bold" disabled={!isNameValid || btnLoader} style={{ display: isNameValid ? 'inline-block' : 'none', opacity: isNameValid ? 1 : 0, transform: isNameValid ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.3s ease', pointerEvents: isNameValid ? 'auto' : 'none' }}>
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i> Waiting...
@@ -171,6 +168,9 @@ const Signup = () => {
                     "Sign Up"
                   )}
                 </button>
+                {!isNameValid && (
+                  <small className="text-danger">Please type only text (no numbers or special characters)</small>
+                )}
               </div>
               <div className="text-center mt-2">
                 <span>Already have an account? </span>

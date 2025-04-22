@@ -243,14 +243,17 @@ const StylistDetails = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <h5>Outfit Planning</h5>
-                  <div>
+                  {/* <div>
                     <button type="button" className="btn btn-outline-dark me-2 rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
                       <i className="fa-solid fa-user-plus"></i>
                     </button>
                     <button type="button" onClick={handleClickToChat} className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
                       <i className="fa-solid fa-message"></i>
                     </button>
-                  </div>
+                  </div> */}
+                  <button type="button" onClick={handleClickToChat} className="btn btn-outline-dark rounded-pill" style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", width: "60px", }}>
+                    <i className="fa-solid fa-message"></i>
+                  </button>
                 </div>
                 <div align="center" className="mt-5">
                   <button type="button" onClick={handleOpenModal} className="btn hire-custom-btn rounded-pill p-2">
@@ -294,18 +297,21 @@ const StylistDetails = () => {
                     )
                   )}
                 </p>
-
                 <h4 className="fw-bold fs-4">Work History</h4>
                 {vendorDetails?.stylist?.workHistory?.map((job, index) => (
                   <div key={index}>
-                    <h6 className="fw-bold fs-6">{job?.title || "N/A"}</h6>
+                    <h6 className="fw-bold fs-6">{job?.title || "Freelance Fashion Stylist with extensive client collaboration experience"}</h6>
                     <p>
-                      <strong>{job?.subtitle || "N/A"}</strong> |{" "}
-                      {job?.workLocation || "N/A"}
+                      <strong>{job?.subtitle || "Worked with top fashion brands on seasonal collections and personal styling."}</strong> |{" "}
+                      {job?.workLocation || "Remote / On-Site Assignments across major cities"}
                       ,&nbsp;&nbsp;&nbsp;
-                      {job?.duration || "N/A"}
+                      {job?.duration || "Over 2 years"}
                     </p>
-                    <p>- &nbsp;{job?.previous_experience || "N/A"}</p>
+                    <p>
+                      - &nbsp;
+                      {job?.previous_experience ||
+                        "Specialized in creating personalized style guides for diverse clients, handling wardrobe makeovers, and providing trend consultations tailored to individual needs. Also collaborated with photographers and designers for editorial shoots."}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -320,7 +326,7 @@ const StylistDetails = () => {
                 <div className="col-12 col-md-4">
                   <h6 className="fw-bold">Employee Reviews</h6>
                   <div className="display-4 fw-bold">
-                    {averageRating ? averageRating.toFixed(1) : "N/A"}
+                    {averageRating ? averageRating.toFixed(1) : ""}
                   </div>
                   <div className="d-flex my-2">
                     {[...Array(5)].map((_, index) => (
@@ -348,7 +354,9 @@ const StylistDetails = () => {
                       </div>
                     ))
                   ) : (
-                    <p>No reviews available yet.</p>
+                    <p className="text-muted">
+                      This stylist hasn't received any reviews yet. Be the first to share your experience and help others make informed choices.
+                    </p>
                   )}
                 </div>
               </div>
@@ -431,19 +439,9 @@ const StylistDetails = () => {
                     ></textarea>
                   </div>
                   {error && <p className="text-danger mb-0">{error}</p>}
-
                   <div className="d-flex justify-content-between align-items-center mt-3">
-                    <Rating
-                      value={rating}
-                      onChange={(event, newValue) => setRating(newValue)}
-                    />
-                    <Button
-                      variant="contained"
-                      size="small"
-                      className="mt-3"
-                      type="submit"
-                      sx={{ textTransform: "capitalize" }}
-                    >
+                    <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
+                    <Button variant="contained" size="small" className="mt-3 rounded-pill" type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
                       Submit Review
                     </Button>
                   </div>
