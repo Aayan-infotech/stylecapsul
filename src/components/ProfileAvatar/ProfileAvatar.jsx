@@ -16,6 +16,11 @@ import { ClossetDetails } from "../ClossetDetails/ClossetDetails.jsx";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 
+const omit = (obj, keys) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key))
+  );
+};
 
 function ProfileAvatar() {
   const [activeTab, setActiveTab] = useState("basic");
@@ -167,7 +172,10 @@ function ProfileAvatar() {
         createBasic({
           userId: user_id,
           profileData: {
-            ...formData,
+            // ...omit(formData, ["email"]),
+            bio: formData.bio,
+            mobileNumber: formData.mobileNumber,
+            profileImage: formData.profileImage,
             height,
             weight,
             shoes,
@@ -186,7 +194,6 @@ function ProfileAvatar() {
         })
       ).unwrap();
       if (actionResult.success) {
-        // navigate("/profile");
         showSuccessToast(actionResult?.message);
         setTimeout(() => {
           window.location.replace("/profile");
@@ -219,7 +226,10 @@ function ProfileAvatar() {
                       height={300}
                       width={300}
                       alt="Avatar"
-                      onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = blank_img;
+                      }}
                     />
                   </div>
                 </div>
@@ -248,8 +258,9 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-end">
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "basic" ? "btn-active" : ""
-                      }`}
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                      activeTab === "basic" ? "btn-active" : ""
+                    }`}
                     onClick={() => setActiveTab("basic")}
                   >
                     Basic
@@ -258,8 +269,9 @@ function ProfileAvatar() {
                 <div className="col-12 col-md-6 d-flex justify-content-center justify-content-lg-start">
                   <button
                     type="button"
-                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${activeTab === "questionnaire" ? "btn-active" : ""
-                      }`}
+                    className={`btn btn-outline-secondary p-2 rounded-pill w-75 fw-bold fs-5 custom-button ${
+                      activeTab === "questionnaire" ? "btn-active" : ""
+                    }`}
                     onClick={() => setActiveTab("questionnaire")}
                   >
                     Questionnaire
@@ -280,7 +292,10 @@ function ProfileAvatar() {
                       <div className="p-2">
                         <form>
                           <div className="mb-3">
-                            <label htmlFor="name" className="form-label fw-bold fs-5">
+                            <label
+                              htmlFor="name"
+                              className="form-label fw-bold fs-5"
+                            >
                               Name
                             </label>
                             <input
@@ -290,29 +305,64 @@ function ProfileAvatar() {
                               name="name"
                               value={formData.name}
                               onChange={(e) => {
-                                const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-                                handleInputChange({ target: { name: "name", value: onlyLetters } });
+                                const onlyLetters = e.target.value.replace(
+                                  /[^a-zA-Z\s]/g,
+                                  ""
+                                );
+                                handleInputChange({
+                                  target: { name: "name", value: onlyLetters },
+                                });
                               }}
                               data-bs-toggle="tooltip"
                               data-bs-placement="bottom"
                               title="Not editable"
-                              readOnly style={{ color: "#6c757d" }}
+                              readOnly
+                              style={{ color: "#6c757d" }}
                             />
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="bio" className="form-label fw-bold fs-5">
+                            <label
+                              htmlFor="bio"
+                              className="form-label fw-bold fs-5"
+                            >
                               Bio
                             </label>
-                            <textarea type="text" className="form-control rounded-pill p-3" placeholder="Enter Bio" rows="1" name="bio" value={formData.bio} onChange={handleInputChange} />
+                            <textarea
+                              type="text"
+                              className="form-control rounded-pill p-3"
+                              placeholder="Enter Bio"
+                              rows="1"
+                              name="bio"
+                              value={formData.bio}
+                              onChange={handleInputChange}
+                            />
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="email" className="form-label fw-bold fs-5">
+                            <label
+                              htmlFor="email"
+                              className="form-label fw-bold fs-5"
+                            >
                               Email
                             </label>
-                            <input type="email" className="form-control rounded-pill p-3" placeholder="Enter Email" readOnly style={{ color: "#6c757d" }} name="email" value={formData.email} onChange={handleInputChange} data-bs-toggle="tooltip" data-bs-placement="bottom" title="Not editable" />
+                            <input
+                              type="email"
+                              className="form-control rounded-pill p-3"
+                              placeholder="Enter Email"
+                              readOnly
+                              style={{ color: "#6c757d" }}
+                              name="email"
+                              value={formData.email}
+                              onChange={handleInputChange}
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="bottom"
+                              title="Not editable"
+                            />
                           </div>
                           <div className="mb-3">
-                            <label htmlFor="mobileNumber" className="form-label fw-bold fs-5">
+                            <label
+                              htmlFor="mobileNumber"
+                              className="form-label fw-bold fs-5"
+                            >
                               Mobile Number (Optional)
                             </label>
                             <input
@@ -322,8 +372,16 @@ function ProfileAvatar() {
                               name="mobileNumber"
                               value={formData.mobileNumber}
                               onChange={(e) => {
-                                const onlyNums = e.target.value.replace(/\D/g, '');
-                                handleInputChange({ target: { name: "mobileNumber", value: onlyNums } });
+                                const onlyNums = e.target.value.replace(
+                                  /\D/g,
+                                  ""
+                                );
+                                handleInputChange({
+                                  target: {
+                                    name: "mobileNumber",
+                                    value: onlyNums,
+                                  },
+                                });
                               }}
                               inputMode="numeric"
                               pattern="[0-9]*"
@@ -587,8 +645,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeGenderType === gender_type ? "selected" : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeGenderType === gender_type ? "selected" : ""
+                            }`}
                             onClick={() => handleClickGenderType(gender_type)}
                           >
                             {gender_type}
@@ -606,8 +665,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeBodySize === body_size ? "selected" : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeBodySize === body_size ? "selected" : ""
+                            }`}
                             onClick={() => handleClickBodySize(body_size)}
                           >
                             {body_size}
@@ -625,8 +685,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeEyeColor === eye_color ? "selected" : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeEyeColor === eye_color ? "selected" : ""
+                            }`}
                             onClick={() => handleClickEyeColor(eye_color)}
                           >
                             {eye_color}
@@ -645,8 +706,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeHairColor === hair_color ? "selected" : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeHairColor === hair_color ? "selected" : ""
+                            }`}
                             onClick={() => handleClickHairColor(hair_color)}
                           >
                             {hair_color}
@@ -666,8 +728,9 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeAgeRange === age_range ? "selected" : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeAgeRange === age_range ? "selected" : ""
+                            }`}
                             onClick={() => handleClickAgeRange(age_range)}
                           >
                             {age_range}
@@ -685,10 +748,11 @@ function ProfileAvatar() {
                         >
                           <button
                             type="button"
-                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${activeMaterialStatus === material_status
-                              ? "selected"
-                              : ""
-                              }`}
+                            className={`btn rounded-pill w-100 fw-bold p-3 custom-gender-btn ${
+                              activeMaterialStatus === material_status
+                                ? "selected"
+                                : ""
+                            }`}
                             onClick={() =>
                               handleClickMaterialStatus(material_status)
                             }

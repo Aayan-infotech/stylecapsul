@@ -14,11 +14,9 @@ const AddClothes = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [eventSeasons, setEventSeasons] = useState([]);
   const [allTypeFromSubCategory, setAllTypeFromSubCategory] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedTypeCategory, setSelectedTypeCategory] = useState("");
-
   const [imagePreview, setImagePreview] = useState([]);
   const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({
@@ -96,9 +94,7 @@ const AddClothes = () => {
 
   const fetchAllSeasons = async (categoryId) => {
     try {
-      const response = await axios.get(
-        apiUrl("api/entity/getEntity?type=season")
-      );
+      const response = await axios.get(apiUrl("api/entity/getEntity?type=season"));
       if (response?.data?.status === 200 && response?.data?.success === true) {
         setEventSeasons(response?.data?.data);
       }
@@ -123,7 +119,7 @@ const AddClothes = () => {
         description: updateNewCloth.description || "",
         image: null,
       });
-      setImagePreview(updateNewCloth.picture || "");
+      setImagePreview(updateNewCloth.pictures || "");
       setSelectedCategory(updateNewCloth.category?._id || "");
       const categoryId = updateNewCloth.category?._id;
       fetchAllSubCategories(categoryId);
@@ -161,9 +157,11 @@ const AddClothes = () => {
     );
     setFormData((prevData) => ({
       ...prevData,
-      image: prevData.image.filter((_, i) => i !== index),
+      image: Array.isArray(prevData.image)
+        ? prevData.image.filter((_, i) => i !== index)
+        : [],
     }));
-  };
+  };  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -193,20 +191,18 @@ const AddClothes = () => {
     try {
       let response;
       if (updateNewCloth) {
-        response = await axios.put(
-          apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`),
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
+        response = await axios.put(apiUrl(`api/cloths/update-cloths/${updateNewCloth._id}`), data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
         );
         showSuccessToast(response?.data?.message);
-        setTimeout(() => {
-          navigate(`/all-clothes-list/${location.state?.currentCategory}`);
-        }, 1000);
+        navigate("/closet-categories")
+        // setTimeout(() => {
+        // navigate(`/all-clothes-list/${location.state?.currentCategory}`);
+        // }, 1000);
       } else {
         response = await dispatch(addClothes(data)).unwrap();
         showSuccessToast("Cloth added successfully..!");
@@ -236,14 +232,7 @@ const AddClothes = () => {
               <form className="row g-3" onSubmit={handleSubmit}>
                 <div className="col-md-4">
                   <label className="form-label">Category</label>
-                  <select
-                    className="form-select rounded-pill p-2"
-                    onChange={handleCategoryChange}
-                    name="category"
-                    value={
-                      selectedCategory || updateNewCloth?.category?._id || ""
-                    }
-                  >
+                  <select className="form-select rounded-pill p-2" onChange={handleCategoryChange} name="category" value={selectedCategory || updateNewCloth?.category?._id || ""}>
                     <option value="">Select Category</option>
                     {categories?.map((cat) => (
                       <option key={cat?._id} value={cat?._id}>
@@ -256,19 +245,10 @@ const AddClothes = () => {
                 {selectedCategory && (
                   <div className="col-md-4">
                     <label className="form-label">SubCategory</label>
-                    <select
-                      className="form-select rounded-pill p-2"
-                      onChange={handleSubCategoryChange}
-                      name="subcategory"
-                      value={
-                        selectedSubCategory ||
-                        updateNewCloth?.subCategories?.name ||
-                        ""
-                      }
-                    >
+                    <select className="form-select rounded-pill p-2" onChange={handleSubCategoryChange} name="subcategory" value={selectedSubCategory || updateNewCloth?.subCategories?.name || ""}>
                       <option value="">Select SubCategory</option>
-                      {subCategories?.map((sub) => (
-                        <option key={sub?._id} value={sub?._id}>
+                      {subCategories?.map((sub, idx) => (
+                        <option key={sub?._id || `sub-${idx}`} value={sub?._id}>
                           {sub?.name}
                         </option>
                       ))}
@@ -279,15 +259,7 @@ const AddClothes = () => {
                 {selectedSubCategory && (
                   <div className="col-md-4">
                     <label className="form-label">Type</label>
-                    <select
-                      className="form-select rounded-pill p-2"
-                      value={
-                        selectedTypeCategory ||
-                        updateNewCloth?.typeOfFashion ||
-                        ""
-                      }
-                      onChange={(e) => setSelectedTypeCategory(e.target.value)}
-                    >
+                    <select className="form-select rounded-pill p-2" value={selectedTypeCategory || updateNewCloth?.typeOfFashion || ""} onChange={(e) => setSelectedTypeCategory(e.target.value)}>
                       <option value="">Select Type Category</option>
                       {allTypeFromSubCategory?.map((type, index) => (
                         <option key={index} value={type}>
@@ -300,12 +272,7 @@ const AddClothes = () => {
 
                 <div className="col-md-4">
                   <label className="form-label">Event & Season</label>
-                  <select
-                    className="form-select rounded-pill p-2"
-                    name="season"
-                    onChange={handleChange}
-                    value={formData.season || updateNewCloth?.season || ""}
-                  >
+                  <select className="form-select rounded-pill p-2" name="season" onChange={handleChange} value={formData.season || updateNewCloth?.season || ""}>
                     <option value="">Select Event & Season</option>
                     {eventSeasons.map((event, index) => (
                       <option key={index} value={event?.name}>
@@ -317,19 +284,9 @@ const AddClothes = () => {
 
                 <div className="col-md-4 col-sm-12">
                   <div className="mb-3">
-                    <label htmlFor="part" className="form-label text-white">
-                      Select Out Fit
-                    </label>
-                    <select
-                      className="form-select rounded-pill p-2"
-                      name="part"
-                      onChange={handleChange}
-                      value={formData.part}
-                      aria-label="part"
-                    >
-                      <option value="" disabled>
-                        Select
-                      </option>
+                    <label htmlFor="part" className="form-label text-white">  Select Out Fit</label>
+                    <select className="form-select rounded-pill p-2" name="part" onChange={handleChange} value={formData.part} aria-label="part">
+                      <option value="" disabled>  Select</option>
                       <option value="outfitTop">Out Fit Top</option>
                       <option value="outfitBottom">Out Fit Bottom</option>
                       <option value="outfitFootwear">Out Fit Footwear</option>
@@ -339,64 +296,25 @@ const AddClothes = () => {
 
                 <div className="col-md-4 col-sm-12">
                   <div className="mb-3">
-                    <label
-                      htmlFor="purchaseDate"
-                      className="form-label text-white"
-                    >
-                      Purchase Date
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control rounded-pill"
-                      id="purchaseDate"
-                      name="purchaseDate"
-                      onChange={handleChange}
-                      value={formData.purchaseDate}
-                      min={todayDate}
-                      aria-describedby="purchaseDate"
-                    />
+                    <label htmlFor="purchaseDate" className="form-label text-white">  Purchase Date</label>
+                    <input type="date" className="form-control rounded-pill" id="purchaseDate" name="purchaseDate" onChange={handleChange} value={formData.purchaseDate} min={todayDate} aria-describedby="purchaseDate" />
                   </div>
                 </div>
 
                 <div className="col-12 col-md-10">
                   <div className="mb-3">
-                    <label
-                      htmlFor="description"
-                      className="form-label text-white"
-                    >
-                      Description
-                    </label>
-                    <textarea
-                      style={{ height: "100px" }}
-                      className="form-control"
-                      placeholder="Description"
-                      id="description"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                    ></textarea>
+                    <label htmlFor="description" className="form-label text-white">  Description</label>
+                    <textarea style={{ height: "100px" }} className="form-control" placeholder="Description" id="description" name="description" value={formData.description} onChange={handleChange}></textarea>
                   </div>
                 </div>
 
                 <div className="col-12 col-md-2 d-flex justify-content-center align-items-center">
                   <div className="text-center mb-4 mb-lg-0">
                     <div className="mt-lg-4">
-                      <label
-                        htmlFor="imageUpload"
-                        className="form-label text-white fw-bold"
-                        style={{ cursor: "pointer" }}
-                      >
+                      <label htmlFor="imageUpload" className="form-label text-white fw-bold" style={{ cursor: "pointer" }}>
                         <i className="fa-solid fa-upload fa-2x"></i>
                       </label>
-                      <input
-                        type="file"
-                        id="imageUpload"
-                        name="image"
-                        accept="image/*"
-                        multiple
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                      />
+                      <input type="file" id="imageUpload" name="image" accept="image/*" multiple onChange={handleChange} style={{ display: "none" }} />
                     </div>
                   </div>
                 </div>
@@ -405,23 +323,10 @@ const AddClothes = () => {
                   <div className="col-12 mt-3">
                     <h5 className="text-white">Uploaded Images</h5>
                     <div className="d-flex flex-wrap gap-2">
-                      {imagePreview.map((src, index) => (
-                        <div
-                          key={index}
-                          className="position-relative"
-                          style={{ display: "inline-block" }}
-                        >
-                          <img
-                            src={src}
-                            height={100}
-                            alt={`Preview ${index + 1}`}
-                            style={{ margin: "5px", borderRadius: "8px" }}
-                          />
-                          <button
-                            onClick={() => handleRemoveImage(index)}
-                            className="btn btn-danger btn-sm position-absolute top-0 end-0"
-                            style={{ borderRadius: "50%", padding: "2px 6px" }}
-                          >
+                      {imagePreview?.map((src, index) => (
+                        <div key={index} className="position-relative" style={{ display: "inline-block" }}>
+                          <img src={src} height={100} alt={`Preview ${index + 1}`} style={{ margin: "5px", borderRadius: "8px" }} />
+                          <button onClick={() => handleRemoveImage(index)} className="btn btn-danger btn-sm position-absolute top-0 end-0" style={{ borderRadius: "50%", padding: "2px 6px" }}>
                             &times;
                           </button>
                         </div>
@@ -430,10 +335,7 @@ const AddClothes = () => {
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  className="rounded-pill fs-5 fw-bold btn btn-light add-btn"
-                >
+                <button type="submit" className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}

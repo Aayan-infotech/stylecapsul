@@ -30,7 +30,7 @@ import MuiPagination from "@mui/material/Pagination";
 import debounce from "lodash.debounce";
 import { useSelector } from "react-redux";
 
-const Explore = ({ isAuth }) => {
+const Explore = () => {
   const [loading, setLoading] = useState(true);
   const [allSocialPosts, setAllSocialPosts] = useState([]);
   const [query, setQuery] = useState("");
@@ -38,6 +38,7 @@ const Explore = ({ isAuth }) => {
   const [totalPages, setTotalPages] = useState(0);
   const [displayPosts, setDisplayPosts] = useState([]);
   const [error, setError] = useState("");
+  const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
@@ -45,7 +46,8 @@ const Explore = ({ isAuth }) => {
   const { user, status } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
 
-  const fetchAllPostsByExplore = async () => {
+  const fetchAllPostsByExplore = async (showLoader = true) => {
+    if (showLoader) setLoading(true);
     try {
       const response = await axios.get(apiUrl("api/explore/getallPosts"), {
         headers: {
@@ -63,6 +65,8 @@ const Explore = ({ isAuth }) => {
       }
     } catch (error) {
       console.error("Error fetching clothes data:", error);
+    } finally {
+      if (showLoader) setLoading(false);
     }
   };
 
@@ -141,41 +145,62 @@ const Explore = ({ isAuth }) => {
     setAllSocialPosts(updatedPosts);
   };
 
-  const handleLike = async (index, post_id) => {
+  // const handleLike = async (index, postId) => {
+  //   setLikeLoadingIndex(index);
+  //   try {
+  //     const { data } = await axios.post(apiUrl("api/explore/like"), { userId, postId },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     fetchAllPostsByExplore();
+  //     setAllSocialPosts((prevPosts) =>
+  //       prevPosts.map((post, idx) =>
+  //         idx === index
+  //           ? {
+  //             ...post,
+  //             liked: !post.liked,
+  //             likes: post.likes + (post.liked ? -1 : 1),
+  //           }
+  //           : post
+  //       )
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLikeLoadingIndex(null);
+  //   }
+  // };
+  const handleLike = async (postId, index) => {
+    setLikeLoadingIndex(index);
     try {
-      const { data } = await axios.post(
-        apiUrl("api/explore/like"),
-        { userId, postId: post_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      fetchAllPostsByExplore();
-      setAllSocialPosts((prevPosts) =>
-        prevPosts.map((post, idx) =>
-          idx === index
-            ? {
-              ...post,
-              liked: !post.liked,
-              likes: post.likes + (post.liked ? -1 : 1),
-            }
-            : post
-        )
-      );
+      const response = await axios.post(apiUrl("api/explore/like"), { userId, postId }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true
+      });
+      showSuccessToast(response.data.message);
+      await fetchAllPostsByExplore(false);
+      return response.data;
     } catch (error) {
-      console.log(error);
+      console.error('Error liking post:', error.response?.data || error.message);
+      return null;
+    } finally {
+      setLikeLoadingIndex(null);
     }
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const formatDate = (dateString) => {
     if (!dateString) return "Unknown Date";
@@ -313,10 +338,6 @@ const Explore = ({ isAuth }) => {
     }
   }, [query, page]);
 
-  useEffect(() => {
-    fetchAllPostsByExplore();
-  }, []);
-
   const handleDelete = async (postId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
@@ -333,7 +354,7 @@ const Explore = ({ isAuth }) => {
       );
       if (response?.data?.success) {
         showSuccessToast(response?.data?.message || "Post deleted successfully!");
-        fetchAllPostsByExplore();
+        await fetchAllPostsByExplore(false);
       } else {
         showErrorToast("Failed to delete post");
       }
@@ -508,13 +529,50 @@ const Explore = ({ isAuth }) => {
 
                       <hr />
                       <div className="d-flex justify-content-evenly align-items-center text-black">
-                        <h5
+                        {/* <h5
                           onClick={() => handleLike(index, post._id)}
                           style={{ cursor: "pointer", color: post.likes.includes(userId) ? "#1976d2" : "black" }}
                         >
                           <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
                           {post.likes.includes(userId) ? "Liked" : "Like"}
-                        </h5>
+                        </h5> */}
+<h5
+  onClick={() => {
+    if (likeLoadingIndex === index) return;
+    handleLike(post._id, index);
+  }}
+  style={{
+    cursor: likeLoadingIndex === index ? "not-allowed" : "pointer",
+    opacity: likeLoadingIndex === index ? 0.5 : 1,
+    color: post.likes.includes(userId) ? "#1976d2" : "black",
+    pointerEvents: likeLoadingIndex === index ? "none" : "auto",
+  }}
+>
+  <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
+  {likeLoadingIndex === index
+    ? "Liking..."
+    : post.likes.includes(userId)
+    ? "Liked"
+    : "Like"}
+</h5>
+
+                        {/* <h5
+                          onClick={() => likeLoadingIndex === index ? null : handleLike(index, post._id)}
+                          style={{
+                            cursor: likeLoadingIndex === index ? "not-allowed" : "pointer",
+                            color: post.likes.includes(userId) ? "#1976d2" : "black",
+                            opacity: likeLoadingIndex === index ? 0.6 : 1,
+                            pointerEvents: likeLoadingIndex === index ? "none" : "auto"
+                          }}
+                        >
+                          <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
+                          {likeLoadingIndex === index
+                            ? "Liked..."
+                            : post.likes.includes(userId)
+                              ? "Liked"
+                              : "Like"}
+                        </h5> */}
+
                         <h5
                           onClick={() => toggleCommentSection(index, post)}
                           style={{ cursor: "pointer" }}

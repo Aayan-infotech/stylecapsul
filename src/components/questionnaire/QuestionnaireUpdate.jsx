@@ -91,7 +91,7 @@ const QuestionnaireUpdate = () => {
           <div key={questionItem._id} className="mt-4">
             <h1 className="fw-bold fs-3">{questionItem.question}</h1>
             <div className="row g-2 mt-2">
-              {questionItem.images && questionItem.images.length > 0 && (
+              {questionItem?.images && questionItem?.images.length > 0 && (
                 <div className="row g-2 mt-2">
                   {questionItem.images.map((src, imgIndex) => (
                     <div key={imgIndex} className="col-12 col-md-4 mb-2 mb-md-0">
@@ -106,7 +106,7 @@ const QuestionnaireUpdate = () => {
               )}
             </div>
             <div className="row g-2 mt-2">
-              {questionItem.options.map((option, index) => (
+              {questionItem?.options?.map((option, index) => (
                 <div key={index} className="col-12 col-md-4 d-flex justify-content-center">
                   <button
                     type="button"

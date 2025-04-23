@@ -256,7 +256,7 @@ export const SocialUserDetails = () => {
           updatedGroupedPosts[postIndex].comments = updatedComments;
           updatedPosts.groupedPosts = updatedGroupedPosts;
           setUserPostDetails(updatedPosts);
-          fetchAllPostsByExplore();
+          // fetchAllPostsByExplore();
         } else {
           showErrorToast("Failed to add reply");
         }
@@ -511,7 +511,6 @@ export const SocialUserDetails = () => {
                         </h6>
                       </div>
                     </div>
-
                     <hr />
                     <div className="d-flex justify-content-evenly align-items-center text-black">
                       <h5 onClick={() => { if (likeLoadingIndex === index) return; likePost(post._id, index); }} style={{ cursor: likeLoadingIndex === index ? "not-allowed" : "pointer", opacity: likeLoadingIndex === index ? 0.5 : 1, color: post.likes.includes(userId) ? "#1976d2" : "black", }}>

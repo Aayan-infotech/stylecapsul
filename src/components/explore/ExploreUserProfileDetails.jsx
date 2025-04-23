@@ -316,21 +316,14 @@ const ExploreUserProfileDetails = () => {
                 <div>
                   <img
                     alt="User Avatar"
-                    className="rounded-circle mb-2"
+                    className="mb-2"
                     src={userPostDetails?.user?.profileImage || blank_img}
+                    height={200}
+                    width={200}
                     style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", }}
                     onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                   />
-                  <h4 className="fw-bold">
-                    {userPostDetails?.user?.firstName
-                      ? userPostDetails?.user?.firstName
-                        .charAt(0)
-                        .toUpperCase() +
-                      userPostDetails?.user?.firstName
-                        .slice(1)
-                        .toLowerCase()
-                      : "N/A"}
-                  </h4>
+                  <h4 className="fw-bold">  {userPostDetails?.user?.firstName ? userPostDetails?.user?.firstName.charAt(0).toUpperCase() + userPostDetails?.user?.firstName.slice(1).toLowerCase() : "N/A"}</h4>
                   <p className="m-0">{userPostDetails?.user?.bio}</p>
                 </div>
               </div>
@@ -340,23 +333,11 @@ const ExploreUserProfileDetails = () => {
                 <Calendar
                   value={selectedDate}
                   tileContent={tileContent}
-                  onClickDay={(date) => {
-                    setSelectedDate(date);
-                    handleSelectOutFits(date);
-                  }}
+                  onClickDay={(date) => { setSelectedDate(date); handleSelectOutFits(date); }}
                   minDate={new Date()}
                 />
               </div>
-              <div
-                className="col-12 col-md-6"
-                style={{
-                  height: "350px",
-                  overflowY: "auto",
-                  borderRadius: "10px",
-                  backgroundColor: "#f0f0f0",
-                  padding: "10px",
-                }}
-              >
+              <div className="col-12 col-md-6" style={{ height: "350px", overflowY: "auto", borderRadius: "10px", backgroundColor: "#f0f0f0", padding: "10px", }}>
                 <style>
                   {`.col-12.col-md-6::-webkit-scrollbar {
                     width: 7px; 
@@ -377,16 +358,16 @@ const ExploreUserProfileDetails = () => {
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
                     <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
-                    <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
-                      <img
-                        src={coinhand || blank_img}
-                        alt={coinhand || blank_img}
-                        height="30"
-                        onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
-                        className="me-2"
-                      />
-                      <h4 className="text-white fw-bold">{item?.name}</h4>
-                    </div>
+                      <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
+                        <img
+                          src={coinhand || blank_img}
+                          alt={coinhand || blank_img}
+                          height="30"
+                          onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
+                          className="me-2"
+                        />
+                        <h4 className="text-white fw-bold">{item?.name}</h4>
+                      </div>
                     </Link>
                   ))
                 ) : (
@@ -409,10 +390,7 @@ const ExploreUserProfileDetails = () => {
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
                         spaceBetween={20}
                         className="swiper-types-custom"
-                        autoplay={{
-                          delay: 2500,
-                          disableOnInteraction: false,
-                        }}
+                        autoplay={{ delay: 2500, disableOnInteraction: false, }}
                         navigation
                         breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 2, }, 1024: { slidesPerView: 3, }, }}
                       >
@@ -463,15 +441,7 @@ const ExploreUserProfileDetails = () => {
                         <i className="fa-regular fa-comment me-2"></i> Comment
                       </h5>
                       <h5 style={{ cursor: "pointer" }}>
-                        <a
-                          href="https://www.instagram.com/thestylecapsule/?hl=en"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                          }}
-                        >
+                        <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", }}>
                           <i className="fa-solid fa-share me-2"></i> Share
                         </a>
                       </h5>
@@ -486,17 +456,10 @@ const ExploreUserProfileDetails = () => {
                             placeholder="Write a comment..."
                             fullWidth
                             size="small"
-                            sx={{
-                              backgroundColor: "#f0f2f5",
-                              borderRadius: 25,
-                            }}
+                            sx={{ backgroundColor: "#f0f2f5", borderRadius: 25, }}
                             value={post?.newComment}
                             onChange={(e) => handleCommentChange(index, e)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && post?.newComment) {
-                                handleCommentSubmit(index, e);
-                              }
-                            }}
+                            onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
                             InputProps={{
                               sx: { borderRadius: "25px" },
                               endAdornment: (
@@ -524,7 +487,6 @@ const ExploreUserProfileDetails = () => {
                         </div>
                         <div className="comments-list px-5 mt-3"
                           style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "10px" }}>
-
                           {post?.comments?.length > 0 ? (
                             post?.comments?.map((comment, commentIndex) => (
                               <div key={commentIndex} className="mb-3">
@@ -568,27 +530,9 @@ const ExploreUserProfileDetails = () => {
                                     className="form-control mb-2"
                                     placeholder="Write a reply..."
                                     value={comment?.newReply}
-                                    onChange={(e) =>
-                                      handleReplyChange(
-                                        index,
-                                        commentIndex,
-                                        e.target.value
-                                      )
-                                    }
-                                    onKeyDown={(e) => {
-                                      if (
-                                        e.key === "Enter" &&
-                                        comment.newReply?.trim()
-                                      ) {
-                                        handleReplySubmit(
-                                          index,
-                                          commentIndex
-                                        );
-                                        e.preventDefault();
-                                      }
-                                    }}
+                                    onChange={(e) => handleReplyChange(index, commentIndex, e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === "Enter" && comment.newReply?.trim()) { handleReplySubmit(index, commentIndex); e.preventDefault(); } }}
                                   />
-
                                   <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() => handleReplySubmit(index, commentIndex)}
