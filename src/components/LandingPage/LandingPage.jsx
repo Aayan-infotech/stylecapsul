@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./LandingPage.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import one from "./img/one.mp4";
 import two from "./img/two.png";
@@ -11,7 +11,6 @@ import six from "./img/six.png";
 import { useSelector } from "react-redux";
 import Loader from "../Loader/Loader";
 import axios from "axios";
-import { loginUser } from "../../reduxToolkit/loginSlice";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -22,6 +21,8 @@ const LandingPage = () => {
   const [loading, setLoading] = useState(true);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [popularsProducts, setPopularsProducts] = useState([]);
+
+  const location = useLocation();
   const token = useSelector((state) => state?.login?.token);
   const navigate = useNavigate();
   const cartIconRef = useRef(null);
@@ -32,6 +33,17 @@ const LandingPage = () => {
     { id: 3, imgSrc: five, alt: "Closet Icon", text: "Market Place", route: "/market-place" },
     { id: 4, imgSrc: six, alt: "Closet Icon", text: "Stylist", route: "/stylist" }, // Stylist route specified
   ];
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("sessionExpired")) {
+      if (params.get("sessionExpired")) {
+        showErrorToast("⚠️ Your session has expired. Please log in again.")
+      }
+    }
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+  }, [location.search]);
 
   const handleServiceClick = (route, text) => {
     if (text === "Stylist" || text === "Market Place") {
@@ -225,11 +237,6 @@ const LandingPage = () => {
                               "Add to cart"
                             )}
                           </button>
-                          {/* <button
-                            className="buy"
-                            onClick={() => handleServiceClick(product?.route)}>
-                            Buy
-                          </button> */}
                         </div>
                       </div>
                     </div>

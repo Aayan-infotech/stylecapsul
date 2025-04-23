@@ -9,73 +9,50 @@ import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 import RecoveryCode from './components/RecoveryCode/RecoveryCode';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookie } from './utils/cookieUtils';
-import PageNotFound from './components/PageNotFound/PageNotFound.jsx'
-
-import axios from 'axios';
-import { apiUrl } from '../apiUtils';
-import { logoutUser, updateUserDetails } from './reduxToolkit/loginSlice';
+import { logoutUser } from './reduxToolkit/loginSlice';
 import MyAddedProducts from './components/MyAddedProducts/MyAddedProducts.jsx';
 import Stylist from './components/stylist/stylist.jsx';
 import StylistDetails from './components/stylist/StylistDetails.jsx';
 import Chat from './components/stylist/Chat.jsx';
 import MarketPlace from './components/marketPlace/MarketPlace.jsx';
 import StylistCategories from './components/stylist/StylistCategories.jsx';
+import { getCookie } from './utils/cookieUtils.js';
+import { showSuccessToast } from './components/toastMessage/Toast.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
-    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     const loginState = useSelector((state) => state?.login);
     const token = loginState?.token;
     const user = loginState?.user;
     const loginStatus = loginState?.status;
 
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            const userId = getCookie('userId');
-            if (userId) {
-                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`),);
-                dispatch(updateUserDetails(userResponse?.data?.data))
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+    const authToken = getCookie('authToken');
 
     useEffect(() => {
         if (loginStatus === "loading") return;
         const checkAuth = async () => {
-            setLoading(true);
+
             if (checkToken() && user) {
                 setIsAuth(true);
             } else {
                 setIsAuth(false);
             }
-            setLoading(false);
         };
         checkAuth();
-    }, [token, user, loginStatus]);
+    }, [authToken, user, loginStatus]);
 
     useEffect(() => {
         const interval = setInterval(() => {
             const isValid = checkToken();
-            if (!isValid && token) {
+            if (!isValid && authToken) {
                 dispatch(logoutUser());
-                // navigate("/login");
+                window.location.href = "/?sessionExpired=true";
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [dispatch, token]);
-
-    // if (loading || loginStatus === 'loading') {
-    //     return <div className="loading-screen">Loading...</div>;
-    // }    
+    }, [dispatch, authToken]);
+    
 
     if (isAuth) {
         return <>{children}</>;
@@ -92,8 +69,6 @@ const AuthRoute = ({ children }) => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* <Route path="*" element={<PageNotFound />} /> */}
     </Routes>;
 }
 export default AuthRoute

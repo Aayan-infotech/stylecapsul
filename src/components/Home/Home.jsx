@@ -3,8 +3,6 @@ import "./Home.scss";
 import { Link } from "react-router-dom";
 import profile from "./img/profile.png";
 import vector from "./img/Vector.png";
-// import marketrate from "./img/market-rate.png";
-// import trendingUpIcon from "@mui/icons-material/TrendingUp";
 import closet from "./img/closet.png";
 import style from "./img/style.png";
 import stylist from "./img/stylist.png";
@@ -21,11 +19,7 @@ const Home = () => {
     { link: "/closet-management", imgSrc: closet, text: "Closet Management" },
     { link: "/my-style-capsule", imgSrc: style, text: "My Style Capsule" },
     { link: "/stylist", imgSrc: stylist, text: "Stylist" },
-    {
-      link: "/analytics-insights",
-      imgSrc: analysis,
-      text: "Analysis & Insights",
-    },
+    { link: "/analytics-insights", imgSrc: analysis, text: "Analysis & Insights", },
   ];
 
   useEffect(() => {
@@ -36,36 +30,6 @@ const Home = () => {
   }, []);
 
   return (
-    // <>
-    //   {loading ? (
-    //     <Loader />
-    //   ) : (
-    //     <div className="home-container-title">
-    //       <div className="container text-center">
-    //         <div className="row gy-4">
-    //           <h3 className="fw-bold text-decoration-underline">Home</h3>
-    //           {itemsLeft?.map((item, index) => (
-    //             <div className="col-12 col-md-6">
-    //               <Link to={item.link} className="text-decoration-none">
-    //                 <div className="closet-management">
-    //                   <div className="image">
-    //                     <img
-    //                       src={item.imgSrc || blank_img}
-    //                       className="img-fluid"
-    //                     />
-    //                   </div>
-    //                   <div className="home-title-content fw-bold">
-    //                     {item?.text}
-    //                   </div>
-    //                 </div>
-    //               </Link>
-    //             </div>
-    //           ))}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   )}
-    // </>
     <>
       {loading ? (
         <Loader />
@@ -73,23 +37,27 @@ const Home = () => {
         <div className="home-container-title">
           <div className="container text-center" style={{ maxWidth: "1025px" }}>
             <div className="row gy-4">
-              <h3 className="fw-bold text-decoration-underline">Home</h3>
+              <h2 className="fw-bold text-decoration-underline">Home</h2>
               {itemsLeft.map((item, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">
-                  <Link to={item.link} className="text-decoration-none">
-                    <div className="closet-management">
-                      <div className="image">
-                        <img
-                          src={item.imgSrc}
-                          alt={`${item.text} Icon`}
-                          className="img-fluid"
-                        />
+                  <div key={index} style={{ transition: 'transform 0.3s', cursor: 'pointer' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
+                    <Link to={item.link} className="text-decoration-none">
+                      <div className="closet-management">
+                        <div className="image">
+                          <img
+                            src={item.imgSrc}
+                            alt={`${item.text} Icon`}
+                            className="img-fluid"
+                          />
+                        </div>
+                        <div className="home-title-content fw-bold">
+                          {item.text}
+                        </div>
                       </div>
-                      <div className="home-title-content fw-bold">
-                        {item.text}
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
