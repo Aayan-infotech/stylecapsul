@@ -92,7 +92,6 @@ const AuthRoute = ({ children }) => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/thanku" element={<ThankuPage />} />
 
         {/* <Route path="*" element={<PageNotFound />} /> */}
     </Routes>;
