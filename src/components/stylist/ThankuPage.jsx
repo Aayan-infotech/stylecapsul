@@ -12,6 +12,8 @@ const ThankuPage = () => {
   const token = getCookie("authToken");
   const dispatch = useDispatch();
 
+  console.log(session_id, 'session_id')
+
   useEffect(() => {
     const fetchPaymentDetails = async () => {
       try {
@@ -26,6 +28,7 @@ const ThankuPage = () => {
             withCredentials: true,
           }
         );
+        console.log(response, "response?.data?.data");
         dispatch(getAllCarts());
       } catch (error) {
         console.error("Error fetching payment details:", error);
