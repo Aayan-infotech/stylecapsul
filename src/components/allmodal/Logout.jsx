@@ -25,15 +25,17 @@ export const Logout = ({ isModalVisible, onClose }) => {
     setBtnLoader(true);
     try {
       const resultAction = await dispatch(logoutUser());
+      console.log(resultAction);
       if (resultAction?.payload?.status === 200) {
-        navigate("/");
         showSuccessToast(resultAction?.payload?.message);
+        navigate("/login");
         onClose();
       } else {
         showErrorToast(
           resultAction?.payload?.message || "Some thing went wrong"
         );
       }
+      
     } catch (error) {
       showErrorToast(error || "Some thing went wrong");
     } finally {

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiUrl } from "../../apiUtils";
+import { getCookie } from "../utils/cookieUtils";
 
 export const loginUser = createAsyncThunk(
   "login/user",
@@ -18,7 +19,7 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk("logout/user", async (thunkAPI) => {
   try {
-     const auth_token = getCookie('authToken');
+    const auth_token = getCookie('authToken');
     const response = await axios.post(apiUrl("api/auth/logout-user"),
       {},
       {
@@ -31,9 +32,11 @@ export const logoutUser = createAsyncThunk("logout/user", async (thunkAPI) => {
     );
     return response.data;
   } catch (error) {
-    return thunkAPI.rejectWithValue(error.response.data);
+    console.error('Error during logout:', error.response || error.message);
+    return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
   }
 });
+
 
 
 export const updateUserDetails = createAsyncThunk(

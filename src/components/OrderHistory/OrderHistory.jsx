@@ -3,7 +3,6 @@ import "./OrderHistory.scss";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
-import blank_img from "../../assets/stylist/blank_img.jpg";
 import Loader from "../Loader/Loader";
 import { Divider } from "@mui/material";
 
@@ -86,7 +85,14 @@ function OrderHistory() {
                             </p>
                             <p className="mb-0 text-black">
                               Order Date:{" "}
-                              {new Date(product?.createdAt).toLocaleDateString()}
+                              {new Date(product?.createdAt).toLocaleString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true,
+                              })}
                             </p>
                           </div>
                         </div>
@@ -140,6 +146,17 @@ function OrderHistory() {
                     {selectedOrder ? (
                       <div>
                         <h6>Payment Details</h6>
+                        <p className="mb-2 text-black">
+                              Order Date:{" "}
+                              {new Date(selectedOrder?.createdAt).toLocaleString('en-GB', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                hour12: true,
+                              })}
+                            </p>
                         <p className="mb-0">Payment Method: {selectedOrder?.paymentDetails?.paymentMethod}</p>
                         <p className="mb-0 fw-bold text-success">Payment Status: {selectedOrder?.paymentDetails?.paymentStatus}</p>
                         <Divider className="my-3" />
