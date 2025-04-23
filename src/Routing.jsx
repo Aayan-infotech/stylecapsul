@@ -90,7 +90,7 @@ const Routing = () => {
             <Route path="/category-details/:subcatid" element={<CategoryDetails />} />
             <Route path="/address" element={<Address />} />
             <Route path="/payment" element={<Payment />} />
-            {/* <Route path="/thanku" element={<ThankuPage />} /> */}
+            <Route path="/thanku" element={<ThankuPage />} />
             <Route path="/gift-cards" element={<GiftCards />} />
             <Route path="/gift-card-details/:id" element={<GiftCardDetails />}/>
             <Route path="/analytics-insights" element={<AnalyticsInsights />} />
