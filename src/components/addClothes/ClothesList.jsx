@@ -21,7 +21,7 @@ function ClothesList() {
   const dispatch = useDispatch();
   const { category } = useParams();
   const location = useLocation();
-  const { category_name, userPostDetails } = location.state || {};
+  const { category_name } = location.state || {};
   const token = getCookie("authToken");
   if (!token) {
     showErrorToast("token not found");
@@ -135,12 +135,7 @@ function ClothesList() {
                 </h1>
                 <div className="search-box ">
                   <i className="fa fa-search"></i>
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                  />
+                  <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
                 </div>
               </div>
               {loading ? (
@@ -155,10 +150,7 @@ function ClothesList() {
                 categoryCloth.map((product, index) => (
                   <div className="col-12" key={index}>
                     <div className="products-container">
-                      <div
-                        className="products-added rounded-pill"
-                        onClick={() => handleClothDetails(product)}
-                      >
+                      <div className="products-added rounded-pill" onClick={() => handleClothDetails(product)}>
                         <div className="product-img">
                           <img src={product?.pictures?.[0] || blank_img} alt="cloth" className="product-image" onError={(e) => (e.target.src = blank_img)} />
                         </div>
@@ -173,11 +165,7 @@ function ClothesList() {
                           <button
                             type="button"
                             className="btn btn-outline-dark"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              updateCloth(product);
-                            }}
-                          >
+                            onClick={(e) => { e.stopPropagation(); updateCloth(product); }}>
                             <i className="fa-regular fa-pen-to-square"></i>
                           </button>
                         </div>

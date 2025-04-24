@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import imagepreview from "../../assets/addclothes/add-photo-style.png";
 import "../../styles/AddClothes.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addClothes } from "../../reduxToolkit/addClothesSlice";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
@@ -199,7 +199,7 @@ const AddClothes = () => {
         }
         );
         showSuccessToast(response?.data?.message);
-        navigate("/closet-categories")
+        // navigate("/closet-categories")
         // setTimeout(() => {
         // navigate(`/all-clothes-list/${location.state?.currentCategory}`);
         // }, 1000);
@@ -335,7 +335,7 @@ const AddClothes = () => {
                   </div>
                 )}
 
-                <button type="submit" className="rounded-pill fs-5 fw-bold btn btn-light add-btn">
+                <button type="submit" className="rounded-pill fs-5 fw-bold btn btn-light add-btn" disabled={btnLoader}>
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
