@@ -17,6 +17,9 @@ const Footer = () => {
               </p>
             </div>
             <div className="col-md-4 footer-column">
+              <h5>
+                <span className="me-2">Important Links</span>
+              </h5>
               <div>
                 <Link to="/termsConditions" className="text-black">
                   <h6>Terms & Condition</h6>

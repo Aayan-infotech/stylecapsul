@@ -25,9 +25,9 @@ const StylistDetails = () => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
-  const [booking, setBooking] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [bookingSlotId, setBookingSlotId] = useState(null);
+  const [btnLoading, setBtnLoading] = useState(false);
 
   const { stylistId } = useParams();
 
@@ -75,6 +75,7 @@ const StylistDetails = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setBtnLoading(true);
     if (!comment.trim() || rating === 0) {
       setError("Please provide both a review comment and rating.");
       return;
@@ -103,6 +104,8 @@ const StylistDetails = () => {
     } catch (error) {
       console.error("Error submitting review:", error);
       showErrorToast("Something went wrong while submitting review.");
+    } finally {
+      setBtnLoading(false)
     }
   };
 
@@ -367,7 +370,6 @@ const StylistDetails = () => {
                 </div>
               </div>
               <div className="row mt-4">
-                {/* {vendorDetails?.reviews?.map((review, index) => ( */}
                 {(showAllReviews ? vendorDetails?.reviews : vendorDetails?.reviews?.slice(0, 2))?.map((review, index) => (
                   <div key={index} className="col-12 mt-3">
                     <div className="d-flex justify-content-between align-items-center">
@@ -392,11 +394,7 @@ const StylistDetails = () => {
                             }
                             alt="Reviewer"
                             className="rounded-circle me-2"
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              objectFit: "cover",
-                            }}
+                            style={{ width: "30px", height: "30px", objectFit: "cover", }}
                           />
                           <h5 className="mb-0">
                             {review?.reviewerId?.firstName || "Anonymous"}
@@ -406,9 +404,11 @@ const StylistDetails = () => {
                           <p className="text-muted mt-2">{review?.comment}</p>
                         </div>
                       </div>
-                      <IconButton aria-label="delete" onClick={() => handleDeleteReview(review?._id)}>
-                        <DeleteIcon />
-                      </IconButton>
+                      {review?.reviewerId?._id === userId && (
+                        <IconButton aria-label="delete" onClick={() => handleDeleteReview(review?._id, review?.reviewerId?._id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -447,8 +447,8 @@ const StylistDetails = () => {
                   {error && <p className="text-danger mb-0">{error}</p>}
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
-                    <Button variant="contained" size="small" className="mt-3 rounded-pill" type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
-                      Submit Review
+                    <Button variant="contained" size="small" className="mt-3 rounded-pill" disabled={btnLoading} type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
+                      {btnLoading ? "Loading..." : "Submit Review"}
                     </Button>
                   </div>
                 </form>
@@ -506,13 +506,7 @@ const StylistDetails = () => {
                           }
                           clickable={slot.available && bookingSlotId === null}
                           disabled={!slot.available || bookingSlotId !== null}
-                          onClick={() => {
-                            if (slot.available && bookingSlotId === null) {
-                              const timeRange = `${slot.start} - ${slot.end}`;
-                              setSelectedTime(timeRange);
-                              bookAppointment(timeRange, slot._id);
-                            }
-                          }}
+                          onClick={() => { if (slot.available && bookingSlotId === null) { const timeRange = `${slot.start} - ${slot.end}`; setSelectedTime(timeRange); bookAppointment(timeRange, slot._id); } }}
                           sx={{
                             backgroundColor: slot.available ? "#28a745" : "#6c757d",
                             color: "#fff",

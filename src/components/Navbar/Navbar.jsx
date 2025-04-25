@@ -66,8 +66,9 @@ function Navbar() {
               />
             </Link>
           </div>
-          {!isExplorePage && (
-            <div className="right d-flex align-items-center px-3 px-lg-0">
+          {/* {!isExplorePage && ( */}
+          <div className="right d-flex align-items-center px-3 px-lg-0">
+            {!isExplorePage && (
               <div>
                 <Link to="/explore" className="text-decoration-none text-black">
                   <button
@@ -79,53 +80,54 @@ function Navbar() {
                   </button>
                 </Link>
               </div>
-              <div className="nav-items-icon d-flex align-items-center rounded-pill">
-                <Link to="/profile" className="text-decoration-none text-white">
-                  <i className="fa-regular fa-user"></i>
-                </Link>
-                <Link to="/cart" className="text-decoration-none text-white">
-                  <div className="cart-icon position-relative">
-                    <i className="fa-solid fa-cart-shopping"></i>
-                    <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
-                      {getTotalProductCount()}
-                    </span>
-                  </div>
-                </Link>
-              </div>
-              <div className="hamburger">
-                <div className="dropdown-center">
-                  <i className="fa-solid fa-bars" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <li>
-                      <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
-                        Scheduled
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/orderhistory" className="text-decoration-none dropdown-item">
-                        Order History
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/gift-cards" className="text-decoration-none dropdown-item">
-                        Gift Card
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/help-support" className="text-decoration-none dropdown-item">
-                        Help & Support
-                      </Link>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" onClick={handleShowModal}>
-                        Log Out
-                      </a>
-                    </li>
-                  </ul>
+            )}
+            <div className="nav-items-icon d-flex align-items-center rounded-pill">
+              <Link to="/profile" className="text-decoration-none text-white">
+                <i className="fa-regular fa-user"></i>
+              </Link>
+              <Link to="/cart" className="text-decoration-none text-white">
+                <div className="cart-icon position-relative">
+                  <i className="fa-solid fa-cart-shopping"></i>
+                  <span className="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">
+                    {getTotalProductCount()}
+                  </span>
                 </div>
+              </Link>
+            </div>
+            <div className="hamburger">
+              <div className="dropdown-center">
+                <i className="fa-solid fa-bars" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li>
+                    <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
+                      Scheduled
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/orderhistory" className="text-decoration-none dropdown-item">
+                      Order History
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/gift-cards" className="text-decoration-none dropdown-item">
+                      Gift Card
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/help-support" className="text-decoration-none dropdown-item">
+                      Help & Support
+                    </Link>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" onClick={handleShowModal}>
+                      Log Out
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </div>
       <Logout isModalVisible={isModalVisible} onClose={handleCloseModal} />

@@ -5,19 +5,6 @@ import CursorTooltip from './CursorTooltip'
 
 function App() {
 
-  // useEffect(() => {
-  //   const disableContextMenu = (e) => e.preventDefault();
-  //   document.addEventListener('contextmenu', disableContextMenu);
-  //   const checkDevTools = setInterval(() => {
-  //     const devtoolsOpen =
-  //       window.outerWidth - window.innerWidth > 100 ||
-  //       window.outerHeight - window.innerHeight > 100;
-  //   }, 1000);
-  //   return () => {
-  //     document.removeEventListener('contextmenu', disableContextMenu);
-  //     clearInterval(checkDevTools);
-  //   };
-  // }, []);
 
   useEffect(() => {
     // 🔒 Disable right-click

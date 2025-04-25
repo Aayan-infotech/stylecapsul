@@ -22,7 +22,7 @@ const CategoryDetails = () => {
   const location = useLocation();
   const { subcatid } = useParams();
   const initialQuantity = location?.state?.quantity;
-  const [quantity, setQuantity] = useState(initialQuantity);
+  const [quantity, setQuantity] = useState(initialQuantity ?? 1);
   const [quantities, setQuantities] = useState({});
   const [loadingProductId, setLoadingProductId] = useState(null);
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ const CategoryDetails = () => {
           viewCount: data.viewCount,
           lastViewed: data.lastViewed,
           discount: data.discount,
-          quantity: data?.quantity
+          quantity: data?.quantity ?? 1
         });
       }
     } catch (error) {
@@ -96,6 +96,7 @@ const CategoryDetails = () => {
       const currentQuantity = quantities[item.id] || item.quantity || 1;
       const newQuantity = currentQuantity + change;
       if (newQuantity >= 0) {
+        setQuantity(newQuantity);
         const action = change > 0 ? "increase" : "decrease";
         const response = await dispatch(
           updateCartQuantity({
@@ -127,7 +128,7 @@ const CategoryDetails = () => {
   };
 
   const handleClickBuynow = () => {
-    navigate("/address", { state: { subcategoryDetails: subcategoryDetails } });
+    navigate("/cart");
   }
 
   return (
@@ -140,20 +141,13 @@ const CategoryDetails = () => {
             <div className="row justify-content-center align-items-center">
               <div className="col-12 col-md-3 d-flex justify-content-center align-items-center">
                 <div className="image-container rounded-top-pill rounded-bottom-pill">
-                  <img
-                    src={subcategoryDetails?.image || blank_image}
-                    alt={subcategoryDetails?.name || "Product"}
-                    className="product-image"
-                  />
+                  <img src={subcategoryDetails?.image || blank_image} alt={subcategoryDetails?.name || "Product"} className="product-image" />
                 </div>
               </div>
               <div className="col-12 col-md-9">
                 <h2>{subcategoryDetails?.name || "Product Name"}</h2>
                 <p className="description-title">Description</p>
-                <p className="m-0">
-                  {subcategoryDetails?.description ||
-                    "No description available."}
-                </p>
+                <p className="m-0">  {subcategoryDetails?.description || "No description available."}</p>
                 <p className="m-0">
                   Price: &nbsp;&nbsp; ${subcategoryDetails?.price || "N/A"}
                 </p>
@@ -162,41 +156,25 @@ const CategoryDetails = () => {
                 </p>
                 <p>
                   Category Type: &nbsp;&nbsp;
-                  <span className="fw-bold">
-                    {subcategoryDetails?.sellType
-                      ? subcategoryDetails.sellType.charAt(0).toUpperCase() +
-                      subcategoryDetails.sellType.slice(1)
-                      : "No type available."}
-                  </span>
+                  <span className="fw-bold">  {subcategoryDetails?.sellType ? subcategoryDetails.sellType.charAt(0).toUpperCase() + subcategoryDetails.sellType.slice(1) : "No type available."}</span>
                 </p>
                 <div className="quantity-selector">
-                  <button
-                    className="quantity-btn"
-                    onClick={() => handleQuantityChange(subcategoryDetails, -1)}
-                  >
+                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, -1)}>
                     -
                   </button>
                   <span className="quantity-display">
-                    {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity}
+                    {/* {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity} */}
+                    {quantity < 10 ? `0${quantity}` : quantity}
                   </span>
-                  <button
-                    className="quantity-btn"
-                    onClick={() => handleQuantityChange(subcategoryDetails, 1)}
-                  >
+                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, 1)}>
                     +
                   </button>
                 </div>
                 <div className="button-group">
-                  <LoadingButton
-                    variant="outlined"
-                    loading={loadingProductId === subcategoryDetails?.id}
-                    disabled={loadingProductId === subcategoryDetails?.id}
-                    onClick={handleAddToCart}
-                    className="rounded-pill text-black fw-bold border border-black"
-                  >
+                  <LoadingButton variant="outlined" loading={loadingProductId === subcategoryDetails?.id} disabled={loadingProductId === subcategoryDetails?.id} onClick={handleAddToCart} className="rounded-pill text-black fw-bold border border-black">
                     Add to Cart
                   </LoadingButton>
-                  <button className="btn buy-now" onClick={handleClickBuynow}>Buy</button>
+                  <button className="btn buy-now" onClick={handleClickBuynow}>Go To Cart</button>
                 </div>
               </div>
             </div>

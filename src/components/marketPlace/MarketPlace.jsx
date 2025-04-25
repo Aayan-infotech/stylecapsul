@@ -112,11 +112,7 @@ const MarketPlace = () => {
                       className="rounded-pill btn bg-black text-white"
                     >
                       <span className="border-end border-white me-2 pe-2">
-                        <img
-                          src={ellipse}
-                          alt="ellipse"
-                          style={{ width: "20px", height: "20px" }}
-                        />
+                        <img  src={ellipse}  alt="ellipse"  style={{ width: "20px", height: "20px" }}/>
                       </span>
                       Order History
                     </button>
@@ -126,7 +122,7 @@ const MarketPlace = () => {
                   <h1 className="title mb-0">Market Place</h1>
                 </div>
                 <div className="navbar-right d-flex">
-                  <i className="fa-regular fa-bell me-2"></i>
+                  {/* <i className="fa-regular fa-bell me-2"></i> */}
                   <Link to={token ? "/cart" : "/myaddedproducts"} className="text-decoration-none text-white">
                     <div className="cart-icon position-relative">
                       <i className="fa-solid fa-cart-shopping"></i>
@@ -144,8 +140,8 @@ const MarketPlace = () => {
               </div>
             </div>
             <div className="landing2" style={{ position: "absolute", color: "white" }}>
-              <div class="marquee-wrapper">
-                <div class="marquee">
+              <div className="marquee-wrapper">
+                <div className="marquee">
                   <p>REVOLUTIONIZE YOUR CLOSET</p>
                   <p>REVOLUTIONIZE YOUR CLOSET</p>
                   <p>REVOLUTIONIZE YOUR CLOSET</p>

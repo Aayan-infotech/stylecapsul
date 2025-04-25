@@ -43,7 +43,7 @@ const Explore = () => {
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
-  const { user, status } = useSelector((state) => state.login);
+  const { user } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
 
   const fetchAllPostsByExplore = async (showLoader = true) => {
@@ -100,6 +100,7 @@ const Explore = () => {
           updatedPosts[index].comments.push({ text: newComment });
           updatedPosts[index].newComment = "";
           setAllSocialPosts(updatedPosts);
+          await fetchAllPostsByExplore(false);
         } else {
           showErrorToast(data.message);
         }
@@ -131,6 +132,7 @@ const Explore = () => {
         const updatedPosts = [...allSocialPosts];
         updatedPosts[postIndex].comments.splice(commentIndex, 1);
         setAllSocialPosts(updatedPosts);
+        await fetchAllPostsByExplore(false);
       } else {
         showErrorToast("Failed to delete comment");
       }
@@ -145,35 +147,6 @@ const Explore = () => {
     setAllSocialPosts(updatedPosts);
   };
 
-  // const handleLike = async (index, postId) => {
-  //   setLikeLoadingIndex(index);
-  //   try {
-  //     const { data } = await axios.post(apiUrl("api/explore/like"), { userId, postId },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     fetchAllPostsByExplore();
-  //     setAllSocialPosts((prevPosts) =>
-  //       prevPosts.map((post, idx) =>
-  //         idx === index
-  //           ? {
-  //             ...post,
-  //             liked: !post.liked,
-  //             likes: post.likes + (post.liked ? -1 : 1),
-  //           }
-  //           : post
-  //       )
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLikeLoadingIndex(null);
-  //   }
-  // };
   const handleLike = async (postId, index) => {
     setLikeLoadingIndex(index);
     try {
@@ -186,6 +159,8 @@ const Explore = () => {
       });
       showSuccessToast(response.data.message);
       await fetchAllPostsByExplore(false);
+      setQuery("");
+      setDisplayPosts(allSocialPosts);
       return response.data;
     } catch (error) {
       console.error('Error liking post:', error.response?.data || error.message);
@@ -194,13 +169,6 @@ const Explore = () => {
       setLikeLoadingIndex(null);
     }
   };
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2000);
-  //   return () => clearTimeout(timer);
-  // }, []);
 
   const formatDate = (dateString) => {
     if (!dateString) return "Unknown Date";
@@ -282,25 +250,20 @@ const Explore = () => {
   }, [userId]);
 
   const fetchPostsUserSearch = async () => {
+    setError("");
+    setLoading(true);
     try {
-      setError("");
-      setLoading(true);
-      const response = await axios.get(
-        apiUrl(
-          `api/explore/search?query=${query}&sort=name&order=asc&page=${page}&limit=5`
-        ),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      // console.log(response, 'abinsh--------')
+      const response = await axios.get(apiUrl(`api/explore/search?query=${query}&sort=name&order=asc&page=${page}&limit=5`), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       if (response?.data?.success) {
         if (response.data.data.length === 0) {
           setError("No results found");
           setDisplayPosts([]);
+          await fetchAllPostsByExplore(false);
         } else {
           setDisplayPosts(response.data.data || []);
           setTotalPages(response.data.pagination.totalPages);
@@ -342,15 +305,13 @@ const Explore = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
     try {
-      const response = await axios.delete(
-        `http://localhost:3555/api/explore/delete-post/${userId}/${postId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
+      const response = await axios.delete(`http://localhost:3555/api/explore/delete-post/${userId}/${postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
       );
       if (response?.data?.success) {
         showSuccessToast(response?.data?.message || "Post deleted successfully!");
@@ -441,14 +402,7 @@ const Explore = () => {
                       </Link>
                       {userId === post?.user?._id && (
                         <div className="dropdown">
-                          <i
-                            className="fa-solid fa-ellipsis-vertical"
-                            role="button"
-                            id={`dropdownMenuButton-${post._id}`}
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                            style={{ cursor: "pointer", fontSize: "20px" }}
-                          ></i>
+                          <i className="fa-solid fa-ellipsis-vertical" role="button" id={`dropdownMenuButton-${post._id}`} data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: "pointer", fontSize: "20px" }}></i>
                           <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
                             <li>
                               <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
@@ -472,28 +426,11 @@ const Explore = () => {
                             disableOnInteraction: false,
                           }}
                           navigation
-                          breakpoints={{
-                            640: {
-                              slidesPerView: 1,
-                            },
-                            768: {
-                              slidesPerView: 2,
-                            },
-                            1024: {
-                              slidesPerView: 3,
-                            },
-                          }}
+                          breakpoints={{ 640: { slidesPerView: 1, }, 768: { slidesPerView: 2, }, 1024: { slidesPerView: 3, }, }}
                         >
                           {post?.image?.map((imageUrl, cardIndex) => (
                             <SwiperSlide key={cardIndex}>
-                              <div className="card text-black" style={{ width: "18rem", backgroundColor: "#e8e8e8", }}>
-                                <img
-                                  src={imageUrl || blank_img}
-                                  className="card-img-top object-fit-cover"
-                                  height={300}
-                                  alt={`Image ${cardIndex + 1}`}
-                                  onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
-                                />
+                              <div className="card text-black" style={{ width: "18rem", backgroundColor: "#e8e8e8", }}><img src={imageUrl || blank_img} className="card-img-top object-fit-cover" height={300} alt={`Image ${cardIndex + 1}`} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
                                 <div className="card-body">
                                   <p className="card-text">
                                     {post?.description}
@@ -508,20 +445,14 @@ const Explore = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="d-flex align-items-center text-black">
-                            <ThumbUpIcon
-                              className="fs-5 me-3"
-                              color={post.likes ? "primary" : "inherit"}
-                            />
+                            <ThumbUpIcon className="fs-5 me-3" color={post.likes ? "primary" : "inherit"} />
                             <h6 className="mt-1 mb-0">
                               {post.likes && post.likes.length}
                             </h6>
                           </div>
                         </div>
                         <div className="d-flex align-items-center text-black gap-3 justify-content-center">
-                          <h6
-                            style={{ cursor: "pointer" }}
-                            onClick={() => toggleCommentSection(index, post)}
-                          >
+                          <h6 style={{ cursor: "pointer" }} onClick={() => toggleCommentSection(index, post)}>
                             {post.comments && post.comments.length} Comments
                           </h6>
                         </div>
@@ -529,111 +460,68 @@ const Explore = () => {
 
                       <hr />
                       <div className="d-flex justify-content-evenly align-items-center text-black">
-                        {/* <h5
-                          onClick={() => handleLike(index, post._id)}
-                          style={{ cursor: "pointer", color: post.likes.includes(userId) ? "#1976d2" : "black" }}
-                        >
-                          <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
-                          {post.likes.includes(userId) ? "Liked" : "Like"}
-                        </h5> */}
-<h5
-  onClick={() => {
-    if (likeLoadingIndex === index) return;
-    handleLike(post._id, index);
-  }}
-  style={{
-    cursor: likeLoadingIndex === index ? "not-allowed" : "pointer",
-    opacity: likeLoadingIndex === index ? 0.5 : 1,
-    color: post.likes.includes(userId) ? "#1976d2" : "black",
-    pointerEvents: likeLoadingIndex === index ? "none" : "auto",
-  }}
->
-  <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
-  {likeLoadingIndex === index
-    ? "Liking..."
-    : post.likes.includes(userId)
-    ? "Liked"
-    : "Like"}
-</h5>
-
-                        {/* <h5
-                          onClick={() => likeLoadingIndex === index ? null : handleLike(index, post._id)}
+                        <h5
+                          onClick={() => {
+                            if (likeLoadingIndex === index) return;
+                            handleLike(post._id, index);
+                          }}
                           style={{
                             cursor: likeLoadingIndex === index ? "not-allowed" : "pointer",
+                            opacity: likeLoadingIndex === index ? 0.5 : 1,
                             color: post.likes.includes(userId) ? "#1976d2" : "black",
-                            opacity: likeLoadingIndex === index ? 0.6 : 1,
-                            pointerEvents: likeLoadingIndex === index ? "none" : "auto"
+                            pointerEvents: likeLoadingIndex === index ? "none" : "auto",
                           }}
                         >
                           <i className={`fa-${post.likes.includes(userId) ? "solid" : "regular"} fa-thumbs-up me-2`}></i>
-                          {likeLoadingIndex === index
-                            ? "Liked..."
-                            : post.likes.includes(userId)
-                              ? "Liked"
-                              : "Like"}
-                        </h5> */}
-
-                        <h5
-                          onClick={() => toggleCommentSection(index, post)}
-                          style={{ cursor: "pointer" }}
-                        >
+                          {likeLoadingIndex === index ? "Liking..." : post.likes.includes(userId) ? "Liked" : "Like"}
+                        </h5>
+                        <h5 onClick={() => toggleCommentSection(index, post)} style={{ cursor: "pointer" }}>
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
                         <h5 style={{ cursor: "pointer" }}>
-                          <a
-                            href="https://www.instagram.com/thestylecapsule/?hl=en"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                            }}
-                          >
-                            <i className="fa-solid fa-share me-2"></i> Share
-                          </a>
+                          {/* <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", }}> */}
+                            {/* <i className="fa-brands fa-instagram me-2 me-2"></i> Share On Instagram */}
+                            <h5 style={{ cursor: "pointer" }}>
+                              <a
+                                href={`https://www.instagram.com/create/story/?media=${encodeURIComponent(post?.image[0])}&caption=${encodeURIComponent(post?.description)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  textDecoration: "none",
+                                  color: "inherit",
+                                }}
+                              >
+                                <i className="fa-brands fa-instagram me-2"></i> Share On Instagram
+                              </a>
+                            </h5>
+                          {/* </a> */}
                         </h5>
                       </div>
                       <hr />
                       {post.showComments && (
                         <div className="comment-section mt-3">
                           <div className="comment-box d-flex align-items-center p-2">
-                            <Avatar
-                              alt={blank_img}
-                              sx={{ width: 40, height: 40, marginRight: 2 }}
-                              className="me-3"
-                              src={blank_img}
-                            />
+                            <Avatar alt={blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" src={blank_img} />
                             <TextField
                               variant="outlined"
                               placeholder="Write a comment..."
                               fullWidth
                               size="small"
-                              sx={{
-                                backgroundColor: "#f0f2f5",
-                                borderRadius: 25,
-                              }}
+                              sx={{ backgroundColor: "#f0f2f5", borderRadius: 25, }}
                               value={post?.newComment}
                               onChange={(e) => handleCommentChange(index, e)}
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" && post?.newComment) {
-                                  handleCommentSubmit(index, e);
-                                }
-                              }}
+                              onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
                               InputProps={{
                                 sx: { borderRadius: "25px" },
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     {post?.newComment ? (
-                                      <SendIcon
-                                        onClick={(e) =>
-                                          handleCommentSubmit(index, e)
-                                        }
-                                      />
+                                      <SendIcon onClick={(e) => handleCommentSubmit(index, e)} />
                                     ) : (
                                       <>
-                                        <CameraAltIcon className="me-2" />
+                                        {/* <CameraAltIcon className="me-2" />
                                         <GifBoxIcon className="me-2" />
-                                        <InsertEmoticonIcon className="me-2" />
+                                        <InsertEmoticonIcon className="me-2" /> */}
                                       </>
                                     )}
                                   </InputAdornment>
@@ -641,88 +529,40 @@ const Explore = () => {
                               }}
                             />
                           </div>
-                          <div className="comments-list px-5 mt-3"
-                            style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "10px" }}>
-
+                          <div className="comments-list px-5 mt-3" style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "10px" }}>
                             {post?.comments?.length > 0 ? (
                               post?.comments?.map((comment, commentIndex) => (
                                 <div key={commentIndex} className="mb-3">
-                                  <div
-                                    key={commentIndex}
-                                    className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                  >
+                                  <div key={commentIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                     <div className="d-flex">
-                                      <Avatar
-                                        alt="User Avatar"
-                                        sx={{ width: 30, height: 30 }}
-                                        className="me-2"
-                                        src={
-                                          comment?.user?.profileImage ||
-                                          blank_img
-                                        }
-                                      />
-                                      <div
-                                        className="text-black p-1 rounded-2"
-                                        style={{ backgroundColor: "#e0e0e0" }}
-                                      >
-                                        <Typography
-                                          variant="body2"
-                                          gutterBottom
-                                        >
+                                      <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={comment?.user?.profileImage || blank_img} />
+                                      <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0" }}>
+                                        <Typography variant="body2" gutterBottom>
                                           {comment?.user?.firstName}
                                         </Typography>
-                                        <Typography
-                                          variant="body2"
-                                          gutterBottom
-                                        >
+                                        <Typography variant="body2" gutterBottom>
                                           {comment?.text}
                                         </Typography>
                                       </div>
                                     </div>
-                                    <DeleteOutlineIcon
-                                      size="small"
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleDeleteComment(index, commentIndex)
-                                      }
-                                    />
+                                    {/* <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} /> */}
+                                    {comment?.user?._id === userId && (
+                                      <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
+                                    )}
                                   </div>
                                   {comment?.replies &&
                                     comment?.replies.length > 0 && (
                                       <div className="ms-5">
                                         {comment?.replies?.map(
                                           (reply, replyIndex) => (
-                                            <div
-                                              key={replyIndex}
-                                              className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                            >
+                                            <div key={replyIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                               <div className="d-flex">
-                                                <Avatar
-                                                  alt="User Avatar"
-                                                  sx={{ width: 30, height: 30 }}
-                                                  className="me-2"
-                                                  src={
-                                                    reply?.replies?.user
-                                                      ?.profileImage ||
-                                                    blank_img
-                                                  }
-                                                />
-                                                <div
-                                                  className="text-black p-1 rounded-2"
-                                                  style={{
-                                                    backgroundColor: "#e0e0e0",
-                                                  }}
-                                                >
-                                                  <Typography
-                                                    variant="caption"
-                                                    className="fw-bold"
-                                                  >
+                                                <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={reply?.replies?.user?.profileImage || blank_img} />
+                                                <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0", }}>
+                                                  <Typography variant="caption" className="fw-bold">
                                                     {reply?.user?.firstName}
                                                   </Typography>
-                                                  <Typography
-                                                    variant="body2"
-                                                    gutterBottom
-                                                  >
+                                                  <Typography variant="body2" gutterBottom>
                                                     {reply?.text}
                                                   </Typography>
                                                 </div>
@@ -738,33 +578,11 @@ const Explore = () => {
                                       className="form-control mb-2"
                                       placeholder="Write a reply..."
                                       value={comment?.newReply}
-                                      onChange={(e) =>
-                                        handleReplyChange(
-                                          index,
-                                          commentIndex,
-                                          e.target.value
-                                        )
-                                      }
-                                      onKeyDown={(e) => {
-                                        if (
-                                          e.key === "Enter" &&
-                                          comment.newReply?.trim()
-                                        ) {
-                                          handleReplySubmit(
-                                            index,
-                                            commentIndex
-                                          );
-                                          e.preventDefault();
-                                        }
-                                      }}
+                                      onChange={(e) => handleReplyChange(index, commentIndex, e.target.value)}
+                                      onKeyDown={(e) => { if (e.key === "Enter" && comment.newReply?.trim()) { handleReplySubmit(index, commentIndex); e.preventDefault(); } }}
                                     />
 
-                                    <button
-                                      className="btn btn-primary btn-sm"
-                                      onClick={() =>
-                                        handleReplySubmit(index, commentIndex)
-                                      }
-                                    >
+                                    <button className="btn btn-primary btn-sm" onClick={() => handleReplySubmit(index, commentIndex)}>
                                       Reply
                                     </button>
                                   </div>
@@ -786,18 +604,7 @@ const Explore = () => {
               </div>
             )}
             <div>
-              <MuiPagination
-                count={totalPages}
-                page={page}
-                onChange={(event, value) => setPage(value)}
-                color="primary"
-                size="large"
-                style={{
-                  marginTop: "2rem",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              />
+              <MuiPagination count={totalPages} page={page} onChange={(event, value) => setPage(value)} color="primary" size="large" style={{ marginTop: "2rem", display: "flex", justifyContent: "center", }} />
             </div>
           </div>
         </div>

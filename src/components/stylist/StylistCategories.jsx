@@ -116,12 +116,14 @@ const StylistCategories = () => {
         );
         if (productIndex !== -1) {
           existingCart[productIndex].quantity += quantity;
+          showSuccessToast("Product quantity updated successfully!");
         } else {
           existingCart.push({ ...product, quantity });
+          showSuccessToast("Product added to cart!");
         }
         localStorage.setItem("cart", JSON.stringify(existingCart));
         navigate("/myaddedproducts")
-        showSuccessToast("Product added to cart!");
+        // showSuccessToast("Product added to cart!");
       } catch (error) {
         console.error("Local cart error:", error);
       } finally {
@@ -131,8 +133,11 @@ const StylistCategories = () => {
       setTimeout(async () => {
         try {
           const response = await dispatch(addToCart({ userId, productId: product?._id, quantity: quantity, }));
-          showSuccessToast(response.message);
-          await dispatch(getAllCarts());
+          console.log(response?.payload, 'existingCart')
+          if (response?.payload?.message) {
+            showSuccessToast(response.payload.message);
+            await dispatch(getAllCarts());
+          }
         } catch (error) {
           showErrorToast(error?.message);
         } finally {
@@ -215,7 +220,7 @@ const StylistCategories = () => {
                             >
                               {isProductInCart(product._id) ? (
                                 <span style={{ textTransform: "none" }}>
-                                  <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
+                                  <AddTaskIcon color="success" disabled={isProductInCart} style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
                                   Added
                                 </span>
                               ) : (
