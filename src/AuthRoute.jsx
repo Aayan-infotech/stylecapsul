@@ -56,9 +56,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    if (loading || loginStatus === 'loading') {
-        return <div className="loading-screen">Loading...</div>;
-    }    
+    // if (loading || loginStatus === 'loading') {
+    //     return <div className="loading-screen">Loading...</div>;
+    // }    
 
     if (isAuth) {
         return <>{children}</>;
