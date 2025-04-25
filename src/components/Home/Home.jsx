@@ -36,8 +36,8 @@ const Home = () => {
       ) : (
         <div className="home-container-title">
           <div className="container text-center" style={{ maxWidth: "1025px" }}>
-            <div className="row gy-4">
-              <h2 className="fw-bold text-decoration-underline">Home</h2>
+            <div className="row gy-4 my-4">
+              <h2 className="fw-bold text-decoration-none">Home</h2>
               {itemsLeft.map((item, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">
                   <div key={index} style={{ transition: 'transform 0.3s', cursor: 'pointer' }}
@@ -46,11 +46,7 @@ const Home = () => {
                     <Link to={item.link} className="text-decoration-none">
                       <div className="closet-management">
                         <div className="image">
-                          <img
-                            src={item.imgSrc}
-                            alt={`${item.text} Icon`}
-                            className="img-fluid"
-                          />
+                          <img src={item.imgSrc} alt={`${item.text} Icon`} className="img-fluid" />
                         </div>
                         <div className="home-title-content fw-bold">
                           {item.text}

@@ -5,29 +5,22 @@ import CursorTooltip from './CursorTooltip'
 
 function App() {
 
-
   useEffect(() => {
-    // 🔒 Disable right-click
     const disableContextMenu = (e) => e.preventDefault();
     document.addEventListener('contextmenu', disableContextMenu);
-
-    // 🔒 Disable key shortcuts
     const disableShortcuts = (e) => {
       if (
-        // DevTools (Chrome / Firefox / Edge)
         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J')) || // Mac
-        e.key === 'F12' || // F12
-        (e.ctrlKey && e.key === 'U') || // View Source
-        (e.metaKey && e.key === 'U') // View Source on Mac
+        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J')) || 
+        e.key === 'F12' || 
+        (e.ctrlKey && e.key === 'U') || 
+        (e.metaKey && e.key === 'U') 
       ) {
         e.preventDefault();
         showSuccessToast('This action is not allowed!');
       }
     };
     document.addEventListener('keydown', disableShortcuts);
-
-    // 🔒 Detect dev tools open using Image getter trick
     let devtoolsOpened = false;
     const element = new Image();
     Object.defineProperty(element, 'id', {
@@ -36,7 +29,6 @@ function App() {
         throw new Error('DevTools detected');
       },
     });
-
     const checkDevTools = setInterval(() => {
       devtoolsOpened = false;
       console.debug(element);

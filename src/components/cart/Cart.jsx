@@ -160,9 +160,8 @@ const Cart = () => {
                               <p className="m-0">{item.date}</p>
                               <div className="d-flex align-items-center justify-content-between">
                                 <p className="text-black fw-bold me-5">
-                                  $
-                                  {quantities[item?.productId] *
-                                    (item?.productDetails?.price || 0)}
+                                  {/* ${quantities[item?.productId] *  (item?.productDetails?.price || 0)} */}
+                                  ${item?.productDetails?.price || 0}
                                 </p>
                                 <div className="quantity-controls d-flex align-items-center">
                                   <button

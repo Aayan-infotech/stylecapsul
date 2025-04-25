@@ -104,8 +104,8 @@ const Stylist = () => {
                     <Link to={`/stylist-profile/${stylist._id}`} className="text-decoration-none p-0" state={{ stylist }} key={index}>
                       <div className="col-12 w-100 mt-3 p-0">
                         <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C", height: "120px", }}>
-                          <div className="me-2" style={{ width: "150px" }}>
-                            <img className="image-rounded" src={stylist?.profilePicture || blank_image} alt={stylist?.name} style={{ width: "150px", height: "120px", objectFit: "cover", }} />
+                          <div className="me-2" style={{ width: "150px"}}>
+                            <img className="image-rounded" src={stylist?.profilePicture || blank_image} alt={stylist?.name} style={{ width: "150px", height: "120px", objectFit: "fill" }} />
                           </div>
                           <div className="p-2 text-white">
                             <h6>{stylist?.name}</h6>

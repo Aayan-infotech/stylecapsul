@@ -122,16 +122,8 @@ function Profile() {
                   <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                     <div className="text-center">
                       <div className="hover-upload-profile">
-                        <div  className="profile-image-container"  onClick={handleImageClick}>
-                          <img
-                            src={previewImage || logedInUserData?.profileImage || blank_img}
-                            alt="Profile"
-                            className="rounded-pill"
-                            height={200}
-                            width={200}
-                            style={{ objectFit: "contain" }}
-                            onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
-                          />
+                        <div className="profile-image-container" onClick={handleImageClick}>
+                          <img src={previewImage || logedInUserData?.profileImage || blank_img} alt="Profile" className="rounded-pill" height={200} width={200} style={{ objectFit: "contain" }} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
                           <div className="upload-overlay">
                             <i className="fa fa-camera"></i>
                           </div>
@@ -139,11 +131,7 @@ function Profile() {
                         <input type="file" id="fileInput" style={{ display: "none" }} accept="image/*" onChange={handleFileChange} />
                         {uploadProgress > 0 && uploadProgress < 100 && (
                           <div className="progress-container">
-                            <CircularProgress
-                              variant="determinate"
-                              value={uploadProgress}
-                              color="primary"
-                            />
+                            <CircularProgress variant="determinate" value={uploadProgress} color="primary" />
                           </div>
                         )}
                       </div>
@@ -160,10 +148,11 @@ function Profile() {
                           {logedInUserData?.email || "Elizabeth@gmail.com"}
                         </h5>
                         <blockquote>
-                          “
-                          {logedInUserData?.bio ||
-                            "“Fashions fade, style is eternal.”"}
-                          ”
+                          {logedInUserData?.bio
+                            ? logedInUserData.bio.split(" ").length > 10
+                              ? logedInUserData.bio.split(" ").slice(0, 10).join(" ") + "..."
+                              : logedInUserData.bio
+                            : "“Fashions fade, style is eternal.”"}
                         </blockquote>
                       </div>
                     </div>
