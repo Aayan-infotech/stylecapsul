@@ -19,6 +19,8 @@ const Cart = () => {
   const [quantities, setQuantities] = useState({});
   const cartItems = useSelector((state) => state.cart.cart);
   const cartId = cartItems.length > 0 ? cartItems[0]._id : null;
+
+  console.log(cartItems, 'cartItems')
   const dispatch = useDispatch();
   const userId = getCookie("userId");
   const navigate = useNavigate();

@@ -31,23 +31,6 @@ const AuthRoute = ({ children }) => {
     const user = loginState?.user;
     const loginStatus = loginState?.status;
 
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            const userId = getCookie('userId');
-            if (userId) {
-                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`),);
-                dispatch(updateUserDetails(userResponse?.data?.data))
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
     useEffect(() => {
         if (loginStatus === "loading") return;
         const checkAuth = async () => {
@@ -73,9 +56,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    // if (loading || loginStatus === 'loading') {
-    //     return <div className="loading-screen">Loading...</div>;
-    // }    
+    if (loading || loginStatus === 'loading') {
+        return <div className="loading-screen">Loading...</div>;
+    }    
 
     if (isAuth) {
         return <>{children}</>;

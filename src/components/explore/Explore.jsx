@@ -354,7 +354,6 @@ const Explore = () => {
                 <Link to="/user-profile">
                   <Avatar
                     alt="Remy Sharp"
-                    className="rounded-circle"
                     src={singleUser?.profileImage || blank_img}
                     onError={(e) => {
                       e.target.onerror = null;
@@ -382,10 +381,10 @@ const Explore = () => {
                       <Link to={`/socialUserDetails/${post?.user?._id}`} className="text-decoration-none">
                         <div className="d-flex justify-content-between align-items-center">
                           <img
-                            className="rounded-circle mb-2 me-2"
+                            className="mb-2 me-2"
                             src={post?.user?.profileImage || blank_img}
                             alt={blank_img}
-                            style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", cursor: "pointer", padding: "5px", height: "60px", width: "60px", }}
+                            style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", cursor: "pointer", padding: "5px", height: "50px", width: "50px", }}
                             onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
                           />
                           <div className="text-black">

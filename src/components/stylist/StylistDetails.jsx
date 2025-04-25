@@ -75,7 +75,7 @@ const StylistDetails = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setBtnLoading(true);
+    // setBtnLoading(true);
     if (!comment.trim() || rating === 0) {
       setError("Please provide both a review comment and rating.");
       return;
@@ -190,8 +190,6 @@ const StylistDetails = () => {
       }
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
-    } finally {
-      setBookingSlotId(null);
     }
   };
 
@@ -448,7 +446,8 @@ const StylistDetails = () => {
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
                     <Button variant="contained" size="small" className="mt-3 rounded-pill" disabled={btnLoading} type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
-                      {btnLoading ? "Loading..." : "Submit Review"}
+                      {/* {btnLoading ? "Loading..." : "Submit Review"} */}
+                      Submit Review
                     </Button>
                   </div>
                 </form>
