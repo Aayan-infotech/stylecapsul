@@ -491,9 +491,7 @@ const Explore = () => {
                                       <SendIcon onClick={(e) => handleCommentSubmit(index, e)} />
                                     ) : (
                                       <>
-                                        {/* <CameraAltIcon className="me-2" />
-                                        <GifBoxIcon className="me-2" />
-                                        <InsertEmoticonIcon className="me-2" /> */}
+                                      <SendIcon style={{ cursor: "pointer" }} />
                                       </>
                                     )}
                                   </InputAdornment>

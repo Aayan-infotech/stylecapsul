@@ -10,12 +10,8 @@ import coinhand from "../../assets/closetmanagement/coin-hand.png";
 import { showSuccessToast } from "../toastMessage/Toast";
 import Loader from "../Loader/Loader.jsx";
 import { TextField, Typography, Avatar, InputAdornment, CircularProgress, IconButton } from "@mui/material";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import GifBoxIcon from "@mui/icons-material/GifBox";
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -23,6 +19,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { useSelector } from "react-redux";
 
 export const SocialUserDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,6 +30,9 @@ export const SocialUserDetails = () => {
   const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
   const [commentLoadingIndex, setCommentLoadingIndex] = useState(null);
   const [replyLoadingIndex, setReplyLoadingIndex] = useState({ postIndex: null, commentIndex: null });
+
+  const { user, status } = useSelector((state) => state.login);
+  const singleUser = user?.payload || user;
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
@@ -62,7 +62,6 @@ export const SocialUserDetails = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
@@ -274,15 +273,15 @@ export const SocialUserDetails = () => {
     if (comment?.user?._id === userId) {
       try {
         const response = await axios.delete(apiUrl(`api/explore/delete-comment/${userId}`), {
-            data: {
-              commentId: comment._id,
-              postId: post._id,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
+          data: {
+            commentId: comment._id,
+            postId: post._id,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
         );
         if (response?.data?.success) {
           showSuccessToast("Comment deleted successfully!");
@@ -304,7 +303,7 @@ export const SocialUserDetails = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
     try {
-      const response = await axios.delete(apiUrl(`api/explore/delete-post/${userId}/${postId}`), 
+      const response = await axios.delete(apiUrl(`api/explore/delete-post/${userId}/${postId}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -315,7 +314,7 @@ export const SocialUserDetails = () => {
       );
       if (response?.data?.success) {
         showSuccessToast(response?.data?.message || "Post deleted successfully!");
-        await fetchPostDetailsByUs(false);
+        fetchPostDetailsByUs();
       } else {
         showErrorToast("Failed to delete post");
       }
@@ -337,21 +336,16 @@ export const SocialUserDetails = () => {
                   <img
                     alt="User Avatar"
                     className="rounded-circle mb-2"
-                    src={userPostDetails?.user?.profileImage || blank_img}
+                    src={singleUser?.profileImage || blank_img}
                     onError={(e) => {
                       e.target.src = blank_img;
                     }}
                     style={{ display: "inline-block", border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", width: "200px", }}
                   />
                   <h4 className="fw-bold">
-                    {userPostDetails?.user?.firstName
-                      ? userPostDetails?.user?.firstName
-                        .charAt(0)
-                        .toUpperCase() +
-                      userPostDetails?.user?.firstName.slice(1).toLowerCase()
-                      : ""}
+                    {singleUser.firstName ? singleUser.firstName.charAt(0).toUpperCase() + singleUser.firstName.slice(1).toLowerCase() : ""}
                   </h4>
-                  <p className="m-0">{userPostDetails?.user?.bio}</p>
+                  <p className="m-0">{singleUser.bio}</p>
                 </div>
               </div>
             </div>
@@ -502,15 +496,7 @@ export const SocialUserDetails = () => {
                         <i className="fa-regular fa-comment me-2"></i> Comment
                       </h5>
                       <h5 style={{ cursor: "pointer" }}>
-                        <a
-                          href="https://www.instagram.com/thestylecapsule/?hl=en"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            textDecoration: "none",
-                            color: "inherit",
-                          }}
-                        >
+                        <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", }}>
                           <i className="fa-solid fa-share me-2"></i> Share
                         </a>
                       </h5>
@@ -531,11 +517,7 @@ export const SocialUserDetails = () => {
                             }}
                             value={post?.newComment}
                             onChange={(e) => handleCommentChange(index, e)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" && post?.newComment) {
-                                handleCommentSubmit(index, e);
-                              }
-                            }}
+                            onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
                             InputProps={{
                               sx: { borderRadius: "25px" },
                               endAdornment: (
@@ -544,16 +526,11 @@ export const SocialUserDetails = () => {
                                     commentLoadingIndex === index ? (
                                       <CircularProgress size={20} />
                                     ) : (
-                                      <SendIcon
-                                        style={{ cursor: "pointer" }}
-                                        onClick={(e) => handleCommentSubmit(index, e)}
-                                      />
+                                      <SendIcon style={{ cursor: "pointer" }} onClick={(e) => handleCommentSubmit(index, e)} />
                                     )
                                   ) : (
                                     <>
-                                      <CameraAltIcon className="me-2" />
-                                      <GifBoxIcon className="me-2" />
-                                      <InsertEmoticonIcon className="me-2" />
+                                      <SendIcon style={{ cursor: "pointer" }} />
                                     </>
                                   )}
                                 </InputAdornment>
@@ -563,7 +540,6 @@ export const SocialUserDetails = () => {
                         </div>
                         <div className="comments-list px-5 mt-3"
                           style={{ maxHeight: "200px", overflowY: "auto", paddingRight: "10px" }}>
-
                           {post?.comments?.length > 0 ? (
                             post?.comments?.map((comment, commentIndex) => (
                               <div key={commentIndex} className="mb-3">
@@ -607,27 +583,9 @@ export const SocialUserDetails = () => {
                                     className="form-control mb-2"
                                     placeholder="Write a reply..."
                                     value={comment?.newReply}
-                                    onChange={(e) =>
-                                      handleReplyChange(
-                                        index,
-                                        commentIndex,
-                                        e.target.value
-                                      )
-                                    }
-                                    onKeyDown={(e) => {
-                                      if (
-                                        e.key === "Enter" &&
-                                        comment.newReply?.trim()
-                                      ) {
-                                        handleReplySubmit(
-                                          index,
-                                          commentIndex
-                                        );
-                                        e.preventDefault();
-                                      }
-                                    }}
+                                    onChange={(e) => handleReplyChange(index, commentIndex, e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === "Enter" && comment.newReply?.trim()) { handleReplySubmit(index, commentIndex); e.preventDefault(); } }}
                                   />
-
                                   <button
                                     className="btn btn-primary btn-sm"
                                     onClick={() => handleReplySubmit(index, commentIndex)}
