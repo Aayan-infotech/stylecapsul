@@ -1,3 +1,8 @@
+.explore-container {
+    padding-top: 2rem;
+    animation: fadeIn 1s ease-in-out;
+}
+
 @media  screen and (max-width: 768px) {
     .explore-container{
         margin-top: 11rem !important;

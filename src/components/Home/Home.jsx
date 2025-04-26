@@ -8,7 +8,6 @@ import style from "./img/style.png";
 import stylist from "./img/stylist.png";
 import analysis from "./img/analysis.png";
 import Loader from "../Loader/Loader";
-import blank_img from "../../assets/stylist/blank_img.jpg";
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -36,7 +35,7 @@ const Home = () => {
       ) : (
         <div className="home-container-title">
           <div className="container text-center" style={{ maxWidth: "1025px" }}>
-            <div className="row gy-4 my-4">
+            <div className="row gy-4">
               <h2 className="fw-bold text-decoration-none">Home</h2>
               {itemsLeft.map((item, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">

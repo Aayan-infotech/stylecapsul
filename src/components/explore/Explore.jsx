@@ -332,34 +332,10 @@ const Explore = () => {
         <div className="mb-4 explore-container">
           <div className="container d-block w-75">
             <div className="d-flex align-items-center justify-content-center">
-              <TextField
-                variant="outlined"
-                placeholder="Search"
-                fullWidth
-                size="small"
-                className="me-2 w-100"
-                onChange={handleInputChange}
-                value={query}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "50px",
-                    padding: "10px",
-                  },
-                  "& .MuiOutlinedInput-input": {
-                    padding: "7px 14px",
-                  },
-                }}
-              />
+              <TextField variant="outlined" placeholder="Search" fullWidth size="small" className="me-2 w-100" onChange={handleInputChange} value={query} sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px", padding: "10px", }, "& .MuiOutlinedInput-input": { padding: "7px 14px", }, }} />
               <div style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", }} className="rounded-circle">
                 <Link to="/user-profile">
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={singleUser?.profileImage || blank_img}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = blank_img
-                    }}
-                  />
+                  <Avatar alt="Remy Sharp" src={singleUser?.profileImage || blank_img} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
                 </Link>
               </div>
             </div>
@@ -478,19 +454,19 @@ const Explore = () => {
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
                         <h5 style={{ cursor: "pointer" }}>
-                            <h5 style={{ cursor: "pointer" }}>
-                              <a
-                                href={`https://www.instagram.com/create/story/?media=${encodeURIComponent(post?.image[0])}&caption=${encodeURIComponent(post?.description)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  textDecoration: "none",
-                                  color: "inherit",
-                                }}
-                              >
-                                <i className="fa-brands fa-instagram me-2"></i> Share On Instagram
-                              </a>
-                            </h5>
+                          <h5 style={{ cursor: "pointer" }}>
+                            <a
+                              href={`https://www.instagram.com/create/story/?media=${encodeURIComponent(post?.image[0])}&caption=${encodeURIComponent(post?.description)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                textDecoration: "none",
+                                color: "inherit",
+                              }}
+                            >
+                              <i className="fa-brands fa-instagram me-2"></i> Share On Instagram
+                            </a>
+                          </h5>
                         </h5>
                       </div>
                       <hr />

@@ -10,6 +10,10 @@ const ClosetCategories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const modalStyle = {
+    animation: "fadeIn 1s ease-in-out"
+  };
+
 
   const fetchAllCategories = async () => {
     setLoading(true);
@@ -29,13 +33,13 @@ const ClosetCategories = () => {
   useEffect(() => {
     fetchAllCategories();
   }, []);
-  
+
   return (
     <>
       {loading ? (
         <Loader />
       ) : (
-        <div className="d-flex justify-content-center align-items-center" style={{ paddingTop: "6rem" }}>
+        <div className="d-flex justify-content-center align-items-center" style={{ paddingTop: "6rem", ...modalStyle }}>
           <div className="container d-block w-75">
             <h1 className="text-center fw-bold fs-1">Details</h1>
             <div className="row g-3 m-0">

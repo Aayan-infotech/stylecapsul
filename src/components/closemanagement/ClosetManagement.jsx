@@ -67,17 +67,12 @@ const ClosetManagement = () => {
                 {cardData.map((item, index) => (
                   <div key={index} className="col-12 col-md-6 col-md-4">
                     <Link to={item.url} className="text-decoration-none text-white">
-                    <div className="p-4 rounded-2 text-white" style={{ backgroundColor: "#4C4C4C" }}>
-                      {item.image && (
-                        <img
-                          src={item.image}
-                          alt={item.imageAlt}
-                          className="mb-4"
-                          style={item.imageStyle}
-                        />
-                      )}
-                      <h4 className="card-title fw-bold">{item.title}</h4>
-                    </div>
+                      <div className="p-4 rounded-2 text-white" style={{ backgroundColor: "#4C4C4C" }}>
+                        {item.image && (
+                          <img src={item.image} alt={item.imageAlt} className="mb-4" style={item.imageStyle} />
+                        )}
+                        <h4 className="card-title fw-bold">{item.title}</h4>
+                      </div>
                     </Link>
                   </div>
                 ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/HelpSupport.scss";
 
 const HelpSupport = () => {
@@ -40,23 +40,6 @@ const HelpSupport = () => {
   return (
     <div className="help-support-container">
       <div className="container w-75">
-        {/* <div className="row mt-4 mx-0">
-          <h1 className="fw-bold fs-1">Help & Support</h1>
-          <div className="col-12 mt-2">
-            <div className="p-3 rounded" style={{ backgroundColor: "#EAEAEA" }}>
-              <div className="d-flex justify-content-between align-items-center">
-                <h4 className="fw-bold fs-5">How do I book a stylist appointment?</h4>
-                <div className="help-arrow-up">
-                  <i className="fa-solid fa-angle-up"></i>
-                </div>
-              </div>
-              <p className="help-content">
-                To book a stylist, go to the 'Stylist' section, choose your preferred expert, select an available date and time slot, then confirm your booking. You'll receive a confirmation notification once it's scheduled.
-              </p>
-            </div>
-          </div>
-        </div> */}
-
         <div className="row m-0 mt-4">
           <div className="col-12">
             <div className="accordion" id="accordionExample">
