@@ -273,9 +273,7 @@ export const SocialUserDetails = () => {
     const comment = post.comments[commentIndex];
     if (comment?.user?._id === userId) {
       try {
-        const response = await axios.delete(
-          apiUrl(`api/explore/delete-comment/${userId}`),
-          {
+        const response = await axios.delete(apiUrl(`api/explore/delete-comment/${userId}`), {
             data: {
               commentId: comment._id,
               postId: post._id,
@@ -306,8 +304,7 @@ export const SocialUserDetails = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
     try {
-      const response = await axios.delete(
-        `http://localhost:3555/api/explore/delete-post/${userId}/${postId}`,
+      const response = await axios.delete(apiUrl(`api/explore/delete-post/${userId}/${postId}`), 
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -332,10 +329,7 @@ export const SocialUserDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div
-          className="container d-block userprofiledetails"
-          style={{ paddingTop: "6rem" }}
-        >
+        <div className="container d-block userprofiledetails" style={{ paddingTop: "6rem", animation: "fadeIn 1s ease-in-out" }}>
           <div className="container d-block px-4">
             <div className="row gy-4 m-0 mb-4">
               <div className="col-12 d-flex justify-content-center align-items-center">
@@ -443,14 +437,7 @@ export const SocialUserDetails = () => {
                     <div className="d-flex justify-content-between align-items-center">
                       <div></div>
                       <div className="dropdown">
-                        <i
-                          className="fa-solid fa-ellipsis-vertical"
-                          role="button"
-                          id={`dropdownMenuButton-${post._id}`}
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                          style={{ cursor: "pointer", fontSize: "20px" }}
-                        ></i>
+                        <i className="fa-solid fa-ellipsis-vertical" role="button" id={`dropdownMenuButton-${post._id}`} data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: "pointer", fontSize: "20px" }}></i>
                         <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
                           <li>
                             <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
@@ -478,13 +465,7 @@ export const SocialUserDetails = () => {
                         {post?.image?.map((imageUrl, cardIndex) => (
                           <SwiperSlide key={cardIndex}>
                             <div className="card text-black" style={{ width: "18rem", backgroundColor: "#e8e8e8", }}>
-                              <img
-                                src={imageUrl || blank_img}
-                                className="card-img-top object-fit-cover"
-                                height={300}
-                                alt={`Image ${cardIndex + 1}`}
-                                onError={(e) => { e.target.onerror = null; e.target.src = blank_img }}
-                              />
+                              <img src={imageUrl || blank_img} className="card-img-top object-fit-cover" height={300} alt={`Image ${cardIndex + 1}`} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
                               <div className="card-body">
                                 <p className="card-text">
                                   {post?.description}
