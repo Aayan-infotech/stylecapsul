@@ -119,6 +119,7 @@ const Routing = () => {
             <Route path="/capsulerangecalendardetails" element={<CapsuleRangeCalendarDetails />}/>
             <Route path="/public-profile/:userId/:categoryId" element={<OtherPostUserDetails />}/>
             <Route path="/user-profile" element={<ExploreUserProfileDetails />}/>
+            
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

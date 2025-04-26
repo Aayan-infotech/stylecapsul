@@ -21,6 +21,7 @@ import StylistDetails from './components/stylist/StylistDetails.jsx';
 import Chat from './components/stylist/Chat.jsx';
 import MarketPlace from './components/marketPlace/MarketPlace.jsx';
 import StylistCategories from './components/stylist/StylistCategories.jsx';
+import Loader from './components/Loader/Loader.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -73,9 +74,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    // if (loading || loginStatus === 'loading') {
-    //     return <div className="loading-screen">Loading...</div>;
-    // }    
+    if (loading || loginStatus === 'loading') {
+        return <Loader />;
+    }
 
     if (isAuth) {
         return <>{children}</>;

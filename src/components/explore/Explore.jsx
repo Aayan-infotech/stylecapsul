@@ -478,8 +478,6 @@ const Explore = () => {
                           <i className="fa-regular fa-comment me-2"></i> Comment
                         </h5>
                         <h5 style={{ cursor: "pointer" }}>
-                          {/* <a href="https://www.instagram.com/thestylecapsule/?hl=en" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit", }}> */}
-                            {/* <i className="fa-brands fa-instagram me-2 me-2"></i> Share On Instagram */}
                             <h5 style={{ cursor: "pointer" }}>
                               <a
                                 href={`https://www.instagram.com/create/story/?media=${encodeURIComponent(post?.image[0])}&caption=${encodeURIComponent(post?.description)}`}
@@ -493,7 +491,6 @@ const Explore = () => {
                                 <i className="fa-brands fa-instagram me-2"></i> Share On Instagram
                               </a>
                             </h5>
-                          {/* </a> */}
                         </h5>
                       </div>
                       <hr />
