@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import GifBoxIcon from "@mui/icons-material/GifBox";
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
@@ -29,6 +26,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MuiPagination from "@mui/material/Pagination";
 import debounce from "lodash.debounce";
 import { useSelector } from "react-redux";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const Explore = () => {
   const [loading, setLoading] = useState(true);
@@ -39,12 +37,33 @@ const Explore = () => {
   const [displayPosts, setDisplayPosts] = useState([]);
   const [error, setError] = useState("");
   const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
+  const [profileImageShow, seProfileImageShow] = useState({});
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
   const { user } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
+
+  useEffect(() => {
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`));
+      if (userResponse?.data?.status === 200 && userResponse?.data?.success === true) {
+        seProfileImageShow(userResponse?.data?.data);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchAllPostsByExplore = async (showLoader = true) => {
     if (showLoader) setLoading(true);
@@ -305,7 +324,7 @@ const Explore = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this post?");
     if (!confirmDelete) return;
     try {
-      const response = await axios.delete(`http://localhost:3555/api/explore/delete-post/${userId}/${postId}`, {
+      const response = await axios.delete(apiUrl(`api/explore/delete-post/${userId}/${postId}`), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -335,7 +354,7 @@ const Explore = () => {
               <TextField variant="outlined" placeholder="Search" fullWidth size="small" className="me-2 w-100" onChange={handleInputChange} value={query} sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px", padding: "10px", }, "& .MuiOutlinedInput-input": { padding: "7px 14px", }, }} />
               <div style={{ border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", }} className="rounded-circle">
                 <Link to="/user-profile">
-                  <Avatar alt="Remy Sharp" src={singleUser?.profileImage || blank_img} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
+                  <Avatar alt="Remy Sharp" src={profileImageShow?.profileImage || blank_img} onError={(e) => { e.target.onerror = null; e.target.src = blank_img }} />
                 </Link>
               </div>
             </div>
@@ -436,10 +455,7 @@ const Explore = () => {
                       <hr />
                       <div className="d-flex justify-content-evenly align-items-center text-black">
                         <h5
-                          onClick={() => {
-                            if (likeLoadingIndex === index) return;
-                            handleLike(post._id, index);
-                          }}
+                          onClick={() => { if (likeLoadingIndex === index) return; handleLike(post._id, index); }}
                           style={{
                             cursor: likeLoadingIndex === index ? "not-allowed" : "pointer",
                             opacity: likeLoadingIndex === index ? 0.5 : 1,
@@ -473,7 +489,7 @@ const Explore = () => {
                       {post.showComments && (
                         <div className="comment-section mt-3">
                           <div className="comment-box d-flex align-items-center p-2">
-                            <Avatar alt={blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" src={blank_img} />
+                            <Avatar alt={post?.user?.firstName} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" src={post?.user?.profileImage || blank_img} />
                             <TextField
                               variant="outlined"
                               placeholder="Write a comment..."
@@ -491,7 +507,7 @@ const Explore = () => {
                                       <SendIcon onClick={(e) => handleCommentSubmit(index, e)} />
                                     ) : (
                                       <>
-                                      <SendIcon style={{ cursor: "pointer" }} />
+                                        <SendIcon style={{ cursor: "pointer" }} />
                                       </>
                                     )}
                                   </InputAdornment>
@@ -515,7 +531,6 @@ const Explore = () => {
                                         </Typography>
                                       </div>
                                     </div>
-                                    {/* <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} /> */}
                                     {comment?.user?._id === userId && (
                                       <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
                                     )}
@@ -570,7 +585,10 @@ const Explore = () => {
               ))
             ) : (
               <div className="text-center mt-4">
-                <Typography variant="h6">No results found</Typography>
+                <Typography variant="h6">No results found. Share your first style and inspire others!</Typography>
+                <Link to="/my-style-capsule" className="text-black text-decoration-none">
+                  <Typography variant="h6">Create your first post <ArrowForwardIcon/></Typography>
+                </Link>
               </div>
             )}
             <div>

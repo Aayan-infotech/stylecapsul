@@ -7,7 +7,7 @@ import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import coinhand from "../../assets/closetmanagement/coin-hand.png";
-import { showSuccessToast } from "../toastMessage/Toast";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import Loader from "../Loader/Loader.jsx";
 import { TextField, Typography, Avatar, InputAdornment, CircularProgress, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
@@ -19,7 +19,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
-import { useSelector } from "react-redux";
 
 export const SocialUserDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -30,9 +29,6 @@ export const SocialUserDetails = () => {
   const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
   const [commentLoadingIndex, setCommentLoadingIndex] = useState(null);
   const [replyLoadingIndex, setReplyLoadingIndex] = useState({ postIndex: null, commentIndex: null });
-
-  const { user, status } = useSelector((state) => state.login);
-  const singleUser = user?.payload || user;
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
@@ -62,6 +58,7 @@ export const SocialUserDetails = () => {
           "Content-Type": "application/json",
         },
       });
+      console.log(response, 'response')
       if (response?.data?.success) {
         setUserPostDetails(response?.data);
         const data = response?.data?.styleOfTheDay || [];
@@ -270,7 +267,7 @@ export const SocialUserDetails = () => {
   const handleDeleteComment = async (postIndex, commentIndex) => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
-    if (comment?.user?._id === userId) {
+    if (comment?.user === userId) {
       try {
         const response = await axios.delete(apiUrl(`api/explore/delete-comment/${userId}`), {
           data: {
@@ -284,10 +281,11 @@ export const SocialUserDetails = () => {
         }
         );
         if (response?.data?.success) {
-          showSuccessToast("Comment deleted successfully!");
           const updatedPosts = { ...userPostDetails };
           updatedPosts.groupedPosts[postIndex].comments.splice(commentIndex, 1);
-          setUserPostDetails(updatedPosts); // Update state
+          setUserPostDetails(updatedPosts);
+          showSuccessToast("Comment deleted successfully!");
+          await fetchPostDetailsByUs(false);
         } else {
           showErrorToast("Failed to delete comment");
         }
@@ -314,7 +312,7 @@ export const SocialUserDetails = () => {
       );
       if (response?.data?.success) {
         showSuccessToast(response?.data?.message || "Post deleted successfully!");
-        fetchPostDetailsByUs();
+        await fetchPostDetailsByUs(false);
       } else {
         showErrorToast("Failed to delete post");
       }
@@ -336,16 +334,21 @@ export const SocialUserDetails = () => {
                   <img
                     alt="User Avatar"
                     className="rounded-circle mb-2"
-                    src={singleUser?.profileImage || blank_img}
+                    src={userPostDetails?.user?.profileImage || blank_img}
                     onError={(e) => {
                       e.target.src = blank_img;
                     }}
                     style={{ display: "inline-block", border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", width: "200px", }}
                   />
                   <h4 className="fw-bold">
-                    {singleUser.firstName ? singleUser.firstName.charAt(0).toUpperCase() + singleUser.firstName.slice(1).toLowerCase() : ""}
+                    {userPostDetails?.user?.firstName
+                      ? userPostDetails?.user?.firstName
+                        .charAt(0)
+                        .toUpperCase() +
+                      userPostDetails?.user?.firstName.slice(1).toLowerCase()
+                      : ""}
                   </h4>
-                  <p className="m-0">{singleUser.bio}</p>
+                  <p className="m-0">{userPostDetails?.user?.bio}</p>
                 </div>
               </div>
             </div>
@@ -430,16 +433,18 @@ export const SocialUserDetails = () => {
                   <div className="p-3 border-1 text-black" style={{ backgroundColor: "#f5f5f56e" }}>
                     <div className="d-flex justify-content-between align-items-center">
                       <div></div>
-                      <div className="dropdown">
-                        <i className="fa-solid fa-ellipsis-vertical" role="button" id={`dropdownMenuButton-${post._id}`} data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: "pointer", fontSize: "20px" }}></i>
-                        <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
-                          <li>
-                            <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
-                              <i className="fa-solid fa-trash me-2"></i>Delete
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
+                      {userId === post?.user?._id && (
+                        <div className="dropdown">
+                          <i className="fa-solid fa-ellipsis-vertical" role="button" id={`dropdownMenuButton-${post._id}`} data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: "pointer", fontSize: "20px" }}></i>
+                          <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
+                            <li>
+                              <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
+                                <i className="fa-solid fa-trash me-2"></i>Delete
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
                     <div className="text-black mt-2">
                       <p className="fw-bold">{post?.description}</p>
@@ -505,7 +510,7 @@ export const SocialUserDetails = () => {
                     {post.showComments && (
                       <div className="comment-section mt-3">
                         <div className="comment-box d-flex align-items-center p-2">
-                          <Avatar alt={blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" src={blank_img} />
+                          <Avatar alt={post?.user?.firstName} src={post?.user?.profileImage || blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" />
                           <TextField
                             variant="outlined"
                             placeholder="Write a comment..."
@@ -555,7 +560,7 @@ export const SocialUserDetails = () => {
                                       </Typography>
                                     </div>
                                   </div>
-                                  {comment?.user?._id === userId && (
+                                  {comment?.user === userId && (
                                     <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
                                   )}
                                 </div>

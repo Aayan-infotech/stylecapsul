@@ -22,6 +22,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { useSelector } from "react-redux";
 
 const ExploreUserProfileDetails = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -33,12 +34,12 @@ const ExploreUserProfileDetails = () => {
   const [commentLoadingIndex, setCommentLoadingIndex] = useState(null);
   const [replyLoadingIndex, setReplyLoadingIndex] = useState({ postIndex: null, commentIndex: null });
 
-
-  const navigate = useNavigate();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
 
+
   const fetchAllCategories = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(apiUrl("api/closet/get-closet"));
       if (response?.data?.status === 200 &&
@@ -47,6 +48,8 @@ const ExploreUserProfileDetails = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,8 +84,10 @@ const ExploreUserProfileDetails = () => {
   };
 
   useEffect(() => {
-    fetchPostDetailsByUs();
-  }, []);
+    if (token) {
+      fetchPostDetailsByUs();
+    }
+  }, [token]);
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -272,7 +277,7 @@ const ExploreUserProfileDetails = () => {
   const handleDeleteComment = async (postIndex, commentIndex) => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
-    if (comment?.user?._id === userId) {
+    if (comment?.user === userId) {
       try {
         const response = await axios.delete(
           apiUrl(`api/explore/delete-comment/${userId}`),
@@ -288,10 +293,11 @@ const ExploreUserProfileDetails = () => {
           }
         );
         if (response?.data?.success) {
-          showSuccessToast("Comment deleted successfully!");
           const updatedPosts = { ...userPostDetails };
           updatedPosts.groupedPosts[postIndex].comments.splice(commentIndex, 1);
-          setUserPostDetails(updatedPosts); // Update state
+          setUserPostDetails(updatedPosts);
+          showSuccessToast("Comment deleted successfully!");
+          await fetchPostDetailsByUs(false);
         } else {
           showErrorToast("Failed to delete comment");
         }
@@ -300,6 +306,30 @@ const ExploreUserProfileDetails = () => {
       }
     } else {
       showErrorToast("You can only delete your own comments");
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+    try {
+      const response = await axios.delete(apiUrl(`api/explore/delete-post/${userId}/${postId}`),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response?.data?.success) {
+        showSuccessToast(response?.data?.message || "Post deleted successfully!");
+        await fetchPostDetailsByUs(false);
+      } else {
+        showErrorToast("Failed to delete post");
+      }
+    } catch (error) {
+      showErrorToast(error || "Failed to delete the post. Please try again.");
     }
   };
 
@@ -359,13 +389,7 @@ const ExploreUserProfileDetails = () => {
                   categories.map((item, index) => (
                     <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
                       <div key={index} className="rounded-pill mb-3 d-flex align-items-center" style={{ backgroundColor: "#4C4C4C", height: "70px", padding: "10px", }}>
-                        <img
-                          src={coinhand || blank_img}
-                          alt={coinhand || blank_img}
-                          height="30"
-                          onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }}
-                          className="me-2"
-                        />
+                        <img src={coinhand || blank_img} alt={coinhand || blank_img} height="30" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} className="me-2" />
                         <h4 className="text-white fw-bold">{item?.name}</h4>
                       </div>
                     </Link>
@@ -383,8 +407,24 @@ const ExploreUserProfileDetails = () => {
                 <div className="col-12" key={index}>
                   <div className="p-3 border-1 text-black" style={{ backgroundColor: "#f5f5f56e" }}>
                     <div className="text-black mt-2">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div></div>
+                        {userId === post?.user?._id && (
+                          <div className="dropdown">
+                            <i className="fa-solid fa-ellipsis-vertical" role="button" id={`dropdownMenuButton-${post._id}`} data-bs-toggle="dropdown" aria-expanded="false" style={{ cursor: "pointer", fontSize: "20px" }}></i>
+                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby={`dropdownMenuButton-${post._id}`}>
+                              <li>
+                                <button className="dropdown-item text-danger" onClick={() => handleDelete(post._id)}>
+                                  <i className="fa-solid fa-trash me-2"></i>Delete
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                       <p className="fw-bold">{post?.description}</p>
                     </div>
+                    {/* <Avatar alt={post?.user?.firstName} src={post?.user?.profileImage || blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" /> */}
                     <div className="d-flex mt-3">
                       <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -450,7 +490,7 @@ const ExploreUserProfileDetails = () => {
                     {post.showComments && (
                       <div className="comment-section mt-3">
                         <div className="comment-box d-flex align-items-center p-2">
-                          <Avatar alt={blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" src={blank_img} />
+                          <Avatar alt={post?.user?.firstName} src={post?.user?.profileImage || blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" />
                           <TextField
                             variant="outlined"
                             placeholder="Write a comment..."
@@ -468,16 +508,11 @@ const ExploreUserProfileDetails = () => {
                                     commentLoadingIndex === index ? (
                                       <CircularProgress size={20} />
                                     ) : (
-                                      <SendIcon
-                                        style={{ cursor: "pointer" }}
-                                        onClick={(e) => handleCommentSubmit(index, e)}
-                                      />
+                                      <SendIcon style={{ cursor: "pointer" }} onClick={(e) => handleCommentSubmit(index, e)} />
                                     )
                                   ) : (
                                     <>
-                                      <CameraAltIcon className="me-2" />
-                                      <GifBoxIcon className="me-2" />
-                                      <InsertEmoticonIcon className="me-2" />
+                                      <SendIcon style={{ cursor: "pointer" }} />
                                     </>
                                   )}
                                 </InputAdornment>
@@ -490,19 +525,16 @@ const ExploreUserProfileDetails = () => {
                           {post?.comments?.length > 0 ? (
                             post?.comments?.map((comment, commentIndex) => (
                               <div key={commentIndex} className="mb-3">
-                                <div
-                                  key={commentIndex}
-                                  className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                >
+                                <div key={commentIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                   <div className="d-flex">
-                                    <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={comment?.user?.profileImage || blank_img} />
+                                    <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={post?.user?.profileImage || blank_img} />
                                     <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0" }}>
                                       <Typography variant="body2" gutterBottom>
                                         {comment?.text}
                                       </Typography>
                                     </div>
                                   </div>
-                                  {comment?.user?._id === userId && (
+                                  {comment?.user === userId && (
                                     <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
                                   )}
                                 </div>
