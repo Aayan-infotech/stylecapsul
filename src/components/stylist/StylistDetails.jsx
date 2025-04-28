@@ -50,8 +50,8 @@ const StylistDetails = () => {
   const hasHalfStar = profile_details?.ratings % 1 !== 0;
   const totalStars = 5;
 
-  const fetchVendorDetails = async () => {
-    setLoading(true);
+  const fetchVendorDetails = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const response = await axios.get(
         apiUrl(`api/stylist/stylist-profile/${stylistId}`),
@@ -69,15 +69,16 @@ const StylistDetails = () => {
     } catch (error) {
       console.error("Error fetching vendor details:", error);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // setBtnLoading(true);
+    setBtnLoading(true);
     if (!comment.trim() || rating === 0) {
       setError("Please provide both a review comment and rating.");
+      setBtnLoading(false);
       return;
     }
     setError("");
@@ -100,7 +101,7 @@ const StylistDetails = () => {
       } else {
         showErrorToast(response?.data?.message || "Failed to submit review.");
       }
-      fetchVendorDetails();
+      await fetchVendorDetails(false);
     } catch (error) {
       console.error("Error submitting review:", error);
       showErrorToast("Something went wrong while submitting review.");
@@ -202,11 +203,10 @@ const StylistDetails = () => {
           "Content-Type": "application/json",
         },
         withCredentials: true,
-      }
-      );
+      });
       if (response?.data?.success === true && response?.data?.status === 200) {
         showSuccessToast(response?.data?.message || "Review deleted successfully!");
-        fetchVendorDetails();
+        await fetchVendorDetails(false);
       }
     } catch (error) {
       console.log(error);
