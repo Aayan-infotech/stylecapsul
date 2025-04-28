@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ const ThankuPage = () => {
   const session_id = searchParams.get("session_id");
   const token = getCookie("authToken");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   console.log(session_id, 'session_id')
 
@@ -28,7 +29,9 @@ const ThankuPage = () => {
             withCredentials: true,
           }
         );
-        console.log(response, "response?.data?.data");
+        setTimeout(() => {
+          navigate("/orderhistory"); // 👈 navigate after 2 seconds
+        }, 2000);
         dispatch(getAllCarts());
       } catch (error) {
         console.error("Error fetching payment details:", error);
