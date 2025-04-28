@@ -199,7 +199,7 @@ const AddClothes = () => {
         }
         );
         showSuccessToast(response?.data?.message);
-        // navigate("/closet-categories")
+        navigate("/closet-categories")
         // setTimeout(() => {
         // navigate(`/all-clothes-list/${location.state?.currentCategory}`);
         // }, 1000);

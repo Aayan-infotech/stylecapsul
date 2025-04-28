@@ -29,10 +29,8 @@ const ThankuPage = () => {
             withCredentials: true,
           }
         );
-        setTimeout(() => {
-          navigate("/orderhistory"); // 👈 navigate after 2 seconds
-        }, 2000);
         dispatch(getAllCarts());
+        navigate("/orderhistory", { replace: true });
       } catch (error) {
         console.error("Error fetching payment details:", error);
       }
