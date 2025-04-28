@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { checkToken } from './utils/auth.util';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Login from './components/Login/Login';
 import LandingPage from './components/LandingPage/LandingPage';
 import Signup from './components/Signup/Signup';
@@ -26,6 +26,7 @@ import Loader from './components/Loader/Loader.jsx';
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [checkingAuth, setCheckingAuth] = useState(true);
     const dispatch = useDispatch();
     const loginState = useSelector((state) => state?.login);
     const token = loginState?.token;
@@ -34,20 +35,21 @@ const AuthRoute = ({ children }) => {
 
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            const userId = getCookie('userId');
-            if (userId) {
-                const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`),);
-                dispatch(updateUserDetails(userResponse?.data?.data))
+        const fetchData = async () => {
+            try {
+                const userId = getCookie('userId');
+                if (userId) {
+                    const userResponse = await axios.get(apiUrl(`api/user/get/${userId}`));
+                    dispatch(updateUserDetails(userResponse?.data?.data));
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setCheckingAuth(false); // <--- Important
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+        };
+        fetchData();
+    }, [dispatch]);
 
     useEffect(() => {
         if (loginStatus === "loading") return;
@@ -74,9 +76,10 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    if (loading || loginStatus === 'loading') {
+    if (checkingAuth || loginStatus === 'loading') {
         return <Loader />;
     }
+
 
     if (isAuth) {
         return <>{children}</>;

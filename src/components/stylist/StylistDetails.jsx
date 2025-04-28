@@ -199,7 +199,6 @@ const StylistDetails = () => {
     }
   };
   
-
   const handleDeleteReview = async (reviewId) => {
     try {
       const response = await axios.delete(apiUrl(`api/review/delete/${reviewId}`), {
