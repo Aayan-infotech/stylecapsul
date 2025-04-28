@@ -42,9 +42,8 @@ const ClothesCalendar = ({ onSave }) => {
       const formattedData = data.map((item) => ({
         date: item?.date,
         thumbnail: item.picture.map((picture) => picture.replace('http://localhost:3555/uploads', '')),
-        id: response?.data?.data?._id || null,
+        id: item?._id || null,
       }));
-      console.log(formattedData, 'formattedData');
       setClothesOnDates(formattedData);
     } catch (error) {
       console.error("Error fetching clothes data:", error);
@@ -123,10 +122,10 @@ const ClothesCalendar = ({ onSave }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const handleDeleteImage = async (dateEntryId) => {
+  const handleDeleteImage = async (id) => {
     try {
       const response = await axios.delete(
-        apiUrl(`api/myStyleCapsule/delete/${dateEntryId?.id}`),
+        apiUrl(`api/myStyleCapsule/delete/${id}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -141,6 +140,7 @@ const ClothesCalendar = ({ onSave }) => {
     }
   };
 
+
   const tileContent = ({ date, view }) => {
     const formattedDate = formatDate(date);
     if (view === "month") {
@@ -149,51 +149,16 @@ const ClothesCalendar = ({ onSave }) => {
       );
       if (dateEntry) {
         return (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "4px",
-              overflow: "hidden",
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", overflow: "hidden", }}>
             {dateEntry.thumbnail.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                style={{
-                  width: "15px",
-                  height: "auto",
-                  objectFit: "cover",
-                  borderRadius: "4px",
-                }}
-              />
+              <img key={index} src={image} style={{ width: "15px", height: "auto", objectFit: "cover", borderRadius: "4px", }} />
             ))}
-            <DeleteIcon
-              style={{
-                color: "red",
-                fontSize: "16px",
-                cursor: "pointer",
-                marginTop: "4px",
-              }}
-              onClick={() => handleDeleteImage(dateEntry)}
-            />
+            <DeleteIcon style={{ color: "red", fontSize: "20px", cursor: "pointer", marginTop: "4px", }} onClick={() => handleDeleteImage(dateEntry?.id)} />
           </div>
         );
       } else {
         return (
-          <div
-            style={{
-              color: "blue",
-              cursor: "pointer",
-              textAlign: "center",
-            }}
-            onClick={() => {
-              setSelectedDate(date);
-              handleImageDialogToggle();
-            }}
-          >
+          <div style={{ color: "blue", cursor: "pointer", textAlign: "center", }} onClick={() => { setSelectedDate(date); handleImageDialogToggle(); }}>
             +
           </div>
         );
@@ -241,13 +206,7 @@ const ClothesCalendar = ({ onSave }) => {
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Select a Date
               </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                onClick={handleModalToggle}
-              ></button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleModalToggle}></button>
             </div>
             <div className="modal-body">
               <Calendar
@@ -258,19 +217,10 @@ const ClothesCalendar = ({ onSave }) => {
               />
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary rounded-pill"
-                data-bs-dismiss="modal"
-                onClick={handleModalToggle}
-              >
+              <button type="button" className="btn btn-secondary rounded-pill" data-bs-dismiss="modal" onClick={handleModalToggle}>
                 Close
               </button>
-              <button
-                type="button"
-                className="btn btn-dark rounded-pill"
-                onClick={handleSave}
-              >
+              <button type="button" className="btn btn-dark rounded-pill" onClick={handleSave}>
                 Save changes
               </button>
             </div>
@@ -302,24 +252,8 @@ const ClothesCalendar = ({ onSave }) => {
                       {allAddedClothesByUser?.outfitTop?.length > 0 ? (
                         allAddedClothesByUser?.outfitTop?.map((item) => (
                           <div className="col-3" key={item?._id}>
-                            <div
-                              className="p-2 text-center"
-                              onClick={() =>
-                                handleSelectImage("outfitTop", item)
-                              }
-                              style={{
-                                border: selectedImages.outfitTop === item._id ? "2px solid green" : "1px solid #d9d6d6",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <img
-                                src={item?.pictures[0] || blank_img}
-                                alt={item?.description}
-                                className="w-100 mb-2 rounded"
-                                height="100"
-                                onError={(e) => (e.target.src = blank_img)}
-                              />
+                            <div className="p-2 text-center" onClick={() => handleSelectImage("outfitTop", item)} style={{ border: selectedImages.outfitTop === item._id ? "2px solid green" : "1px solid #d9d6d6", borderRadius: "8px", cursor: "pointer", }}>
+                              <img src={item?.pictures[0] || blank_img} alt={item?.description} className="w-100 mb-2 rounded" height="100" onError={(e) => (e.target.src = blank_img)} />
                             </div>
                           </div>
                         ))
@@ -337,13 +271,7 @@ const ClothesCalendar = ({ onSave }) => {
                               className="p-2 text-center"
                               onClick={() => handleSelectImage("outfitBottom", item)}
                               style={{ border: selectedImages.outfitBottom === item._id ? "2px solid green" : "1px solid #d9d6d6", borderRadius: "8px", cursor: "pointer", }}>
-                              <img
-                                src={item?.pictures[0] || blank_img}
-                                alt={item?.description}
-                                className="w-100 mb-2 rounded"
-                                height="100"
-                                onError={(e) => (e.target.src = blank_img)}
-                              />
+                              <img src={item?.pictures[0] || blank_img} alt={item?.description} className="w-100 mb-2 rounded" height="100" onError={(e) => (e.target.src = blank_img)} />
                             </div>
                           </div>
                         ))
@@ -359,25 +287,10 @@ const ClothesCalendar = ({ onSave }) => {
                           <div className="col-3" key={item?._id}>
                             <div
                               className="p-2 text-center"
-                              onClick={() =>
-                                handleSelectImage("outfitFootwear", item)
-                              }
-                              style={{
-                                border:
-                                  selectedImages.outfitFootwear === item._id
-                                    ? "2px solid green"
-                                    : "1px solid #d9d6d6",
-                                borderRadius: "8px",
-                                cursor: "pointer",
-                              }}
+                              onClick={() => handleSelectImage("outfitFootwear", item)}
+                              style={{ border: selectedImages.outfitFootwear === item._id ? "2px solid green" : "1px solid #d9d6d6", borderRadius: "8px", cursor: "pointer", }}
                             >
-                              <img
-                                src={item?.pictures[0] || blank_img}
-                                alt={item?.description}
-                                className="w-100 mb-2 rounded"
-                                height="100"
-                                onError={(e) => (e.target.src = blank_img)}
-                              />
+                              <img src={item?.pictures[0] || blank_img} alt={item?.description} className="w-100 mb-2 rounded" height="100" onError={(e) => (e.target.src = blank_img)} />
                             </div>
                           </div>
                         ))
@@ -389,11 +302,7 @@ const ClothesCalendar = ({ onSave }) => {
                 </TabContext>
               </Box>
               <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary rounded-pill"
-                  onClick={handleImageDialogToggle}
-                >
+                <button type="button" className="btn btn-secondary rounded-pill" onClick={handleImageDialogToggle}>
                   Close
                 </button>
                 <LoadingButton
@@ -402,11 +311,7 @@ const ClothesCalendar = ({ onSave }) => {
                   startIcon={<AddIcon />}
                   variant="contained"
                   onClick={handleImageSave}
-                  sx={{
-                    backgroundColor: "black",
-                    color: "white",
-                    textTransform: "none",
-                  }}
+                  sx={{ backgroundColor: "black", color: "white", textTransform: "none", }}
                   className="rounded-pill"
                 >
                   Save Images

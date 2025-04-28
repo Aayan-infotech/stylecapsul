@@ -178,20 +178,8 @@ const Address = () => {
                           </p>
                         </div>
                         <div className="delete-icon">
-                          <i
-                            className="fa-solid fa-trash-can fs-5 fw-bold me-3"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteAddress(address._id);
-                            }}
-                          ></i>
-                          <i
-                            className="fa-solid fa-pen fs-5 fw-bold"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEditAddress(address._id);
-                            }}
-                          ></i>
+                          <i className="fa-solid fa-trash-can fs-5 fw-bold me-3" onClick={(e) => { e.stopPropagation(); handleDeleteAddress(address._id); }}></i>
+                          <i className="fa-solid fa-pen fs-5 fw-bold" onClick={(e) => { e.stopPropagation(); handleEditAddress(address._id); }}></i>
                         </div>
                       </div>
                     </label>
@@ -211,16 +199,8 @@ const Address = () => {
           </div>
         </Container>
       </div>
-
-
       <div className="text-center mt-2">
-        <button
-          onClick={handleClickPayment}
-          type="submit"
-          disabled={!selectedAddressId}
-          className="btn btn-dark rounded-pill w-25"
-          style={{ backgroundColor: "black" }}
-        >
+        <button onClick={handleClickPayment} type="submit" disabled={!selectedAddressId} className="btn btn-dark rounded-pill w-25" style={{ backgroundColor: "black" }}>
           Submit
         </button>
       </div>
