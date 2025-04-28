@@ -154,7 +154,6 @@ const StylistDetails = () => {
     return nextDate;
   };
 
-
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -167,6 +166,7 @@ const StylistDetails = () => {
   const bookAppointment = async (time, slotId) => {
     if (!selectedDate || !time) return;
     setBookingSlotId(slotId);
+    setLoading(true);
     try {
       const res = await axios.post(apiUrl("api/appointment/create-appointment"),
         {
@@ -185,15 +185,20 @@ const StylistDetails = () => {
       );
       if (res.status === 201 && res.data?.success) {
         showSuccessToast(res.data.message || "Appointment booked successfully!");
+        setBookingSlotId(null); 
         setOpenModal(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
+        setBookingSlotId(null);
       }
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
+      setBookingSlotId(null); 
+    } finally {
+      setLoading(false);
     }
   };
-
+  
 
   const handleDeleteReview = async (reviewId) => {
     try {
@@ -212,6 +217,7 @@ const StylistDetails = () => {
       console.log(error);
     }
   }
+
 
   return (
     <>
@@ -278,16 +284,22 @@ const StylistDetails = () => {
                       {vendorDetails?.stylist?.availability?.days.map((day) => {
                         const date = getNextDateForDay(day);
                         const today = new Date();
-                        if (!isSameMonth(today, date)) return null;
-                        if (!isAfter(date, today) && !format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")) return null;
+                        if (!(isAfter(date, today))) {
+                          return null;
+                        }
                         return (
-                          <Chip
-                            key={day}
-                            label={`${day} - ${format(date, "dd MMM yyyy")}`}
-                            sx={{ backgroundColor: "#17a2b8", color: "#fff" }}
-                          />
+                          <Chip key={day} label={`${day} - ${format(date, "dd MMM yyyy")}`} sx={{ backgroundColor: "#17a2b8", color: "#fff" }} />
                         );
                       })}
+                      {/* {vendorDetails?.stylist?.availability?.days.map((day) => {
+                        const date = getNextDateForDay(day);
+                        const today = new Date();
+                        if (!isSameMonth(today, date)) return null;
+                        if (!(isAfter(date, today) || format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd"))) return null;
+                        return (
+                          <Chip  key={day}  label={`${day} - ${format(date, "dd MMM yyyy")}`}  sx={{ backgroundColor: "#17a2b8", color: "#fff" }}/>
+                        );
+                      })} */}
                     </div>
                   ) : (
                     <div className="text-muted mt-2">No available booking slots at the moment.</div>
@@ -386,13 +398,11 @@ const StylistDetails = () => {
                         </div>
                         <div className="d-flex align-items-center">
                           <img
-                            src={
-                              review?.reviewerId?.profileImage ||
-                              "https://via.placeholder.com/30"
-                            }
+                            src={review?.reviewerId?.profileImage || blank_image}
                             alt="Reviewer"
                             className="rounded-circle me-2"
                             style={{ width: "30px", height: "30px", objectFit: "cover", }}
+                            onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
                           />
                           <h5 className="mb-0">
                             {review?.reviewerId?.firstName || "Anonymous"}
@@ -468,7 +478,19 @@ const StylistDetails = () => {
                 vendorDetails?.stylist?.availability?.slots ? (
                 <>
                   <div className="d-flex gap-2 mt-2 flex-wrap mb-4">
-                    {vendorDetails.stylist.availability.days.map((day) => {
+                    {vendorDetails?.stylist?.availability?.days.map((day) => {
+                      const date = getNextDateForDay(day);
+                      const today = new Date();
+                      if (!(isAfter(date, today))) return null;
+                      return (
+                        <Chip key={day} label={`${day} - ${format(date, "dd MMM yyyy")}`} sx={{ backgroundColor: "#17a2b8", color: "#fff" }}
+                          onClick={() => {
+                            setSelectedDay(day);
+                            setSelectedDate(format(date, "yyyy-MM-dd"));
+                          }} />
+                      );
+                    })}
+                    {/* {vendorDetails.stylist.availability.days.map((day) => {
                       const date = getNextDateForDay(day);
                       const today = new Date();
                       if (!isSameMonth(today, date)) return null;
@@ -488,40 +510,52 @@ const StylistDetails = () => {
                           }}
                         />
                       );
-                    })}
+                    })} */}
                   </div>
                   {selectedDay && (
-                    <div className="d-flex gap-2 flex-wrap">
-                      {vendorDetails.stylist.availability.slots.map((slot) => (
-                        <Chip
-                          key={slot._id}
-                          label={
-                            bookingSlotId === slot._id ? (
-                              <span style={{ display: 'flex', alignItems: 'center' }}>
-                                <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                Booking...
-                              </span>
-                            ) : `${slot.start} - ${slot.end}`
-                          }
-                          clickable={slot.available && bookingSlotId === null}
-                          disabled={!slot.available || bookingSlotId !== null}
-                          onClick={() => { if (slot.available && bookingSlotId === null) { const timeRange = `${slot.start} - ${slot.end}`; setSelectedTime(timeRange); bookAppointment(timeRange, slot._id); } }}
-                          sx={{
-                            backgroundColor: slot.available ? "#28a745" : "#6c757d",
-                            color: "#fff",
-                            '&:hover': {
-                              backgroundColor: slot.available ? "#218838" : "#5a6268",
-                            },
-                          }}
-                        />
-                      ))}
-                    </div>
+                    <>
+                      {/* Check if there are available slots for the selected day */}
+                      {vendorDetails.stylist.availability.slots.filter((slot) => slot.available).length === 0 ? (
+                        <div className="text-muted mt-2">Slots are not available for {selectedDay}.</div>
+                      ) : (
+                        <div className="d-flex gap-2 flex-wrap">
+                          {vendorDetails.stylist.availability.slots.map((slot) => (
+                            <Chip
+                            key={slot._id}
+                            label={
+                              bookingSlotId === slot._id ? (
+                                <span style={{ display: 'flex', alignItems: 'center' }}>
+                                  <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                  Booking...
+                                </span>
+                              ) : `${slot.start} - ${slot.end}`
+                            }
+                            clickable={slot.available && bookingSlotId === null}
+                            disabled={!slot.available || bookingSlotId !== null}
+                            onClick={() => { 
+                              if (slot.available && bookingSlotId === null) { 
+                                const timeRange = `${slot.start} - ${slot.end}`; 
+                                setSelectedTime(timeRange); 
+                                bookAppointment(timeRange, slot._id); 
+                              } 
+                            }}
+                            sx={{
+                              backgroundColor: slot.available ? "#28a745" : "#6c757d",
+                              color: "#fff",
+                              '&:hover': {
+                                backgroundColor: slot.available ? "#218838" : "#5a6268",
+                              },
+                            }}
+                          />
+                          
+                          ))}
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               ) : (
-                <div className="text-muted mt-2">
-                  No available booking slots at the moment.
-                </div>
+                <div className="text-muted mt-2">No available booking slots at the moment.</div>
               )}
             </DialogContent>
           </Dialog>

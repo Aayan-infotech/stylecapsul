@@ -218,74 +218,24 @@ const Address = () => {
               <form onSubmit={handleFormSubmit}>
                 <div className="modal-body text-start" style={{ maxHeight: "60vh", overflowY: "auto" }}>
                   <div className="mb-3">
-                    <label htmlFor="customerName" className="form-label">
-                      Customer Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill p-4"
-                      id="customerName"
-                      name="customerName"
-                      value={addressForm.customerName}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <label htmlFor="customerName" className="form-label">  Customer Name</label>
+                    <input type="text" className="form-control rounded-pill p-4" id="customerName" name="customerName" value={addressForm.customerName} onChange={handleInputChange} required />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="streetName" className="form-label">
-                      Street Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill p-4"
-                      id="streetName"
-                      name="streetName"
-                      value={addressForm.streetName}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <label htmlFor="streetName" className="form-label">  Street Name</label>
+                    <input type="text" className="form-control rounded-pill p-4" id="streetName" name="streetName" value={addressForm.streetName} onChange={handleInputChange} required />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="city" className="form-label">
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill p-4"
-                      id="city"
-                      name="city"
-                      value={addressForm.city}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <label htmlFor="city" className="form-label">  City</label>
+                    <input type="text" className="form-control rounded-pill p-4" id="city" name="city" value={addressForm.city} onChange={handleInputChange} required />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="country" className="form-label">
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill p-4"
-                      id="country"
-                      name="country"
-                      value={addressForm.country}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <label htmlFor="country" className="form-label">  Country</label>
+                    <input type="text" className="form-control rounded-pill p-4" id="country" name="country" value={addressForm.country} onChange={handleInputChange} required />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="mobileNumber" className="form-label">
-                      Mobile Number
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control rounded-pill p-4"
-                      id="mobileNumber"
-                      name="mobileNumber"
-                      value={addressForm.mobileNumber}
-                      onChange={handleInputChange}
-                      required
-                    />
+                    <label htmlFor="mobileNumber" className="form-label">  Mobile Number</label>
+                    <input type="text" className="form-control rounded-pill p-4" id="mobileNumber" name="mobileNumber" value={addressForm.mobileNumber} onChange={handleInputChange} required minLength={10} maxLength={15} pattern="^[0-9]{10,15}$" title="Mobile number should be between 10 and 15 digits" />
                   </div>
                 </div>
                 <div className="modal-footer">

@@ -175,10 +175,10 @@ const Chat = () => {
       <div className="container d-flex justify-content-center align-items-center">
         <div className="row gx-0">
           <div className="col-12 col-md-4 chat-list">
-            <div className="search-bar mb-3">
+            {/* <div className="search-bar mb-3">
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
               <input type="text" className="search-input" placeholder="Search Message" />
-            </div>
+            </div> */}
             <div className="overflow-list">
               {chatList.map((stylist) => (
                 <div
