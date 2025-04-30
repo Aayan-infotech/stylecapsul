@@ -50,10 +50,10 @@ function App() {
   return (
     <div>
       <Toast />
-      <AdClipModal />
-      <CursorTooltip text="Style Capsule" />
+      {/* <AdClipModal /> */}
+      {/* <CursorTooltip text="Style Capsule" /> */}
       <Routing />
-      <BottomBanner />
+      {/* <BottomBanner /> */}
     </div>
   )
 }
