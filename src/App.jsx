@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import Routing from './Routing'
 import Toast, { showSuccessToast } from './components/toastMessage/Toast'
 import CursorTooltip from './CursorTooltip'
+import AdClipModal from './addclip/AdClipModal';
+import BottomBanner from './addclip/BottomBanner';
 
 function App() {
 
@@ -11,10 +13,10 @@ function App() {
     const disableShortcuts = (e) => {
       if (
         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J')) || 
-        e.key === 'F12' || 
-        (e.ctrlKey && e.key === 'U') || 
-        (e.metaKey && e.key === 'U') 
+        (e.metaKey && e.altKey && (e.key === 'I' || e.key === 'J')) ||
+        e.key === 'F12' ||
+        (e.ctrlKey && e.key === 'U') ||
+        (e.metaKey && e.key === 'U')
       ) {
         e.preventDefault();
         showSuccessToast('This action is not allowed!');
@@ -48,8 +50,10 @@ function App() {
   return (
     <div>
       <Toast />
-      {/* <CursorTooltip text="Style Capsule" /> */}
+      <AdClipModal />
+      <CursorTooltip text="Style Capsule" />
       <Routing />
+      <BottomBanner />
     </div>
   )
 }

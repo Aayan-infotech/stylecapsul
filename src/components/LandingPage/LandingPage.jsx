@@ -179,6 +179,15 @@ const LandingPage = () => {
                     </h2>
                   </div>
                 </div>
+                {/* <div
+                  className="bubble-element 1544679421691x581364656889921500-AAE"
+                  style={{ alignSelf: "flex-start", minWidth: "42%", maxWidth: "42%", order: 2, minHeight: "200px", width: "42%", flexGrow: 1, height: "max-content", margin: 0, zIndex: 17, borderRadius: "10px", backgroundImage: "none", }}
+                >
+                  <video preload="metadata" className="html5VideoPlayer" id="html5Video-fb842654-9b08-cd09-ac19-408dd8fe187a" width="100%" height="100%" autoPlay muted loop>
+                    <source src="//40e507dd0272b7bb46d376a326e6cb3c.cdn.bubble.io/f1742105399665x244292551448723300/nPx5IeLK49MFZ7KiCZr9j_output.mp4" />
+                  </video>
+                </div> */}
+
                 <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                   <img src={two} height={400} alt="" />
                 </div>
