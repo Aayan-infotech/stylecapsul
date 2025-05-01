@@ -13,8 +13,9 @@ const GarmentsCare = () => {
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
 
-  const location = new window.google.maps.LatLng(26.8467, 80.9462); // Lucknow
+  const location = new window.google.maps.LatLng(26.8467, 80.9462);
   const radius = 5000;
 
   useEffect(() => {
@@ -23,25 +24,68 @@ const GarmentsCare = () => {
       return;
     }
 
-    const map = new window.google.maps.Map(document.createElement("div"));
-    const service = new window.google.maps.places.PlacesService(map);
-
-    const request = {
-      location,
-      radius,
-      keyword: "laundry|Washing|cloths",
-    };
-
-    service.nearbySearch(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        setPlaces(results);
-        setFilteredPlaces(results);
-      } else {
-        console.error("Places API error:", status);
-      }
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by this browser.");
       setLoading(false);
-    });
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const userLocation = new window.google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+
+        const map = new window.google.maps.Map(document.createElement("div"));
+        const service = new window.google.maps.places.PlacesService(map);
+
+        const request = {
+          location: userLocation,
+          radius: 5000,
+          keyword: "laundry|Washing|cloths",
+        };
+
+        service.nearbySearch(request, async (results, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            const detailedResults = await Promise.all(
+              results.map((place) => {
+                return new Promise((resolve) => {
+                  service.getDetails(
+                    {
+                      placeId: place.place_id,
+                      fields: ['formatted_phone_number', 'website'],
+                    },
+                    (details, status) => {
+                      if (
+                        status === window.google.maps.places.PlacesServiceStatus.OK &&
+                        details
+                      ) {
+                        resolve({ ...place, ...details });
+                      } else {
+                        resolve(place);
+                      }
+                    }
+                  );
+                });
+              })
+            );
+
+            setPlaces(detailedResults);
+            setFilteredPlaces(detailedResults);
+          } else {
+            console.error("Places API error:", status);
+          }
+          setLoading(false);
+        });
+      },
+      (error) => {
+        console.error("Geolocation error:", error);
+        setLoading(false);
+      }
+    );
   }, []);
+
 
   const handleSearch = useCallback(
     debounce((text) => {
@@ -92,12 +136,13 @@ const GarmentsCare = () => {
                 const rating = place.rating || "N/A";
                 const userRatings = place.user_ratings_total || 0;
                 const phone = place.formatted_phone_number || "N/A";
-                const website = place.website || "#";
+                const website = place.website || `https://www.google.com/search?q=${encodeURIComponent(place.name)}`;
                 const placeUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.name)},${place.geometry.location.lat},${place.geometry.location.lng}`;
 
                 return (
                   <div className="garment-card border border-2 px-5 rounded-pill mb-3" key={index}>
-                    <img src={photo} alt={name} className="card-img" />
+                    <img src={photo} alt={name} className="card-img" onError={(e) => { e.target.onerror = null; e.target.src = blank_image; }} />
+
                     <div className="card-content">
                       <h3 className="place-name">{name}</h3>
                       <p className="mb-0"><strong>Address:</strong> {address}</p>
@@ -105,7 +150,7 @@ const GarmentsCare = () => {
                         <strong>Rating:</strong> {rating}{" "}
                         <StarIcon fontSize="small" style={{ color: "#ffc107" }} /> ({userRatings}) |{" "}
                         <strong>Phone:</strong> {phone}{""} | {" "} <a href={website} target="_blank" rel="noreferrer">Visit Website</a> {" "} | {" "}
-                        <Link to={placeUrl} className="" target="_blank" rel="noreferrer">
+                        <Link to={placeUrl} className="w-100" target="_blank" rel="noreferrer">
                           <RoomIcon fontSize="small" /> Visit Location
                         </Link>
                       </p>
