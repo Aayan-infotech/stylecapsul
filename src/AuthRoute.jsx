@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { checkToken } from './utils/auth.util';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Login from './components/Login/Login';
 import LandingPage from './components/LandingPage/LandingPage';
 import Signup from './components/Signup/Signup';
@@ -27,6 +27,8 @@ const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
     const [loading, setLoading] = useState(true);
     const [checkingAuth, setCheckingAuth] = useState(true);
+
+    const location = useLocation();
     const dispatch = useDispatch();
     const loginState = useSelector((state) => state?.login);
     const token = loginState?.token;
@@ -44,13 +46,16 @@ const AuthRoute = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-            } 
-            // finally {
-            //     setCheckingAuth(false);
-            // }
+            } finally {
+                setCheckingAuth(false);
+            }
         };
-        fetchData();
-    }, [dispatch]);
+        if (location.pathname !== "/login") {
+            fetchData();
+        } else {
+            setCheckingAuth(false);
+        }
+    }, [dispatch, location.pathname]);
 
     useEffect(() => {
         if (loginStatus === "loading") return;
@@ -63,8 +68,12 @@ const AuthRoute = ({ children }) => {
             }
             setLoading(false);
         };
-        checkAuth();
-    }, [token, user, loginStatus]);
+        if (location.pathname !== "/login") {
+            checkAuth();
+        } else {
+            setLoading(false);
+        }
+    }, [token, user, loginStatus, location.pathname]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -77,9 +86,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    // if (checkingAuth || loginStatus === 'loading') {
-    //     return <Loader />;
-    // }
+    if (checkingAuth || (loading && location.pathname !== "/login")) {
+        return <Loader />;
+    }
 
 
     if (isAuth) {

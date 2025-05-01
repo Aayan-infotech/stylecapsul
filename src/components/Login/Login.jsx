@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../reduxToolkit/loginSlice";
 import "./Login.scss";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
-// import { setCookie } from "../../utils/cookieUtils";
-import Cookies from "js-cookie";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -55,9 +53,6 @@ const Login = () => {
       const products = addedProducts.map((item) => ({ productId: item._id, quantity: item.quantity, }));
       const payload = { ...formData, products: products, };
       const resultAction = await dispatch(loginUser(payload)).unwrap();
-      // Cookies.set("authToken", resultAction.token, { expires: 7 });
-      // Cookies.set("userId", resultAction.data._id, { expires: 7 });
-      // Cookies.set("refreshToken", resultAction.data.refreshToken, { expires: 30 });
       showSuccessToast(resultAction?.message);
       if (resultAction?.success === true && resultAction?.status === 200) {
         if (location?.state?.fromChat) {
