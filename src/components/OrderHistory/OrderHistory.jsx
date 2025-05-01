@@ -53,8 +53,8 @@ function OrderHistory() {
       {loading ? (
         <Loader />
       ) : (
-        <div className="container d-block">
-          <div className="order-history">
+        <div className="container">
+          <div className="order-history w-100">
             <div className="row gx-5 align-items-center my-4">
               <div className="col-12 col-md-6">
                 <h5 className="fw-bold fs-1">Order History</h5>
@@ -97,13 +97,7 @@ function OrderHistory() {
                           </div>
                         </div>
                         <div className="second-text">
-                          <button
-                            type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#orderhistorydialogopenClick"
-                            className="btn btn-dark rounded-pill fw-bold"
-                            onClick={() => handleViewOrder(product)}
-                          >
+                          <button type="button" data-bs-toggle="modal" data-bs-target="#orderhistorydialogopenClick" className="btn btn-dark rounded-pill fw-bold" onClick={() => handleViewOrder(product)}>
                             View <i className="bx bx-show"></i>
                           </button>
                         </div>
@@ -130,54 +124,52 @@ function OrderHistory() {
               <div className="modal-dialog">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">
-                      {selectedOrder
-                        ? `Order Details (${selectedOrder._id})`
-                        : "Order Details"}
-                    </h5>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
+                    <h5 className="modal-title" id="exampleModalLabel">  {selectedOrder ? `Order Details (${selectedOrder._id})` : "Order Details"}</h5>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div className="modal-body text-start">
                     {selectedOrder ? (
                       <div>
                         <h6>Payment Details</h6>
                         <p className="mb-2 text-black">
-                              Order Date:{" "}
-                              {new Date(selectedOrder?.createdAt).toLocaleString('en-GB', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true,
-                              })}
-                            </p>
+                          Order Date:{" "}
+                          {new Date(selectedOrder?.createdAt).toLocaleString('en-GB', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true,
+                          })}
+                        </p>
                         <p className="mb-0">Payment Method: {selectedOrder?.paymentDetails?.paymentMethod}</p>
                         <p className="mb-0 fw-bold text-success">Payment Status: {selectedOrder?.paymentDetails?.paymentStatus}</p>
                         <Divider className="my-3" />
                         <h6>Order Items</h6>
                         {selectedOrder?.items?.map((item, index) => (
-                          <div key={index} className="mb-2">
-                            <p className="mb-0">Item ID: {item._id}</p>
-                            <p className="mb-0">Quantity: {item.quantity}</p>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <img src={item?.image} alt="Product" height={60} width={60} className="product-img" />
+                            <div key={index} className="mb-2">
+                              <p className="mb-0">Item ID: {item?._id}</p>
+                              <p className="mb-0">Item Name: {item?.name}</p>
+                              <p className="mb-0">Item Price: {item?.price}</p>
+                              <p className="mb-0">Quantity: {item?.quantity}</p>
+                            </div>
                           </div>
                         ))}
                         <Divider className="my-3" />
-                        <p className="mb-0">Total Price: ₹{selectedOrder?.totalPrice}</p>
-                        <p className="mb-0">Discount: ₹{selectedOrder?.discount}</p>
                         <p className="mb-0">Delivery Charges: ₹{selectedOrder?.deliveryCharges}</p>
+                        <p className="mb-0">Discount: ₹{selectedOrder?.discount}</p>
+                        <p className="mb-0 fw-bold">Total Price: ₹{selectedOrder?.totalPrice}</p>
+
+                        <p className="mt-2 fw-bold text-success">Order Status: {selectedOrder?.orderStatus}</p>
                       </div>
                     ) : (
                       <p>No order details available.</p>
                     )}
                   </div>
                   <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"  >
+                    <button type="button" className="btn btn-dark rounded-pill" data-bs-dismiss="modal"  >
                       Close
                     </button>
                   </div>

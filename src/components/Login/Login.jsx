@@ -85,7 +85,11 @@ const Login = () => {
     <>
       <div className="custom-container">
         <div className="w-100">
-          <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+          <Link to="/" className="text-black text-decoration-none">
+            <h1 className="text-center outside-heading fs-1 fw-bold">
+              Style Capsule
+            </h1>
+          </Link>
           <div className="card custom-card border-0 p-2">
             <div className="card-body p-4 text-black">
               <h2 className="card-title fs-4 text-center fw-bold">Login</h2>

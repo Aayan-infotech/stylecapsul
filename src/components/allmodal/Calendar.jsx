@@ -7,7 +7,7 @@ import { getCookie } from "../../utils/cookieUtils";
 import { apiUrl } from "../../../apiUtils";
 import { LoadingButton, TabContext, TabList, TabPanel } from "@mui/lab";
 import { Box } from "@react-three/drei";
-import { Button, Tab } from "@mui/material";
+import { Tab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
@@ -52,7 +52,7 @@ const ClothesCalendar = ({ onSave }) => {
 
   const fetchAllAddedClothesByUser = async () => {
     try {
-      const response = await axios.get(apiUrl("api/cloths/all-cloths"), {
+      const response = await axios.get(apiUrl(`api/cloths/get-cloths/${userId}`), {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -160,6 +160,13 @@ const Signup = () => {
                   <button type="button" className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y" onClick={togglePasswordVisibility} style={{ background: "none", border: "none" }}>
                     <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                   </button>
+                  <small
+                    className={`d-block mt-1 ${formData.password && formData.password.length < 8 ? "text-danger" : "text-muted"}`}
+                    style={{ fontSize: "0.85rem" }}
+                  >
+                    Password must be at least 8 characters.
+                  </small>
+
                 </div>
               </div>
               <div className="col-12 col-md-6 d-flex justify-content-start align-items-center">
@@ -169,6 +176,13 @@ const Signup = () => {
                   <button type="button" className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y" onClick={toggleConfirmPasswordVisibility} style={{ background: "none", border: "none" }}>
                     <i className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                   </button>
+                  <small
+                    className={`d-block mt-1 ${formData.password && formData.password.length < 8 ? "text-danger" : "text-muted"}`}
+                    style={{ fontSize: "0.85rem" }}
+                  >
+                    Password must be at least 8 characters.
+                  </small>
+
                 </div>
               </div>
               <div className="text-center mt-4">
@@ -182,7 +196,7 @@ const Signup = () => {
                   )}
                 </button>
                 {!isNameValid && (
-                  <small className="text-danger">Please type only text (no numbers or special characters)</small>
+                  <small className="text-danger">Please enter a valid name (letters only, no numbers or special characters).</small>
                 )}
               </div>
               <div className="text-center mt-2">

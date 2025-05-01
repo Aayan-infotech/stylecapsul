@@ -31,7 +31,6 @@ const ShowClothesDetails = () => {
         }
       );
       if (response.data.status === 200 && response.data.success === true) {
-        console.log(response.data?.data, "response.data.data");
         setShowClothesDetails(response.data.data);
         setLoading(false);
       } else {
@@ -65,35 +64,22 @@ const ShowClothesDetails = () => {
               <h1 className="fw-bold fs-3">View Clothes</h1>
               <p className="fs-6">{showClothesDetails?.description || "N/A"}</p>
               <div className="col-12 col-md-6 mb-2 mb-md-0">
-                <div
-                  id="carouselExampleIndicators"
-                  className="carousel slide"
-                  data-bs-ride="carousel"
-                >
+                <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                   <div className="carousel-inner">
                     {showClothesDetails?.pictures?.map((image, index) => (
-                      <div
-                        className={`carousel-item ${
-                          index === 0 ? "active" : ""
-                        }`}
-                        key={index}
-                      >
-                        <img
-                          src={image}
-                          className="d-block w-100 clothes-carousel-image"
-                          alt={`Image ${index + 1}`}
-                        />
+                      <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={index}>
+                        <img src={image} className="d-block w-100 clothes-carousel-image" alt={`Image ${index + 1}`} />
                       </div>
                     ))}
                   </div>
                   <div className="carousel-indicators clothes-custom-indicators">
-                    {[...Array(3)].map((item, index) => (
+                    {showClothesDetails?.pictures?.map((_, index) => (
                       <button
                         type="button"
                         data-bs-target="#carouselExampleIndicators"
                         data-bs-slide-to={index}
                         className={index === 0 ? "active" : ""}
-                        aria-current={index === 0 ? "true" : ""}
+                        aria-current={index === 0 ? "true" : undefined}
                         aria-label={`Slide ${index + 1}`}
                         key={index}
                       ></button>
@@ -136,12 +122,7 @@ const ShowClothesDetails = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Purchase Date</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.purchaseDate
-                        ? format(
-                            new Date(showClothesDetails.purchaseDate),
-                            "dd MMM yyyy"
-                          )
-                        : "N/A"}
+                      {showClothesDetails?.purchaseDate ? format(new Date(showClothesDetails.purchaseDate), "dd MMM yyyy") : "N/A"}
                     </p>
                   </div>
 
@@ -149,39 +130,21 @@ const ShowClothesDetails = () => {
                     <p>Dominant Color</p>
                     <div className="d-flex align-items-center gap-2">
                       <span>{showClothesDetails?.dominantColor || "N/A"}</span>
-                      <div
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          backgroundColor:
-                            showClothesDetails?.dominantColor || "#ccc",
-                          border: "1px solid #000",
-                        }}
-                      ></div>
+                      <div style={{ width: "20px", height: "20px", backgroundColor: showClothesDetails?.dominantColor || "#ccc", border: "1px solid #000", }}></div>
                     </div>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Created At</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.createdAt
-                        ? format(
-                            new Date(showClothesDetails.createdAt),
-                            "dd MMM yyyy HH:mm:ss"
-                          )
-                        : "N/A"}
+                      {showClothesDetails?.createdAt ? format(new Date(showClothesDetails.createdAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
                     </p>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Updated At</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.updatedAt
-                        ? format(
-                            new Date(showClothesDetails.updatedAt),
-                            "dd MMM yyyy HH:mm:ss"
-                          )
-                        : "N/A"}
+                      {showClothesDetails?.updatedAt ? format(new Date(showClothesDetails.updatedAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
                     </p>
                   </div>
                 </div>

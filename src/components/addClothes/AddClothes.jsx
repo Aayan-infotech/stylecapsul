@@ -304,7 +304,10 @@ const AddClothes = () => {
                 <div className="col-12 col-md-10">
                   <div className="mb-3">
                     <label htmlFor="description" className="form-label text-white">  Description</label>
-                    <textarea style={{ height: "100px" }} className="form-control" placeholder="Description" id="description" name="description" value={formData.description} onChange={handleChange}></textarea>
+                    <textarea style={{ height: "100px" }} className="form-control" placeholder="Description" id="description" maxLength={250} name="description" value={formData.description} onChange={handleChange}></textarea>
+                    <small className={`d-block mt-1 ${formData.description.length === 250 ? "text-danger" : "text-white"}`} style={{ fontSize: "0.85rem" }}>
+                      {formData.description.length}/250 characters used
+                    </small>
                   </div>
                 </div>
 
