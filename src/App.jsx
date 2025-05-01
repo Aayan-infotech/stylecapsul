@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import Routing from './Routing'
 import Toast, { showSuccessToast } from './components/toastMessage/Toast'
 import CursorTooltip from './CursorTooltip'
-import AdClipModal from './addclip/AdClipModal';
-import BottomBanner from './addclip/BottomBanner';
+// import AdClipModal from './addclip/AdClipModal';
+// import BottomBanner from './addclip/BottomBanner';
 
 function App() {
 

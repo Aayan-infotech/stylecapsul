@@ -1,89 +1,96 @@
-.garment-search-input {
-    .search-box {
-        position: relative;
-        width: 100%;
-    }
+.garments-care-wrapper {
+    padding-top: 6rem;
+    // background-color: #f9f9f9;
 
-    .search-box input {
-        width: 100%;
-        padding: 15px 45px;
-        border: none;
-        background-color: #4C4C4C;
-    }
-
-    .search-box .fa-search {
-        position: absolute;
-        top: 50%;
-        left: 15px;
-        transform: translateY(-50%);
-        color: #ffffff;
-        font-size: 1.3rem;
-    }
-
-    .search-box .fa-sliders {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translateY(-50%);
-        color: #ffffff;
-        font-size: 1.3rem;
-    }
-}
-
-.image-rounded {
-    border-top-left-radius: 60px;
-    border-bottom-left-radius: 60px;
-    height: 125px;
-    width: 150px;
-}
-
-@media (max-width: 768px) {
-    .container {
-        // padding-top: 6rem !important;
-        width: 100% !important;
-    }
-
-    .fw-bold.fs-1 {
-        font-size: 1.5rem;
-    }
-
-    .search-box input {
-        padding: 12px 40px;
-    }
-
-    .search-box .fa-search,
-    .search-box .fa-sliders {
-        font-size: 1rem;
-    }
-
-    .image-rounded {
-        height: 100px;
-        width: 100px;
+    .garment-search-input {
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+    
+        .search-box input {
+            width: 100%;
+            padding: 15px 45px;
+            border: none;
+            background-color: #4C4C4C;
+        }
+    
+        .search-box .fa-search {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
+    
+        .search-box .fa-sliders {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #ffffff;
+            font-size: 1.3rem;
+        }
     }
 }
 
-@media (max-width: 576px) {
-    .container {
-        width: 95%;
+.garments-care-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.garment-card {
+    display: flex;
+    // border-radius: 50px;
+    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    // background: white;
+    overflow: hidden;
+    align-items: center;
+    padding: 1rem;
+}
+
+.card-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 1.5rem;
+}
+
+.card-content {
+    flex: 1;
+
+    .place-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
     }
 
-    .fw-bold.fs-1 {
-        font-size: 1.25rem;
+    p {
+        margin: 0.2rem 0;
     }
 
-    .search-box input {
-        padding: 10px 35px;
+    .card-links {
+        margin-top: 0.5rem;
+
+        a {
+            color: #007bff;
+            text-decoration: underline;
+        }
     }
 
-    .search-box .fa-search,
-    .search-box .fa-sliders {
-        font-size: 0.9rem;
-    }
-
-    .image-rounded {
-        border-top-left-radius: 70px;
-        border-bottom-left-radius: 70px;
-        height: 100%;
-        width: 120px;
+    .location-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background-color: #1e1e1e;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 20px;
+        margin-top: 0.7rem;
+        text-decoration: none;
+        font-size: 14px;
     }
 }
