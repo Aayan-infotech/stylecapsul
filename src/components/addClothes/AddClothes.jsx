@@ -161,7 +161,7 @@ const AddClothes = () => {
         ? prevData.image.filter((_, i) => i !== index)
         : [],
     }));
-  };  
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -326,7 +326,22 @@ const AddClothes = () => {
                       {imagePreview?.map((src, index) => (
                         <div key={index} className="position-relative" style={{ display: "inline-block" }}>
                           <img src={src} height={100} alt={`Preview ${index + 1}`} style={{ margin: "5px", borderRadius: "8px" }} />
-                          <button onClick={() => handleRemoveImage(index)} className="btn btn-danger btn-sm position-absolute top-0 end-0" style={{ borderRadius: "50%", padding: "2px 6px" }}>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(index)}
+                            className="btn btn-danger btn-sm position-absolute bottom-0 end-0"
+                            style={{
+                              borderRadius: "50%",
+                              padding: "6px 10px",
+                              width: "35px",
+                              height: "35px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "1rem",
+                              zIndex: 2,
+                            }}
+                          >
                             &times;
                           </button>
                         </div>
