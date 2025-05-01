@@ -30,6 +30,7 @@
     "dayjs": "^1.11.13",
     "emoji-mart": "^5.6.0",
     "firebase": "^11.5.0",
+    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.30.1",

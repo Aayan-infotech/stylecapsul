@@ -34,14 +34,14 @@ const cardData = [
     imageStyle: { width: "50px", height: "45px" },
     url: "/garment-care",
   },
-  {
-    id: 4,
-    image: imagefocus,
-    title: "StyleScan",
-    imageAlt: "imagefocus",
-    imageStyle: { width: "50px", height: "45px" },
-    url: "/stylescan",
-  },
+  // {
+  //   id: 4,
+  //   image: imagefocus,
+  //   title: "StyleScan",
+  //   imageAlt: "imagefocus",
+  //   imageStyle: { width: "50px", height: "45px" },
+  //   url: "/stylescan",
+  // },
 ];
 
 const ClosetManagement = () => {
@@ -63,7 +63,7 @@ const ClosetManagement = () => {
           <div className="text-center">
             <h1 className="text-center fw-bold fs-1">Closet Management</h1>
             <div className="container p-3 text-center w-75 pt-0">
-              <div className="row g-3 m-0">
+              <div className="row justify-content-center g-3 m-0">
                 {cardData.map((item, index) => (
                   <div key={index} className="col-12 col-md-6 col-md-4">
                     <Link to={item.url} className="text-decoration-none text-white">

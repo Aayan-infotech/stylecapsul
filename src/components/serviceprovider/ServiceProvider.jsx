@@ -70,7 +70,7 @@ const ServiceProvider = () => {
             <div className="col-12">
               <h1 className="fw-bold fs-1 my-3">Service Provider</h1>
             </div>
-            <div className="col-12 col-md-3 d-flex">
+            {/* <div className="col-12 col-md-3 d-flex">
               <div id="serviceProviderCarousel" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-indicators">
                   <button type="button" data-bs-target="#serviceProviderCarousel" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
@@ -92,8 +92,8 @@ const ServiceProvider = () => {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-12 col-md-8 d-flex align-items-center">
+            </div> */}
+            <div className="col-12 d-flex justify-content-center align-items-center">
               <div className="w-100">
                 <div className="d-flex justify-content-between align-items-center">
                   <h3>{serviceProviderData?.ServiceProvider?.name || "Service Provider Name"}</h3>

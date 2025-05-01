@@ -44,9 +44,10 @@ const AuthRoute = ({ children }) => {
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-            } finally {
-                setCheckingAuth(false); // <--- Important
-            }
+            } 
+            // finally {
+            //     setCheckingAuth(false);
+            // }
         };
         fetchData();
     }, [dispatch]);
@@ -76,9 +77,9 @@ const AuthRoute = ({ children }) => {
         return () => clearInterval(interval);
     }, [dispatch, token]);
 
-    if (checkingAuth || loginStatus === 'loading') {
-        return <Loader />;
-    }
+    // if (checkingAuth || loginStatus === 'loading') {
+    //     return <Loader />;
+    // }
 
 
     if (isAuth) {

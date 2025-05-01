@@ -4,9 +4,9 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
-import blank_image from '../../assets/stylist/blank_img.jpg';
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from '../../components/Loader/Loader.jsx';
+import DryCleaningIcon from '@mui/icons-material/DryCleaning';
 
 const GarmentsCare = () => {
   const [showGarments, setShowGarments] = useState([]);
@@ -115,8 +115,8 @@ const GarmentsCare = () => {
             showGarments.map((garment) => (
               <div className="col-12 mt-3" style={{ cursor: "pointer" }} key={garment._id} onClick={() => handleShowServiceProvider(garment)}>
                 <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C" }}>
-                  <div className="me-2">
-                    <img className="image-rounded" src={garment?.ServiceProvider?.profilePicture || blank_image} onError={(e) => { e.target.onerror = null; e.target.src = blank_image }} alt={garment.ServiceProvider.name} />
+                  <div className="me-2 image-rounded d-flex justify-content-center align-items-center">
+                    <DryCleaningIcon sx={{ fontSize: 70, color: "white" }} />
                   </div>
                   <div className="p-2 text-white">
                     <h6>{garment.ServiceProvider.name}</h6>
