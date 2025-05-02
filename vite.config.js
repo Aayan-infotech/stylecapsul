@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   assetsInclude: ['**/*.glb', '**/*.gltf'],
-  server: {
-    https: true,  // Enable HTTPS
-  },
+  // server: {
+  //   https: true,  // Enable HTTPS
+  // },
 });

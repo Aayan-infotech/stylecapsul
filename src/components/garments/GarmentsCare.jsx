@@ -13,9 +13,7 @@ const GarmentsCare = () => {
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [userLocation, setUserLocation] = useState(null);
 
-  const location = new window.google.maps.LatLng(26.8467, 80.9462);
   const radius = 5000;
 
   useEffect(() => {
@@ -24,24 +22,42 @@ const GarmentsCare = () => {
       return;
     }
 
-    const map = new window.google.maps.Map(document.createElement("div"));
-    const service = new window.google.maps.places.PlacesService(map);
+    if (!navigator.geolocation) {
+      console.error("Geolocation is not supported by this browser.");
+      return;
+    }
 
-    const request = {
-      location,
-      radius,
-      keyword: "laundry|Washing|cloths",
-    };
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const location = new window.google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
 
-    service.nearbySearch(request, (results, status) => {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        setPlaces(results);
-        setFilteredPlaces(results);
-      } else {
-        console.error("Places API error:", status);
+        const map = new window.google.maps.Map(document.createElement("div"));
+        const service = new window.google.maps.places.PlacesService(map);
+
+        const request = {
+          location,
+          radius,
+          keyword: "laundry|Washing|cloths",
+        };
+
+        service.nearbySearch(request, (results, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            setPlaces(results);
+            setFilteredPlaces(results);
+          } else {
+            console.error("Places API error:", status);
+          }
+          setLoading(false);
+        });
+      },
+      (error) => {
+        console.error("Geolocation error:", error.message);
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    );
   }, []);
 
   const handleSearch = useCallback(
@@ -53,8 +69,6 @@ const GarmentsCare = () => {
     }, 300),
     [places]
   );
-
-  console.log(places, 'places')
 
   const onSearchChange = (e) => {
     const value = e.target.value;
@@ -106,7 +120,7 @@ const GarmentsCare = () => {
                         <strong>Rating:</strong> {rating}{" "}
                         <StarIcon fontSize="small" style={{ color: "#ffc107" }} /> ({userRatings}) |{" "}
                         <strong>Phone:</strong> {phone}{""} | {" "} <a href={website} target="_blank" rel="noreferrer">Visit Website</a> {" "} | {" "}
-                        <Link to={placeUrl} className="" target="_blank" rel="noreferrer">
+                        <Link to={placeUrl} className="w-100" target="_blank" rel="noreferrer">
                           <RoomIcon fontSize="small" /> Visit Location
                         </Link>
                       </p>
