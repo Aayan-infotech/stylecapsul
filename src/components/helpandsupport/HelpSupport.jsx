@@ -1,120 +1,178 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/HelpSupport.scss";
 import axios from "axios";
-import { Box, Button, CircularProgress, IconButton, TextField, Tooltip, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, List, ListItem, ListItemText, TextField, Tooltip, Typography } from "@mui/material";
 import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 const HelpSupport = () => {
-  const helpandsupport = [
-    {
-      id: "collapseOne",
-      title: "How do I book a stylist appointment?",
-      content:
-        "To book a stylist, go to the 'Stylist' section, choose your preferred expert, select an available date and time slot, then confirm your booking. You'll receive a confirmation notification once it's scheduled.",
-    },
-    {
-      id: "collapseTwo",
-      title: "What is the Closet Management feature?",
-      content:
-        "The Closet Management feature helps you organize and digitize your wardrobe. You can upload images of your clothes, categorize them by type, color, season, and easily plan outfits for any occasion.",
-    },
-    {
-      id: "collapseThree",
-      title: "Can I share my wardrobe with my stylist?",
-      content:
-        "Yes! You can grant your stylist access to your digital closet. This allows them to better understand your style and make personalized recommendations or outfit plans based on what you already own.",
-    },
-    {
-      id: "collapseFour",
-      title: "How does outfit planning work?",
-      content:
-        "Our app allows you to mix and match your wardrobe items to create complete outfits. You can save outfit combinations for future use, plan outfits for upcoming events, and get suggestions from your stylist.",
-    },
-    {
-      id: "collapseFive",
-      title: "Is there a way to track worn outfits?",
-      content:
-        "Yes, the app keeps a history of your worn outfits so you can avoid outfit repeats and rotate your wardrobe effectively. Great for managing fashion variety without effort!",
-    },
-  ];
-
   const [concern, setConcern] = useState('');
   const [loading, setLoading] = useState(false);
   const [responseMsg, setResponseMsg] = useState('');
+  const [userConcerns, setUserConcerns] = useState([]);
+  const [concernLoading, setConcernLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   const token = getCookie('authToken');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!concern.trim()) return;
-
-    setLoading(true);
     try {
-      const res = await axios.post(apiUrl('/api/help-concerns'), { concern }, {
+      const res = await axios.post(
+        apiUrl('api/help-concerns'),
+        { concern },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (res.data.success) {
+        setResponseMsg(res.data.message || 'Submitted successfully!');
+        setConcern('');
+      } else {
+        setResponseMsg('Something went wrong.');
+      }
+      fetchConcerns();
+    } catch (err) {
+      setResponseMsg(err.response?.data?.message || 'Backend not reachable.');
+    }
+  };
+
+  const fetchConcerns = async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    else setConcernLoading(true);
+
+    try {
+      const res = await axios.get(apiUrl('api/help-concerns/get'), {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
+      });
+      setUserConcerns(res.data.data);
+      if (isRefresh) {
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 3000);
       }
-      );
-      setResponseMsg(res.data.message || 'Submitted successfully!');
-      setConcern('');
     } catch (err) {
-      setResponseMsg(err.response?.data?.message || 'Something went wrong.');
+      if (isRefresh) {
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 3000);
+      }
     } finally {
-      setLoading(false);
+      if (!isRefresh) setConcernLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      fetchConcerns();
+    }
+  }, [token]);
+
+  const handleShowAllToggle = () => {
+    setShowAll(!showAll);
+  };
+
+  const concernsToDisplay = showAll ? userConcerns : userConcerns.slice(0, 3);
+
 
   return (
     <div className="help-support-container">
       <div className="container w-75">
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h4" fontWeight="bold" mt={4} gutterBottom>
-            Help & Support
-          </Typography>
-          <Tooltip title="Reload">
-            <IconButton sx={{ mt: 4 }} color="dark">
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <Typography variant="h4" fontWeight="bold" mt={4} gutterBottom>
+          Help & Support
+        </Typography>
+
         <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
           <div className="mb-3">
-            <TextField label="Your Concern" multiline fullWidth rows={2} value={concern} onChange={(e) => setConcern(e.target.value)} variant="outlined" required />
+            <TextField
+              label="Your Concern"
+              multiline
+              fullWidth
+              rows={2}
+              value={concern}
+              onChange={(e) => setConcern(e.target.value)}
+              variant="outlined"
+              required
+            />
           </div>
           <div className="d-flex justify-content-between align-items-end">
-            <Button type="submit" variant="contained" sx={{ bgcolor: "black", borderRadius: "50px", ":hover": { bgcolor: "black" } }} disabled={loading}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ bgcolor: "black", borderRadius: "50px", ":hover": { bgcolor: "black" } }}
+              disabled={loading}
+            >
               {loading ? <CircularProgress size={24} /> : 'Submit'}
             </Button>
             {responseMsg && <small className="text-muted">{responseMsg}</small>}
           </div>
         </form>
 
-        <div className="row m-0 mt-4">
-          <div className="col-12">
-            <div className="accordion" id="accordionExample">
-              {helpandsupport.map((item) => (
-                <div key={item.id} className="col-12 mt-3">
-                  <div className="p-3 rounded" style={{ backgroundColor: "#EAEAEA", borderLeft: "4px solid #0d6efd", boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.05)", }}>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <h4 className="fw-bold fs-5">{item.title}</h4>
-                      <div className="help-arrow-up">
-                        <i className="fa-solid fa-angle-up"></i>
+        <div style={{ marginTop: '30px' }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Typography variant="h5" fontWeight="bold">
+              Your Previous Concerns
+            </Typography>
+            <Tooltip title="Refresh">
+              <IconButton onClick={() => fetchConcerns(true)}>
+                {refreshing ? (
+                  <i className="fa-solid fa-spinner fa-spin me-2"></i>
+                ) : (
+                  <i className="fa-solid fa-rotate-right me-2"></i>
+                )}
+              </IconButton>
+            </Tooltip>
+          </Box>
+
+          {concernLoading ? (
+            <CircularProgress />
+          ) : userConcerns.length === 0 ? (
+            <Typography>No concerns submitted yet.</Typography>
+          ) : (
+            <div>
+              {concernsToDisplay?.map((concernItem) => (
+                <div key={concernItem._id} style={{ marginBottom: '30px' }}>
+                  <div className="d-flex justify-content-start">
+                    <div className="p-3 bg-light rounded shadow-sm" style={{ maxWidth: '70%' }}>
+                      <p className="mb-1"><strong>You:</strong> {concernItem.concern}</p>
+                      <small className="text-muted">{new Date(concernItem.createdAt).toLocaleString()}</small>
+                    </div>
+                  </div>
+                  {concernItem.reply ? (
+                    <div className="d-flex justify-content-end mt-2">
+                      <div className="p-3 bg-secondary text-white rounded shadow-sm" style={{ maxWidth: '70%' }}>
+                        <p className="mb-1"><strong>Admin:</strong> {concernItem.reply} Waiting for admin reply...</p>
+                        <small className="text-light">{new Date(concernItem.updatedAt).toLocaleString()}</small>
                       </div>
                     </div>
-                    <p className="help-content">{item.content}</p>
-                  </div>
+                  ) : (
+                    <div className="d-flex justify-content-end mt-2">
+                      <div className="p-2 bg-warning text-dark rounded shadow-sm" style={{ maxWidth: '70%' }}>
+                        <small><strong>Waiting for admin reply...</strong></small>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
-
+              <Box sx={{ textAlign: "center" }}>
+                <Button onClick={handleShowAllToggle} className="w-25" sx={{ mt: 2, bgcolor: "black", color: "white", borderRadius: "50px", textTransform: "none", ":hover": { bgcolor: "black" } }}>
+                  {showAll ? 'Show Less' : 'Show All'}
+                </Button>
+              </Box>
             </div>
-          </div>
+          )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

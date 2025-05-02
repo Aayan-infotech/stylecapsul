@@ -126,13 +126,13 @@ const GiftCardDetails = () => {
                                     <p className='fs-5'>{giftDetails?.giftDescription}</p>
                                 </div>
                             </div>
-                            <div align="center" className="mt-5">
+                            {/* <div align="center" className="mt-5">
                                 <button
                                     type="button"
                                     className="btn gift-custom-btn w-50 rounded-pill p-2">
                                     Share
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

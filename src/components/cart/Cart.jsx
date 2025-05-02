@@ -51,7 +51,7 @@ const Cart = () => {
   const handleQuantityChange = async (item, change) => {
     try {
       const newQuantity = quantities[item?.productId] + change;
-      if (newQuantity >= 0) {
+      if (newQuantity >= 1) {
         const action = change > 0 ? "increase" : "decrease";
         setQuantities((prev) => ({ ...prev, [item?.productId]: newQuantity }));
         const response = await dispatch(
