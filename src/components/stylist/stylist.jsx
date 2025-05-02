@@ -94,7 +94,7 @@ const Stylist = () => {
               </div>
             </div>
             <div className=" d-block">
-              <div className="row my-1">
+              <div className="row m-0 my-1">
                 {message ? (
                   <div className="text-center">
                     <h2 className="fs-3">{message}</h2>
@@ -103,7 +103,7 @@ const Stylist = () => {
                   showStylists.map((stylist, index) => (
                     <Link to={`/stylist-profile/${stylist._id}`} className="text-decoration-none p-0" state={{ stylist }} key={index}>
                       <div className="col-12 w-100 mt-3 p-0">
-                        <div className="d-flex rounded-pill" style={{ backgroundColor: "#4C4C4C", height: "120px", }}>
+                        <div className="d-flex rounded-pill classic-card" style={{ backgroundColor: "#4C4C4C", height: "120px", }}>
                           <div className="me-2" style={{ width: "150px"}}>
                             <img className="image-rounded" src={stylist?.profilePicture || blank_image} alt={stylist?.name} style={{ width: "150px", height: "120px", objectFit: "fill" }} />
                           </div>

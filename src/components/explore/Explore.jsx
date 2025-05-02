@@ -176,7 +176,7 @@ const Explore = () => {
         },
         withCredentials: true
       });
-      showSuccessToast(response.data.message);
+      // showSuccessToast(response.data.message);
       await fetchAllPostsByExplore(false);
       setQuery("");
       setDisplayPosts(allSocialPosts);
@@ -439,7 +439,8 @@ const Explore = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="d-flex align-items-center text-black">
-                            <ThumbUpIcon className="fs-5 me-3" color={post.likes ? "primary" : "inherit"} />
+                            {/* <ThumbUpIcon className="fs-5 me-3" color={post.likes ? "text-danger" : "inherit"} /> */}
+                            <ThumbUpIcon className="fs-5 me-3" style={{ color: post.likes ? "red" : "inherit" }} />
                             <h6 className="mt-1 mb-0">
                               {post.likes && post.likes.length}
                             </h6>
@@ -587,7 +588,7 @@ const Explore = () => {
               <div className="text-center mt-4">
                 <Typography variant="h6">No results found. Share your first style and inspire others!</Typography>
                 <Link to="/my-style-capsule" className="text-black text-decoration-none">
-                  <Typography variant="h6">Create your first post <ArrowForwardIcon/></Typography>
+                  <Typography variant="h6">Create your first post <ArrowForwardIcon /></Typography>
                 </Link>
               </div>
             )}

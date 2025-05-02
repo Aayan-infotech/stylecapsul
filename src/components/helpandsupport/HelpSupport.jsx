@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/HelpSupport.scss";
+import axios from "axios";
+import { Box, Button, CircularProgress, IconButton, TextField, Tooltip, Typography } from "@mui/material";
+import { apiUrl } from "../../../apiUtils";
+import { getCookie } from "../../utils/cookieUtils";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const HelpSupport = () => {
   const helpandsupport = [
@@ -35,11 +40,59 @@ const HelpSupport = () => {
     },
   ];
 
-  const generateItemId = (index) => `collapse${index + 1}`;
+  const [concern, setConcern] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [responseMsg, setResponseMsg] = useState('');
+
+  const token = getCookie('authToken');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!concern.trim()) return;
+
+    setLoading(true);
+    try {
+      const res = await axios.post(apiUrl('/api/help-concerns'), { concern }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+      );
+      setResponseMsg(res.data.message || 'Submitted successfully!');
+      setConcern('');
+    } catch (err) {
+      setResponseMsg(err.response?.data?.message || 'Something went wrong.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="help-support-container">
       <div className="container w-75">
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h4" fontWeight="bold" mt={4} gutterBottom>
+            Help & Support
+          </Typography>
+          <Tooltip title="Reload">
+            <IconButton sx={{ mt: 4 }} color="dark">
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
+          <div className="mb-3">
+            <TextField label="Your Concern" multiline fullWidth rows={2} value={concern} onChange={(e) => setConcern(e.target.value)} variant="outlined" required />
+          </div>
+          <div className="d-flex justify-content-between align-items-end">
+            <Button type="submit" variant="contained" sx={{ bgcolor: "black", borderRadius: "50px", ":hover": { bgcolor: "black" } }} disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : 'Submit'}
+            </Button>
+            {responseMsg && <small className="text-muted">{responseMsg}</small>}
+          </div>
+        </form>
+
         <div className="row m-0 mt-4">
           <div className="col-12">
             <div className="accordion" id="accordionExample">

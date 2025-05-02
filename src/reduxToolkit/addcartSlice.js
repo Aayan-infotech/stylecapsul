@@ -33,7 +33,10 @@ export const getAllCarts = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       });
-      return response.data.carts;
+      return {
+        carts: response.data?.carts || [],
+        gifts: response.data?.gifts || []
+      };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -114,7 +117,9 @@ const cartSlice = createSlice({
       })
       .addCase(getAllCarts.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload;
+        // state.cart = action.payload;
+        state.cart = action.payload.carts;
+        state.gifts = action.payload.gifts;
       })
       .addCase(getAllCarts.rejected, (state, action) => {
         state.loading = false;

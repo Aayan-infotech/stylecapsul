@@ -39,9 +39,7 @@ const Home = () => {
               <h2 className="fw-bold text-decoration-none">Home</h2>
               {itemsLeft.map((item, index) => (
                 <div key={index} className="col-12 col-md-6 col-lg-4">
-                  <div key={index} style={{ transition: 'transform 0.3s', cursor: 'pointer' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
+                  <div key={index} className="">
                     <Link to={item.link} className="text-decoration-none">
                       <div className="closet-management">
                         <div className="image">

@@ -79,6 +79,7 @@ function OrderHistory() {
                     <div className="col-12" key={index}>
                       <div className="order-history-card d-flex justify-content-between align-items-center px-5 mb-2 rounded-pill">
                         <div className="product-img d-flex align-items-center">
+                        <img src={product.items[0]?.image} alt="Product" height={80} width={80} className="product-img" />
                           <div>
                             <p className="mb-0 fw-bold">
                               {product.items[0]?.name || "Product Name"}

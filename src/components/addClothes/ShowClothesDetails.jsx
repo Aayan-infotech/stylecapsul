@@ -92,7 +92,6 @@ const ShowClothesDetails = () => {
                 <div>
                   <h5 className="fw-bold">{category_name || "N/A"}</h5>
                   <div className="border-line"></div>
-
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Category</p>
                     <p className="fw-bold">{category_name || "N/A"}</p>
@@ -104,7 +103,10 @@ const ShowClothesDetails = () => {
                       {showClothesDetails?.typeOfFashion || "N/A"}
                     </p>
                   </div>
-
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p>Gender</p>
+                    <p className="fw-bold">{showClothesDetails?.gender || "N/A"}</p>
+                  </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Season</p>
                     <p className="fw-bold">
@@ -122,7 +124,7 @@ const ShowClothesDetails = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Purchase Date</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.purchaseDate ? format(new Date(showClothesDetails.purchaseDate), "dd MMM yyyy") : "N/A"}
+                      {showClothesDetails?.purchaseDate ? format(new Date(showClothesDetails?.purchaseDate), "dd MMM yyyy") : "N/A"}
                     </p>
                   </div>
 
@@ -137,14 +139,14 @@ const ShowClothesDetails = () => {
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Created At</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.createdAt ? format(new Date(showClothesDetails.createdAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
+                      {showClothesDetails?.createdAt ? format(new Date(showClothesDetails?.createdAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
                     </p>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Updated At</p>
                     <p className="fw-bold">
-                      {showClothesDetails?.updatedAt ? format(new Date(showClothesDetails.updatedAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
+                      {showClothesDetails?.updatedAt ? format(new Date(showClothesDetails?.updatedAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
                     </p>
                   </div>
                 </div>

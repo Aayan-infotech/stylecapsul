@@ -17,7 +17,10 @@ import no_cart_found from "../../assets/blankcart.gif"
 const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [quantities, setQuantities] = useState({});
+  const [selectedGift, setSelectedGift] = useState(null);
+
   const cartItems = useSelector((state) => state.cart.cart);
+  const gifts = useSelector((state) => state.cart.gifts);
   const cartId = cartItems.length > 0 ? cartItems[0]._id : null;
   const dispatch = useDispatch();
   const userId = getCookie("userId");
@@ -88,7 +91,9 @@ const Cart = () => {
 
   const discount = 4;
   const deliveryCharges = 2;
-  const total = subtotal - discount + deliveryCharges;
+  const giftDiscount = selectedGift ? parseFloat(selectedGift.discountPrice) : 0;
+  // const total = subtotal - discount + deliveryCharges;
+  const total = subtotal - discount - giftDiscount + deliveryCharges;
 
   const handleRemove = async (productId) => {
     try {
@@ -124,6 +129,8 @@ const Cart = () => {
     });
   };
 
+  console.log(gifts, 'gifts')
+
   return (
     <>
       {loading ? (
@@ -137,55 +144,29 @@ const Cart = () => {
                   <div className="col-md-6 buy-cart-list mt-2">
                     {cartItems?.map((cart, cartIndex) =>
                       cart.items?.map((item, itemIndex) => (
-                        <div
-                          key={`${cartIndex}-${itemIndex}`}
-                          className=" d-flex align-items-center justify-content-center"
-                        >
+                        <div key={`${cartIndex}-${itemIndex}`} className=" d-flex align-items-center justify-content-center">
                           <div className="cart-item  mb-2 mt-3 rounded-pill px-4 w-100">
-                            <img
-                              src={item?.productDetails?.image || blank_img}
-                              alt={item.name}
-                              className="item-image w-100"
-                            />
+                            <img src={item?.productDetails?.image || blank_img} alt={item.name} className="item-image w-100" />
                             <div className="item-details ml-3">
                               <p className="text-black text-muted">
                                 Order ID - {item?.productId || "N/A"}
                               </p>
                               <h6 className="text-black fw-bold m-0">
-                                {item?.productDetails?.name?.length > 30
-                                  ? item?.productDetails?.name.slice(3, 30) +
-                                  "...."
-                                  : item?.productDetails?.name || "N/A"}
+                                {item?.productDetails?.name?.length > 30 ? item?.productDetails?.name.slice(3, 30) + "...." : item?.productDetails?.name || "N/A"}
                               </h6>
                               <p className="m-0">{item.date}</p>
                               <div className="d-flex align-items-center justify-content-between">
                                 <p className="text-black fw-bold me-5">
-                                  {/* ${quantities[item?.productId] *  (item?.productDetails?.price || 0)} */}
                                   ${item?.productDetails?.price || 0}
                                 </p>
                                 <div className="quantity-controls d-flex align-items-center">
-                                  <button
-                                    type="button"
-                                    className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
-                                    onClick={() =>
-                                      handleQuantityChange(item, -1)
-                                    }
-                                  >
+                                  <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" onClick={() => handleQuantityChange(item, -1)}>
                                     <i className="fa-solid fa-minus small"></i>
                                   </button>
                                   <span className="quantity mx-3">
-                                    {quantities[item?.productId] < 10
-                                      ? `0${quantities[item?.productId]}`
-                                      : quantities[item?.productId]}
+                                    {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
                                   </span>
-                                  <button
-                                    type="button"
-                                    className="btn btn-dark rounded-pill quantity-change-btn small fs-6"
-                                    style={{}}
-                                    onClick={() =>
-                                      handleQuantityChange(item, 1)
-                                    }
-                                  >
+                                  <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" style={{}} onClick={() => handleQuantityChange(item, 1)}>
                                     <i className="fa-solid fa-plus small"></i>
                                   </button>
                                 </div>
@@ -194,11 +175,7 @@ const Cart = () => {
                                 {moment(item.createdAt).format("YYYY/MM/DD")}
                               </p>
                             </div>
-                            <button
-                              type="button"
-                              className="btn btn-dark rounded-pill remove-btn"
-                              onClick={() => handleRemove(item?.productId)}
-                            >
+                            <button type="button" className="btn btn-dark rounded-pill remove-btn" onClick={() => handleRemove(item?.productId)}>
                               <i className="fa-solid fa-xmark"></i>
                             </button>
                           </div>
@@ -217,10 +194,7 @@ const Cart = () => {
                           <div className="summary-item">
                             <span>Total Items</span>
                             <span>
-                              {cartItems.reduce(
-                                (total, cart) => total + cart.items.length,
-                                0
-                              )}
+                              {cartItems.reduce((total, cart) => total + cart.items.length, 0)}
                             </span>
                           </div>
                           <div className="summary-item">
@@ -237,8 +211,29 @@ const Cart = () => {
                           </div>
                           <div className="summary-item">
                             <span>Delivery Charges</span>
-                            <span>${deliveryCharges.toFixed(2) || "N/A"}</span>
+                            <span>
+                              ${deliveryCharges.toFixed(2) || "N/A"}</span>
                           </div>
+                          {gifts?.length > 0 && (
+                            <div className="gift-section mt-3">
+                              <h5 className="fw-bold">Available Gift Coupons</h5>
+                              {gifts.map((gift) => (
+                                <div key={gift._id} className="d-flex flex-column border rounded p-2 mb-2" style={{ backgroundColor: selectedGift?._id === gift._id ? "#f5f5f5" : "white", }}>
+                                  <div className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                      <strong>{gift.giftPromoCode}</strong> - ${gift.discountPrice}
+                                    </div>
+                                    <button className="btn btn-sm btn-outline-dark rounded-pill" disabled={selectedGift?._id === gift._id} onClick={() => setSelectedGift(gift)}>
+                                      {selectedGift?._id === gift._id ? "Applied" : "Apply"}
+                                    </button>
+                                  </div>
+                                  <small className="text-muted">
+                                    Expiry: {moment(gift.offerValidity).format("YYYY-MM-DD")}
+                                  </small>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                           <hr />
                           <div className="summary-item total">
                             <span>Total</span>
@@ -247,12 +242,7 @@ const Cart = () => {
                         </div>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-dark w-100 mt-3 rounded-pill"
-                      onClick={handleClick}
-                    >
-                      Proceed to Checkout
+                    <button type="button" className="btn btn-dark w-100 mt-3 rounded-pill" onClick={handleClick}>  Proceed to Checkout
                     </button>
                   </div>
                 </>

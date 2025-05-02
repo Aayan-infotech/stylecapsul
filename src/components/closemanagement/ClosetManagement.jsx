@@ -34,14 +34,14 @@ const cardData = [
     imageStyle: { width: "50px", height: "45px" },
     url: "/garment-care",
   },
-  // {
-  //   id: 4,
-  //   image: imagefocus,
-  //   title: "StyleScan",
-  //   imageAlt: "imagefocus",
-  //   imageStyle: { width: "50px", height: "45px" },
-  //   url: "/stylescan",
-  // },
+  {
+    id: 4,
+    image: imagefocus,
+    title: "StyleScan",
+    imageAlt: "imagefocus",
+    imageStyle: { width: "50px", height: "45px" },
+    url: "/stylescan",
+  },
 ];
 
 const ClosetManagement = () => {
