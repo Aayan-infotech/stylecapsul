@@ -13,6 +13,10 @@ const Stylist = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [showAll, setShowAll] = useState(false);
+
+
   const token = getCookie("authToken");
 
   const fetchStylists = async () => {
@@ -100,11 +104,11 @@ const Stylist = () => {
                     <h2 className="fs-3">{message}</h2>
                   </div>
                 ) : (
-                  showStylists.map((stylist, index) => (
+                  showStylists.slice(0, visibleCount).map((stylist, index) => (
                     <Link to={`/stylist-profile/${stylist._id}`} className="text-decoration-none p-0" state={{ stylist }} key={index}>
                       <div className="col-12 w-100 mt-3 p-0">
                         <div className="d-flex rounded-pill classic-card" style={{ backgroundColor: "#4C4C4C", height: "120px", }}>
-                          <div className="me-2" style={{ width: "150px"}}>
+                          <div className="me-2" style={{ width: "150px" }}>
                             <img className="image-rounded" src={stylist?.profilePicture || blank_image} alt={stylist?.name} style={{ width: "150px", height: "120px", objectFit: "fill" }} />
                           </div>
                           <div className="p-2 text-white">
@@ -119,6 +123,13 @@ const Stylist = () => {
                 )}
               </div>
             </div>
+            {showStylists.length > 4 && (
+              <div className="text-center mt-3">
+                <button className="btn btn-dark rounded-pill" onClick={() => { if (showAll) { setVisibleCount(4); } else { setVisibleCount(showStylists.length); } setShowAll(!showAll); }}>
+                  {showAll ? "Show Less" : "Show More"}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -48,7 +48,7 @@ const ClosetCategories = () => {
                   <div className="col-md-6" key={index}>
                     <Link to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name }} className="text-decoration-none">
                       <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "rgb(76, 76, 76)" }}>
-                        <img src={coinhand || blank_img} alt="Category Icon" className="mb-4" />
+                        <img src={item.icon || blank_img} alt="Category Icon" height={70} width={70} className="mb-4" />
                         <h4 className="card-title fw-bold">{item?.name}</h4>
                       </div>
                     </Link>

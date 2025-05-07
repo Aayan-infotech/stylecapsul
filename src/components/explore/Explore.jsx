@@ -177,9 +177,9 @@ const Explore = () => {
         withCredentials: true
       });
       // showSuccessToast(response.data.message);
-      await fetchAllPostsByExplore(false);
       setQuery("");
       setDisplayPosts(allSocialPosts);
+      await fetchAllPostsByExplore(false);
       return response.data;
     } catch (error) {
       console.error('Error liking post:', error.response?.data || error.message);

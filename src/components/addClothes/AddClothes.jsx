@@ -18,6 +18,8 @@ const AddClothes = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedTypeCategory, setSelectedTypeCategory] = useState("");
   const [imagePreview, setImagePreview] = useState([]);
+  const [removedExistingImages, setRemovedExistingImages] = useState([]);
+
   const [btnLoader, setBtnLoader] = useState(false);
   const [formData, setFormData] = useState({
     category: "",
@@ -152,16 +154,25 @@ const AddClothes = () => {
   };
 
   const handleRemoveImage = (index) => {
+    const isExistingImage = typeof imagePreview[index] === "string";
+
+    if (isExistingImage) {
+      // Track it for exclusion in the payload
+      setRemovedExistingImages((prev) => [...prev, imagePreview[index]]);
+    }
+
     setImagePreview((prevPreviews) =>
       prevPreviews.filter((_, i) => i !== index)
     );
+
     setFormData((prevData) => ({
       ...prevData,
       image: Array.isArray(prevData.image)
-        ? prevData.image.filter((_, i) => i !== index)
+        ? prevData.image.filter((_, i) => i !== index || typeof imagePreview[i] === "string")
         : [],
     }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -180,13 +191,18 @@ const AddClothes = () => {
       return;
     }
     data.append("loggedInUserId", loggedInUserId);
-    if (formData.image) {
-      formData.image.forEach((image, index) => {
+    if (formData.image && formData.image.length > 0) {
+      formData.image.forEach((image) => {
         data.append("pictures", image);
       });
-    } else if (updateNewCloth?.picture) {
-      data.append("pictures", updateNewCloth.picture);
     }
+    const existingImagesToSend = (updateNewCloth?.pictures || []).filter(
+      (img) => !removedExistingImages.includes(img)
+    );
+    existingImagesToSend.forEach((picUrl) => {
+      data.append("existingPictures", picUrl);
+    });
+
 
     try {
       let response;

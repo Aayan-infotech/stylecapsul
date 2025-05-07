@@ -64,7 +64,7 @@ const HelpSupport = () => {
       if (isRefresh) {
         setTimeout(() => {
           setRefreshing(false);
-        }, 3000);
+        }, 2000);
       }
     } finally {
       if (!isRefresh) setConcernLoading(false);
@@ -94,7 +94,7 @@ const HelpSupport = () => {
         <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
           <div className="mb-3">
             <TextField
-              label="Your Concern"
+              label="Describe your concern"
               multiline
               fullWidth
               rows={2}
@@ -111,7 +111,7 @@ const HelpSupport = () => {
               sx={{ bgcolor: "black", borderRadius: "50px", ":hover": { bgcolor: "black" } }}
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : 'Submit'}
+              {loading ? <CircularProgress size={24} /> : 'Submit Request'}
             </Button>
             {responseMsg && <small className="text-muted">{responseMsg}</small>}
           </div>
@@ -141,26 +141,28 @@ const HelpSupport = () => {
             <div>
               {concernsToDisplay?.map((concernItem) => (
                 <div key={concernItem._id} style={{ marginBottom: '30px' }}>
-                  <div className="d-flex justify-content-start">
-                    <div className="p-3 bg-light rounded shadow-sm" style={{ maxWidth: '70%' }}>
+                  <div className="d-flex">
+                    {concernItem.reply ? (
+                      <div className="d-flex mt-2">
+                        <div className="p-3 bg-secondary text-white rounded shadow-sm">
+                          <p className="mb-1"><strong>Admin:</strong> {concernItem.reply} Waiting for admin reply...</p>
+                          <small className="text-light">{new Date(concernItem.updatedAt).toLocaleString()}</small>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="d-flex justify-content-end mt-2">
+                        <div className="p-2 bg-warning text-dark rounded shadow-sm">
+                          <small><strong>Waiting for admin reply...</strong></small>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="d-flex justify-content-end">
+                    <div className="p-3 bg-light rounded shadow-sm">
                       <p className="mb-1"><strong>You:</strong> {concernItem.concern}</p>
                       <small className="text-muted">{new Date(concernItem.createdAt).toLocaleString()}</small>
                     </div>
                   </div>
-                  {concernItem.reply ? (
-                    <div className="d-flex justify-content-end mt-2">
-                      <div className="p-3 bg-secondary text-white rounded shadow-sm" style={{ maxWidth: '70%' }}>
-                        <p className="mb-1"><strong>Admin:</strong> {concernItem.reply} Waiting for admin reply...</p>
-                        <small className="text-light">{new Date(concernItem.updatedAt).toLocaleString()}</small>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="d-flex justify-content-end mt-2">
-                      <div className="p-2 bg-warning text-dark rounded shadow-sm" style={{ maxWidth: '70%' }}>
-                        <small><strong>Waiting for admin reply...</strong></small>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ))}
               <Box sx={{ textAlign: "center" }}>

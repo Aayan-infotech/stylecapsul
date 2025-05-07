@@ -20,7 +20,6 @@ const Chat = () => {
   const db = getFirestore();
   const location = useLocation();
   const st_chat = location?.state?.profile_details;
-  console.log(st_chat, 'st_chat');
 
   const userId = getCookie("userId");
   const [message, setMessage] = useState("");
@@ -75,51 +74,6 @@ const Chat = () => {
     }
   }, [messages]);
 
-  // const handleSendMessage = async () => {
-  //   if (!message.trim() || !selectedStylist || !selectedStylist._id) return;
-  //   const senderId = userId;
-  //   const receiverId = selectedStylist._id;
-  //   const chatId = getChatId(senderId, receiverId);
-  //   const time = Date.now();
-
-  //   const receiverName = selectedStylist.name || selectedStylist.receiverName || "Unknown";
-
-  //   const chat = {
-  //     msg: message,
-  //     timeStamp: time,
-  //     type: "text",
-  //     receiverId: receiverId,
-  //     receiverName: receiverName,
-  //     senderId: senderId,
-  //     senderName: singleUser?.firstName,
-  //     profileImage: singleUser?.profileImage
-  //   };
-  //   const users = {
-  //     receiverId: receiverId,
-  //     senderId: senderId,
-  //     receiverName: receiverName,
-  //     senderName: singleUser?.firstName,
-  //     lastMessage: message,
-  //     lastMessageTime: time,
-  //     profileImage: singleUser?.profileImage
-  //   };
-  //   setMessage("");
-  //   try {
-  //     const messageRef = collection(db, "chats", chatId, "messages");
-  //     await addDoc(messageRef, chat);
-  //     await setDoc(
-  //       doc(db, "chat_list", senderId, "messages", receiverId),
-  //       users
-  //     );
-  //     await setDoc(
-  //       doc(db, "chat_list", receiverId, "messages", senderId),
-  //       users
-  //     );
-  //   } catch (error) {
-  //     console.error("Error sending message:", error);
-  //   }
-  // };
-
   const handleSendMessage = async () => {
     if (!message.trim() || !selectedStylist || !selectedStylist._id) return;
     const senderId = userId;
@@ -170,17 +124,15 @@ const Chat = () => {
     }
   };
 
+  console.log(messages, chatList, 'messages');
+
   return (
     <div className="stylist-message-container">
       <div className="container d-flex justify-content-center align-items-center">
         <div className="row gx-0">
           <div className="col-12 col-md-4 chat-list">
-            {/* <div className="search-bar mb-3">
-              <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              <input type="text" className="search-input" placeholder="Search Message" />
-            </div> */}
             <div className="overflow-list">
-              {chatList.map((stylist) => (
+              {chatList?.map((stylist) => (
                 <div
                   key={stylist.stylistId}
                   className={`mt-2 show-list ${selectedStylist?._id === stylist.stylistId ? "active" : ""}`}
@@ -188,7 +140,7 @@ const Chat = () => {
                 >
                   <div className="d-flex align-items-center">
                     <img
-                      src={stylist?.stylistProfileImage || blank_image}
+                      src={stylist?.stylistProfileImage || stylist?.profileImage || blank_image}
                       alt={stylist.name}
                       className="profile-image rounded-circle"
                       onError={(e) => { e.target.onerror = null; e.target.src = blank_image }}
@@ -236,10 +188,7 @@ const Chat = () => {
                   <input type="text" className="search-input" placeholder="Type a message..." value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} />
                   <i className="fa-regular fa-face-smile search-icon"></i>
                 </div>
-                <button
-                  onClick={handleSendMessage}
-                  className="btn btn-dark rounded-pill"
-                >
+                <button onClick={handleSendMessage} className="btn btn-dark rounded-pill">
                   <i className="fa-solid fa-paper-plane send-icon"></i>
                 </button>
               </div>

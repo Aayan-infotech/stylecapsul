@@ -331,22 +331,9 @@ export const SocialUserDetails = () => {
             <div className="row gy-4 m-0 mb-4">
               <div className="col-12 d-flex justify-content-center align-items-center">
                 <div className="text-center">
-                  <img
-                    alt="User Avatar"
-                    className="rounded-circle mb-2"
-                    src={userPostDetails?.user?.profileImage || blank_img}
-                    onError={(e) => {
-                      e.target.src = blank_img;
-                    }}
-                    style={{ display: "inline-block", border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", width: "200px", }}
-                  />
+                  <img alt="User Avatar" className="rounded-circle mb-2" src={userPostDetails?.user?.profileImage || blank_img} onError={(e) => { e.target.src = blank_img; }} style={{ display: "inline-block", border: "2px solid black", padding: "5px", borderRadius: "50%", boxShadow: "0px 0px 15px 5px rgba(0, 0, 0, 0.3)", cursor: "pointer", padding: "5px", height: "200px", width: "200px", }} />
                   <h4 className="fw-bold">
-                    {userPostDetails?.user?.firstName
-                      ? userPostDetails?.user?.firstName
-                        .charAt(0)
-                        .toUpperCase() +
-                      userPostDetails?.user?.firstName.slice(1).toLowerCase()
-                      : ""}
+                    {userPostDetails?.user?.firstName ? userPostDetails?.user?.firstName.charAt(0).toUpperCase() + userPostDetails?.user?.firstName.slice(1).toLowerCase() : ""}
                   </h4>
                   <p className="m-0">{userPostDetails?.user?.bio}</p>
                 </div>
@@ -390,30 +377,9 @@ export const SocialUserDetails = () => {
                       : `/public-profile/${userPostDetails?.user?._id}/${item?._id}`;
 
                     return (
-                      <Link
-                        key={index}
-                        to={route}
-                        state={{ category_name: item?.name, userPostDetails }}
-                        className="text-decoration-none"
-                      >
-                        <div
-                          className="rounded-pill mb-3 d-flex align-items-center"
-                          style={{
-                            backgroundColor: "#4C4C4C",
-                            height: "70px",
-                            padding: "10px",
-                          }}
-                        >
-                          <img
-                            src={coinhand || blank_img}
-                            alt={coinhand || blank_img}
-                            height="30"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = blank_img;
-                            }}
-                            className="me-2"
-                          />
+                      <Link key={index} to={route} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
+                        <div className="rounded-pill mb-3 d-flex align-items-center px-4" style={{ backgroundColor: "#4C4C4C", height: "70px"}}>
+                          <img src={item?.icon || blank_img} alt="Category Icon" height={50} width={50} className="me-2" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                           <h4 className="text-white fw-bold">{item?.name}</h4>
                         </div>
                       </Link>
