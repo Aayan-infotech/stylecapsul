@@ -26,7 +26,7 @@ const ForgotPassword = () => {
           if (match) {
             const minutes = parseInt(match[1]);
             const seconds = parseInt(match[2]);
-            return minutes * 60 + seconds;  
+            return minutes * 60 + seconds;
           }
           return 60;
         };
@@ -45,44 +45,34 @@ const ForgotPassword = () => {
   };
 
   return (
-    <>
+    <div className="forgot-wrapper">
       <div className="forgot-custom-container">
-        <div>
-          <Link to="/" className="text-black text-decoration-none">
-            <h1 className="text-center outside-heading fs-1 fw-bold">
-              Style Capsule
-            </h1>
-          </Link>
-          <div className="card custom-card mt-0 border-0">
-            <div className="card-body p-5 text-black">
-              <h2 className="card-title fs-4 text-center fw-bold">
-                Forgot Password
-              </h2>
-              <form className="mt-3" onSubmit={handleForgetPassword}>
-                <div className="">
-                  <label htmlFor="email" className="form-label fw-bold">
-                    Enter Email
-                  </label>
-                  <input type="text" id="email" className="form-control rounded-pill" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div className="text-center mt-4">
-                  <button type="submit" className="btn custom-button text-white fw-bold rounded-pill w-50 p-2">
-                    {btnLoader ? (
-                      <span>
-                        <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
-                        Resetting...
-                      </span>
-                    ) : (
-                      "Reset Password"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
+        <Link to="/" className="text-black text-decoration-none">
+          <h1 className="text-center outside-heading fs-1 fw-bold">Style Capsule</h1>
+        </Link>
+        <div className="card custom-card border-0">
+          <div className="card-body text-black">
+            <h2 className="card-title fs-4 text-center fw-bold">Forgot Password</h2>
+            <form className="mt-3" onSubmit={handleForgetPassword}>
+              <div>
+                <label htmlFor="email" className="form-label fw-bold">Enter Email</label>
+                <input type="text" id="email" className="form-control rounded-pill" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              </div>
+              <div className="text-center mt-4">
+                <button type="submit" className="btn custom-button text-white fw-bold rounded-pill w-50 p-2">
+                  {btnLoader ? (
+                    <span><i className="fa-solid fa-spinner fa-spin me-2"></i> Resetting...</span>
+                  ) : (
+                    "Reset Password"
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-    </>
+    </div>
+
   );
 };
 
