@@ -76,13 +76,15 @@ const ContactPage = () => {
   return (
     <div className="contact-container">
       <div className="container d-block w-75">
-        <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
-          {!token && (
-            <Link to="/">
-              <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
-            </Link>
-          )}
-          <h4 className="fw-bold text-center text-md-start">Contact US</h4>
+        <div className="row">
+          <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
+            {!token && (
+              <Link to="/">
+                <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
+              </Link>
+            )}
+            <h4 className="fw-bold text-center text-md-start">Contact US</h4>
+          </div>
         </div>
         <form className="form-responsive" onSubmit={handleContactPageSubmit}>
           <div className="mb-2">

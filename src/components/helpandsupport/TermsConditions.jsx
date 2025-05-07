@@ -1,8 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import "../../../src/components/helpandsupport/contactuse.scss";
+import { getCookie } from "../../utils/cookieUtils";
+import { Link } from "react-router-dom";
+import logo from "../../assets/images/LOGOSC.png";
 
 const TermsConditions = () => {
+    const token = getCookie("authToken");
+    const userId = getCookie("userId");
 
     const termsAndConditions = [
         {
@@ -51,7 +56,16 @@ const TermsConditions = () => {
     return (
         <div className="container d-block my-4 termsconditoins">
             <Box>
-                <h2 className="text-center mb-4">Terms & Conditions</h2>
+                <div className="row m-0 w-100">
+                    <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
+                        {!token && (
+                            <Link to="/">
+                                <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
+                            </Link>
+                        )}
+                        <h4 className="fw-bold text-center text-md-start">Terms & Conditions</h4>
+                    </div>
+                </div>
                 <ul className="list-group">
                     {termsAndConditions?.map((point, index) => (
                         <li key={index} className="rounded-pill p-3 mx-4 px-5 mb-2 list-group-item">
