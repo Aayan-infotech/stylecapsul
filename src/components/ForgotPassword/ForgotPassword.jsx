@@ -46,7 +46,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <div className="forgot-custom-container mt-5">
+      <div className="forgot-custom-container">
         <div>
           <Link to="/" className="text-black text-decoration-none">
             <h1 className="text-center outside-heading fs-1 fw-bold">
