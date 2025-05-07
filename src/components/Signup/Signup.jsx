@@ -46,7 +46,7 @@ const Signup = () => {
   };
 
   const validateForm = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.com$/i;
     if (!formData.firstName.trim()) { showErrorToast("Name is required"); return false; }
     if (!formData.email.trim()) {
       showErrorToast("Email is required");
@@ -125,25 +125,12 @@ const Signup = () => {
                 <div>
                   <label htmlFor="firstName" className="form-label text-black fw-bold">Name</label>
                   <input type="text" className="form-control rounded-pill" placeholder="Enter Your Name" pattern="[A-Za-z\s]*" name="firstName" value={formData.firstName} onChange={handleInputChange} />
-                  {/* <input
-                    type="text"
-                    className="form-control rounded-pill"
-                    placeholder="Enter Your Name"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    onKeyPress={(e) => {
-                      if (!/^[a-zA-Z\s]*$/.test(e.key)) {
-                        e.preventDefault();
-                      }
-                    }}
-                  /> */}
                 </div>
               </div>
               <div className="col-12 col-md-4 mt-4">
                 <div>
                   <label htmlFor="email" className="form-label text-black fw-bold">  Enter Email</label>
-                  <input type="text" className="form-control rounded-pill" placeholder="Enter Email or Phone Number" name="email" value={formData.email} onChange={handleInputChange} />
+                  <input type="text" className="form-control rounded-pill" placeholder="Enter Email Address" name="email" value={formData.email} onChange={handleInputChange} />
                 </div>
               </div>
               <div className="col-12 col-md-4">
