@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/StylistCategories.scss";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, getAllCarts } from "../../reduxToolkit/addcartSlice";
 import { getCookie } from "../../utils/cookieUtils";
@@ -12,6 +12,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import Loader from "../Loader/Loader";
 import no_cart_found from "../../assets/not-cart_found.png"
+import logo from "../../assets/images/LOGOSC.png";
 
 const StylistCategories = () => {
   const [marketPlaceCategoryType, setMarketPlaceCategoryType] = useState([]);
@@ -85,27 +86,6 @@ const StylistCategories = () => {
     }
   };
 
-  // const handleAddToCart = async (product) => {
-  //   setLoadingProductId(product._id);
-  //   setTimeout(async () => {
-  //     try {
-  //       const response = await dispatch(
-  //         addToCart({
-  //           userId,
-  //           productId: product?._id,
-  //           quantity: quantity,
-  //         })
-  //       );
-  //       showSuccessToast(response.message);
-  //       await dispatch(getAllCarts());
-  //     } catch (error) {
-  //       showErrorToast(error?.message);
-  //     } finally {
-  //       setLoadingProductId(null);
-  //     }
-  //   }, 2000);
-  // };
-
   const handleAddToCart = async (product) => {
     setLoadingProductId(product._id);
     if (!userId || !token) {
@@ -155,6 +135,15 @@ const StylistCategories = () => {
       ) : (
         <div className="categories-type-container">
           <div className="container w-75 mt-2 stylist-content d-block">
+            <div className="row m-0 w-100">
+              <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
+                {!token && (
+                  <Link to="/">
+                    <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
+                  </Link>
+                )}
+              </div>
+            </div>
             <div className="container-fluid">
               <div className="row gx-2">
                 {loading ? (
