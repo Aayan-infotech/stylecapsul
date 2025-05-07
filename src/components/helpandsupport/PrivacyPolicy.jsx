@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
                 </div>
                 <ul className="list-group">
                     {policyPoints?.map((point, index) => (
-                        <li key={index} className="rounded-pill p-3 mx-4 mb-2 px-5 list-group-item">
+                        <li key={index} className="rounded-pill p-3 mb-2 px-5 list-group-item">
                             <h4 className="fw-bold">{point.title}</h4>
                             <p className="mb-0">{point.content}</p>
                         </li>

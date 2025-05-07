@@ -68,7 +68,7 @@ const TermsConditions = () => {
                 </div>
                 <ul className="list-group">
                     {termsAndConditions?.map((point, index) => (
-                        <li key={index} className="rounded-pill p-3 mx-4 px-5 mb-2 list-group-item">
+                        <li key={index} className="rounded-pill p-3 px-5 mb-2 list-group-item">
                             <h4 className="fw-bold">{point.title}</h4>
                             <p className="mb-0">{point.content}</p>
                         </li>
