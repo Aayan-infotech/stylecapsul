@@ -22,6 +22,9 @@ import Chat from './components/stylist/Chat.jsx';
 import MarketPlace from './components/marketPlace/MarketPlace.jsx';
 import StylistCategories from './components/stylist/StylistCategories.jsx';
 import Loader from './components/Loader/Loader.jsx';
+import TermsConditions from './components/helpandsupport/TermsConditions.jsx';
+import PrivacyPolicy from './components/helpandsupport/PrivacyPolicy.jsx';
+import ContactPage from './components/helpandsupport/ContactPage.jsx';
 
 const AuthRoute = ({ children }) => {
     const [isAuth, setIsAuth] = useState(false);
@@ -106,6 +109,9 @@ const AuthRoute = ({ children }) => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/recovery-code" element={<RecoveryCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/termsConditions" element={<TermsConditions />} />
+        <Route path="/policy" element={<PrivacyPolicy />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         <Route path="*" element={<PageNotFound />} />
     </Routes>;

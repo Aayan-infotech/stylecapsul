@@ -3,6 +3,9 @@ import "../../../src/components/helpandsupport/contactuse.scss";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
+import { Link } from "react-router-dom";
+import logo from "../../assets/images/LOGOSC.png";
+import { getCookie } from "../../utils/cookieUtils";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +15,9 @@ const ContactPage = () => {
   });
   const [btnLoader, setBtnLoader] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const token = getCookie("authToken");
+  const userId = getCookie("userId");
 
   const validateForm = () => {
     const newErrors = {};
@@ -69,7 +75,15 @@ const ContactPage = () => {
 
   return (
     <div className="contact-container">
-      <div className="container w-75">
+      <div className="container d-block w-75">
+        <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
+          {!token && (
+            <Link to="/">
+              <img src={logo} alt="logo" style={{ width: "300px", height: "60px" }} />
+            </Link>
+          )}
+          <h4 className="fw-bold text-center text-md-start">Contact US</h4>
+        </div>
         <form className="form-responsive" onSubmit={handleContactPageSubmit}>
           <div className="mb-2">
             <label className="form-label fw-bold">Name</label>
