@@ -53,16 +53,16 @@ const StylistDetails = () => {
   const fetchVendorDetails = async (showLoading = true) => {
     if (showLoading) setLoading(true);
     try {
-      const response = await axios.get(
-        apiUrl(`api/stylist/stylist-profile/${stylistId}`),
+      const response = await axios.get(apiUrl(`api/stylist/stylist-profile/${stylistId}`),
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          withCredentials: true,
+          // withCredentials: true,
         }
       );
+      console.log(response?.data);
       // if (response?.data?.status === true) {
       setVendorDetails(response?.data);
       // }
@@ -72,6 +72,8 @@ const StylistDetails = () => {
       if (showLoading) setLoading(false);
     }
   };
+
+  console.log(vendorDetails, 'vendorDetails')
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -111,10 +113,10 @@ const StylistDetails = () => {
   };
 
   useEffect(() => {
-    if (stylistId && token) {
+    if (stylistId) {
       fetchVendorDetails();
     }
-  }, [stylistId, token]);
+  }, [stylistId]);
 
   const averageRating = vendorDetails?.averageRating?.[0]?.averageRating;
 
@@ -154,7 +156,19 @@ const StylistDetails = () => {
     return nextDate;
   };
 
-  const handleOpenModal = () => setOpenModal(true);
+  const handleOpenModal = () => {
+    if (!token) {
+      navigate("/login", {
+        state: {
+          fromHire: true,
+          profile_details: profile_details,
+        },
+      });
+      return;
+    }
+    setOpenModal(true);
+  };
+
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedDay(null);
@@ -185,7 +199,7 @@ const StylistDetails = () => {
       );
       if (res.status === 201 && res.data?.success) {
         showSuccessToast(res.data.message || "Appointment booked successfully!");
-        setBookingSlotId(null); 
+        setBookingSlotId(null);
         setOpenModal(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
@@ -193,12 +207,12 @@ const StylistDetails = () => {
       }
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
-      setBookingSlotId(null); 
+      setBookingSlotId(null);
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleDeleteReview = async (reviewId) => {
     try {
       const response = await axios.delete(apiUrl(`api/review/delete/${reviewId}`), {
@@ -271,6 +285,11 @@ const StylistDetails = () => {
                   <button type="button" onClick={handleOpenModal} className="btn hire-custom-btn rounded-pill p-2">
                     Hire
                   </button>
+                  {!token && (
+                    <p className="text-danger mt-2" style={{ fontSize: "0.9rem" }}>
+                      * Please log in to hire this stylist
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -433,33 +452,35 @@ const StylistDetails = () => {
 
 
                 {/* Review Submission Form */}
-                <form onSubmit={handleSubmit} className="mt-4">
-                  <h4 className="fw-bold">Leave a Review</h4>
-                  <div className="form-floating">
-                    <textarea
-                      className="form-control"
-                      placeholder="Write your review"
-                      id="floatingTextarea2"
-                      style={{ height: "100px" }}
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSubmit(e);
-                        }
-                      }}
-                    ></textarea>
-                  </div>
-                  {error && <p className="text-danger mb-0">{error}</p>}
-                  <div className="d-flex justify-content-between align-items-center mt-3">
-                    <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
-                    <Button variant="contained" size="small" className="mt-3 rounded-pill" disabled={btnLoading} type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
-                      {/* {btnLoading ? "Loading..." : "Submit Review"} */}
-                      Submit Review
-                    </Button>
-                  </div>
-                </form>
+                {token && (
+                  <form onSubmit={handleSubmit} className="mt-4">
+                    <h4 className="fw-bold">Leave a Review</h4>
+                    <div className="form-floating">
+                      <textarea
+                        className="form-control"
+                        placeholder="Write your review"
+                        id="floatingTextarea2"
+                        style={{ height: "100px" }}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSubmit(e);
+                          }
+                        }}
+                      ></textarea>
+                    </div>
+                    {error && <p className="text-danger mb-0">{error}</p>}
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+                      <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
+                      <Button variant="contained" size="small" className="mt-3 rounded-pill" disabled={btnLoading} type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
+                        {/* {btnLoading ? "Loading..." : "Submit Review"} */}
+                        Submit Review
+                      </Button>
+                    </div>
+                  </form>
+                )}
                 <hr className="text-muted mt-4" />
               </div>
             </div>
@@ -489,27 +510,6 @@ const StylistDetails = () => {
                           }} />
                       );
                     })}
-                    {/* {vendorDetails.stylist.availability.days.map((day) => {
-                      const date = getNextDateForDay(day);
-                      const today = new Date();
-                      if (!isSameMonth(today, date)) return null;
-                      if (!isAfter(date, today) && !isToday(date)) return null;
-                      return (
-                        <Chip
-                          key={day}
-                          label={`${day} - ${format(date, "dd MMM yyyy")}`}
-                          sx={{
-                            backgroundColor:
-                              selectedDay === day ? "#0d6efd" : "#17a2b8",
-                            color: "#fff",
-                          }}
-                          onClick={() => {
-                            setSelectedDay(day);
-                            setSelectedDate(format(date, "yyyy-MM-dd"));
-                          }}
-                        />
-                      );
-                    })} */}
                   </div>
                   {selectedDay && (
                     <>
@@ -520,33 +520,33 @@ const StylistDetails = () => {
                         <div className="d-flex gap-2 flex-wrap">
                           {vendorDetails.stylist.availability.slots.map((slot) => (
                             <Chip
-                            key={slot._id}
-                            label={
-                              bookingSlotId === slot._id ? (
-                                <span style={{ display: 'flex', alignItems: 'center' }}>
-                                  <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                  Booking...
-                                </span>
-                              ) : `${slot.start} - ${slot.end}`
-                            }
-                            clickable={slot.available && bookingSlotId === null}
-                            disabled={!slot.available || bookingSlotId !== null}
-                            onClick={() => { 
-                              if (slot.available && bookingSlotId === null) { 
-                                const timeRange = `${slot.start} - ${slot.end}`; 
-                                setSelectedTime(timeRange); 
-                                bookAppointment(timeRange, slot._id); 
-                              } 
-                            }}
-                            sx={{
-                              backgroundColor: slot.available ? "#28a745" : "#6c757d",
-                              color: "#fff",
-                              '&:hover': {
-                                backgroundColor: slot.available ? "#218838" : "#5a6268",
-                              },
-                            }}
-                          />
-                          
+                              key={slot._id}
+                              label={
+                                bookingSlotId === slot._id ? (
+                                  <span style={{ display: 'flex', alignItems: 'center' }}>
+                                    <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                    Booking...
+                                  </span>
+                                ) : `${slot.start} - ${slot.end}`
+                              }
+                              clickable={slot.available && bookingSlotId === null}
+                              disabled={!slot.available || bookingSlotId !== null}
+                              onClick={() => {
+                                if (slot.available && bookingSlotId === null) {
+                                  const timeRange = `${slot.start} - ${slot.end}`;
+                                  setSelectedTime(timeRange);
+                                  bookAppointment(timeRange, slot._id);
+                                }
+                              }}
+                              sx={{
+                                backgroundColor: slot.available ? "#28a745" : "#6c757d",
+                                color: "#fff",
+                                '&:hover': {
+                                  backgroundColor: slot.available ? "#218838" : "#5a6268",
+                                },
+                              }}
+                            />
+
                           ))}
                         </div>
                       )}
