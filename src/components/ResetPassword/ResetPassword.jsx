@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./ResetPassword.scss";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import { showErrorToast } from "../toastMessage/Toast";
+import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,12 +31,15 @@ const ResetPassword = () => {
     setErrorMessage("");
     if (!newPassword || !confirmPassword) {
       setErrorMessage("Both fields are required.");
+      setBtnLoader(false);
       return;
     }
     if (newPassword !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
+      setBtnLoader(false);
       return;
     }
+
     try {
       const response = await axios.post(
         apiUrl("api/auth/resetPassword"),
@@ -47,8 +50,9 @@ const ResetPassword = () => {
           },
         }
       );
-      console.log(response, "response frget");
       showSuccessToast(response?.data?.message);
+      setNewPassword("");
+      setConfirmPassword("");
       navigate("/login");
     } catch (error) {
       if (
@@ -70,7 +74,9 @@ const ResetPassword = () => {
   return (
     <>
       <div className="reset-container">
-        <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+        <Link to="/" className="text-decoration-none text-black">
+          <h1 className="outside-heading fs-1 fw-bold">Style Capsule</h1>
+        </Link>
         <div className="reset-card">
           <div className="login-box">
             <h2 className="card-title fs-4 text-center fw-bold">
@@ -130,11 +136,11 @@ const ResetPassword = () => {
                   className="submit-button fw-bold"
                   disabled={!isFormValid} // Disable if the form is invalid
                   style={{
-                    backgroundColor: !isFormValid ? "#ddd" : "#007bff", // Light gray when disabled, blue when active
-                    color: !isFormValid ? "#888" : "white", // Dimmed text when disabled, white when active
-                    border: !isFormValid ? "1px solid #ccc" : "1px solid black", // Lighter border when disabled, blue when active
-                    cursor: !isFormValid ? "not-allowed" : "pointer", // Not-allowed cursor when disabled, pointer when active
-                    pointerEvents: !isFormValid ? "none" : "auto" // Disable pointer events when disabled
+                    backgroundColor: !isFormValid ? "#ddd" : "black",
+                    color: !isFormValid ? "#888" : "white",
+                    border: !isFormValid ? "1px solid #ccc" : "1px solid black",
+                    cursor: !isFormValid ? "not-allowed" : "pointer",
+                    pointerEvents: !isFormValid ? "none" : "auto"
                   }}
                 >
                   {btnLoader ? (

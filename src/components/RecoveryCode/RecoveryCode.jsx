@@ -39,7 +39,6 @@ const RecoveryCode = () => {
             setResendDisabled(false);
             return 0;
           }
-
           localStorage.setItem("resendCountdown", newTime);
           return newTime;
         });
@@ -104,7 +103,6 @@ const RecoveryCode = () => {
     e.preventDefault();
     setBtnLoader(true);
     const otp = values.join("");
-    console.log(otp.length, values.length, otp.includes(""), 'sdfsdfsf');
     if (otp.length !== values.length) {
       showErrorToast("Please fill in all OTP fields before submitting.");
       setBtnLoader(false);
@@ -115,6 +113,7 @@ const RecoveryCode = () => {
         otp,
       });
       if (response.status === 200) {
+        console.log("Navigating with token:", response.data.token);
         showSuccessToast(response?.data?.message);
         setTimeout(() => {
           navigate("/reset-password", {
