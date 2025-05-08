@@ -5,6 +5,7 @@ import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
 import { Divider } from "@mui/material";
+import blank_img from "../../assets/stylist/blank_img.jpg";
 
 function OrderHistory() {
   const [loading, setLoading] = useState(true);
@@ -59,12 +60,12 @@ function OrderHistory() {
               <div className="col-12 col-md-6">
                 <h5 className="fw-bold fs-1">Order History</h5>
               </div>
-              <div className="col-12 col-md-6">
+              {/* <div className="col-12 col-md-6">
                 <div className="search-box d-flex">
                   <i className="fa fa-search"></i>
                   <input type="text" placeholder="Search" />
                 </div>
-              </div>
+              </div> */}
             </div>
             {errors ? (
               <div className="error-message text-center">
@@ -79,7 +80,17 @@ function OrderHistory() {
                     <div className="col-12" key={index}>
                       <div className="order-history-card d-flex justify-content-between align-items-center px-5 mb-2 rounded-pill">
                         <div className="product-img d-flex align-items-center">
-                        <img src={product.items[0]?.image} alt="Product" height={80} width={80} className="product-img" />
+                          <img
+                            src={product.items[0]?.image || blank_img}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = blank_img;
+                            }}
+                            alt="Product"
+                            height={80}
+                            width={80}
+                            className="product-img"
+                          />
                           <div>
                             <p className="mb-0 fw-bold">
                               {product.items[0]?.name || "Product Name"}
