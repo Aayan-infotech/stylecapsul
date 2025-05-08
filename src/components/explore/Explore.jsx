@@ -408,7 +408,9 @@ const Explore = () => {
                       )}
                     </div>
                       <div className="text-black mt-2">
-                        <p className="fw-bold">{post?.description}</p>
+                        <p className="fw-bold">
+                          {post?.user.bio?.length > 100 ? post.user.bio.substring(0, 100) + "..." : post?.user.bio}
+                        </p>
                       </div>
                       <div className="d-flex mt-3">
                         <Swiper
