@@ -114,12 +114,8 @@ export const ClossetDetails = () => {
                       className="text-decoration-none"
                     >
                       <div className="p-4 text-white text-center rounded" style={{ backgroundColor: "rgb(76, 76, 76)" }}>
-                        <img
-                          src={coinhand || blank_img}
-                          alt="Category Icon"
-                          className="mb-4"
-                        />
-                        <h4 className="card-title fw-bold">{item?.name}</h4>
+                       <img src={item?.icon || blank_img} alt="Category Icon" height={50} width={50} className="me-2" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
+                        <h4 className="card-title fw-bold mt-3">{item?.name}</h4>
                       </div>
                     </Link>
                   </div>
@@ -143,11 +139,7 @@ export const ClossetDetails = () => {
                             onClick={() => handleSelectDesigner(designer._id)}
                             style={{ cursor: "pointer" }}
                           >
-                            <img
-                              src={designer.profilePicture}
-                              alt={`Closet ${imgIndex}`}
-                              className="img-fluid"
-                            />
+                            <img src={designer.profilePicture} alt={`Closet ${imgIndex}`} className="img-fluid" />
                             {selectedDesigner === designer._id && (
                               <FaCheckCircle
                                 className="position-absolute top-0 end-0 text-success"
@@ -184,12 +176,7 @@ export const ClossetDetails = () => {
                     {allProfileImages1.map((imageSet, index) => (
                       <div key={index} className="col-12 col-md-4 mb-2 mb-md-0">
                         {imageSet.map((src, imgIndex) => (
-                          <img
-                            key={imgIndex}
-                            src={src}
-                            alt={`Closet ${imgIndex}`}
-                            className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`}
-                          />
+                          <img key={imgIndex} src={src} alt={`Closet ${imgIndex}`} className={`img-fluid ${imgIndex > 0 ? "mt-2" : ""}`} />
                         ))}
                       </div>
                     ))}
