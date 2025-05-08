@@ -16,7 +16,6 @@ const Stylist = () => {
   const [visibleCount, setVisibleCount] = useState(4);
   const [showAll, setShowAll] = useState(false);
 
-
   const token = getCookie("authToken");
 
   const fetchStylists = async () => {

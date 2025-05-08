@@ -23,10 +23,14 @@ const Signup = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const updatedValue = name === "email" ? value.toLowerCase() : value;
+    setFormData({ ...formData, [name]: updatedValue });
     if (name === "firstName") {
       const nameRegex = /^[A-Za-z\s]*$/;
+      const capitalized = value.charAt(0).toUpperCase() + value.slice(1);
       setIsNameValid(nameRegex.test(value));
+      setFormData({ ...formData, [name]: capitalized });
+      return;
     }
     if (name === "username") {
       if (value.length > 25) {
@@ -183,7 +187,7 @@ const Signup = () => {
                   )}
                 </button>
                 {!isNameValid && (
-                  <small className="text-danger">Please enter a valid name (letters only, no numbers or special characters).</small>
+                  <small className="text-danger fw-bold">Please enter a valid name (letters only, no numbers or special characters).</small>
                 )}
               </div>
               <div className="text-center mt-2">

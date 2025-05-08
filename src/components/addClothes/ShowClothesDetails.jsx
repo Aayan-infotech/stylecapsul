@@ -128,13 +128,13 @@ const ShowClothesDetails = () => {
                     </p>
                   </div>
 
-                  <div className="d-flex justify-content-between align-items-center">
+                  {/* <div className="d-flex justify-content-between align-items-center">
                     <p>Dominant Color</p>
                     <div className="d-flex align-items-center gap-2">
                       <span>{showClothesDetails?.dominantColor || "N/A"}</span>
                       <div style={{ width: "20px", height: "20px", backgroundColor: showClothesDetails?.dominantColor || "#ccc", border: "1px solid #000", }}></div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="d-flex justify-content-between align-items-center">
                     <p>Created At</p>

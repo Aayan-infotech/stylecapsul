@@ -87,6 +87,7 @@ const RecoveryCode = () => {
 
   const handleChange = (e, index) => {
     const { value } = e.target;
+    if (!/^\d?$/.test(value)) return;
     const newValues = [...values];
     newValues[index] = value.slice(0, 1);
     setValues(newValues);
@@ -152,7 +153,18 @@ const RecoveryCode = () => {
               </div>
               <div className="box-container">
                 {values.map((value, index) => (
-                  <input key={index} id={`box-${index}`} className="box me-2" type="text" maxLength="1" value={value} onChange={(e) => handleChange(e, index)} />
+                  // <input key={index} id={`box-${index}`} className="box me-2" type="number" pattern="[0-9]*" maxLength="1" value={value} onChange={(e) => handleChange(e, index)} />
+                  <input
+                  key={index}
+                  id={`box-${index}`}
+                  className="box me-2"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength="1"
+                  value={value}
+                  onChange={(e) => handleChange(e, index)}
+                />
                 ))}
               </div>
               <p className="mt-2">

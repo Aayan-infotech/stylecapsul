@@ -6,6 +6,7 @@ import { apiUrl } from "../../../apiUtils";
 import axios from "axios";
 import { getCookie } from "../../utils/cookieUtils";
 import { Button } from "@mui/material";
+import { showSuccessToast } from "../toastMessage/Toast";
 
 const StyleScan = () => {
   const [selectedFiles, setSelectedFiles] = useState({});
@@ -41,9 +42,11 @@ const StyleScan = () => {
         },
       });
       const result = response?.data;
+      console.log(result, 'result')
       if (result?.success === true && result?.matches) {
         setFilteredImages(result.matches);
         setStatusMessage(result.message);
+        // showSuccessToast(result.message);
       } else if (result?.bestMatch) {
         const bestMatchImage = {
           ...result.bestMatch,
@@ -51,6 +54,8 @@ const StyleScan = () => {
         };
         setFilteredImages([bestMatchImage]);
         setStatusMessage(result.message);
+        console.log(result, 'result')
+        showSuccessToast(result.message);
       } else {
         setStatusMessage("No similar items found.");
       }
@@ -82,7 +87,7 @@ const StyleScan = () => {
           {filteredImages && filteredImages.length > 0 ? (
             filteredImages.map((item, index) => (
               <div key={index} className="col-12 filtered-item rounded-3 d-flex justify-content-center align-items-center">
-                <div className="image_scanner">
+                <div className="image_scanner me-4">
                   <div className="image_scanner_card">
                     <img
                       src={item?.picture || item?.pictures?.[0]}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../styles/QuestionnaireUpdate.css";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 
@@ -149,12 +149,17 @@ const QuestionnaireUpdate = () => {
             </button>
           </div>
           <div className="col-12 col-sm-6 col-md-6">
-            <button
-              type="button"
-              className="btn btn-outline-secondary rounded-pill w-50 custom-button p-2 fw-bold fs-5"
+            <Link
+              to="/profile"
+              className=" justify-content-center align-items-center d-flex mx-200 w-100 text-decoration-none"
             >
-              Cancel
-            </button>
+              <button
+                type="button"
+                className="btn btn-outline-secondary rounded-pill w-50 custom-button p-2 fw-bold fs-5"
+              >
+                Cancel
+              </button>
+            </Link>
           </div>
         </div>
       </div>

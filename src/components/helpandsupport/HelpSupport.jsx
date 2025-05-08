@@ -22,7 +22,7 @@ const HelpSupport = () => {
     try {
       const res = await axios.post(
         apiUrl('api/help-concerns'),
-        { concern },
+        { concernMessage: concern },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -54,6 +54,7 @@ const HelpSupport = () => {
           'Content-Type': 'application/json',
         },
       });
+      console.log(res.data.data, 'Concerns Fetched');
       setUserConcerns(res.data.data);
       if (isRefresh) {
         setTimeout(() => {
@@ -82,7 +83,6 @@ const HelpSupport = () => {
   };
 
   const concernsToDisplay = showAll ? userConcerns : userConcerns.slice(0, 3);
-
 
   return (
     <div className="help-support-container">
@@ -141,28 +141,38 @@ const HelpSupport = () => {
             <div>
               {concernsToDisplay?.map((concernItem) => (
                 <div key={concernItem._id} style={{ marginBottom: '30px' }}>
-                  <div className="d-flex">
-                    {concernItem.reply ? (
-                      <div className="d-flex mt-2">
-                        <div className="p-3 bg-secondary text-white rounded shadow-sm">
-                          <p className="mb-1"><strong>Admin:</strong> {concernItem.reply} Waiting for admin reply...</p>
-                          <small className="text-light">{new Date(concernItem.updatedAt).toLocaleString()}</small>
+
+                  {/* Admin replies - Display on left side */}
+                  {concernItem.replies && concernItem.replies.length > 0 ? (
+                    concernItem.replies.map((reply, index) => (
+                      <div className="d-flex mt-2" key={`reply-${index}`}>
+                        <div className="p-3 bg-secondary text-white rounded shadow-sm" style={{ maxWidth: '80%', marginLeft: '10px' }}>
+                          <p className="mb-1"><strong>Admin:</strong> {reply.reply}</p>
+                          <small className="text-light">
+                            {new Date(reply.timestamp).toLocaleString()}
+                          </small>
                         </div>
                       </div>
-                    ) : (
-                      <div className="d-flex justify-content-end mt-2">
-                        <div className="p-2 bg-warning text-dark rounded shadow-sm">
-                          <small><strong>Waiting for admin reply...</strong></small>
-                        </div>
+                    ))
+                  ) : (
+                    <div className="d-flex justify-content-end mt-2">
+                      <div className="p-2 bg-warning text-dark rounded shadow-sm">
+                        <small><strong>Waiting for admin reply...</strong></small>
                       </div>
-                    )}
-                  </div>
-                  <div className="d-flex justify-content-end">
-                    <div className="p-3 bg-light rounded shadow-sm">
-                      <p className="mb-1"><strong>You:</strong> {concernItem.concern}</p>
-                      <small className="text-muted">{new Date(concernItem.createdAt).toLocaleString()}</small>
                     </div>
-                  </div>
+                  )}
+
+                  {/* User messages - Display on right side */}
+                  {concernItem.concern && concernItem.concern.length > 0 && concernItem.concern.map((userMessage, index) => (
+                    <div className="d-flex justify-content-end" key={`user-${index}`}>
+                      <div className="p-3 bg-light rounded shadow-sm" style={{ maxWidth: '80%' }}>
+                        <p className="mb-1"><strong>You:</strong> {userMessage}</p>
+                        <small className="text-muted">
+                          {new Date(concernItem.createdAt).toLocaleString()}
+                        </small>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
               <Box sx={{ textAlign: "center" }}>
@@ -174,8 +184,9 @@ const HelpSupport = () => {
           )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
+
 
 export default HelpSupport;

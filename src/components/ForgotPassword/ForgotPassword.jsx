@@ -56,7 +56,7 @@ const ForgotPassword = () => {
             <form className="mt-3" onSubmit={handleForgetPassword}>
               <div>
                 <label htmlFor="email" className="form-label fw-bold">Enter Email</label>
-                <input type="text" id="email" className="form-control rounded-pill" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="text" id="email" className="form-control rounded-pill" placeholder="Enter Email" value={email} onChange={(e) => setEmail(e.target.value.toLowerCase())} />
               </div>
               <div className="text-center mt-4">
                 <button type="submit" className="btn custom-button text-white fw-bold rounded-pill w-50 p-2">

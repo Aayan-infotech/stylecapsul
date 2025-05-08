@@ -7,11 +7,12 @@ import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
 import { format, addDays, isAfter, isToday, isSameMonth } from "date-fns";
-import { Button, Chip, Rating } from "@mui/material";
+import { Box, Button, Card, Chip, Rating, Typography } from "@mui/material";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const StylistDetails = () => {
   const [showStylistProfileDetails, setSshowStylistProfileDetails] =
@@ -72,8 +73,6 @@ const StylistDetails = () => {
       if (showLoading) setLoading(false);
     }
   };
-
-  console.log(vendorDetails, 'vendorDetails')
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -201,6 +200,7 @@ const StylistDetails = () => {
         showSuccessToast(res.data.message || "Appointment booked successfully!");
         setBookingSlotId(null);
         setOpenModal(false);
+        await fetchVendorDetails(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
         setBookingSlotId(null);
@@ -309,15 +309,6 @@ const StylistDetails = () => {
                           <Chip key={day} label={`${day} - ${format(date, "dd MMM yyyy")}`} sx={{ backgroundColor: "#17a2b8", color: "#fff" }} />
                         );
                       })}
-                      {/* {vendorDetails?.stylist?.availability?.days.map((day) => {
-                        const date = getNextDateForDay(day);
-                        const today = new Date();
-                        if (!isSameMonth(today, date)) return null;
-                        if (!(isAfter(date, today) || format(date, "yyyy-MM-dd") === format(today, "yyyy-MM-dd"))) return null;
-                        return (
-                          <Chip  key={day}  label={`${day} - ${format(date, "dd MMM yyyy")}`}  sx={{ backgroundColor: "#17a2b8", color: "#fff" }}/>
-                        );
-                      })} */}
                     </div>
                   ) : (
                     <div className="text-muted mt-2">No available booking slots at the moment.</div>
@@ -475,7 +466,6 @@ const StylistDetails = () => {
                     <div className="d-flex justify-content-between align-items-center mt-3">
                       <Rating value={rating} onChange={(event, newValue) => setRating(newValue)} />
                       <Button variant="contained" size="small" className="mt-3 rounded-pill" disabled={btnLoading} type="submit" sx={{ textTransform: "capitalize", backgroundColor: "black" }}>
-                        {/* {btnLoading ? "Loading..." : "Submit Review"} */}
                         Submit Review
                       </Button>
                     </div>
@@ -513,12 +503,11 @@ const StylistDetails = () => {
                   </div>
                   {selectedDay && (
                     <>
-                      {/* Check if there are available slots for the selected day */}
                       {vendorDetails.stylist.availability.slots.filter((slot) => slot.available).length === 0 ? (
                         <div className="text-muted mt-2">Slots are not available for {selectedDay}.</div>
                       ) : (
                         <div className="d-flex gap-2 flex-wrap">
-                          {vendorDetails.stylist.availability.slots.map((slot) => (
+                          {/* {vendorDetails.stylist.availability.slots.map((slot) => (
                             <Chip
                               key={slot._id}
                               label={
@@ -547,6 +536,46 @@ const StylistDetails = () => {
                               }}
                             />
 
+                          ))} */}
+                          {vendorDetails.stylist.availability.slots.map((slot) => (
+                            <Card
+                              key={slot._id}
+                              onClick={() => {
+                                if (slot.available && bookingSlotId === null) {
+                                  const timeRange = `${slot.start} - ${slot.end}`;
+                                  setSelectedTime(timeRange);
+                                  bookAppointment(timeRange, slot._id);
+                                }
+                              }}
+                              sx={{
+                                width: 150,
+                                padding: 2,
+                                borderRadius: 2,
+                                boxShadow: 3,
+                                cursor: slot.available ? 'pointer' : 'not-allowed',
+                                backgroundColor: '#fff',
+                                opacity: slot.available ? 1 : 0.5,
+                                transition: '0.3s',
+                                '&:hover': {
+                                  boxShadow: slot.available ? 6 : 3,
+                                },
+                              }}
+                            >
+                              <Typography fontWeight="bold" variant="body1">
+                                {slot.start} - {slot.end}
+                              </Typography>
+
+                              <Box display="flex" alignItems="center" gap={1} mt={1}>
+                                <CheckCircleIcon fontSize="small" sx={{ color: '#17a2b8' }} />
+                                <Typography variant="body2" color="textSecondary">
+                                  {slot.available ? 'Available' : 'Unavailable'}
+                                </Typography>
+                              </Box>
+
+                              <Typography variant="caption" color="textSecondary" mt={1}>
+                                {slot.bookedCount}/{slot.maxBookings} booked
+                              </Typography>
+                            </Card>
                           ))}
                         </div>
                       )}

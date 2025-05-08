@@ -37,6 +37,7 @@ export const addAddress = createAsyncThunk('addresses/addAddress', async (newAdd
 });
 
 export const deleteAddress = createAsyncThunk('addresses/deleteAddress', async (id) => {
+    const token = getCookie('authToken');
     await axios.delete(apiUrl(`api/address/delete-address/${id}`), {
         headers: {
             'Authorization': `Bearer ${token}`,

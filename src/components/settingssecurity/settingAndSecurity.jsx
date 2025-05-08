@@ -126,18 +126,32 @@ const SettingAndSecurity = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await dispatch(addAddress(addressForm));
-    await dispatch(fetchAddresses());
-    setAddressForm({
-      streetName: "",
-      city: "",
-      country: "",
-      mobileNumber: "",
-      customerName: ""
-    });
-    setLoading(false);
-    setActiveTab("addresslist");
+  
+    try {
+      const response = await dispatch(addAddress(addressForm));
+      if (response?.type === "addresses/addAddress/fulfilled") {
+        const message = response?.payload?.message || "Address added successfully";
+        showSuccessToast(message);
+      } else {
+        showErrorToast("Failed to add address");
+      }
+      await dispatch(fetchAddresses());
+      setAddressForm({
+        streetName: "",
+        city: "",
+        country: "",
+        mobileNumber: "",
+        customerName: ""
+      });
+  
+      setActiveTab("addresslist");
+    } catch (error) {
+      showErrorToast("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
 
   return (
@@ -180,18 +194,10 @@ const SettingAndSecurity = () => {
               </div>
               <div className="modal-body" style={{ height: "400px", overflowY: "auto" }}>
                 <div className="d-flex border-bottom mb-3">
-                  <button
-                    type="button"
-                    className="btn btn-dark rounded-pill me-3"
-                    onClick={() => setActiveTab("addresslist")}
-                  >
+                  <button type="button" className="btn btn-dark rounded-pill me-3" onClick={() => setActiveTab("addresslist")}>
                     Add New Address
                   </button>
-                  <button
-                    type="button"
-                    className="btn btn-dark rounded-pill"
-                    onClick={() => setActiveTab("add_new_address")}
-                  >
+                  <button type="button" className="btn btn-dark rounded-pill" onClick={() => setActiveTab("add_new_address")}>
                     Address List
                   </button>
                 </div>
@@ -200,74 +206,23 @@ const SettingAndSecurity = () => {
                   <form onSubmit={handleFormSubmit}>
                     <div className="modal-body text-start">
                       <div className="mb-2">
-                        <input
-                          type="text"
-                          className="form-control rounded-pill"
-                          id="customerName"
-                          name="customerName"
-                          value={addressForm.customerName}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Customer Name"
-                        />
+                        <input type="text" className="form-control rounded-pill" id="customerName" name="customerName" value={addressForm.customerName} onChange={handleInputChange} required placeholder="Customer Name" />
                       </div>
                       <div className="mb-2">
-                        <input
-                          type="text"
-                          className="form-control rounded-pill"
-                          id="streetName"
-                          name="streetName"
-                          value={addressForm.streetName}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Street Name"
-                        />
+                        <input type="text" className="form-control rounded-pill" id="streetName" name="streetName" value={addressForm.streetName} onChange={handleInputChange} required placeholder="Street Name" />
                       </div>
                       <div className="mb-2">
-                        <input
-                          type="text"
-                          className="form-control rounded-pill"
-                          id="city"
-                          name="city"
-                          value={addressForm.city}
-                          onChange={handleInputChange}
-                          required
-                          placeholder=" City"
-                        />
+                        <input type="text" className="form-control rounded-pill" id="city" name="city" value={addressForm.city} onChange={handleInputChange} required placeholder=" City" />
                       </div>
                       <div className="mb-2">
-                        <input
-                          type="text"
-                          className="form-control rounded-pill"
-                          id="country"
-                          name="country"
-                          value={addressForm.country}
-                          onChange={handleInputChange}
-                          required
-                          placeholder=" Country"
-                        />
+                        <input type="text" className="form-control rounded-pill" id="country" name="country" value={addressForm.country} onChange={handleInputChange} required placeholder=" Country" />
                       </div>
                       <div className="">
-                        <input
-                          type="text"
-                          className="form-control rounded-pill"
-                          id="mobileNumber"
-                          name="mobileNumber"
-                          value={addressForm.mobileNumber}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="Mobile Number (min 10 digits)"
-                          maxLength={10}
-                        />
+                        <input type="number" className="form-control rounded-pill" id="mobileNumber" name="mobileNumber" value={addressForm.mobileNumber} onChange={handleInputChange} required placeholder="Mobile Number" />
                       </div>
                     </div>
                     <div className="modal-footer">
-                      <button
-                        type="submit"
-                        className="btn btn-dark rounded-pill"
-                        style={{ backgroundColor: "black" }}
-                        disabled={loading}
-                      >
+                      <button type="submit" className="btn btn-dark rounded-pill" style={{ backgroundColor: "black" }} disabled={loading}>
                         {loading ? (
                           <span>
                             <i className="fa-solid fa-spinner fa-spin me-2"></i> Adding...
@@ -307,22 +262,8 @@ const SettingAndSecurity = () => {
                             <p className="m-1 fw-bold text-body-tertiary">{address.mobileNumber}</p>
                           </div>
                           <div>
-                            <i
-                              className="fa-solid fa-trash-can fs-5 fw-bold me-3"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteAddress(address._id);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            ></i>
-                            <i
-                              className="fa-solid fa-pen fs-5 fw-bold"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditAddress(address._id);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            ></i>
+                            <i className="fa-solid fa-trash-can fs-5 fw-bold me-3" onClick={(e) => { e.stopPropagation(); handleDeleteAddress(address._id); }} style={{ cursor: "pointer" }}></i>
+                            <i className="fa-solid fa-pen fs-5 fw-bold" onClick={(e) => { e.stopPropagation(); handleEditAddress(address._id); }} style={{ cursor: "pointer" }}></i>
                           </div>
                         </div>
                       ))
