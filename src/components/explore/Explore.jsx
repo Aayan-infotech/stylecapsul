@@ -343,6 +343,42 @@ const Explore = () => {
     }
   };
 
+
+  const handleDeleteReply = async (postIndex, commentIndex, replyIndex) => {
+    const post = allSocialPosts[postIndex];
+    const comment = post.comments[commentIndex];
+    const reply = comment.replies[replyIndex];
+
+    try {
+      const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
+        data: {
+          postId: post._id,
+          commentId: comment._id,
+          replyId: reply._id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response?.data?.success) {
+        showSuccessToast("Reply deleted successfully!");
+        const updatedPosts = [...allSocialPosts];
+        updatedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
+        setAllSocialPosts(updatedPosts);
+        await fetchAllPostsByExplore(false);
+      } else {
+        showErrorToast("Failed to delete reply");
+      }
+    } catch (error) {
+      console.error("Error deleting reply:", error);
+      showErrorToast("Something went wrong while deleting the reply.");
+    }
+  };
+
+
+
   return (
     <>
       {loading ? (
@@ -545,7 +581,7 @@ const Explore = () => {
                                           (reply, replyIndex) => (
                                             <div key={replyIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                               <div className="d-flex">
-                                                <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={reply?.replies?.user?.profileImage || blank_img} />
+                                                <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={reply?.user?.profileImage || blank_img} />
                                                 <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0", }}>
                                                   <Typography variant="caption" className="fw-bold">
                                                     {reply?.user?.firstName}
@@ -555,6 +591,13 @@ const Explore = () => {
                                                   </Typography>
                                                 </div>
                                               </div>
+                                              {reply?.user?._id === userId && (
+                                                <DeleteOutlineIcon
+                                                  size="small"
+                                                  style={{ cursor: "pointer" }}
+                                                  onClick={() => handleDeleteReply(index, commentIndex, replyIndex)}
+                                                />
+                                              )}
                                             </div>
                                           )
                                         )}
