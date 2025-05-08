@@ -235,7 +235,7 @@ const Address = () => {
                   </div>
                   <div className="mb-3">
                     <label htmlFor="mobileNumber" className="form-label">  Mobile Number</label>
-                    <input type="text" className="form-control rounded-pill p-4" id="mobileNumber" name="mobileNumber" value={addressForm.mobileNumber} onChange={handleInputChange} required minLength={10} maxLength={15} pattern="^[0-9]{10,15}$" title="Mobile number should be between 10 and 15 digits" />
+                    <input type="number" className="form-control rounded-pill p-4" id="mobileNumber" name="mobileNumber" value={addressForm.mobileNumber} onChange={handleInputChange} required minLength={10} maxLength={15} pattern="^[0-9]{10,15}$" title="Mobile number should be between 10 and 15 digits" />
                   </div>
                 </div>
                 <div className="modal-footer">
