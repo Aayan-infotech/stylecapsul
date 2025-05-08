@@ -321,6 +321,39 @@ export const SocialUserDetails = () => {
     }
   };
 
+  const handleDeleteReply = async (postIndex, commentIndex, replyIndex) => {
+    const post = userPostDetails[postIndex];
+    const comment = post.comments[commentIndex];
+    const reply = comment.replies[replyIndex];
+
+    try {
+      const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
+        data: {
+          postId: post._id,
+          commentId: comment._id,
+          replyId: reply._id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response?.data?.success) {
+        showSuccessToast("Reply deleted successfully!");
+        const updatedPosts = [...userPostDetails];
+        updatedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
+        setUserPostDetails(updatedPosts);
+        await fetchPostDetailsByUs(false);
+      } else {
+        showErrorToast("Failed to delete reply");
+      }
+    } catch (error) {
+      console.error("Error deleting reply:", error);
+      showErrorToast("Something went wrong while deleting the reply.");
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -378,7 +411,7 @@ export const SocialUserDetails = () => {
 
                     return (
                       <Link key={index} to={route} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
-                        <div className="rounded-pill mb-3 d-flex align-items-center px-4" style={{ backgroundColor: "#4C4C4C", height: "70px"}}>
+                        <div className="rounded-pill mb-3 d-flex align-items-center px-4" style={{ backgroundColor: "#4C4C4C", height: "70px" }}>
                           <img src={item?.icon || blank_img} alt="Category Icon" height={50} width={50} className="me-2" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                           <h4 className="text-white fw-bold">{item?.name}</h4>
                         </div>
@@ -514,13 +547,13 @@ export const SocialUserDetails = () => {
                           {post?.comments?.length > 0 ? (
                             post?.comments?.map((comment, commentIndex) => (
                               <div key={commentIndex} className="mb-3">
-                                <div
-                                  key={commentIndex}
-                                  className="d-flex justify-content-between align-items-center mb-2 text-black"
-                                >
+                                <div key={commentIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                   <div className="d-flex">
                                     <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={comment?.user?.profileImage || blank_img} />
                                     <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0" }}>
+                                      <Typography variant="body2" gutterBottom>
+                                        {comment?.user?.firstName}
+                                      </Typography>
                                       <Typography variant="body2" gutterBottom>
                                         {comment?.text}
                                       </Typography>
@@ -540,10 +573,20 @@ export const SocialUserDetails = () => {
                                               <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={reply?.user?.profileImage || blank_img} />
                                               <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0" }}>
                                                 <Typography variant="body2" gutterBottom>
+                                                  {reply?.user?.firstName}
+                                                </Typography>
+                                                <Typography variant="body2" gutterBottom>
                                                   {reply?.text}
                                                 </Typography>
                                               </div>
                                             </div>
+                                            {reply?.user === userId && (
+                                              <DeleteOutlineIcon
+                                                size="small"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() => handleDeleteReply(index, commentIndex, replyIndex)}
+                                              />
+                                            )}
                                           </div>
                                         ))}
                                     </div>

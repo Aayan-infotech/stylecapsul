@@ -333,6 +333,39 @@ const ExploreUserProfileDetails = () => {
     }
   };
 
+    const handleDeleteReply = async (postIndex, commentIndex, replyIndex) => {
+      const post = userPostDetails[postIndex];
+      const comment = post.comments[commentIndex];
+      const reply = comment.replies[replyIndex];
+  
+      try {
+        const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
+          data: {
+            postId: post._id,
+            commentId: comment._id,
+            replyId: reply._id,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (response?.data?.success) {
+          showSuccessToast("Reply deleted successfully!");
+          const updatedPosts = [...userPostDetails];
+          updatedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
+          setUserPostDetails(updatedPosts);
+          await fetchPostDetailsByUs(false);
+        } else {
+          showErrorToast("Failed to delete reply");
+        }
+      } catch (error) {
+        console.error("Error deleting reply:", error);
+        showErrorToast("Something went wrong while deleting the reply.");
+      }
+    };
+
 
   return (
     <>
@@ -388,7 +421,7 @@ const ExploreUserProfileDetails = () => {
                 {categories?.length > 0 ? (
                   categories.map((item, index) => (
                     <Link key={index} to={`/all-clothes-list/${item?._id}`} state={{ category_name: item?.name, userPostDetails }} className="text-decoration-none">
-                      <div key={index} className="rounded-pill mb-3 d-flex align-items-center px-4"  style={{ backgroundColor: "#4C4C4C", height: "70px", }}>
+                      <div key={index} className="rounded-pill mb-3 d-flex align-items-center px-4" style={{ backgroundColor: "#4C4C4C", height: "70px", }}>
                         <img src={item?.icon || blank_img} alt="Category Icon" height={50} width={50} className="me-2" onError={(e) => { e.target.onerror = null; e.target.src = blank_img; }} />
                         <h4 className="text-white fw-bold mb-0">{item?.name}</h4>
                       </div>
@@ -552,6 +585,13 @@ const ExploreUserProfileDetails = () => {
                                                 </Typography>
                                               </div>
                                             </div>
+                                            {reply?.user === userId && (
+                                              <DeleteOutlineIcon
+                                                size="small"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() => handleDeleteReply(index, commentIndex, replyIndex)}
+                                              />
+                                            )}
                                           </div>
                                         ))}
                                     </div>
