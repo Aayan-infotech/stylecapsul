@@ -133,10 +133,10 @@ function ClothesList() {
                 <h1 className="text-center fw-bold fs-1 mb-0">
                   {category_name || "N/A"}
                 </h1>
-                <div className="search-box ">
+                {/* <div className="search-box ">
                   <i className="fa fa-search"></i>
                   <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
-                </div>
+                </div> */}
               </div>
               {loading ? (
                 <div className="col-12 text-center">

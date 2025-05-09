@@ -218,39 +218,45 @@ const LandingPage = () => {
             <div className="container landing5 mt-5">
               <div className="row">
                 <h2 className="text-center fw-bold">Popular Products</h2>
-                {popularsProducts?.map((product, index) => (
-                  <div key={index} className="col-12 col-md-6 mt-4">
-                    <div className="product-card">
-                      <div className="image-container">
-                        <img src={product?.image || blank_img} alt={product?.name} onError={(e) => (e.target.src = blank_img)} />
-                      </div>
-                      <div className="text-container">
-                        <div className="info">
-                          <h6> {product?.name ? product.name.length > 25 ? `${product.name.slice(0, 25)}...` : product.name : "N/A"}</h6>
-                          <div className="description-price">
-                            <p>  {product?.description ? product.description.length > 40 ? `${product.description.slice(0, 40)}...` : product.description : "N/A"}{" "}</p>
-                            <div className="price">
-                              ${product?.price || "N/A"}
+                {popularsProducts && popularsProducts.length > 0 ? (
+                  popularsProducts.map((product, index) => (
+                    <div key={index} className="col-12 col-md-6 mt-4">
+                      <div className="product-card">
+                        <div className="image-container">
+                          <img src={product?.image || blank_img} alt={product?.name} onError={(e) => (e.target.src = blank_img)} />
+                        </div>
+                        <div className="text-container">
+                          <div className="info">
+                            <h6> {product?.name ? product.name.length > 25 ? `${product.name.slice(0, 25)}...` : product.name : "N/A"}</h6>
+                            <div className="description-price">
+                              <p>  {product?.description ? product.description.length > 40 ? `${product.description.slice(0, 40)}...` : product.description : "N/A"}{" "}</p>
+                              <div className="price">
+                                ${product?.price || "N/A"}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="actions">
-                          <button
-                            className="add-to-cart"
-                            onClick={() => handleAddToCart(product)}
-                            disabled={loadingProductId === product.id}
-                          >
-                            {loadingProductId === product.id ? (
-                              <CircularProgress size={20} color="inherit" />
-                            ) : (
-                              "Add to cart"
-                            )}
-                          </button>
+                          <div className="actions">
+                            <button
+                              className="add-to-cart"
+                              onClick={() => handleAddToCart(product)}
+                              disabled={loadingProductId === product.id}
+                            >
+                              {loadingProductId === product.id ? (
+                                <CircularProgress size={20} color="inherit" />
+                              ) : (
+                                "Add to cart"
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center mt-5">
+                    <h5>No popular products available at the moment.</h5>
                   </div>
-                ))}
+                )}
               </div>
             </div>
             <Footer />

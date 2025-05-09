@@ -234,8 +234,6 @@ const StylistDetails = () => {
     }
   };
 
-  console.log(vendorDetails?.stylist?.availability, 'vendorDetails?.stylist?.availability')
-
   return (
     <>
       {loading ? (

@@ -157,7 +157,6 @@ const AddClothes = () => {
     const isExistingImage = typeof imagePreview[index] === "string";
 
     if (isExistingImage) {
-      // Track it for exclusion in the payload
       setRemovedExistingImages((prev) => [...prev, imagePreview[index]]);
     }
 

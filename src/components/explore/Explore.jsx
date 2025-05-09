@@ -270,7 +270,6 @@ const Explore = () => {
 
   const fetchPostsUserSearch = async () => {
     setError("");
-    setLoading(true);
     try {
       const response = await axios.get(apiUrl(`api/explore/search?query=${query}&sort=name&order=asc&page=${page}&limit=5`), {
         headers: {
@@ -295,8 +294,6 @@ const Explore = () => {
     } catch (error) {
       setError(error?.response?.data?.message);
       setDisplayPosts([]);
-    } finally {
-      setLoading(false);
     }
   };
 
