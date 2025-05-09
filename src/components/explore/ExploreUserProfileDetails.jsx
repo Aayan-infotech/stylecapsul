@@ -262,7 +262,7 @@ const ExploreUserProfileDetails = () => {
           updatedPosts.groupedPosts = updatedGroupedPosts;
 
           setUserPostDetails(updatedPosts);
-          fetchAllPostsByExplore();
+          await fetchPostDetailsByUs(false);
         } else {
           showErrorToast("Failed to add reply");
         }
@@ -357,7 +357,7 @@ const ExploreUserProfileDetails = () => {
           const updatedPosts = { ...userPostDetails };
           updatedPosts.groupedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
           setUserPostDetails(updatedPosts);
-          fetchPostDetailsByUs();
+          await fetchPostDetailsByUs(false);
         } else {
           showErrorToast("Failed to delete reply");
         }

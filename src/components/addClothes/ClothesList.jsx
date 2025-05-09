@@ -16,7 +16,7 @@ function ClothesList() {
   const [loading, setLoading] = useState(true);
   const [categoryCloth, setCategoryCloth] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { category } = useParams();
@@ -31,8 +31,8 @@ function ClothesList() {
     dispatch(allAddedClothList());
   }, [dispatch]);
 
-  const fetchClothesByCategory = async () => {
-    setLoading(true);
+  const fetchClothesByCategory = async (showLoader = true) => {
+    if (showLoader) setLoading(true);
     try {
       const response = await axios.get(
         apiUrl(`api/cloths/get-by-category/${category}`),
@@ -49,38 +49,40 @@ function ClothesList() {
       }
     } catch (error) {
       console.error("Error fetching clothes by category:", error);
-      setLoading(false);
+    } finally {
+      if (showLoader) setLoading(false);
     }
   };
 
-  const fetchClothesByCategoryAndSearch = async () => {
-    try {
-      const response = await axios.get(
-        apiUrl(`api/cloths/${category}/search/${searchTerm}`),
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setCategoryCloth(
-        Array.isArray(response.data.cloths) ? response.data.cloths : []
-      );
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching clothes with search term:", error);
-      setLoading(false);
-    }
-  };
+  // const fetchClothesByCategoryAndSearch = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       apiUrl(`api/cloths/${category}/search/${searchTerm}`),
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     setCategoryCloth(
+  //       Array.isArray(response.data.cloths) ? response.data.cloths : []
+  //     );
+  //   } catch (error) {
+  //     console.error("Error fetching clothes with search term:", error);
+  //   }
+  // };
 
+  // useEffect(() => {
+  //   if (searchTerm) {
+  //     fetchClothesByCategoryAndSearch();
+  //   } else {
+  //     fetchClothesByCategory(false);
+  //   }
+  // }, [searchTerm, category]);
   useEffect(() => {
-    if (searchTerm) {
-      fetchClothesByCategoryAndSearch();
-    } else {
-      fetchClothesByCategory();
-    }
-  }, [searchTerm, category]);
+    fetchClothesByCategory(false);
+  }, []);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -121,6 +123,11 @@ function ClothesList() {
     });
   };
 
+  const filteredClothes = categoryCloth.filter((cloth) =>
+    cloth?.category?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cloth?.typeOfFashion?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       {loading ? (
@@ -133,10 +140,10 @@ function ClothesList() {
                 <h1 className="text-center fw-bold fs-1 mb-0">
                   {category_name || "N/A"}
                 </h1>
-                {/* <div className="search-box ">
+                <div className="search-box ">
                   <i className="fa fa-search"></i>
                   <input type="text" placeholder="Search" value={searchTerm} onChange={handleSearch} />
-                </div> */}
+                </div>
               </div>
               {loading ? (
                 <div className="col-12 text-center">
@@ -146,8 +153,8 @@ function ClothesList() {
                     </span>
                   </div>
                 </div>
-              ) : categoryCloth.length > 0 ? (
-                categoryCloth.map((product, index) => (
+              ) : filteredClothes?.length > 0 ? (
+                filteredClothes?.map((product, index) => (
                   <div className="col-12" key={index}>
                     <div className="products-container">
                       <div className="products-added rounded-pill" onClick={() => handleClothDetails(product)}>

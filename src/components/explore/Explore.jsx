@@ -38,6 +38,8 @@ const Explore = () => {
   const [error, setError] = useState("");
   const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
   const [profileImageShow, seProfileImageShow] = useState({});
+  const [replyLoading, setReplyLoading] = useState({ postIndex: null, commentIndex: null });
+
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
@@ -225,6 +227,7 @@ const Explore = () => {
     const comment = post.comments[commentIndex];
     const newReply = comment.newReply;
     if (newReply) {
+      setReplyLoading({ postIndex, commentIndex });
       try {
         const response = await axios.post(
           apiUrl("api/explore/reply"),
@@ -251,13 +254,15 @@ const Explore = () => {
             userId,
           });
           updatedPosts[postIndex].comments[commentIndex].newReply = "";
-          fetchAllPostsByExplore();
           setAllSocialPosts(updatedPosts);
+          await fetchAllPostsByExplore(false);
         } else {
           showErrorToast("Failed to add reply");
         }
       } catch (error) {
         console.error("Error adding reply:", error);
+      } finally {
+        setReplyLoading({ postIndex: null, commentIndex: null }); // Stop loading
       }
     }
   };
@@ -610,8 +615,13 @@ const Explore = () => {
                                       onKeyDown={(e) => { if (e.key === "Enter" && comment.newReply?.trim()) { handleReplySubmit(index, commentIndex); e.preventDefault(); } }}
                                     />
 
-                                    <button className="btn btn-primary btn-sm" onClick={() => handleReplySubmit(index, commentIndex)}>
-                                      Reply
+                                    <button disabled={replyLoading.postIndex === index && replyLoading.commentIndex === commentIndex}
+                                      className="btn btn-primary btn-sm" onClick={() => handleReplySubmit(index, commentIndex)}>
+                                      {replyLoading.postIndex === index && replyLoading.commentIndex === commentIndex ? (
+                                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                      ) : (
+                                        "Reply"
+                                      )}
                                     </button>
                                   </div>
                                 </div>

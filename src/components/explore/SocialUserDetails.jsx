@@ -252,7 +252,7 @@ export const SocialUserDetails = () => {
           updatedGroupedPosts[postIndex].comments = updatedComments;
           updatedPosts.groupedPosts = updatedGroupedPosts;
           setUserPostDetails(updatedPosts);
-          // fetchAllPostsByExplore();
+          await fetchPostDetailsByUs(false);
         } else {
           showErrorToast("Failed to add reply");
         }
@@ -322,7 +322,7 @@ export const SocialUserDetails = () => {
   };
 
   const handleDeleteReply = async (postIndex, commentIndex, replyIndex) => {
-    const post = userPostDetails[postIndex];
+    const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
     const reply = comment.replies[replyIndex];
 
@@ -348,6 +348,7 @@ export const SocialUserDetails = () => {
       } else {
         showErrorToast("Failed to delete reply");
       }
+      await fetchPostDetailsByUs(false);
     } catch (error) {
       console.error("Error deleting reply:", error);
       showErrorToast("Something went wrong while deleting the reply.");

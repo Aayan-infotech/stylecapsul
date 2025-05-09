@@ -164,14 +164,21 @@ const AddClothes = () => {
       prevPreviews.filter((_, i) => i !== index)
     );
 
-    setFormData((prevData) => ({
-      ...prevData,
-      image: Array.isArray(prevData.image)
-        ? prevData.image.filter((_, i) => i !== index || typeof imagePreview[i] === "string")
-        : [],
-    }));
+    setFormData((prevData) => {
+      const updatedImages = [...prevData.image || []];
+      updatedImages.splice(index, 1);
+      return {
+        ...prevData,
+        image: updatedImages,
+      };
+    })
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   image: Array.isArray(prevData.image)
+    //     ? prevData.image.filter((_, i) => i !== index || typeof imagePreview[i] === "string")
+    //     : [],
+    // }));
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -214,7 +221,9 @@ const AddClothes = () => {
         }
         );
         showSuccessToast(response?.data?.message);
-        navigate("/closet-categories")
+        setTimeout(() => {
+          navigate("/closet-categories")
+        });
       } else {
         response = await dispatch(addClothes(data)).unwrap();
         showSuccessToast("Cloth added successfully..!");
@@ -370,12 +379,12 @@ const AddClothes = () => {
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
-                      Adding...
+                      {updateNewCloth ? "Updating..." : "Adding..."}
                     </span>
                   ) : updateNewCloth ? (
                     "Update"
                   ) : (
-                    "Add"
+                    "Add Clothes"
                   )}
                 </button>
               </form>
