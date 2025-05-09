@@ -27,6 +27,7 @@ const Stylist = () => {
           "Content-Type": "application/json",
         },
       });
+      console.log(response?.data, 'check stylist');
       if (response?.data?.stylists?.length > 0) {
         setShowStylists(response.data.stylists);
         setMessage("");

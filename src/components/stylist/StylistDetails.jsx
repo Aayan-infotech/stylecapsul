@@ -13,6 +13,7 @@ import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle'
 
 const StylistDetails = () => {
   const [showStylistProfileDetails, setSshowStylistProfileDetails] =
@@ -197,9 +198,11 @@ const StylistDetails = () => {
         }
       );
       if (res.status === 201 && res.data?.success) {
-        showSuccessToast(res.data.message || "Appointment booked successfully!");
         setBookingSlotId(null);
         setOpenModal(false);
+        setTimeout(() => {
+          showSuccessToast(res.data.message || "Appointment booked successfully!");
+        }, 2000);
         await fetchVendorDetails(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
@@ -229,8 +232,9 @@ const StylistDetails = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
+  console.log(vendorDetails?.stylist?.availability, 'vendorDetails?.stylist?.availability')
 
   return (
     <>
@@ -507,36 +511,6 @@ const StylistDetails = () => {
                         <div className="text-muted mt-2">Slots are not available for {selectedDay}.</div>
                       ) : (
                         <div className="d-flex gap-2 flex-wrap">
-                          {/* {vendorDetails.stylist.availability.slots.map((slot) => (
-                            <Chip
-                              key={slot._id}
-                              label={
-                                bookingSlotId === slot._id ? (
-                                  <span style={{ display: 'flex', alignItems: 'center' }}>
-                                    <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                    Booking...
-                                  </span>
-                                ) : `${slot.start} - ${slot.end}`
-                              }
-                              clickable={slot.available && bookingSlotId === null}
-                              disabled={!slot.available || bookingSlotId !== null}
-                              onClick={() => {
-                                if (slot.available && bookingSlotId === null) {
-                                  const timeRange = `${slot.start} - ${slot.end}`;
-                                  setSelectedTime(timeRange);
-                                  bookAppointment(timeRange, slot._id);
-                                }
-                              }}
-                              sx={{
-                                backgroundColor: slot.available ? "#28a745" : "#6c757d",
-                                color: "#fff",
-                                '&:hover': {
-                                  backgroundColor: slot.available ? "#218838" : "#5a6268",
-                                },
-                              }}
-                            />
-
-                          ))} */}
                           {vendorDetails.stylist.availability.slots.map((slot) => (
                             <Card
                               key={slot._id}
@@ -566,12 +540,22 @@ const StylistDetails = () => {
                               </Typography>
 
                               <Box display="flex" alignItems="center" gap={1} mt={1}>
-                                <CheckCircleIcon fontSize="small" sx={{ color: '#17a2b8' }} />
-                                <Typography variant="body2" color="textSecondary">
-                                  {slot.available ? 'Available' : 'Unavailable'}
-                                </Typography>
+                                {slot.available ? (
+                                  <>
+                                    <CheckCircleIcon fontSize="small" sx={{ color: '#17a2b8' }} />
+                                    <Typography variant="body2" color="textSecondary">
+                                      Available
+                                    </Typography>
+                                  </>
+                                ) : (
+                                  <>
+                                    <RemoveCircleIcon fontSize="small" sx={{ color: 'red' }} />
+                                    <Typography variant="body2" fontWeight="bold" sx={{ color: 'red' }}>
+                                      Booked
+                                    </Typography>
+                                  </>
+                                )}
                               </Box>
-
                               <Typography variant="caption" color="textSecondary" mt={1}>
                                 {slot.bookedCount}/{slot.maxBookings} booked
                               </Typography>

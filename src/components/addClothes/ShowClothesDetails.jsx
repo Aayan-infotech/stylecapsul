@@ -8,6 +8,13 @@ import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader.jsx";
 import { showErrorToast } from "../toastMessage/Toast.jsx";
+import CategoryIcon from '@mui/icons-material/Category';
+import SubtitlesIcon from '@mui/icons-material/Subtitles';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import StyleIcon from '@mui/icons-material/Style';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const ShowClothesDetails = () => {
   const [showClothesDetails, setShowClothesDetails] = useState({});
@@ -90,65 +97,52 @@ const ShowClothesDetails = () => {
 
               <div className="col-12 col-md-6 p-3 clothes-service-details">
                 <div>
-                  <h5 className="fw-bold">{category_name || "N/A"}</h5>
+                  <h5 className="fw-bold">Basic Info</h5>
                   <div className="border-line"></div>
+
                   <div className="d-flex justify-content-between align-items-center">
-                    <p>Category</p>
-                    <p className="fw-bold">{category_name || "N/A"}</p>
+                    <p><CategoryIcon fontSize="small" className="me-2" />Category</p>
+                    <p>{category_name || "N/A"}</p>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <p>Type</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.typeOfFashion || "N/A"}
-                    </p>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Gender</p>
-                    <p className="fw-bold">{showClothesDetails?.gender || "N/A"}</p>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Season</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.season || "N/A"}
-                    </p>
+                    <p><SubtitlesIcon fontSize="small" className="me-2" />Sub Category</p>
+                    <p>{showClothesDetails?.subcategory || "N/A"}</p>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <p>Part</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.part || "N/A"}
-                    </p>
+                    <p><ViewModuleIcon fontSize="small" className="me-2" />Part</p>
+                    <p>{showClothesDetails?.part || "N/A"}</p>
+                  </div>
+
+                  <h5 className="fw-bold">Style Details</h5>
+
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p><StyleIcon fontSize="small" className="me-2" />Type</p>
+                    <p>{showClothesDetails?.typeOfFashion || "N/A"}</p>
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center">
-                    <p>Purchase Date</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.purchaseDate ? format(new Date(showClothesDetails?.purchaseDate), "dd MMM yyyy") : "N/A"}
-                    </p>
+                    <p><WbSunnyIcon fontSize="small" className="me-2" />Season</p>
+                    <p>{showClothesDetails?.season || "N/A"}</p>
+                  </div>
+
+                  <h5 className="fw-bold">Additional Info</h5>
+
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p><CalendarTodayIcon fontSize="small" className="me-2" />Purchase Date</p>
+                    <p>{showClothesDetails?.purchaseDate ? format(new Date(showClothesDetails?.purchaseDate), "dd MMM yyyy") : "N/A"}</p>
+                  </div>
+
+                  <div className="d-flex justify-content-between align-items-center">
+                    <p><AccessTimeIcon fontSize="small" className="me-2" />Created At</p>
+                    <p>{showClothesDetails?.createdAt ? format(new Date(showClothesDetails?.createdAt), "dd MMM yyyy HH:mm:ss") : "N/A"}</p>
                   </div>
 
                   {/* <div className="d-flex justify-content-between align-items-center">
-                    <p>Dominant Color</p>
-                    <div className="d-flex align-items-center gap-2">
-                      <span>{showClothesDetails?.dominantColor || "N/A"}</span>
-                      <div style={{ width: "20px", height: "20px", backgroundColor: showClothesDetails?.dominantColor || "#ccc", border: "1px solid #000", }}></div>
-                    </div>
+                    <p><AccessTimeIcon fontSize="small" className="me-2" />Updated At</p>
+                    <p>{showClothesDetails?.updatedAt ? format(new Date(showClothesDetails?.updatedAt), "dd MMM yyyy HH:mm:ss") : "N/A"}</p>
                   </div> */}
-
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Created At</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.createdAt ? format(new Date(showClothesDetails?.createdAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
-                    </p>
-                  </div>
-
-                  <div className="d-flex justify-content-between align-items-center">
-                    <p>Updated At</p>
-                    <p className="fw-bold">
-                      {showClothesDetails?.updatedAt ? format(new Date(showClothesDetails?.updatedAt), "dd MMM yyyy HH:mm:ss") : "N/A"}
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>

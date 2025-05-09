@@ -216,15 +216,13 @@ const AddClothes = () => {
         );
         showSuccessToast(response?.data?.message);
         navigate("/closet-categories")
-        // setTimeout(() => {
-        // navigate(`/all-clothes-list/${location.state?.currentCategory}`);
-        // }, 1000);
       } else {
         response = await dispatch(addClothes(data)).unwrap();
         showSuccessToast("Cloth added successfully..!");
         if (response.success && response.status === 200) {
+          showSuccessToast(response?.data?.message);
           setTimeout(() => {
-            navigate("/closet-categories");
+            navigate("/closet-management");
           }, 1000);
         }
       }
