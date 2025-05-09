@@ -27,9 +27,9 @@ const Footer = () => {
                 <Link to="/policy" className="text-black">
                   <h6>Privacy Policy</h6>
                 </Link>
-                <Link to="/contact" className="text-black">
+                {/* <Link to="/contact" className="text-black">
                   <h6>Contact</h6>
-                </Link>
+                </Link> */}
               </div>
             </div>
             <div className="col-md-4 footer-column">
