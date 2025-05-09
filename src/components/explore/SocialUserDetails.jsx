@@ -325,7 +325,7 @@ export const SocialUserDetails = () => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
     const reply = comment.replies[replyIndex];
-
+  
     try {
       const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
         data: {
@@ -338,23 +338,24 @@ export const SocialUserDetails = () => {
           "Content-Type": "application/json",
         },
       });
-
+  
       if (response?.data?.success) {
         showSuccessToast("Reply deleted successfully!");
-        const updatedPosts = [...userPostDetails];
-        updatedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
+  
+        const updatedPosts = { ...userPostDetails };
+        updatedPosts.groupedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
         setUserPostDetails(updatedPosts);
-        await fetchPostDetailsByUs(false);
+  
+        await fetchPostDetailsByUs(false); // optional: if you want to fully refresh
       } else {
         showErrorToast("Failed to delete reply");
       }
-      await fetchPostDetailsByUs(false);
     } catch (error) {
       console.error("Error deleting reply:", error);
       showErrorToast("Something went wrong while deleting the reply.");
     }
   };
-
+  
   return (
     <>
       {loading ? (

@@ -363,7 +363,6 @@ const ExploreUserProfileDetails = () => {
         }
       } catch (error) {
         console.error("Error deleting reply:", error);
-        showErrorToast("Something went wrong while deleting the reply.");
       }
     } else {
       showErrorToast("You can only delete your own replies");
