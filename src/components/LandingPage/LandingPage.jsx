@@ -15,12 +15,14 @@ import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/blank_img.jpg";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { CircularProgress } from "@mui/material";
+import { Visibility } from "@mui/icons-material";
 
 const LandingPage = () => {
   const [loadingProductId, setLoadingProductId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [popularsProducts, setPopularsProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const location = useLocation();
   const token = useSelector((state) => state?.login?.token);
@@ -104,6 +106,14 @@ const LandingPage = () => {
     setCartQuantity(existingCart.length);
   }, []);
 
+  const handleProductClick = (product) => {
+    console.log(product, 'product')
+    setSelectedProduct(product);
+  };
+
+  const handleBackToList = () => {
+    setSelectedProduct(null);
+  };
 
   return (
     <>
@@ -179,15 +189,6 @@ const LandingPage = () => {
                     </h2>
                   </div>
                 </div>
-                {/* <div
-                  className="bubble-element 1544679421691x581364656889921500-AAE"
-                  style={{ alignSelf: "flex-start", minWidth: "42%", maxWidth: "42%", order: 2, minHeight: "200px", width: "42%", flexGrow: 1, height: "max-content", margin: 0, zIndex: 17, borderRadius: "10px", backgroundImage: "none", }}
-                >
-                  <video preload="metadata" className="html5VideoPlayer" id="html5Video-fb842654-9b08-cd09-ac19-408dd8fe187a" width="100%" height="100%" autoPlay muted loop>
-                    <source src="//40e507dd0272b7bb46d376a326e6cb3c.cdn.bubble.io/f1742105399665x244292551448723300/nPx5IeLK49MFZ7KiCZr9j_output.mp4" />
-                  </video>
-                </div> */}
-
                 <div className="col-12 col-md-6 d-flex justify-content-center align-items-center">
                   <img src={two} height={400} alt="" />
                 </div>
@@ -217,48 +218,85 @@ const LandingPage = () => {
 
             <div className="container landing5 mt-5">
               <div className="row">
-                <h2 className="text-center fw-bold">Popular Products</h2>
-                {popularsProducts && popularsProducts.length > 0 ? (
-                  popularsProducts.map((product, index) => (
-                    <div key={index} className="col-12 col-md-6 mt-4">
-                      <div className="product-card">
-                        <div className="image-container">
-                          <img src={product?.image || blank_img} alt={product?.name} onError={(e) => (e.target.src = blank_img)} />
-                        </div>
-                        <div className="text-container">
-                          <div className="info">
-                            <h6> {product?.name ? product.name.length > 25 ? `${product.name.slice(0, 25)}...` : product.name : "N/A"}</h6>
-                            <div className="description-price">
-                              <p>  {product?.description ? product.description.length > 40 ? `${product.description.slice(0, 40)}...` : product.description : "N/A"}{" "}</p>
-                              <div className="price">
-                                ${product?.price || "N/A"}
-                              </div>
-                            </div>
+                {selectedProduct ? (
+                  <div className="col-12">
+                    <div className="product-detail">
+                      <div className="product-detail-card d-flex">
+                        <img src={selectedProduct?.image || blank_img} alt={selectedProduct?.name} onError={(e) => (e.target.src = blank_img)} className="rounded-pill" />
+                        <div className="p-4 mt-3">
+                          <h4>{selectedProduct?.name || 'N/A'}</h4>
+                          <div className="price"><strong>Price:</strong> ${selectedProduct?.price || 'N/A'}</div>
+                          <div>
+                            <strong>Brand:</strong> {selectedProduct?.brand || 'N/A'}
                           </div>
-                          <div className="actions">
-                            <button
-                              className="add-to-cart"
-                              onClick={() => handleAddToCart(product)}
-                              disabled={loadingProductId === product.id}
-                            >
-                              {loadingProductId === product.id ? (
+                          <div>
+                            <strong>Views:</strong> {selectedProduct?.viewCount || '0'}
+                          </div>
+                          <div>
+                            <strong>Created At:</strong> {selectedProduct?.createdAt ? new Date(selectedProduct.createdAt).toLocaleString() : 'N/A'}
+                          </div>
+                          <div className="d-flex gap-2 mt-3">
+                            <button className="btn btn-dark rounded-pill" onClick={() => handleAddToCart(selectedProduct)} disabled={loadingProductId === selectedProduct?.id}>
+                              {loadingProductId === selectedProduct?.id ? (
                                 <CircularProgress size={20} color="inherit" />
                               ) : (
-                                "Add to cart"
+                                'Add to cart'
                               )}
+                            </button>
+                            <button onClick={handleBackToList} className="btn btn-dark rounded-pill">
+                              Back to Products
                             </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center mt-5">
-                    <h5>No popular products available at the moment.</h5>
                   </div>
+                ) : (
+                  <>
+                    <h2 className="text-center fw-bold">Popular Products</h2>
+                    {popularsProducts && popularsProducts.length > 0 ? (
+                      popularsProducts.map((product, index) => (
+                        <div key={index} className="col-12 col-md-6 mt-4">
+                          <div className="product-card">
+                            <div className="image-container">
+                              <img src={product?.image || blank_img} alt={product?.name} onError={(e) => (e.target.src = blank_img)} />
+                            </div>
+                            <div className="text-container">
+                              <div className="info">
+                                <h6>  {product?.name ? product.name.length > 25 ? `${product.name.slice(0, 25)}...` : product.name : 'N/A'}
+                                </h6>
+                                <div className="description-price">
+                                  <p>  {product?.description ? product.description.length > 40 ? `${product.description.slice(0, 40)}...` : product.description : 'N/A'}
+                                  </p>
+                                  <div className="price">${product?.price || 'N/A'}</div>
+                                </div>
+                              </div>
+                              <div className="actions">
+                                <button className="add-to-cart" onClick={() => handleAddToCart(product)} disabled={loadingProductId === product.id}>
+                                  {loadingProductId === product.id ? (
+                                    <CircularProgress size={20} color="inherit" />
+                                  ) : (
+                                    'Add to cart'
+                                  )}
+                                </button>
+                                <button className="btn btn-dark rounded-pill" onClick={() => handleProductClick(product)}>
+                                <Visibility /> View
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center mt-5">
+                        <h5>No popular products available at the moment.</h5>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
+
             <Footer />
           </div>
         </>
