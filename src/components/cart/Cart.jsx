@@ -129,8 +129,6 @@ const Cart = () => {
     });
   };
 
-  console.log(gifts, 'gifts')
-
   return (
     <>
       {loading ? (

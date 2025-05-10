@@ -55,6 +55,11 @@ const Login = () => {
       const resultAction = await dispatch(loginUser(payload)).unwrap();
       showSuccessToast(resultAction?.message);
       if (resultAction?.success === true && resultAction?.status === 200) {
+
+        // if (!location.state?.fromCheckout) {
+        //   localStorage.removeItem("cart");
+        // }
+
         if (location?.state?.fromChat) {
           navigate("/chat", {
             state: { profile_details: location?.state?.profile_details },
@@ -62,6 +67,7 @@ const Login = () => {
         } else {
           const redirectPath = location.state?.fromCheckout ? "/cart" : "/";
           navigate(redirectPath);
+          localStorage.removeItem("cart");
         }
       }
     } catch (err) {
