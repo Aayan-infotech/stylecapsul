@@ -54,6 +54,7 @@ const LandingPage = () => {
     }
     if (!token) {
       showErrorToast("You need to log in first!");
+      navigate('/login');
     } else {
       navigate(route);
     }
@@ -107,7 +108,6 @@ const LandingPage = () => {
   }, []);
 
   const handleProductClick = (product) => {
-    console.log(product, 'product')
     setSelectedProduct(product);
   };
 
@@ -280,7 +280,7 @@ const LandingPage = () => {
                                   )}
                                 </button>
                                 <button className="btn btn-dark rounded-pill" onClick={() => handleProductClick(product)}>
-                                <Visibility /> View
+                                  <Visibility /> View
                                 </button>
                               </div>
                             </div>

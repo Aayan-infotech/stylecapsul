@@ -83,6 +83,7 @@ const StylistCategories = () => {
       });
     } else {
       showErrorToast("Please log in to view product details.");
+      navigate('/login');
     }
   };
 
