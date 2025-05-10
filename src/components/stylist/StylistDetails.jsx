@@ -30,6 +30,7 @@ const StylistDetails = () => {
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [bookingSlotId, setBookingSlotId] = useState(null);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [showBookingAvailability, setShowBookingAvailability] = useState([]);
 
   const { stylistId } = useParams();
 
@@ -64,7 +65,6 @@ const StylistDetails = () => {
           // withCredentials: true,
         }
       );
-      console.log(response?.data);
       // if (response?.data?.status === true) {
       setVendorDetails(response?.data);
       // }
@@ -74,6 +74,33 @@ const StylistDetails = () => {
       if (showLoading) setLoading(false);
     }
   };
+
+  const fetchStylistBookingAvalability = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
+    try {
+      const response = await axios.get(apiUrl(`api/stylist/get-slots-by-date/${stylistId}`),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setShowBookingAvailability(response?.data);
+    } catch (error) {
+      console.error("Error fetching vendor details:", error);
+    } finally {
+      if (showLoading) setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    if (stylistId) {
+      fetchStylistBookingAvalability();
+      fetchVendorDetails();
+    }
+  }, [stylistId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -106,17 +133,12 @@ const StylistDetails = () => {
       await fetchVendorDetails(false);
     } catch (error) {
       console.error("Error submitting review:", error);
-      showErrorToast("Something went wrong while submitting review.");
+      // showErrorToast("Something went wrong while submitting review.");
     } finally {
       setBtnLoading(false)
     }
   };
 
-  useEffect(() => {
-    if (stylistId) {
-      fetchVendorDetails();
-    }
-  }, [stylistId]);
 
   const averageRating = vendorDetails?.averageRating?.[0]?.averageRating;
 
@@ -126,34 +148,6 @@ const StylistDetails = () => {
     } else {
       navigate("/login", { state: { fromChat: true, profile_details: profile_details, }, });
     }
-  };
-
-  const getNextDateForDay = (dayName) => {
-    const dayIndexMap = {
-      Sunday: 0,
-      Monday: 1,
-      Tuesday: 2,
-      Wednesday: 3,
-      Thursday: 4,
-      Friday: 5,
-      Saturday: 6,
-    };
-    const today = new Date();
-    const todayDay = today.getDay();
-    const targetDay = dayIndexMap[dayName];
-
-    let daysToAdd = (targetDay - todayDay + 7) % 7;
-    if (daysToAdd === 0) {
-      const now = new Date();
-      const currentHour = now.getHours();
-      const isExpired = vendorDetails?.stylist?.availability?.slots?.every(
-        (slot) => parseInt(slot.start.split(":")[0]) <= currentHour
-      );
-      if (isExpired) daysToAdd = 7;
-    }
-
-    const nextDate = addDays(today, daysToAdd);
-    return nextDate;
   };
 
   const handleOpenModal = () => {
@@ -179,8 +173,7 @@ const StylistDetails = () => {
 
   const bookAppointment = async (time, slotId) => {
     if (!selectedDate || !time) return;
-    setBookingSlotId(slotId);
-    setLoading(true);
+    setBookingSlotId(slotId._id);
     try {
       const res = await axios.post(apiUrl("api/appointment/create-appointment"),
         {
@@ -188,6 +181,7 @@ const StylistDetails = () => {
           userId: userId,
           date: selectedDate,
           time: time,
+          slotId: slotId._id
         },
         {
           headers: {
@@ -197,13 +191,12 @@ const StylistDetails = () => {
           withCredentials: true,
         }
       );
-      if (res.status === 201 && res.data?.success) {
+      if (res.status === 201) {
         setBookingSlotId(null);
         setOpenModal(false);
-        setTimeout(() => {
-          showSuccessToast(res.data.message || "Appointment booked successfully!");
-        }, 2000);
+        showSuccessToast(res.data.message || "Appointment booked successfully!");
         await fetchVendorDetails(false);
+        fetchStylistBookingAvalability(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
         setBookingSlotId(null);
@@ -211,10 +204,9 @@ const StylistDetails = () => {
     } catch (error) {
       showErrorToast(error.response?.data?.message || "An error occurred while booking.");
       setBookingSlotId(null);
-    } finally {
-      setLoading(false);
     }
   };
+
 
   const handleDeleteReview = async (reviewId) => {
     try {
@@ -301,16 +293,13 @@ const StylistDetails = () => {
                   <h5>Appointment Booking Time Slots</h5>
                   {vendorDetails?.stylist?.availability?.days && vendorDetails?.stylist?.availability?.slots ? (
                     <div className="d-flex gap-2 mt-2 flex-wrap">
-                      {vendorDetails?.stylist?.availability?.days.map((day) => {
-                        const date = getNextDateForDay(day);
-                        const today = new Date();
-                        if (!(isAfter(date, today))) {
-                          return null;
-                        }
-                        return (
-                          <Chip key={day} label={`${day} - ${format(date, "dd MMM yyyy")}`} sx={{ backgroundColor: "#17a2b8", color: "#fff" }} />
-                        );
-                      })}
+                      {vendorDetails?.stylist?.availability?.days.map((day) => (
+                        <Chip
+                          key={day}
+                          label={day}
+                          sx={{ backgroundColor: "#17a2b8", color: "#fff" }}
+                        />
+                      ))}
                     </div>
                   ) : (
                     <div className="text-muted mt-2">No available booking slots at the moment.</div>
@@ -486,79 +475,86 @@ const StylistDetails = () => {
               </IconButton>
             </DialogTitle>
             <DialogContent>
-              {vendorDetails?.stylist?.availability?.days &&
-                vendorDetails?.stylist?.availability?.slots ? (
+              {showBookingAvailability?.availability?.length ? (
                 <>
                   <div className="d-flex gap-2 mt-2 flex-wrap mb-4">
-                    {vendorDetails?.stylist?.availability?.days.map((day) => {
-                      const date = getNextDateForDay(day);
-                      const today = new Date();
-                      if (!(isAfter(date, today))) return null;
-                      return (
-                        <Chip key={day} label={`${day} - ${format(date, "dd MMM yyyy")}`} sx={{ backgroundColor: "#17a2b8", color: "#fff" }}
-                          onClick={() => {
-                            setSelectedDay(day);
-                            setSelectedDate(format(date, "yyyy-MM-dd"));
-                          }} />
-                      );
-                    })}
+                    {showBookingAvailability.availability.map((availability) => (
+                      <Chip
+                        key={availability.date}
+                        label={`${availability.day} - ${format(new Date(availability.date), "dd MMM yyyy")}`}
+                        sx={{
+                          backgroundColor:
+                            selectedDate === availability.date ? "#0d6efd" : "#17a2b8",
+                          color: "#fff",
+                        }}
+                        onClick={() => {
+                          setSelectedDate(availability.date);
+                        }}
+                      />
+                    ))}
                   </div>
-                  {selectedDay && (
+
+                  {selectedDate && (
                     <>
-                      {vendorDetails.stylist.availability.slots.filter((slot) => slot.available).length === 0 ? (
-                        <div className="text-muted mt-2">Slots are not available for {selectedDay}.</div>
+                      {showBookingAvailability.availability
+                        .find((availability) => availability.date === selectedDate)
+                        ?.slots?.filter((slot) => slot.available).length === 0 ? (
+                        <div className="text-muted mt-2">
+                          Slots are not available for the selected date.
+                        </div>
                       ) : (
                         <div className="d-flex gap-2 flex-wrap">
-                          {vendorDetails.stylist.availability.slots.map((slot) => (
-                            <Card
-                              key={slot._id}
-                              onClick={() => {
-                                if (slot.available && bookingSlotId === null) {
-                                  const timeRange = `${slot.start} - ${slot.end}`;
-                                  setSelectedTime(timeRange);
-                                  bookAppointment(timeRange, slot._id);
-                                }
-                              }}
-                              sx={{
-                                width: 150,
-                                padding: 2,
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                cursor: slot.available ? 'pointer' : 'not-allowed',
-                                backgroundColor: '#fff',
-                                opacity: slot.available ? 1 : 0.5,
-                                transition: '0.3s',
-                                '&:hover': {
-                                  boxShadow: slot.available ? 6 : 3,
-                                },
-                              }}
-                            >
-                              <Typography fontWeight="bold" variant="body1">
-                                {slot.start} - {slot.end}
-                              </Typography>
-
-                              <Box display="flex" alignItems="center" gap={1} mt={1}>
-                                {slot.available ? (
-                                  <>
-                                    <CheckCircleIcon fontSize="small" sx={{ color: '#17a2b8' }} />
-                                    <Typography variant="body2" color="textSecondary">
-                                      Available
-                                    </Typography>
-                                  </>
-                                ) : (
-                                  <>
-                                    <RemoveCircleIcon fontSize="small" sx={{ color: 'red' }} />
-                                    <Typography variant="body2" fontWeight="bold" sx={{ color: 'red' }}>
-                                      Booked
-                                    </Typography>
-                                  </>
-                                )}
-                              </Box>
-                              <Typography variant="caption" color="textSecondary" mt={1}>
-                                {slot.bookedCount}/{slot.maxBookings} booked
-                              </Typography>
-                            </Card>
-                          ))}
+                          {showBookingAvailability.availability
+                            .find((availability) => availability.date === selectedDate)
+                            ?.slots.map((slot) => (
+                              <Card
+                                key={slot._id}
+                                onClick={() => {
+                                  if (slot.available && bookingSlotId === null) {
+                                    const timeRange = `${slot.start} - ${slot.end}`;
+                                    setSelectedTime(timeRange);
+                                    bookAppointment(timeRange, slot);
+                                  }
+                                }}
+                                sx={{
+                                  width: 150,
+                                  padding: 2,
+                                  borderRadius: 2,
+                                  boxShadow: 3,
+                                  cursor: slot.available ? "pointer" : "not-allowed",
+                                  backgroundColor: "#fff",
+                                  opacity: slot.available ? 1 : 0.5,
+                                  transition: "0.3s",
+                                  "&:hover": {
+                                    boxShadow: slot.available ? 6 : 3,
+                                  },
+                                }}
+                              >
+                                <Typography fontWeight="bold" variant="body1">
+                                  {slot.start} - {slot.end}
+                                </Typography>
+                                <Box display="flex" alignItems="center" gap={1} mt={1}>
+                                  {slot.available ? (
+                                    <>
+                                      <CheckCircleIcon fontSize="small" sx={{ color: "#17a2b8" }} />
+                                      <Typography variant="body2" color="textSecondary">
+                                        Available
+                                      </Typography>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <RemoveCircleIcon fontSize="small" sx={{ color: "red" }} />
+                                      <Typography variant="body2" fontWeight="bold" sx={{ color: "red" }}>
+                                        Booked
+                                      </Typography>
+                                    </>
+                                  )}
+                                </Box>
+                                <Typography variant="caption" color="textSecondary" mt={1}>
+                                  {slot.bookedCount}/{slot.maxBookings} booked
+                                </Typography>
+                              </Card>
+                            ))}
                         </div>
                       )}
                     </>
