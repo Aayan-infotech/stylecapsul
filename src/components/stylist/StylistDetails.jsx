@@ -383,7 +383,7 @@ const StylistDetails = () => {
               </div>
               <div className="row mt-4">
                 {/* {(showAllReviews ? vendorDetails?.reviews : vendorDetails?.reviews?.slice(0, 2))?.map((review, index) => ( */}
-                {(showAllReviews ? [...(vendorDetails?.reviews || [])].reverse() : [...(vendorDetails?.reviews || [])].slice(0, 2).reverse())?.map((review, index) => (
+                {[...(vendorDetails?.reviews || [])].reverse().slice(0, showAllReviews ? undefined : 2).map((review, index) => (
                   <div key={index} className="col-12 mt-3">
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
