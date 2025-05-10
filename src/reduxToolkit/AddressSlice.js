@@ -48,6 +48,7 @@ export const deleteAddress = createAsyncThunk('addresses/deleteAddress', async (
 });
 
 export const updateAddress = createAsyncThunk('addresses/updateAddress', async ({ id, updatedAddress }) => {
+    const token = getCookie('authToken');
     const response = await axios.put(apiUrl(`api/address/update-address/${id}`), updatedAddress, {
         headers: {
             'Authorization': `Bearer ${token}`,

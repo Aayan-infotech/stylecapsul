@@ -7,7 +7,7 @@ import { apiUrl } from "../../../apiUtils";
 import { getCookie } from "../../utils/cookieUtils";
 import Loader from "../Loader/Loader";
 import { format, addDays, isAfter, isToday, isSameMonth } from "date-fns";
-import { Box, Button, Card, Chip, Rating, Typography } from "@mui/material";
+import { Box, Button, Card, Chip, CircularProgress, Rating, Typography } from "@mui/material";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import { Dialog, DialogTitle, DialogContent, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -31,6 +31,7 @@ const StylistDetails = () => {
   const [bookingSlotId, setBookingSlotId] = useState(null);
   const [btnLoading, setBtnLoading] = useState(false);
   const [showBookingAvailability, setShowBookingAvailability] = useState([]);
+  const [slotLoading, setSlotLoading] = useState(false);
 
   const { stylistId } = useParams();
 
@@ -76,7 +77,7 @@ const StylistDetails = () => {
   };
 
   const fetchStylistBookingAvalability = async (showLoading = true) => {
-    if (showLoading) setLoading(true);
+    if (showLoading) setSlotLoading(true);
     try {
       const response = await axios.get(apiUrl(`api/stylist/get-slots-by-date/${stylistId}`),
         {
@@ -90,7 +91,7 @@ const StylistDetails = () => {
     } catch (error) {
       console.error("Error fetching vendor details:", error);
     } finally {
-      if (showLoading) setLoading(false);
+      if (showLoading) setSlotLoading(false);
     }
   };
 
@@ -150,7 +151,7 @@ const StylistDetails = () => {
     }
   };
 
-  const handleOpenModal = () => {
+  const handleOpenModal = async () => {
     if (!token) {
       navigate("/login", {
         state: {
@@ -161,6 +162,7 @@ const StylistDetails = () => {
       return;
     }
     setOpenModal(true);
+    await fetchStylistBookingAvalability();
   };
 
   const handleCloseModal = () => {
@@ -196,7 +198,7 @@ const StylistDetails = () => {
         setOpenModal(false);
         showSuccessToast(res.data.message || "Appointment booked successfully!");
         await fetchVendorDetails(false);
-        fetchStylistBookingAvalability(false);
+        await fetchStylistBookingAvalability(false);
       } else {
         showErrorToast(res?.data?.message || "Booking failed.");
         setBookingSlotId(null);
@@ -475,7 +477,12 @@ const StylistDetails = () => {
               </IconButton>
             </DialogTitle>
             <DialogContent>
-              {showBookingAvailability?.availability?.length ? (
+              {slotLoading ? (
+                <Box display="flex" justifyContent="center" alignItems="center" height={200}>
+                  <p>Loading Booking Slot</p><br />
+                  <CircularProgress />
+                </Box>
+              ) : showBookingAvailability?.availability?.length ? (
                 <>
                   <div className="d-flex gap-2 mt-2 flex-wrap mb-4">
                     {showBookingAvailability.availability.map((availability) => (
@@ -521,17 +528,24 @@ const StylistDetails = () => {
                                   padding: 2,
                                   borderRadius: 2,
                                   boxShadow: 3,
-                                  cursor: slot.available ? "pointer" : "not-allowed",
+                                  cursor: slot.available && bookingSlotId === null ? "pointer" : "not-allowed",
                                   backgroundColor: "#fff",
                                   opacity: slot.available ? 1 : 0.5,
                                   transition: "0.3s",
-                                  "&:hover": {
-                                    boxShadow: slot.available ? 6 : 3,
-                                  },
+                                  "&:hover": { boxShadow: slot.available && bookingSlotId === null ? 6 : 3, },
+                                  pointerEvents: bookingSlotId && bookingSlotId !== slot._id ? "none" : "auto",
+                                  "&:hover": { boxShadow: slot.available && bookingSlotId === null ? 6 : 3, },
                                 }}
                               >
                                 <Typography fontWeight="bold" variant="body1">
-                                  {slot.start} - {slot.end}
+                                  {bookingSlotId === slot._id ? (
+                                    <Box display="flex" alignItems="center" gap={1}>
+                                      <CircularProgress size={16} thickness={5} />
+                                      <span>Booking...</span>
+                                    </Box>
+                                  ) : (
+                                    `${slot.start} - ${slot.end}`
+                                  )}
                                 </Typography>
                                 <Box display="flex" alignItems="center" gap={1} mt={1}>
                                   {slot.available ? (
@@ -564,6 +578,7 @@ const StylistDetails = () => {
                 <div className="text-muted mt-2">No available booking slots at the moment.</div>
               )}
             </DialogContent>
+
           </Dialog>
         </div>
       )}

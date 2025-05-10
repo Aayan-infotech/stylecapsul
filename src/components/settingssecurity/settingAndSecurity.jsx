@@ -45,14 +45,6 @@ const SettingAndSecurity = () => {
   }, [showModal, dispatch]);
 
   const securityData = [
-    // {
-    //   id: 1,
-    //   image: notification,
-    //   title: "Notification",
-    //   imageAlt: "Notification",
-    //   imageStyle: { width: "50px", height: "45px" },
-    //   url: "#",
-    // },
     {
       id: 2,
       icon: null,
@@ -63,14 +55,6 @@ const SettingAndSecurity = () => {
       url: "#",
       onClick: handleAddressClick,
     },
-    // {
-    //   id: 3,
-    //   image: global,
-    //   title: "Language",
-    //   imageAlt: "global",
-    //   imageStyle: { width: "50px", height: "45px" },
-    //   url: "#",
-    // },
     {
       id: 4,
       image: password,
@@ -243,7 +227,7 @@ const SettingAndSecurity = () => {
                       <input type="text" className="form-control mb-2 rounded-pill" placeholder="Street Name" value={addressForm.streetName} onChange={(e) => setAddressForm({ ...addressForm, streetName: e.target.value })} />
                       <input type="text" className="form-control mb-2 rounded-pill" placeholder="City" value={addressForm.city} onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })} />
                       <input type="text" className="form-control mb-2 rounded-pill" placeholder="Country" value={addressForm.country} onChange={(e) => setAddressForm({ ...addressForm, country: e.target.value })} />
-                      <input type="text" className="form-control mb-2 rounded-pill" placeholder="Mobile Number" value={addressForm.mobileNumber} onChange={(e) => setAddressForm({ ...addressForm, mobileNumber: e.target.value })} />
+                      <input type="number" className="form-control mb-2 rounded-pill" placeholder="Mobile Number" value={addressForm.mobileNumber} onChange={(e) => setAddressForm({ ...addressForm, mobileNumber: e.target.value })} />
                       <button className="btn btn-dark rounded-pill mt-2" onClick={handleUpdateAddress} disabled={loading}>{loading ? 'Updating...' : 'Update Address'}</button>
                       <button className="btn btn-danger rounded-pill mt-2 ms-2" onClick={() => setEditMode(false)}>Cancel</button>
                     </div>

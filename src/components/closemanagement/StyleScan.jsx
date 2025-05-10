@@ -43,36 +43,42 @@ const StyleScan = () => {
       });
       const result = response?.data;
       console.log(result, 'result')
-      if (result?.success === true && result?.matches) {
-        setFilteredImages(result.matches);
-        setStatusMessage(result.message);
-        // showSuccessToast(result.message);
+      setStatusMessage(result?.message || "No response message provided.");
+      if (result?.success && result?.match) {
+        const matchImages = result.match.pictures?.map((pic) => ({ ...result.match, picture: pic })) || [];
+        setFilteredImages(matchImages);
       } else if (result?.bestMatch) {
         const bestMatchImage = {
           ...result.bestMatch,
           picture: result.bestMatch.pictures?.[0],
         };
         setFilteredImages([bestMatchImage]);
-        setStatusMessage(result.message);
-        console.log(result, 'result')
-        showSuccessToast(result.message);
       } else {
-        setStatusMessage("No similar items found.");
+        setFilteredImages([]);
       }
     } catch (error) {
-      setStatusMessage("Something went wrong");
+      setStatusMessage(error?.response?.data?.message || "Something went wrong");
+      setFilteredImages([]);
     } finally {
       setUploadingId(null);
       setLoading(false);
     }
   };
 
-
   const resetSearch = () => {
     setFilteredImages(null);
     setSelectedFiles({});
-    fileInputRefs.current = {};
+    setStatusMessage("");
+    setUploadingId(null);
+    setLoading(false);
+    Object.keys(fileInputRefs.current).forEach((key) => {
+      const input = fileInputRefs.current[key];
+      if (input && input.value) {
+        input.value = null;
+      }
+    });
   };
+
 
   return (
     <div className="closet-management-container">
@@ -85,25 +91,23 @@ const StyleScan = () => {
       <div className="container text-center">
         <div className="row gy-2 w750">
           {filteredImages && filteredImages.length > 0 ? (
-            filteredImages.map((item, index) => (
-              <div key={index} className="col-12 filtered-item rounded-3 d-flex justify-content-center align-items-center">
-                <div className="image_scanner me-4">
-                  <div className="image_scanner_card">
+            <>
+              <div className="col-12 text-center">
+                <p className="main-message">{statusMessage || "Suggested item from your wardrobe"}</p>
+              </div>
+              <div className="col-12 d-flex justify-content-center flex-wrap gap-3">
+                {filteredImages.map((item, index) => (
+                  <div key={index} className="image_scanner_card">
                     <img
                       src={item?.picture || item?.pictures?.[0]}
                       alt="Matched Item"
                       className="img-fluid rounded"
+                      style={{ width: '200px', height: '200px' }}
                     />
                   </div>
-                </div>
-                <div className="text-start">
-                  <p className="main-message">{statusMessage || "Suggested item from your wardrobe"}</p>
-                  <p className="sub-message">
-                    But don’t worry! This is the most similar item we found in your wardrobe.
-                  </p>
-                </div>
+                ))}
               </div>
-            ))
+            </>
           ) : (
             cardData.map((item) => (
               <div className="col-12 d-flex justify-content-center align-items-center" key={item.id}>
@@ -136,9 +140,11 @@ const StyleScan = () => {
           )}
         </div>
       </div>
+
     </div>
   );
 };
+
 
 export default StyleScan;
 
