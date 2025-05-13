@@ -12,9 +12,9 @@ import blank_image from "../../assets/stylist/blank_img.jpg";
 import { getCookie } from "../../utils/cookieUtils";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast";
 import Loader from "../Loader/Loader";
+import { CircularProgress } from "@mui/material";
 
 const CategoryDetails = () => {
   const [subcategoryDetails, setSubcategoryDetails] = useState({});
@@ -25,15 +25,14 @@ const CategoryDetails = () => {
   const [quantity, setQuantity] = useState(initialQuantity ?? 1);
   const [quantities, setQuantities] = useState({});
   const [loadingProductId, setLoadingProductId] = useState(null);
-  const [isInCart, setIsInCart] = useState(false);
 
   const dispatch = useDispatch();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
   const navigate = useNavigate();
 
-  const fetchSubCategoryDetails = async () => {
-    setLoading(true);
+  const fetchSubCategoryDetails = async (showLoader = true) => {
+    if (showLoader) setLoading(true);
     try {
       const response = await axios.get(
         apiUrl(`api/marketPlaceSubcat/get-details/${subcatid}`),
@@ -57,13 +56,13 @@ const CategoryDetails = () => {
           viewCount: data.viewCount,
           lastViewed: data.lastViewed,
           discount: data.discount,
-          quantity: data?.quantity ?? 1
+          quantity: data?.quantity
         });
       }
     } catch (error) {
       console.error("Error fetching category details:", error);
     } finally {
-      setLoading(false);
+      if (showLoader) setLoading(false);
     }
   };
 
@@ -75,26 +74,30 @@ const CategoryDetails = () => {
 
   const handleAddToCart = async () => {
     setLoadingProductId(subcategoryDetails?.id);
-    try {
-      const response = await dispatch(
-        addToCart({
-          userId,
-          productId: subcategoryDetails?.id,
-          quantity,
-        })
-      ).unwrap();
-      showSuccessToast(response?.message || "Item added to cart successfully.");
-      await dispatch(getAllCarts());
-      setIsInCart(true);
-    } catch (error) {
-      showErrorToast(error?.message || "Failed to add item to cart.");
-    } finally {
-      setLoadingProductId(null);
-    }
+    setTimeout(async () => {
+      try {
+        const response = await dispatch(
+          addToCart({
+            userId,
+            productId: subcategoryDetails?.id,
+            quantity,
+          })
+        ).unwrap();
+        showSuccessToast(response?.message || "Item added to cart successfully.");
+        await dispatch(getAllCarts());
+      } catch (error) {
+        showErrorToast(error?.message || "Failed to add item to cart.");
+      } finally {
+        setLoadingProductId(null);
+      }
+    }, 2000);
   };
 
   const handleQuantityChange = async (item, change) => {
-    if (!isInCart) return;
+    // if (!quantities[item.id]) {
+    //   showErrorToast("You need to add the product to the cart first.");
+    //   return;
+    // }
     setLoadingProductId(subcategoryDetails?.id);
     try {
       const currentQuantity = quantities[item.id] || item.quantity || 1;
@@ -121,6 +124,7 @@ const CategoryDetails = () => {
           showErrorToast(response.message || "Failed to update quantity.");
         }
       }
+      await fetchSubCategoryDetails(false);
     } catch (error) {
       console.error("Failed to update quantity:", error);
       showErrorToast(
@@ -158,31 +162,31 @@ const CategoryDetails = () => {
                 <p className="m-0">
                   Brand: &nbsp;&nbsp; {subcategoryDetails?.brand || "No brand"}
                 </p>
-                <p>
-                  Category Type: &nbsp;&nbsp;
-                  <span className="fw-bold">  {subcategoryDetails?.sellType ? subcategoryDetails.sellType.charAt(0).toUpperCase() + subcategoryDetails.sellType.slice(1) : "No type available."}</span>
-                </p>
-                {isInCart && (
-                  <div className="quantity-selector">
-                    <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, -1)}>
-                      -
-                    </button>
-                    <span className="quantity-display">
-                      {/* {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity} */}
-                      {quantity < 10 ? `0${quantity}` : quantity}
-                    </span>
-                    <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, 1)}>
-                      +
+                <div className="quantity-selector">
+                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, -1)}>
+                    -
+                  </button>
+                  <span className="quantity-display">
+                    {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity}
+                  </span>
+                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, 1)}>
+                    +
+                  </button>
+                </div>
+                <div className="button-group">
+                  <div className="button-group d-flex align-items-center gap-3">
+                    {loadingProductId === subcategoryDetails?.id && (
+                      <CircularProgress size={24} className="mb-2" />
+                    )}
+                    <button
+                      className="btn btn-outline-dark rounded-pill fw-bold"
+                      disabled={loadingProductId === subcategoryDetails?.id}
+                      onClick={handleAddToCart}
+                    >
+                      Add to Cart
                     </button>
                   </div>
-                )}
-                <div className="button-group">
-                  <LoadingButton variant="outlined" loading={loadingProductId === subcategoryDetails?.id} disabled={loadingProductId === subcategoryDetails?.id} onClick={handleAddToCart} className="rounded-pill text-black fw-bold border border-black">
-                    Add to Cart
-                  </LoadingButton>
-                  {isInCart && (
-                    <button className="btn buy-now" onClick={handleClickBuynow}>Go To Cart</button>
-                  )}
+                  <button className="btn buy-now" onClick={handleClickBuynow}>Go To Cart</button>
                 </div>
               </div>
             </div>

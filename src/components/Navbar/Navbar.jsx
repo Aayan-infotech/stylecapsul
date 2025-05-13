@@ -100,7 +100,7 @@ function Navbar() {
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <li>
                     <Link to="/scheduled-appointment" className="text-decoration-none dropdown-item">
-                      Scheduled
+                      Appointment
                     </Link>
                   </li>
                   <li>
