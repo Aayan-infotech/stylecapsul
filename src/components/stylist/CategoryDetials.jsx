@@ -25,6 +25,8 @@ const CategoryDetails = () => {
   const [quantity, setQuantity] = useState(initialQuantity ?? 1);
   const [quantities, setQuantities] = useState({});
   const [loadingProductId, setLoadingProductId] = useState(null);
+  const [isInCart, setIsInCart] = useState(false);
+
   const dispatch = useDispatch();
   const token = getCookie("authToken");
   const userId = getCookie("userId");
@@ -83,6 +85,7 @@ const CategoryDetails = () => {
       ).unwrap();
       showSuccessToast(response?.message || "Item added to cart successfully.");
       await dispatch(getAllCarts());
+      setIsInCart(true);
     } catch (error) {
       showErrorToast(error?.message || "Failed to add item to cart.");
     } finally {
@@ -91,11 +94,12 @@ const CategoryDetails = () => {
   };
 
   const handleQuantityChange = async (item, change) => {
+    if (!isInCart) return;
     setLoadingProductId(subcategoryDetails?.id);
     try {
       const currentQuantity = quantities[item.id] || item.quantity || 1;
       const newQuantity = currentQuantity + change;
-      if (newQuantity >= 0) {
+      if (newQuantity >= 1) {
         setQuantity(newQuantity);
         const action = change > 0 ? "increase" : "decrease";
         const response = await dispatch(
@@ -158,23 +162,27 @@ const CategoryDetails = () => {
                   Category Type: &nbsp;&nbsp;
                   <span className="fw-bold">  {subcategoryDetails?.sellType ? subcategoryDetails.sellType.charAt(0).toUpperCase() + subcategoryDetails.sellType.slice(1) : "No type available."}</span>
                 </p>
-                <div className="quantity-selector">
-                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, -1)}>
-                    -
-                  </button>
-                  <span className="quantity-display">
-                    {/* {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity} */}
-                    {quantity < 10 ? `0${quantity}` : quantity}
-                  </span>
-                  <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, 1)}>
-                    +
-                  </button>
-                </div>
+                {isInCart && (
+                  <div className="quantity-selector">
+                    <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, -1)}>
+                      -
+                    </button>
+                    <span className="quantity-display">
+                      {/* {subcategoryDetails?.quantity < 10 ? `0${subcategoryDetails?.quantity}` : subcategoryDetails?.quantity} */}
+                      {quantity < 10 ? `0${quantity}` : quantity}
+                    </span>
+                    <button className="quantity-btn" onClick={() => handleQuantityChange(subcategoryDetails, 1)}>
+                      +
+                    </button>
+                  </div>
+                )}
                 <div className="button-group">
                   <LoadingButton variant="outlined" loading={loadingProductId === subcategoryDetails?.id} disabled={loadingProductId === subcategoryDetails?.id} onClick={handleAddToCart} className="rounded-pill text-black fw-bold border border-black">
                     Add to Cart
                   </LoadingButton>
-                  <button className="btn buy-now" onClick={handleClickBuynow}>Go To Cart</button>
+                  {isInCart && (
+                    <button className="btn buy-now" onClick={handleClickBuynow}>Go To Cart</button>
+                  )}
                 </div>
               </div>
             </div>

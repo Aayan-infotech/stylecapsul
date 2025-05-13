@@ -42,7 +42,7 @@ const StyleScan = () => {
         },
       });
       const result = response?.data;
-      console.log(result, 'result')
+      showSuccessToast(response?.data.message || "Showing closest match.");
       setStatusMessage(result?.message || "No response message provided.");
       if (result?.success && result?.match) {
         const matchImages = result.match.pictures?.map((pic) => ({ ...result.match, picture: pic })) || [];
@@ -53,6 +53,7 @@ const StyleScan = () => {
           picture: result.bestMatch.pictures?.[0],
         };
         setFilteredImages([bestMatchImage]);
+        showInfoToast(result.message || "Showing closest match.");
       } else {
         setFilteredImages([]);
       }

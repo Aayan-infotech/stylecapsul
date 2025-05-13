@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import SendIcon from "@mui/icons-material/Send";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -39,10 +39,12 @@ const Explore = () => {
   const [likeLoadingIndex, setLikeLoadingIndex] = useState(null);
   const [profileImageShow, seProfileImageShow] = useState({});
   const [replyLoading, setReplyLoading] = useState({ postIndex: null, commentIndex: null });
+  const [submittingCommentIndex, setSubmittingCommentIndex] = useState(null);
 
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
+  const enterPressedRef = useRef(false);
 
   const { user } = useSelector((state) => state.login);
   const singleUser = user?.payload || user;
@@ -99,6 +101,7 @@ const Explore = () => {
 
   const handleCommentSubmit = async (index, e) => {
     e.preventDefault();
+    if (submittingCommentIndex === index) return;
     const updatedPosts = [...allSocialPosts];
     const newComment = updatedPosts[index].newComment;
     if (newComment) {
@@ -127,6 +130,8 @@ const Explore = () => {
         }
       } catch (error) {
         console.error("Error submitting comment:", error);
+      } finally {
+        setSubmittingCommentIndex(null); // unlock
       }
     }
   };
@@ -479,7 +484,6 @@ const Explore = () => {
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex justify-content-between align-items-center">
                           <div className="d-flex align-items-center text-black">
-                            {/* <ThumbUpIcon className="fs-5 me-3" color={post.likes ? "text-danger" : "inherit"} /> */}
                             <ThumbUpIcon className="fs-5 me-3" style={{ color: post.likes ? "red" : "inherit" }} />
                             <h6 className="mt-1 mb-0">
                               {post.likes && post.likes.length}
@@ -539,17 +543,36 @@ const Explore = () => {
                               sx={{ backgroundColor: "#f0f2f5", borderRadius: 25, }}
                               value={post?.newComment}
                               onChange={(e) => handleCommentChange(index, e)}
-                              onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" && !enterPressedRef.current && post?.newComment) {
+                                  enterPressedRef.current = true;
+                                  handleCommentSubmit(index, e);
+                                }
+                              }}
+                              onKeyUp={(e) => {
+                                if (e.key === "Enter") {
+                                  enterPressedRef.current = false;
+                                }
+                              }}
                               InputProps={{
                                 sx: { borderRadius: "25px" },
                                 endAdornment: (
                                   <InputAdornment position="end">
                                     {post?.newComment ? (
-                                      <SendIcon onClick={(e) => handleCommentSubmit(index, e)} />
+                                      <SendIcon
+                                        onClick={(e) => {
+                                          if (submittingCommentIndex !== index) {
+                                            handleCommentSubmit(index, e);
+                                          }
+                                        }}
+                                        style={{
+                                          cursor: submittingCommentIndex === index ? "not-allowed" : "pointer",
+                                          opacity: submittingCommentIndex === index ? 0.5 : 1,
+                                          pointerEvents: submittingCommentIndex === index ? "none" : "auto"
+                                        }}
+                                      />
                                     ) : (
-                                      <>
-                                        <SendIcon style={{ cursor: "pointer" }} />
-                                      </>
+                                      <SendIcon style={{ cursor: "pointer", opacity: 0.5 }} />
                                     )}
                                   </InputAdornment>
                                 ),

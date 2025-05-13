@@ -43,7 +43,9 @@ function ClothesList() {
           },
         }
       );
+      console.log(response, 'response')
       if (response.data.status === 200 && response.data.success === true) {
+        console.log(response?.data, 'response')
         setCategoryCloth(response.data.cloths || []);
         setLoading(false);
       }
@@ -54,35 +56,11 @@ function ClothesList() {
     }
   };
 
-  // const fetchClothesByCategoryAndSearch = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       apiUrl(`api/cloths/${category}/search/${searchTerm}`),
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     setCategoryCloth(
-  //       Array.isArray(response.data.cloths) ? response.data.cloths : []
-  //     );
-  //   } catch (error) {
-  //     console.error("Error fetching clothes with search term:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (searchTerm) {
-  //     fetchClothesByCategoryAndSearch();
-  //   } else {
-  //     fetchClothesByCategory(false);
-  //   }
-  // }, [searchTerm, category]);
   useEffect(() => {
-    fetchClothesByCategory(false);
-  }, []);
+    if(token){
+      fetchClothesByCategory();
+    };
+  }, [token]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);

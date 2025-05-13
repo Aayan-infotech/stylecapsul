@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -32,6 +32,9 @@ export const SocialUserDetails = () => {
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
+  const enterPressedRef = useRef(false);
+  const sendClickedRef = useRef(false);
+
   const { postId } = useParams();
   const fetchAllCategories = async () => {
     try {
@@ -325,7 +328,7 @@ export const SocialUserDetails = () => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
     const reply = comment.replies[replyIndex];
-  
+
     try {
       const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
         data: {
@@ -338,14 +341,14 @@ export const SocialUserDetails = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       if (response?.data?.success) {
         showSuccessToast("Reply deleted successfully!");
-  
+
         const updatedPosts = { ...userPostDetails };
         updatedPosts.groupedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
         setUserPostDetails(updatedPosts);
-  
+
         await fetchPostDetailsByUs(false); // optional: if you want to fully refresh
       } else {
         showErrorToast("Failed to delete reply");
@@ -355,7 +358,7 @@ export const SocialUserDetails = () => {
       showErrorToast("Something went wrong while deleting the reply.");
     }
   };
-  
+
   return (
     <>
       {loading ? (
@@ -523,7 +526,22 @@ export const SocialUserDetails = () => {
                             }}
                             value={post?.newComment}
                             onChange={(e) => handleCommentChange(index, e)}
-                            onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
+                            // onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
+                            onKeyDown={(e) => {
+                              if (
+                                e.key === "Enter" &&
+                                !enterPressedRef.current &&
+                                post?.newComment?.trim()
+                              ) {
+                                enterPressedRef.current = true;
+                                handleCommentSubmit(index, e);
+                              }
+                            }}
+                            onKeyUp={(e) => {
+                              if (e.key === "Enter") {
+                                enterPressedRef.current = false;
+                              }
+                            }}
                             InputProps={{
                               sx: { borderRadius: "25px" },
                               endAdornment: (

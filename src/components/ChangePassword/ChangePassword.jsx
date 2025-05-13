@@ -27,15 +27,20 @@ const ChangePassword = () => {
     setter((prev) => !prev);
   };
 
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
   const validateForm = () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       showErrorToast("All fields are required!");
       return false;
     }
-    if (newPassword.length < 8) {
-      showErrorToast("New password must be at least 8 characters long.");
+    if (!strongPasswordRegex.test(newPassword)) {
+      showErrorToast(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
       return false;
     }
+
     if (newPassword !== confirmPassword) {
       showErrorToast("New password and confirm password do not match.");
       return false;
@@ -129,17 +134,11 @@ const ChangePassword = () => {
                     onClick={() => togglePasswordVisibility(setShowNewPassword)}
                     style={{ background: "none", border: "none" }}
                   >
-                    <i
-                      className={`fa-solid ${showNewPassword ? "fa-eye" : "fa-eye-slash"
-                        }`}
-                    ></i>
+                    <i className={`fa-solid ${showNewPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
                   </button>
                 </div>
                 <div className="mb-2 position-relative">
-                  <label
-                    htmlFor="confirmpassword"
-                    className="form-label fw-bold"
-                  >
+                  <label htmlFor="confirmpassword" className="form-label fw-bold">
                     Confirm Password
                   </label>
                   <input
@@ -158,17 +157,15 @@ const ChangePassword = () => {
                     }
                     style={{ background: "none", border: "none" }}
                   >
-                    <i
-                      className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"
-                        }`}
-                    ></i>
+                    <i className={`fa-solid ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"}`}></i>
                   </button>
                 </div>
-                <button
-                  type="submit"
-                  className="rounded-pill fw-bold btn btn-light chagne-passwrod-submit-btn"
-                  disabled={btnLoader}
-                >
+                {newPassword && !strongPasswordRegex.test(newPassword) && (
+                  <small className="text-white d-block mt-1" style={{ fontSize: "0.85rem" }}>
+                    Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
+                  </small>
+                )}
+                <button type="submit" className="rounded-pill fw-bold btn btn-light chagne-passwrod-submit-btn" disabled={btnLoader}>
                   {btnLoader ? (
                     <span>
                       <i className="fa-solid fa-spinner fa-spin me-2"></i>{" "}
@@ -177,7 +174,6 @@ const ChangePassword = () => {
                   ) : (
                     "Change Password"
                   )}
-                  {/* {btnLoader ? "Processing..." : "Change Password"} */}
                 </button>
               </form>
             </div>

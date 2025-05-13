@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -36,7 +36,7 @@ const ExploreUserProfileDetails = () => {
 
   const token = getCookie("authToken");
   const userId = getCookie("userId");
-
+  const enterPressedRef = useRef(false);
 
   const fetchAllCategories = async () => {
     setLoading(true);
@@ -99,17 +99,10 @@ const ExploreUserProfileDetails = () => {
   const tileContent = ({ date, view }) => {
     const formattedDate = formatDate(date);
     if (view === "month") {
-      const dateEntry = clothesOnDates.find((item) => item.date === formattedDate);
-      if (dateEntry && dateEntry.thumbnail.length > 0) {
+      const dateEntry = clothesOnDates?.find((item) => item.date === formattedDate);
+      if (dateEntry && dateEntry?.thumbnail.length > 0) {
         return (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "4px",
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", }}>
             {dateEntry?.thumbnail?.map((image, index) => (
               <img key={index} src={image} style={{ width: "15px", height: "auto", objectFit: "cover", borderRadius: "4px", }} />
             ))}
@@ -536,6 +529,21 @@ const ExploreUserProfileDetails = () => {
                             value={post?.newComment}
                             onChange={(e) => handleCommentChange(index, e)}
                             onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
+                            // onKeyDown={(e) => {
+                            //   if (
+                            //     e.key === "Enter" &&
+                            //     !enterPressedRef.current &&
+                            //     post?.newComment?.trim()
+                            //   ) {
+                            //     enterPressedRef.current = true;
+                            //     handleCommentSubmit(index, e);
+                            //   }
+                            // }}
+                            // onKeyUp={(e) => {
+                            //   if (e.key === "Enter") {
+                            //     enterPressedRef.current = false;
+                            //   }
+                            // }}
                             InputProps={{
                               sx: { borderRadius: "25px" },
                               endAdornment: (

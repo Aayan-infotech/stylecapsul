@@ -51,6 +51,7 @@ const Signup = () => {
 
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.com$/i;
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     if (!formData.firstName.trim()) { showErrorToast("Name is required"); return false; }
     if (!formData.email.trim()) {
       showErrorToast("Email is required");
@@ -66,10 +67,13 @@ const Signup = () => {
     if (!formData.password) {
       showErrorToast("Password is required");
       return false;
-    } else if (formData.password.length < 8) {
-      showErrorToast("Password must be at least 8 characters");
+    } else if (!strongPasswordRegex.test(formData.password)) {
+      showErrorToast(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
       return false;
     }
+
     if (!formData.confirmPassword) {
       showErrorToast("Confirm password is required");
       return false;
@@ -139,7 +143,7 @@ const Signup = () => {
               </div>
               <div className="col-12 col-md-4">
                 <div>
-                  <label htmlFor="username" className="form-label text-black fw-bold">  Username</label>
+                  <label htmlFor="username" className="form-label text-black fw-bold"> Username</label>
                   <input type="text" className="form-control rounded-pill" placeholder="Enter Username" name="username" value={formData.username} onChange={handleInputChange} />
                   {!usernameValid && (<small className="text-danger">Username cannot be more than 25 characters</small>)}
                 </div>
@@ -151,13 +155,6 @@ const Signup = () => {
                   <button type="button" className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y" onClick={togglePasswordVisibility} style={{ background: "none", border: "none" }}>
                     <i className={`fa-solid ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                   </button>
-                  <small
-                    className={`d-block mt-1 ${formData.password && formData.password.length < 8 ? "text-danger" : "text-muted"}`}
-                    style={{ fontSize: "0.85rem" }}
-                  >
-                    Password must be at least 8 characters.
-                  </small>
-
                 </div>
               </div>
               <div className="col-12 col-md-6 d-flex justify-content-start align-items-center">
@@ -167,16 +164,25 @@ const Signup = () => {
                   <button type="button" className="btn btn-link position-absolute end-0 showhidepassword translate-middle-y" onClick={toggleConfirmPasswordVisibility} style={{ background: "none", border: "none" }}>
                     <i className={`fa-solid ${showConfirmPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                   </button>
-                  <small
+                  {/* <small
                     className={`d-block mt-1 ${formData.password && formData.password.length < 8 ? "text-danger" : "text-muted"}`}
                     style={{ fontSize: "0.85rem" }}
                   >
                     Password must be at least 8 characters.
-                  </small>
-
+                  </small> */}
                 </div>
               </div>
-              <div className="text-center mt-4">
+              <div className="text-center mt-2">
+                <small
+                  className={`d-block mb-4 ${formData.password &&
+                    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(formData.password)
+                    ? "text-danger"
+                    : "text-muted"
+                    }`}
+                  style={{ fontSize: "0.85rem" }}
+                >
+                  *Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
+                </small>
                 <button type="submit" className="login-button fw-bold" disabled={!isNameValid || btnLoader} style={{ display: isNameValid ? 'inline-block' : 'none', opacity: isNameValid ? 1 : 0, transform: isNameValid ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.3s ease', pointerEvents: isNameValid ? 'auto' : 'none' }}>
                   {btnLoader ? (
                     <span>
