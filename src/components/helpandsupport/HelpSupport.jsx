@@ -149,7 +149,7 @@ const HelpSupport = () => {
                       </div>
 
                       {/* Admin replies (if any) */}
-                      {userMessage.replies && userMessage.replies.length > 0 ? (
+                      {/* {userMessage.replies && userMessage.replies.length > 0 ? (
                         userMessage.replies.map((reply, i) => (
                           <div className="d-flex mt-2" key={`reply-${i}`}>
                             <div className="p-3 bg-secondary text-white rounded shadow-sm" style={{ maxWidth: '80%', marginLeft: '10px' }}>
@@ -166,7 +166,19 @@ const HelpSupport = () => {
                             <small><strong>Waiting for admin reply...</strong></small>
                           </div>
                         </div>
-                      )}
+                      )} */}
+                      {userMessage.replies && userMessage.replies.length > 0 &&
+                        userMessage.replies.map((reply, i) => (
+                          <div className="d-flex mt-2" key={`reply-${i}`}>
+                            <div className="p-3 bg-secondary text-white rounded shadow-sm" style={{ maxWidth: '80%', marginLeft: '10px' }}>
+                              <p className="mb-1"><strong>{reply.replyBy}:</strong> {reply.reply}</p>
+                              <small className="text-light">
+                                {new Date(reply.repliedAt).toLocaleString()}
+                              </small>
+                            </div>
+                          </div>
+                        ))
+                      }
                     </div>
                   ))}
                 </div>
