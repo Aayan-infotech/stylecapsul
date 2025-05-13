@@ -518,7 +518,7 @@ const StylistDetails = () => {
                                 key={slot._id}
                                 onClick={() => {
                                   if (slot.available && bookingSlotId === null) {
-                                    const timeRange = `${slot.start} - ${slot.end}`;
+                                    const timeRange = slot.start;
                                     setSelectedTime(timeRange);
                                     bookAppointment(timeRange, slot);
                                   }
