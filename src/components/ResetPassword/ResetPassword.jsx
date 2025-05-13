@@ -24,21 +24,44 @@ const ResetPassword = () => {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+  const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setBtnLoader(true);
-    setErrorMessage("");
+  const validatePasswords = () => {
     if (!newPassword || !confirmPassword) {
       setErrorMessage("Both fields are required.");
-      setBtnLoader(false);
-      return;
+      return false;
+    }
+    if (!strongPasswordRegex.test(newPassword)) {
+      setErrorMessage(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+      );
+      return false;
     }
     if (newPassword !== confirmPassword) {
       setErrorMessage("Passwords do not match.");
-      setBtnLoader(false);
-      return;
+      return false;
     }
+    setErrorMessage("");
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    // e.preventDefault();
+    // setBtnLoader(true);
+    // setErrorMessage("");
+    // if (!newPassword || !confirmPassword) {
+    //   setErrorMessage("Both fields are required.");
+    //   setBtnLoader(false);
+    //   return;
+    // }
+    // if (newPassword !== confirmPassword) {
+    //   setErrorMessage("Passwords do not match.");
+    //   setBtnLoader(false);
+    //   return;
+    // }
+    e.preventDefault();
+    if (!validatePasswords()) return;
+    setBtnLoader(true);
 
     try {
       const response = await axios.post(
@@ -69,7 +92,13 @@ const ResetPassword = () => {
     }
   };
 
-  const isFormValid = newPassword && confirmPassword && newPassword === confirmPassword;
+  // const isFormValid = newPassword && confirmPassword && newPassword === confirmPassword;
+  const isPasswordValid = strongPasswordRegex.test(newPassword);
+  const isFormValid =
+    newPassword &&
+    confirmPassword &&
+    isPasswordValid &&
+    newPassword === confirmPassword;
 
   return (
     <>
@@ -130,6 +159,11 @@ const ResetPassword = () => {
                 </button>
               </div>
               {errorMessage}
+              {newPassword && !isPasswordValid && (
+                <small className="text-danger d-block mt-1">
+                  Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
+                </small>
+              )}
               <div className="mt-4 text-center">
                 <button
                   type="submit"

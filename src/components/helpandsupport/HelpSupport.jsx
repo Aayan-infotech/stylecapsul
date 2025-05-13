@@ -19,6 +19,8 @@ const HelpSupport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!concern.trim()) return;
+    setLoading(true);
+    setResponseMsg("");
     try {
       const res = await axios.post(
         apiUrl('api/help-concerns'),
@@ -40,6 +42,8 @@ const HelpSupport = () => {
       fetchConcerns();
     } catch (err) {
       setResponseMsg(err.response?.data?.message || 'Backend not reachable.');
+    } finally {
+      setLoading(false);
     }
   };
 
