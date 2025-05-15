@@ -270,7 +270,7 @@ export const SocialUserDetails = () => {
   const handleDeleteComment = async (postIndex, commentIndex) => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
-    if (comment?.user === userId) {
+    if (comment?.user?._id === userId) {
       try {
         const response = await axios.delete(apiUrl(`api/explore/delete-comment/${userId}`), {
           data: {
