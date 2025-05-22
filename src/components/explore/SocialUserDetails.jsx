@@ -175,7 +175,6 @@ export const SocialUserDetails = () => {
 
   const handleCommentSubmit = async (index, event) => {
     event?.preventDefault();
-
     const post = userPostDetails.groupedPosts[index];
     if (!post?.newComment?.trim()) return;
     setCommentLoadingIndex(index);
@@ -328,7 +327,6 @@ export const SocialUserDetails = () => {
     const post = userPostDetails.groupedPosts[postIndex];
     const comment = post.comments[commentIndex];
     const reply = comment.replies[replyIndex];
-
     try {
       const response = await axios.delete(apiUrl(`api/explore/delete-reply/${userId}`), {
         data: {
@@ -349,7 +347,7 @@ export const SocialUserDetails = () => {
         updatedPosts.groupedPosts[postIndex].comments[commentIndex].replies.splice(replyIndex, 1);
         setUserPostDetails(updatedPosts);
 
-        await fetchPostDetailsByUs(false); // optional: if you want to fully refresh
+        await fetchPostDetailsByUs(false);
       } else {
         showErrorToast("Failed to delete reply");
       }
@@ -579,7 +577,7 @@ export const SocialUserDetails = () => {
                                       </Typography>
                                     </div>
                                   </div>
-                                  {comment?.user === userId && (
+                                  {comment?.user?._id === userId && (
                                     <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteComment(index, commentIndex)} />
                                   )}
                                 </div>
@@ -600,12 +598,8 @@ export const SocialUserDetails = () => {
                                                 </Typography>
                                               </div>
                                             </div>
-                                            {reply?.user === userId && (
-                                              <DeleteOutlineIcon
-                                                size="small"
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() => handleDeleteReply(index, commentIndex, replyIndex)}
-                                              />
+                                            {reply?.user._id === userId && (
+                                              <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteReply(index, commentIndex, replyIndex)} />
                                             )}
                                           </div>
                                         ))}

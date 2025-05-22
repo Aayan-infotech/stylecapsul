@@ -89,11 +89,29 @@ const Cart = () => {
     0
   );
 
-  const discount = 4;
+  const cartSummary = cartItems.reduce(
+    (summary, cart) => {
+      cart.items.forEach((item) => {
+        const quantity = quantities[item.productId] || 0;
+        const originalPrice = item.originalPrice || item?.productDetails?.price || 0;
+        const discountPercentage = item.discountPercentage || 0;
+
+        const priceAfterDiscount = originalPrice * (1 - discountPercentage / 100);
+        const itemSubtotal = quantity * originalPrice;
+        const itemDiscount = quantity * (originalPrice - priceAfterDiscount);
+
+        summary.subtotal += itemSubtotal;
+        summary.discount += itemDiscount;
+        summary.total += itemSubtotal - itemDiscount;
+      });
+      return summary;
+    },
+    { subtotal: 0, discount: 0, total: 0 }
+  );
+
   const deliveryCharges = 2;
   const giftDiscount = selectedGift ? parseFloat(selectedGift.discountPrice) : 0;
-  // const total = subtotal - discount + deliveryCharges;
-  const total = subtotal - discount - giftDiscount + deliveryCharges;
+  const finalTotal = cartSummary.total - giftDiscount + deliveryCharges;
 
   const handleRemove = async (productId) => {
     try {
@@ -109,25 +127,25 @@ const Cart = () => {
 
   const handleClick = () => {
     const paymentDetails = {
-      totalAmount: total.toFixed(2),
+      totalAmount: finalTotal.toFixed(2),
       totalQuantity,
-      discount,
+      discount: cartSummary.discount + giftDiscount,
       deliveryCharges,
       cartId,
-      cartItems: cartItems
-        .map((cart) =>
-          cart.items.map((item) => ({
-            productId: item.productId,
-            quantity: quantities[item.productId],
-            price: item?.productDetails?.price,
-          }))
-        )
-        .flat(),
+      cartItems: cartItems.flatMap((cart) =>
+        cart?.items.map((item) => ({
+          productId: item.productId,
+          quantity: quantities[item.productId],
+          price: item?.productDetails?.price,
+        }))
+      ),
     };
     navigate("/address", {
       state: { paymentDetails, allCartDetails: cartItems },
     });
   };
+
+  console.log(cartItems, 'cartItems')
 
   return (
     <>
@@ -157,17 +175,19 @@ const Cart = () => {
                                 <p className="text-black fw-bold me-5">
                                   ${item?.productDetails?.price || 0}
                                 </p>
-                                <div className="quantity-controls d-flex align-items-center">
-                                  <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" onClick={() => handleQuantityChange(item, -1)}>
-                                    <i className="fa-solid fa-minus small"></i>
-                                  </button>
-                                  <span className="quantity mx-3">
-                                    {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
-                                  </span>
-                                  <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" style={{}} onClick={() => handleQuantityChange(item, 1)}>
-                                    <i className="fa-solid fa-plus small"></i>
-                                  </button>
-                                </div>
+                                {item.source !== "closet" && (
+                                  <div className="quantity-controls d-flex align-items-center">
+                                    <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" onClick={() => handleQuantityChange(item, -1)}>
+                                      <i className="fa-solid fa-minus small"></i>
+                                    </button>
+                                    <span className="quantity mx-3">
+                                      {quantities[item?.productId] < 10 ? `0${quantities[item?.productId]}` : quantities[item?.productId]}
+                                    </span>
+                                    <button type="button" className="btn btn-dark rounded-pill quantity-change-btn small fs-6" style={{}} onClick={() => handleQuantityChange(item, 1)}>
+                                      <i className="fa-solid fa-plus small"></i>
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                               <p className="fw-bold">
                                 {moment(item.createdAt).format("YYYY/MM/DD")}
@@ -190,27 +210,25 @@ const Cart = () => {
                         </h3>
                         <div className="order-summary-details">
                           <div className="summary-item">
-                            <span>Total Items</span>
-                            <span>
-                              {cartItems.reduce((total, cart) => total + cart.items.length, 0)}
-                            </span>
-                          </div>
-                          <div className="summary-item">
-                            <span>Total Quantity</span>
-                            <span>{totalQuantity || "N/A"}</span>
-                          </div>
-                          <div className="summary-item">
                             <span>Subtotal</span>
-                            <span>${subtotal.toFixed(2) || "N/A"}</span>
+                            <span>${cartSummary.subtotal.toFixed(2)}</span>
                           </div>
                           <div className="summary-item">
                             <span>Discount</span>
-                            <span>${discount.toFixed(2) || "N/A"}</span>
+                            <span>${cartSummary.discount.toFixed(2)}</span>
+                          </div>
+                          <div className="summary-item">
+                            <span>Gift Discount</span>
+                            <span>${giftDiscount.toFixed(2)}</span>
                           </div>
                           <div className="summary-item">
                             <span>Delivery Charges</span>
-                            <span>
-                              ${deliveryCharges.toFixed(2) || "N/A"}</span>
+                            <span>${deliveryCharges.toFixed(2)}</span>
+                          </div>
+                          <hr />
+                          <div className="summary-item total">
+                            <span>Total</span>
+                            <span>${finalTotal.toFixed(2)}</span>
                           </div>
                           {gifts?.length > 0 && (
                             <div className="gift-section mt-3">
@@ -235,7 +253,7 @@ const Cart = () => {
                           <hr />
                           <div className="summary-item total">
                             <span>Total</span>
-                            <span>${total.toFixed(2) || "N/A"}</span>
+                            <span>${finalTotal.toFixed(2)}</span>
                           </div>
                         </div>
                       </div>

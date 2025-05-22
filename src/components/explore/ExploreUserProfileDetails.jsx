@@ -453,7 +453,6 @@ const ExploreUserProfileDetails = () => {
                       </div>
                       <p className="fw-bold">{post?.description}</p>
                     </div>
-                    {/* <Avatar alt={post?.user?.firstName} src={post?.user?.profileImage || blank_img} sx={{ width: 40, height: 40, marginRight: 2 }} className="me-3" /> */}
                     <div className="d-flex mt-3">
                       <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -529,21 +528,6 @@ const ExploreUserProfileDetails = () => {
                             value={post?.newComment}
                             onChange={(e) => handleCommentChange(index, e)}
                             onKeyDown={(e) => { if (e.key === "Enter" && post?.newComment) { handleCommentSubmit(index, e); } }}
-                            // onKeyDown={(e) => {
-                            //   if (
-                            //     e.key === "Enter" &&
-                            //     !enterPressedRef.current &&
-                            //     post?.newComment?.trim()
-                            //   ) {
-                            //     enterPressedRef.current = true;
-                            //     handleCommentSubmit(index, e);
-                            //   }
-                            // }}
-                            // onKeyUp={(e) => {
-                            //   if (e.key === "Enter") {
-                            //     enterPressedRef.current = false;
-                            //   }
-                            // }}
                             InputProps={{
                               sx: { borderRadius: "25px" },
                               endAdornment: (
@@ -589,7 +573,7 @@ const ExploreUserProfileDetails = () => {
                                         (reply, replyIndex) => (
                                           <div key={replyIndex} className="d-flex justify-content-between align-items-center mb-2 text-black">
                                             <div className="d-flex">
-                                              <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={reply?.user?.profileImage || blank_img} />
+                                              <Avatar alt="User Avatar" sx={{ width: 30, height: 30 }} className="me-2" src={post?.user?.profileImage || blank_img} />
                                               <div className="text-black p-1 rounded-2" style={{ backgroundColor: "#e0e0e0" }}>
                                                 <Typography variant="body2" gutterBottom>
                                                   {reply?.text}
@@ -597,11 +581,7 @@ const ExploreUserProfileDetails = () => {
                                               </div>
                                             </div>
                                             {reply?.user === userId && (
-                                              <DeleteOutlineIcon
-                                                size="small"
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() => handleDeleteReply(index, commentIndex, replyIndex)}
-                                              />
+                                              <DeleteOutlineIcon size="small" style={{ cursor: "pointer" }} onClick={() => handleDeleteReply(index, commentIndex, replyIndex)} />
                                             )}
                                           </div>
                                         ))}
