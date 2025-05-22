@@ -13,8 +13,6 @@ const ThankuPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(session_id, 'session_id')
-
   useEffect(() => {
     const fetchPaymentDetails = async () => {
       try {

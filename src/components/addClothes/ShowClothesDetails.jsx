@@ -128,6 +128,30 @@ const ShowClothesDetails = () => {
     }
   };
 
+  const removeFromMarketplace = async (productId) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        apiUrl(`api/cloths/remove-from-market/${productId}`),
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response, 'response');
+      showSuccessToast(response.data.data?.message || "Removed from marketplace successfully");
+      await fetchClothDetails(); 
+    } catch (error) {
+      showErrorToast(error?.response?.data?.message || "Error removing item");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
   return (
     <>
@@ -236,7 +260,7 @@ const ShowClothesDetails = () => {
                               {showClothesDetails?.marketplaceInfo?.name}
                             </h5>
                             <p className="mb-1">
-                              <strong>Price:</strong> ₹{showClothesDetails?.marketplaceInfo?.price}
+                              <strong>Price:</strong> ${showClothesDetails?.marketplaceInfo?.price}
                             </p>
                             <p className="mb-1">
                               <strong>Discount:</strong> {showClothesDetails?.marketplaceInfo?.discount}%
@@ -244,10 +268,21 @@ const ShowClothesDetails = () => {
                           </div>
                           <div>
                             <Link to="/market-place" state={{ defaultTab: "closet" }}>
-                          <button type="button" class="btn btn-outline-dark me-2 rouded-pill"><RemoveRedEyeIcon/></button></Link>
-                          <button type="button" class="btn btn-outline-dark"><EditIcon onClick={() => handleOpenMarketPlaceDialog(true)} sx={{ cursor: 'pointer' }} /></button>
+                              <button type="button" className="btn btn-outline-dark me-2 rouded-pill">
+                                <RemoveRedEyeIcon />
+                              </button>
+                            </Link>
+                            <button type="button" className="btn btn-outline-dark me-2">
+                              <EditIcon onClick={() => handleOpenMarketPlaceDialog(true)} sx={{ cursor: 'pointer' }} />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-outline-danger rounded-pill"
+                              onClick={() => removeFromMarketplace(showClothesDetails?.marketplaceInfo?.productId)}
+                            >
+                              Remove from Marketplace
+                            </button>
                           </div>
-                          
                         </div>
                       </div>
                     ) : (

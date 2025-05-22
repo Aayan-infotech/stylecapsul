@@ -114,7 +114,6 @@ const MarketPlace = () => {
   };
 
   const handleAddToCart = async (product) => {
-    console.log(product, 'product')
     setLoadingProductId(product._id);
     try {
       const response = await dispatch(addToCart({ userId, productId: product?._id, quantity: product?.marketplaceInfo?.stockQuantity, }));
@@ -129,6 +128,12 @@ const MarketPlace = () => {
     }
   };
 
+  // const isProductInCart = (productId) => {
+  //   return cart?.[0]?.items?.some(item => item.productId === productId);
+  // };
+
+  console.log(cart, 'cart')
+  console.log(marketPlaceCategory?.shop_by_closet_wear, 'marketPlaceCategory?.shop_by_closet_wear')
   return (
     <>
       {loading ? (
@@ -331,33 +336,51 @@ const MarketPlace = () => {
                             {product.marketplaceInfo?.price && (
                               <h3 className="product-price fw-bold">${product.marketplaceInfo.price}</h3>
                             )}
-                            <div className="d-flex justify-content-center mt-3">
-                              <LoadingButton
-                                variant="outlined"
-                                loading={loadingProductId === product._id}
-                                disabled={loadingProductId === product._id}
-                                onClick={() => handleAddToCart(product)}
-                                style={{
-                                  maxWidth: "150px",
-                                  width: "100%",
-                                  backgroundColor:
-                                    loadingProductId === product._id ? "#e0e0e0" : "white",
-                                  color:
-                                    loadingProductId === product._id ? "#a0a0a0" : "black",
-                                  cursor:
-                                    loadingProductId === product._id ? "not-allowed" : "pointer",
-                                }}
-                                className="rounded-pill text-black fw-bold border border-black"
-                              >
-                                {isProductInCart(product._id) ? (
-                                  <span style={{ textTransform: "none" }}>
-                                    <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
-                                    Added
-                                  </span>
-                                ) : (
-                                  "Add to Cart"
+                            <div className="d-flex justify-content-center">
+                              <div className="d-flex flex-column align-items-center mt-3">
+                                <LoadingButton
+                                  variant="outlined"
+                                  loading={loadingProductId === product._id}
+                                  disabled={loadingProductId === product._id || isProductInCart(product._id)}
+                                  onClick={() => handleAddToCart(product)}
+                                  style={{
+                                    maxWidth: "150px",
+                                    width: "100%",
+                                    backgroundColor:
+                                      loadingProductId === product._id || isProductInCart(product._id)
+                                        ? "#f0f0f0"
+                                        : "#fff",
+                                    color:
+                                      loadingProductId === product._id || isProductInCart(product._id)
+                                        ? "#999"
+                                        : "#000",
+                                    borderColor:
+                                      loadingProductId === product._id || isProductInCart(product._id)
+                                        ? "#ccc"
+                                        : "#000",
+                                    cursor:
+                                      loadingProductId === product._id || isProductInCart(product._id)
+                                        ? "not-allowed"
+                                        : "pointer",
+                                  }}
+                                  className="rounded-pill fw-bold"
+                                >
+                                  {isProductInCart(product._id) ? (
+                                    <span style={{ textTransform: "none" }}>
+                                      <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
+                                      Added
+                                    </span>
+                                  ) : (
+                                    "Add to Cart"
+                                  )}
+                                </LoadingButton>
+                                {isProductInCart(product._id) && (
+                                  <small className="text-muted" style={{ fontSize: "12px" }}>
+                                    Already added this product
+                                  </small>
                                 )}
-                              </LoadingButton>
+                              </div>
+
                             </div>
                           </div>
                         </div>

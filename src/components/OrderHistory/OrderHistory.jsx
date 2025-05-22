@@ -60,12 +60,6 @@ function OrderHistory() {
               <div className="col-12 col-md-6">
                 <h5 className="fw-bold fs-1">Order History</h5>
               </div>
-              {/* <div className="col-12 col-md-6">
-                <div className="search-box d-flex">
-                  <i className="fa fa-search"></i>
-                  <input type="text" placeholder="Search" />
-                </div>
-              </div> */}
             </div>
             {errors ? (
               <div className="error-message text-center">
@@ -82,10 +76,7 @@ function OrderHistory() {
                         <div className="product-img d-flex align-items-center">
                           <img
                             src={product.items[0]?.image || blank_img}
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = blank_img;
-                            }}
+                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = blank_img; }}
                             alt="Product"
                             height={80}
                             width={80}
@@ -170,11 +161,11 @@ function OrderHistory() {
                           </div>
                         ))}
                         <Divider className="my-3" />
-                        <p className="mb-0">Delivery Charges: ₹{selectedOrder?.deliveryCharges}</p>
-                        <p className="mb-0">Discount: ₹{selectedOrder?.discount}</p>
-                        <p className="mb-0 fw-bold">Total Price: ₹{selectedOrder?.totalPrice}</p>
+                        <p className="mb-0">Delivery Charges: ${selectedOrder?.deliveryCharges}</p>
+                        <p className="mb-0">Discount: ${selectedOrder?.discount.toFixed(2)}</p>
+                        <p className="mb-0 fw-bold">Total Price: ${selectedOrder?.totalPrice}</p>
 
-                        <p className="mt-2 fw-bold text-success">Order Status: {selectedOrder?.orderStatus}</p>
+                        <p className="mt-2 fw-bold"><span className="text-success">Order Status:</span> {selectedOrder?.orderStatus || "Pending..."}</p>
                       </div>
                     ) : (
                       <p>No order details available.</p>
