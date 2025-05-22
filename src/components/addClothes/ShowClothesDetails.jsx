@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "../../styles/ShowClothesDetails.scss";
 import { format } from "date-fns";
 import axios from "axios";
@@ -16,6 +16,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Button, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const ShowClothesDetails = () => {
   const [showClothesDetails, setShowClothesDetails] = useState({});
@@ -39,11 +40,11 @@ const ShowClothesDetails = () => {
     setLoading(true);
     try {
       const response = await axios.get(apiUrl(`api/cloths/getClothById/${clothid}`), {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
       );
       if (response.data.status === 200 && response.data.success === true) {
         setShowClothesDetails(response.data.data);
@@ -115,7 +116,7 @@ const ShowClothesDetails = () => {
       if (response.data.success) {
         showSuccessToast(isEditMode ? "Marketplace details updated!" : "Cloth added to marketplace!");
         setShowMarketplaceDialog(false);
-        fetchClothDetails(clothid); 
+        fetchClothDetails(clothid);
       } else {
         showErrorToast(response.data.message || "Failed to submit.");
       }
@@ -221,27 +222,48 @@ const ShowClothesDetails = () => {
               <div className="row m-0">
                 <div className="col-12">
                   <div className="p-3 border border-1 rounded-4">
-                    <div className="row gx-2 gy-3 align-items-center">
-                      <div className="col-auto">
-                        <img src={showClothesDetails?.marketplaceInfo?.image} alt={showClothesDetails?.marketplaceInfo?.name} className="rounded" style={{ width: '100px', height: '100px', objectFit: 'cover', }} />
-                      </div>
-                      <div className="col d-flex justify-content-between">
-                        <div>
-                          <p className="mb-0 text-muted text-break">
-                            <small><strong>Product ID:</strong> {showClothesDetails?.marketplaceInfo?.productId}</small>
-                          </p>
-                          <h5 className="mb-1 text-capitalize">{showClothesDetails?.marketplaceInfo?.name}</h5>
-                          <p className="mb-1"><strong>Price:</strong> ₹{showClothesDetails?.marketplaceInfo?.price}</p>
-                          <p className="mb-1"><strong>Discount:</strong> {showClothesDetails?.marketplaceInfo?.discount}%</p>
+                    {showClothesDetails?.marketplaceInfo?.name ? (
+                      <div className="row gx-2 gy-3 align-items-center">
+                        <div className="col-auto">
+                          <img src={showClothesDetails?.marketplaceInfo?.image} alt={showClothesDetails?.marketplaceInfo?.name} className="rounded" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                         </div>
-                        <EditIcon onClick={() => handleOpenMarketPlaceDialog(true)} sx={{ cursor: 'pointer' }} />
+                        <div className="col d-flex justify-content-between">
+                          <div>
+                            <p className="mb-0 text-muted text-break">
+                              <small>  <strong>Product ID:</strong> {showClothesDetails?.marketplaceInfo?.productId}</small>
+                            </p>
+                            <h5 className="mb-1 text-capitalize">
+                              {showClothesDetails?.marketplaceInfo?.name}
+                            </h5>
+                            <p className="mb-1">
+                              <strong>Price:</strong> ₹{showClothesDetails?.marketplaceInfo?.price}
+                            </p>
+                            <p className="mb-1">
+                              <strong>Discount:</strong> {showClothesDetails?.marketplaceInfo?.discount}%
+                            </p>
+                          </div>
+                          <div>
+                            <Link to="/market-place" state={{ defaultTab: "closet" }}>
+                          <button type="button" class="btn btn-outline-dark me-2 rouded-pill"><RemoveRedEyeIcon/></button></Link>
+                          <button type="button" class="btn btn-outline-dark"><EditIcon onClick={() => handleOpenMarketPlaceDialog(true)} sx={{ cursor: 'pointer' }} /></button>
+                          </div>
+                          
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="text-center text-muted">
+                        <p className="fw-semibold mb-2">
+                          This cloth item is currently part of your personal wardrobe only.
+                        </p>
+                        <p className="mb-2">
+                          If you'd like to sell this product, please list it on the marketplace so others can view and purchase it.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
           {showMarketplaceDialog && (
             <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
@@ -258,7 +280,7 @@ const ShowClothesDetails = () => {
                         <input type="text" className="form-control" value={marketplaceData.name} onChange={(e) => setMarketplaceData({ ...marketplaceData, name: e.target.value })} placeholder="Enter Product Name" />
                       </div>
                       <div className="mb-3">
-                        <label htmlFor="price" className="form-label">Enter price (₹)</label>
+                        <label htmlFor="price" className="form-label">Enter price ($)</label>
                         <input type="number" className="form-control" value={marketplaceData.price} onChange={(e) => setMarketplaceData({ ...marketplaceData, price: e.target.value })} placeholder="Enter price" />
                       </div>
                       <div className="mb-3">

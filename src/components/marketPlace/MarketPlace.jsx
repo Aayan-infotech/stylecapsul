@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ellipse from "../../assets/marketplace/Ellipse1.png";
 import one from "../../assets/marketplace/one.mp4";
 import blank_img from "../../assets/stylist/blank_img.jpg";
@@ -27,7 +27,8 @@ const MarketPlace = () => {
   const [cartQuantity, setCartQuantity] = useState(0)
   const [trendySearch, setTrendySearch] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("marketplace");
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.defaultTab || "marketplace");
   const [loadingProductId, setLoadingProductId] = useState(null);
 
   const dispatch = useDispatch();
