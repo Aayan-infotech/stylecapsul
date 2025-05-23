@@ -110,6 +110,7 @@ const Signup = () => {
           navigate("/login");
         }, 1000);
       }
+      navigate("/login");
     } catch (err) {
       showErrorToast(err.response?.data?.message);
     } finally {

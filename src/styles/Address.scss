@@ -33,6 +33,11 @@
                 flex: 1;
                 margin-left: 10px;
             }
+            h5,
+            p {
+              margin: 2px 0;
+              word-break: break-word; // prevent overflow
+            }
         }
     }
 }

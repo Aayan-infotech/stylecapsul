@@ -158,7 +158,7 @@ const Address = () => {
             <div>
               <div className="row">
                 {(showAll ? addresses : addresses.slice(0, maxVisibleAddresses)).map((address, index) => (
-                  <div className="col-12 col-md-4 mb-4" key={index}>
+                  <div className="col-12 col-md-6 mb-4" key={index}>
                     <label
                       key={index}
                       className={`address-card ${selectedAddressId === address._id ? "selected" : ""
