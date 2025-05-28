@@ -58,6 +58,7 @@ import ContactPage from "./components/helpandsupport/ContactPage.jsx";
 import PrivacyPolicy from "./components/helpandsupport/PrivacyPolicy.jsx";
 import TermsConditions from "./components/helpandsupport/TermsConditions.jsx";
 import OtherPostUserDetails from "./components/explore/OtherPostUserDetails.jsx";
+import ClosetAddedProducts from "./components/marketPlace/ClosetAddedProducts.jsx";
 
 const Routing = () => {
   return (
@@ -79,6 +80,7 @@ const Routing = () => {
             <Route path="/upload-image-scan" element={<UploadScanImage />} />
             <Route path="/scanned-image-wardrobe" element={<ScannedImageWardrobe />}/>
             <Route path="/market-place" element={<MarketPlace />} />
+            <Route path="/closet-added-products" element={<ClosetAddedProducts />} />
             <Route path="/my-style-capsule" element={<MyStyleCapsul />} />
             <Route path="/add-clothes" element={<AddClothes />} />
             <Route path="/all-clothes-list/:category" element={<ClothesList />}/>

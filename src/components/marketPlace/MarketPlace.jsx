@@ -21,6 +21,7 @@ import { addToCart, getAllCarts } from "../../reduxToolkit/addcartSlice.js";
 import { getCookie } from "../../utils/cookieUtils.js";
 import { LoadingButton } from "@mui/lab";
 import { showErrorToast, showSuccessToast } from "../toastMessage/Toast.jsx";
+import CheckroomIcon from '@mui/icons-material/Checkroom';
 
 const MarketPlace = () => {
   const [marketPlaceCategory, setMarketPlaceCategory] = useState(null);
@@ -39,7 +40,7 @@ const MarketPlace = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl("api/marketplaces"));
+      const response = await axios.get(apiUrl(`api/marketplaces?userId=${userId}`));
       if (response?.data?.success) {
         setMarketPlaceCategory(response?.data?.groupedProducts);
       }
@@ -128,12 +129,6 @@ const MarketPlace = () => {
     }
   };
 
-  // const isProductInCart = (productId) => {
-  //   return cart?.[0]?.items?.some(item => item.productId === productId);
-  // };
-
-  console.log(cart, 'cart')
-  console.log(marketPlaceCategory?.shop_by_closet_wear, 'marketPlaceCategory?.shop_by_closet_wear')
   return (
     <>
       {loading ? (
@@ -145,14 +140,19 @@ const MarketPlace = () => {
               <div className="navbar d-flex justify-content-between align-items-center p-2">
                 <div className="navbar-left d-flex mb-0">
                   <Link to="/orderhistory">
-                    <button
-                      type="button"
-                      className="rounded-pill btn bg-black text-white"
-                    >
+                    <button type="button" className="rounded-pill btn bg-black text-white me-3">
                       <span className="border-end border-white me-2 pe-2">
                         <img src={ellipse} alt="ellipse" style={{ width: "20px", height: "20px" }} />
                       </span>
                       Order History
+                    </button>
+                  </Link>
+                  <Link to="/closet-added-products">
+                    <button type="button" className="rounded-pill btn bg-black text-white">
+                      <span className="border-end border-white me-2 pe-2">
+                        <img src={ellipse} alt="ellipse" style={{ width: "20px", height: "20px" }} />
+                      </span>
+                      My Added Products
                     </button>
                   </Link>
                 </div>
