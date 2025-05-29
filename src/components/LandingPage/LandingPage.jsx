@@ -222,7 +222,7 @@ const LandingPage = () => {
                   <div className="col-12">
                     <div className="product-detail">
                       <div className="product-detail-card d-flex">
-                        <img src={selectedProduct?.image || blank_img} alt={selectedProduct?.name} onError={(e) => (e.target.src = blank_img)} className="rounded-pill" />
+                        <img src={selectedProduct?.image || blank_img} height={300} alt={selectedProduct?.name} onError={(e) => (e.target.src = blank_img)} className="rounded-pill" />
                         <div className="p-4 mt-3">
                           <h4>{selectedProduct?.name || 'N/A'}</h4>
                           <div className="price"><strong>Price:</strong> ${selectedProduct?.price || 'N/A'}</div>
@@ -296,7 +296,6 @@ const LandingPage = () => {
                 )}
               </div>
             </div>
-
             <Footer />
           </div>
         </>
