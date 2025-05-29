@@ -1,22 +1,52 @@
 import React, { useEffect, useState } from "react";
-import "../../styles/StylistCategories.scss";
 import { Link } from "react-router-dom";
 import { getCookie } from "../../utils/cookieUtils";
 import axios from "axios";
 import { apiUrl } from "../../../apiUtils";
 import blank_img from "../../assets/stylist/no_image.png";
 import Loader from "../Loader/Loader";
-import no_cart_found from "../../assets/not-cart_found.png"
 import logo from "../../assets/images/LOGOSC.png";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const truncateText = (text, length) => {
     if (!text) return "";
     return text.length > length ? text.slice(0, length) + "..." : text;
 };
+const cartStyle = {
+    card: {
+        position: "relative",
+        height: "480px",
+        cursor: "pointer",
+        overflow: "hidden",
+        transition: "background-color 0.3s ease",
+    },
+    hoverOverlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        height: "100%",
+        width: "100%",
+        backgroundColor: "rgba(99, 102, 105, 0.8)", // dark gray
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "#fff",
+        fontSize: "2rem",
+        opacity: 0,
+        transition: "opacity 0.3s ease",
+        zIndex: 1,
+    },
+    imageContainer: {
+        position: "relative",
+        zIndex: 0,
+    },
+};
+
 
 const ClosetAddedProducts = () => {
     const [closetAddedProducts, setClosetAddedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const token = getCookie("authToken");
 
@@ -55,13 +85,14 @@ const ClosetAddedProducts = () => {
         setShowModal(false);
     };
 
+
     return (
         <>
             {loading ? (
                 <Loader />
             ) : (
                 <div className="categories-type-container">
-                    <div className="container w-75 mt-2 stylist-content d-block">
+                    <div className="container mt-2 stylist-content d-block">
                         <div className="row m-0 w-100">
                             <div className="col-12 mb-4 d-flex justify-content-between align-items-center">
                                 {!token && (
@@ -72,19 +103,117 @@ const ClosetAddedProducts = () => {
                             </div>
                         </div>
                         <div className="container-fluid">
-                            <div className="row gx-2">
+                            <div id="productCarousel" className="carousel slide d-block d-md-none" data-bs-ride="carousel">
+                                <div className="carousel-inner">
+                                    {closetAddedProducts?.length > 0 ? (
+                                        closetAddedProducts.map((product, index) => {
+                                            const { name, price, image, discount } = product.marketplaceInfo || {};
+                                            return (
+                                                <div
+                                                    key={index}
+                                                    className={`carousel-item ${index === 0 ? "active" : ""}`}
+                                                >
+                                                    <div
+                                                        className="product-card rounded-pill text-center mx-auto"
+                                                        style={{ ...cartStyle.card, width: "90vw", maxWidth: 350 }}
+                                                        onMouseEnter={() => setHoveredIndex(index)}
+                                                        onMouseLeave={() => setHoveredIndex(null)}
+                                                        onClick={() => handleShowProductDetails(product)}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                ...cartStyle.hoverOverlay,
+                                                                opacity: hoveredIndex === index ? 1 : 0,
+                                                            }}
+                                                        >
+                                                            <VisibilityIcon fontSize="large" />
+                                                        </div>
+                                                        <div className="image-container" style={cartStyle.imageContainer}>
+                                                            <img
+                                                                src={image || blank_img}
+                                                                alt={name}
+                                                                className="img-fluid rounded-top"
+                                                                style={{ objectFit: "contain", maxHeight: "250px", width: "100%" }}
+                                                                onError={(e) => {
+                                                                    e.target.onerror = null;
+                                                                    e.target.src = blank_img;
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className="product-details p-3">
+                                                            <h3 className="product-name fw-bold">
+                                                                {name?.length > 10 ? `${name.slice(0, 10)}...` : name}
+                                                            </h3>
+                                                            <p className="product-description text-muted mb-0">
+                                                                {truncateText(product.description, 30)}
+                                                            </p>
+                                                            <h3 className="product-price fw-bold">
+                                                                ₹{price}{" "}
+                                                                {discount ? (
+                                                                    <small className="text-success fs-6">({discount}% off)</small>
+                                                                ) : null}
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className="text-center w-100">
+                                            <img src={blank_img} height="200" alt="no product" />
+                                            <p>No products available in your closet.</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <button
+                                    className="carousel-control-prev"
+                                    type="button"
+                                    data-bs-target="#productCarousel"
+                                    data-bs-slide="prev"
+                                >
+                                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Previous</span>
+                                </button>
+                                <button
+                                    className="carousel-control-next"
+                                    type="button"
+                                    data-bs-target="#productCarousel"
+                                    data-bs-slide="next"
+                                >
+                                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span className="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                            {/* Grid for desktop */}
+                            <div className="row gx-2 d-none d-md-flex">
                                 {closetAddedProducts?.length > 0 ? (
                                     closetAddedProducts.map((product, index) => {
                                         const { name, price, image, discount } = product.marketplaceInfo || {};
                                         return (
                                             <div key={index} className="col-12 col-md-4 p-3">
-                                                <div className="product-card rounded-pill text-center">
-                                                    <div className="image-container">
+                                                <div
+                                                    className="product-card rounded-pill text-center"
+                                                    style={cartStyle.card}
+                                                    onMouseEnter={() => setHoveredIndex(index)}
+                                                    onMouseLeave={() => setHoveredIndex(null)}
+                                                    onClick={() => handleShowProductDetails(product)}
+                                                >
+                                                    {/* Hover Overlay */}
+                                                    <div
+                                                        style={{
+                                                            ...cartStyle.hoverOverlay,
+                                                            opacity: hoveredIndex === index ? 1 : 0,
+                                                        }}
+                                                    >
+                                                        <VisibilityIcon fontSize="large" />
+                                                    </div>
+                                                    <div className="image-container" style={cartStyle.imageContainer}>
                                                         <img
                                                             src={image || blank_img}
                                                             alt={name}
                                                             className="img-fluid rounded-top"
-                                                            style={{ objectFit: "contain" }}
+                                                            style={{ objectFit: "contain", maxHeight: "250px", width: "100%" }}
                                                             onError={(e) => {
                                                                 e.target.onerror = null;
                                                                 e.target.src = blank_img;
@@ -92,15 +221,18 @@ const ClosetAddedProducts = () => {
                                                         />
                                                     </div>
                                                     <div className="product-details p-3">
-                                                        <div onClick={() => handleShowProductDetails(product)} style={{ cursor: "pointer" }}>
-                                                            <h3 className="product-name fw-bold">{name}</h3>
-                                                            <p className="product-description text-muted mb-0">
-                                                                {truncateText(product.description, 30)}
-                                                            </p>
-                                                            <h3 className="product-price fw-bold">
-                                                                ₹{price} {discount ? <small className="text-success fs-6">({discount}% off)</small> : null}
-                                                            </h3>
-                                                        </div>
+                                                        <h3 className="product-name fw-bold">
+                                                            {name?.length > 10 ? `${name.slice(0, 10)}...` : name}
+                                                        </h3>
+                                                        <p className="product-description text-muted mb-0">
+                                                            {truncateText(product.description, 30)}
+                                                        </p>
+                                                        <h3 className="product-price fw-bold">
+                                                            ₹{price}{" "}
+                                                            {discount ? (
+                                                                <small className="text-success fs-6">({discount}% off)</small>
+                                                            ) : null}
+                                                        </h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,6 +245,7 @@ const ClosetAddedProducts = () => {
                                     </div>
                                 )}
                             </div>
+
                         </div>
 
                         {showModal && selectedProduct && (
@@ -179,7 +312,7 @@ const ClosetAddedProducts = () => {
                                                 <p><strong>Season:</strong> {selectedProduct.season}</p>
                                                 <p><strong>Category:</strong> {selectedProduct.subcategory}</p>
                                                 <p><strong>Description:</strong> {selectedProduct.description}</p>
-                                                <p><strong>Price:</strong> ₹{selectedProduct.marketplaceInfo?.price}</p>
+                                                <p><strong>Price:</strong> ${selectedProduct.marketplaceInfo?.price}</p>
                                                 <p><strong>Discount:</strong> {selectedProduct.marketplaceInfo?.discount}%</p>
                                                 <p><strong>In Stock:</strong> {selectedProduct.marketplaceInfo?.stockQuantity}</p>
                                                 <p><strong>Purchased On:</strong> {new Date(selectedProduct.purchaseDate).toDateString()}</p>
@@ -192,9 +325,6 @@ const ClosetAddedProducts = () => {
                                 </div>
                             </div>
                         )}
-
-
-
                     </div>
                 </div>
             )}
