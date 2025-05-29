@@ -40,10 +40,14 @@ const MarketPlace = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(apiUrl(`api/marketplaces?userId=${userId}`));
+      const endpoint = userId
+        ? apiUrl(`api/marketplaces?userId=${userId}`)
+        : apiUrl("api/marketplaces");
+      const response = await axios.get(endpoint);
       if (response?.data?.success) {
         setMarketPlaceCategory(response?.data?.groupedProducts);
       }
+      console.log(response, 'response')
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -160,7 +164,6 @@ const MarketPlace = () => {
                   <h1 className="title mb-0">Market Place</h1>
                 </div>
                 <div className="navbar-right d-flex">
-                  {/* <i className="fa-regular fa-bell me-2"></i> */}
                   <Link to={token ? "/cart" : "/myaddedproducts"} className="text-decoration-none text-white">
                     <div className="cart-icon position-relative">
                       <i className="fa-solid fa-cart-shopping"></i>
@@ -312,81 +315,100 @@ const MarketPlace = () => {
             {activeTab === "closet" && (
               <div className="shop-by-style mt-1">
                 <h3>Shop By Closet Wear</h3>
-                <div className="row gx-2">
-                  {marketPlaceCategory?.shop_by_closet_wear?.length > 0 &&
-                    marketPlaceCategory?.shop_by_closet_wear?.map((product, index) => (
-                      <div key={index} className="col-12 col-md-4 p-3">
-                        <div className="product-card rounded-pill text-center border p-2">
-                          <div className="image-container mb-2">
-                            <img
-                              src={product.marketplaceInfo?.image || product.pictures?.[0] || blank_img}
-                              alt={product.marketplaceInfo?.name || "Product"}
-                              className="img-fluid rounded-top"
-                              style={{ objectFit: "contain", height: "250px", width: "100%" }}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = blank_img;
-                              }}
-                            />
-                          </div>
-                          <div className="product-details">
-                            <h3 className="product-name fw-bold">
-                              {product.marketplaceInfo?.name || "Unnamed"}
-                            </h3>
-                            {product.marketplaceInfo?.price && (
-                              <h3 className="product-price fw-bold">${product.marketplaceInfo.price}</h3>
-                            )}
-                            <div className="d-flex justify-content-center">
-                              <div className="d-flex flex-column align-items-center mt-3">
-                                <LoadingButton
-                                  variant="outlined"
-                                  loading={loadingProductId === product._id}
-                                  disabled={loadingProductId === product._id || isProductInCart(product._id)}
-                                  onClick={() => handleAddToCart(product)}
-                                  style={{
-                                    maxWidth: "150px",
-                                    width: "100%",
-                                    backgroundColor:
-                                      loadingProductId === product._id || isProductInCart(product._id)
-                                        ? "#f0f0f0"
-                                        : "#fff",
-                                    color:
-                                      loadingProductId === product._id || isProductInCart(product._id)
-                                        ? "#999"
-                                        : "#000",
-                                    borderColor:
-                                      loadingProductId === product._id || isProductInCart(product._id)
-                                        ? "#ccc"
-                                        : "#000",
-                                    cursor:
-                                      loadingProductId === product._id || isProductInCart(product._id)
-                                        ? "not-allowed"
-                                        : "pointer",
-                                  }}
-                                  className="rounded-pill fw-bold"
-                                >
-                                  {isProductInCart(product._id) ? (
-                                    <span style={{ textTransform: "none" }}>
-                                      <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
-                                      Added
-                                    </span>
-                                  ) : (
-                                    "Add to Cart"
+                {!userId ? (
+                  <div className="text-center border rounded p-4 mt-3 mb-5 bg-light">
+                    <h5 className="mb-3">Please log in to view Closet Wear products.</h5>
+                    <p className="mb-4">Don't have an account? Create one to explore exclusive closet collections.</p>
+                    <div className="d-flex justify-content-center gap-3">
+                      <Link to="/login">
+                        <button className="btn btn-dark rounded-pill px-4">
+                          Login
+                        </button>
+                      </Link>
+                      <Link to="/signup">
+                        <button className="btn btn-outline-dark rounded-pill px-4" onClick={() => navigate("/signup")}>
+                          Create Account
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="row gx-2">
+                    {marketPlaceCategory?.shop_by_closet_wear?.length > 0 &&
+                      marketPlaceCategory?.shop_by_closet_wear?.map((product, index) => (
+                        <div key={index} className="col-12 col-md-4 p-3">
+                          <div className="product-card rounded-pill text-center border p-2">
+                            <div className="image-container mb-2">
+                              <img
+                                src={product.marketplaceInfo?.image || product.pictures?.[0] || blank_img}
+                                alt={product.marketplaceInfo?.name || "Product"}
+                                className="img-fluid rounded-top"
+                                style={{ objectFit: "contain", height: "250px", width: "100%" }}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = blank_img;
+                                }}
+                              />
+                            </div>
+                            <div className="product-details">
+                              <h3 className="product-name fw-bold">
+                                {product.marketplaceInfo?.name || "Unnamed"}
+                              </h3>
+                              {product.marketplaceInfo?.price && (
+                                <h3 className="product-price fw-bold">${product.marketplaceInfo.price}</h3>
+                              )}
+                              <div className="d-flex justify-content-center">
+                                <div className="d-flex flex-column align-items-center mt-3">
+                                  <LoadingButton
+                                    variant="outlined"
+                                    loading={loadingProductId === product._id}
+                                    disabled={loadingProductId === product._id || isProductInCart(product._id)}
+                                    onClick={() => handleAddToCart(product)}
+                                    style={{
+                                      maxWidth: "150px",
+                                      width: "100%",
+                                      backgroundColor:
+                                        loadingProductId === product._id || isProductInCart(product._id)
+                                          ? "#f0f0f0"
+                                          : "#fff",
+                                      color:
+                                        loadingProductId === product._id || isProductInCart(product._id)
+                                          ? "#999"
+                                          : "#000",
+                                      borderColor:
+                                        loadingProductId === product._id || isProductInCart(product._id)
+                                          ? "#ccc"
+                                          : "#000",
+                                      cursor:
+                                        loadingProductId === product._id || isProductInCart(product._id)
+                                          ? "not-allowed"
+                                          : "pointer",
+                                    }}
+                                    className="rounded-pill fw-bold"
+                                  >
+                                    {isProductInCart(product._id) ? (
+                                      <span style={{ textTransform: "none" }}>
+                                        <AddTaskIcon color="success" style={{ position: "absolute", bottom: "5px", left: "5px", fontSize: "20px", fontWeight: "bold", }} />
+                                        Added
+                                      </span>
+                                    ) : (
+                                      "Add to Cart"
+                                    )}
+                                  </LoadingButton>
+                                  {isProductInCart(product._id) && (
+                                    <small className="text-muted" style={{ fontSize: "12px" }}>
+                                      Already added this product
+                                    </small>
                                   )}
-                                </LoadingButton>
-                                {isProductInCart(product._id) && (
-                                  <small className="text-muted" style={{ fontSize: "12px" }}>
-                                    Already added this product
-                                  </small>
-                                )}
-                              </div>
+                                </div>
 
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                </div>
+                      ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
