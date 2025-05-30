@@ -197,11 +197,11 @@ const MarketPlace = () => {
 
           <div className="container w-75 mt-4 trending-searches-section " style={{ display: "block" }}>
             <div className="d-flex justify-content-around mb-3">
+              <button  className={`btn rounded-pill w-25 me-2 ${activeTab === "closet" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setActiveTab("closet")}>
+                Closet Product
+              </button> |
               <button className={`btn rounded-pill w-25 ${activeTab === "marketplace" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setActiveTab("marketplace")}>
                 Marketplace Product
-              </button> |
-              <button className={`btn rounded-pill w-25 me-2 ${activeTab === "closet" ? "btn-dark" : "btn-outline-dark"}`} onClick={() => setActiveTab("closet")}>
-                Closet Product
               </button>
             </div>
 
