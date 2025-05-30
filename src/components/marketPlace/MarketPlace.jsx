@@ -29,7 +29,7 @@ const MarketPlace = () => {
   const [trendySearch, setTrendySearch] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState(location.state?.defaultTab || "marketplace");
+  const [activeTab, setActiveTab] = useState(location.state?.defaultTab || "closet");
   const [loadingProductId, setLoadingProductId] = useState(null);
 
   const dispatch = useDispatch();
